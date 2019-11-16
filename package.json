@@ -13,7 +13,8 @@
     "start": "cross-env NODE_ENV=development nodemon server.js",
     "test": "cross-env NODE_ENV=test babel-tape-runner test/test-*.js",
     "pretest": "eslint .",
-    "prod": "pm2-runtime start ecosystem.config.js --env production"
+    "prod": "pm2-runtime start ecosystem.config.js --env production",
+    "pm2": "pm2 start server.js -i 0"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
