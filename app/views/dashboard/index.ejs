@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <% include ../partials/head %>
+</head>
+<body>
+    <% include ../partials/modals %>
+
+    <% include ../partials/topnav %>
+
+    <!-- MAIN CONTENT
+    ================================================== -->
+    <div class="main-content">
+
+        <!-- HEADER -->
+        <div class="header">
+          <div class="container">
+  
+            <!-- Body -->
+            <div class="header-body">
+              <div class="row align-items-end">
+                <div class="col">
+                  
+  
+                  <!-- Title -->
+                  <h1 class="header-title">
+                    Dashboard
+                  </h1>
+  
+                </div>
+                <div class="col-auto">
+                  
+                  <!-- Button -->
+                  <a href="/property/new" class="btn btn-primary lift">
+                    Add a property
+                  </a>
+  
+                </div>
+              </div> <!-- / .row -->
+            </div> <!-- / .header-body -->
+  
+          </div>
+        </div> <!-- / .header -->
+        
+        <!-- CARDS -->
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-lg-6 col-xl">
+              
+              <!-- Card -->
+              <div class="card">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col">
+  
+                      <!-- Title -->
+                      <h6 class="card-title text-uppercase text-muted mb-2">
+                        Portfolio Value
+                      </h6>
+                      
+                      <!-- Heading -->
+                      <span class="h2 mb-0">
+                        £524,500
+                      </span>
+  
+                      <!-- Badge -->
+                      <span class="badge badge-soft-success mt-n1">
+                        +£24,500
+                      </span>
+  
+                    </div>
+                  </div> <!-- / .row -->
+  
+                </div>
+              </div>
+  
+            </div>
+            <div class="col-12 col-lg-6 col-xl">
+              
+              <!-- Card -->
+              <div class="card">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col">
+  
+                      <!-- Title -->
+                      <h6 class="card-title text-uppercase text-muted mb-2">
+                        Rental income
+                      </h6>
+                      
+                      <!-- Heading -->
+                      <span class="h2 mb-0">
+                        £3,300
+                      </span>
+  
+                    </div>
+                  </div> <!-- / .row -->
+  
+                </div>
+              </div>
+                
+            </div>
+            <div class="col-12 col-lg-6 col-xl">
+              
+              <!-- Card -->
+              <div class="card">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col">
+  
+                      <!-- Title -->
+                      <h6 class="card-title text-uppercase text-muted mb-2">
+                        Occupancy
+                      </h6>
+  
+                      <div class="row align-items-center no-gutters">
+                        <div class="col-auto">
+  
+                          <!-- Heading -->
+                          <span class="h2 mr-2 mb-0">
+                            84.5%
+                          </span>
+                          
+                        </div>
+                        
+                      </div> <!-- / .row -->
+  
+                    </div>
+                  </div> <!-- / .row -->
+  
+                </div>
+              </div>
+                
+            </div>
+            <div class="col-12 col-lg-6 col-xl">
+              
+              <!-- Card -->
+              <div class="card">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col">
+  
+                      <!-- Title -->
+                      <h6 class="card-title text-uppercase text-muted mb-2">
+                        Units
+                      </h6>
+                      
+                      <!-- Heading -->
+                      <span class="h2 mb-0">
+                        10
+                      </span>
+  
+                    </div>
+                  </div> <!-- / .row -->
+  
+                </div>
+              </div>
+                
+            </div>
+          </div> <!-- / .row -->
+          <div class="row">
+            <div class="col-12 col-xl-8">
+              
+              <!-- Orders -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="row align-items-center">
+                    <div class="col">
+                  
+                      <!-- Title -->
+                      <h4 class="card-header-title">
+                        Locations
+                      </h4>
+  
+                    </div>
+                    
+                    
+                  </div> <!-- / .row -->
+  
+                </div>
+                <div class="card-body">
+                  
+                  <div class="embed-responsive embed-responsive-21by9 rounded">
+                    <div class="embed-responsive-item" id="map">
+                      
+                    </div>
+                  </div>
+  
+                </div>
+              </div>
+  
+            </div>
+            <div class="col-12 col-xl-4">
+  
+              <!-- Devices -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="row align-items-center">
+                    <div class="col">
+                  
+                      <!-- Title -->
+                      <h4 class="card-header-title">
+                        Breakdown by Property
+                      </h4>
+  
+                    </div>
+                    <div class="col-auto">
+  
+                      <!-- Tabs -->
+                      <ul class="nav nav-tabs nav-tabs-sm card-header-tabs">
+                        <li class="nav-item" data-toggle="chart" data-target="#devicesChart" data-update='{"data":{"datasets":[{"data":[60,25,15]}]}}'>
+                          <a href="#" class="nav-link active" data-toggle="tab">
+                            Value
+                          </a>
+                        </li>
+                        <li class="nav-item" data-toggle="chart" data-target="#devicesChart" data-update='{"data":{"datasets":[{"data":[15,45,20]}]}}'>
+                          <a href="#" class="nav-link" data-toggle="tab">
+                            Income
+                          </a>
+                        </li>
+                      </ul>
+  
+                    </div>
+                  </div> <!-- / .row -->
+  
+                </div>
+                <div class="card-body">
+                  
+                  <!-- Chart -->
+                  <div class="chart chart-appended">
+                    <canvas id="devicesChart" class="chart-canvas" data-toggle="legend" data-target="#devicesChartLegend"></canvas>
+                  </div>
+  
+                  <!-- Legend -->
+                  <div id="devicesChartLegend" class="chart-legend"></div>
+  
+                </div>
+              </div>
+              
+            </div>
+          </div> <!-- / .row -->
+      
+      
+      
+            <div class="row">
+              <div class="col-12">
+              
+                <!-- Goals -->
+                <div class="card">
+                  <div class="card-header">
+                    <div class="row align-items-center">
+                      <div class="col">
+  
+                        <!-- Title -->
+                        <h4 class="card-header-title">
+                          Properties
+                        </h4>
+  
+                      </div>
+                      <div class="col-auto">
+  
+                        <!-- Button -->
+                        <a href="#!" class="btn btn-sm btn-white">
+                          View all
+                        </a>
+                      
+                      </div>
+                    </div> <!-- / .row -->
+                  </div>
+                  <div class="table-responsive mb-0" data-toggle="lists" data-options='{"valueNames": ["goal-project", "goal-status", "goal-progress", "goal-date"]}'>
+                    <table class="table table-sm table-nowrap card-table">
+                      <thead>
+                        <tr>
+                          <th>
+                              Address
+                          </th>
+                          <th>
+                              Units
+                          </th>
+                          <th>
+                              Current value
+                          </th>
+                          <th>
+                              Purchase price
+                          </th>
+                          <th>
+                              Income
+                          </th>
+                         <th>
+                             Status
+                         </th>
+                        </tr>
+                      </thead>
+                      <tbody class="list">
+                        <tr>
+                          <td class="goal-project">
+                            29 Tythe Barn Lane
+                          </td>
+                          <td class="goal-status">
+                            3
+                          </td>
+                          <td class="goal-progress">
+                            £235,000
+                          </td>
+                          <td class="goal-date">
+                            £210,000
+                          </td>
+                          <td>
+                            £500
+                          </td>
+                          <td>
+                            <span class="text-warning">●</span> Part occupied
+                          </td>
+                        </tr>
+                        <tr>
+                           <td class="goal-project">
+                             29 Tythe Barn Lane
+                           </td>
+                           <td class="goal-status">
+                             3
+                           </td>
+                           <td class="goal-progress">
+                             £235,000
+                           </td>
+                           <td class="goal-date">
+                             £210,000
+                           </td>
+                           <td>
+                             £500
+                           </td>
+                           <td>
+                             <span class="text-success">●</span> Occupied
+                           </td>
+                         </tr>
+                        </tr>
+                        <tr>
+                           <td class="goal-project">
+                             29 Tythe Barn Lane
+                           </td>
+                           <td class="goal-status">
+                             3
+                           </td>
+                           <td class="goal-progress">
+                             £235,000
+                           </td>
+                           <td class="goal-date">
+                             £210,000
+                           </td>
+                           <td>
+                             £500
+                           </td>
+                           <td>
+                             <span class="text-danger">●</span> Vacant
+                           </td>
+                         </tr>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+          </div>
+  
+                </div> <!-- / .card-body -->
+              </div> <!-- / .card -->           
+        </div>
+        
+              </div> <!-- / .row -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> <!-- / .main-content -->
+
+
+    <% include ../partials/scripts %>
+</body>
+</html>

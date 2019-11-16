@@ -42,7 +42,32 @@ fs.readdirSync(models)
 // Bootstrap routes
 require('./config/passport')(passport);
 require('./config/express')(app, passport);
-require('./config/routes')(app, passport);
+app.use(require('./routes'));
+
+app.use(function(err, req, res, next) {
+  console.log('server', err);
+  // treat as 404
+  if (
+    err.message &&
+    (~err.message.indexOf('not found') ||
+      ~err.message.indexOf('Cast to ObjectId failed'))
+  ) {
+    return next();
+  } else if (err.status && err.status == 405) {
+    res.redirect('/signin');
+  } else {
+    // error page
+    res.status(500).render('other/error', { error: err.stack });
+  }
+});
+
+// assume 404 since no middleware responded
+app.use(function(req, res) {
+  res.status(404).render('other/error', {
+    url: req.originalUrl,
+    error: 'Not found'
+  });
+});
 
 connection
   .on('error', console.log)

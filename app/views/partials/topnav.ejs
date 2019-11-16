@@ -1,0 +1,58 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-vibrant" id="topnav">
+  <div class="container">
+
+    <!-- Toggler -->
+    <button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Brand -->
+    <a class="navbar-brand mr-auto" href="/">
+      <img src="/img/logo.svg" alt="..." class="navbar-brand-img">
+    </a>
+
+
+    <!-- User -->
+    <div class="navbar-user">
+
+      <!-- Dropdown -->
+      <div class="dropdown">
+  
+        <!-- Toggle -->
+        <a href="#" class="avatar avatar-sm avatar-online dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img src="/img/avatars/profiles/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
+        </a>
+
+        <!-- Menu -->
+        <div class="dropdown-menu dropdown-menu-right">
+          <a href="javascript:logout()" class="dropdown-item">Logout</a>
+        </div>
+
+      </div>
+
+    <!-- Collapse -->
+    <div class="collapse navbar-collapse mr-auto order-lg-first" id="navbar">
+
+      <!-- Navigation -->
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="/" id="topnavDashboards" role="button" aria-haspopup="true" aria-expanded="false">
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/property/my" id="topnavPages" role="button" aria-haspopup="true" aria-expanded="false">
+            My Properties
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/settings"  role="button" aria-haspopup="true" aria-expanded="false">
+            Settings
+          </a>
+        </li>
+      </ul>
+
+    </div>
+
+  </div> <!-- / .container -->
+</nav>

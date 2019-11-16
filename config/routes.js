@@ -1,17 +1,41 @@
 'use strict';
 
+const express = require('express');
+const router = express.Router();
+
 /**
  * Module dependencies.
  */
 
-const home = require('../app/controllers/home');
+const dashboard = require('../app/controllers/dashboard');
+const auth = require('../app/controllers/auth');
+const property = require('../app/controllers/property');
 
 /**
  * Expose
  */
 
 module.exports = function(app) {
-  app.get('/', home.index);
+  /**
+   * Dashboard
+   */
+
+  app.get('/', dashboard.index);
+
+  /**
+   * Auth
+   */
+
+  app.get('/signin', auth.signin);
+  app.get('/signup', auth.signup);
+  app.get('/settings', auth.settings);
+
+  /**
+   * Property
+   */
+
+  app.get('/property/my', property.my);
+  app.get('/property/overview', property.overview);
 
   /**
    * Error handling
@@ -28,12 +52,12 @@ module.exports = function(app) {
     }
     console.error(err.stack);
     // error page
-    res.status(500).render('500', { error: err.stack });
+    res.status(500).render('other/error', { error: err.stack });
   });
 
   // assume 404 since no middleware responded
   app.use(function(req, res) {
-    res.status(404).render('404', {
+    res.status(404).render('other/error', {
       url: req.originalUrl,
       error: 'Not found'
     });

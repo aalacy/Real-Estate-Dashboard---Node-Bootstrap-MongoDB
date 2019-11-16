@@ -56,7 +56,7 @@ module.exports = function(app, passport) {
 
   // set views path and default layout
   app.set('views', config.root + '/app/views');
-  app.set('view engine', 'pug');
+  app.set('view engine', 'ejs');
 
   // expose package.json to views
   app.use(function(req, res, next) {
