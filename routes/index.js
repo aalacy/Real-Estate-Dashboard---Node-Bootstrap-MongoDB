@@ -43,5 +43,6 @@ router.get('/', auth.checkToken, dashboard.index);
 
 router.get('/property/my', auth.checkToken, property.my);
 router.use('/property/overview', auth.checkToken, property.overview);
+router.use('/property/new', auth.checkToken, property.new);
 
 module.exports = router;

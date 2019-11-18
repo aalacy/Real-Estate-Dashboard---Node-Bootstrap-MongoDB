@@ -15,3 +15,10 @@ exports.overview = function(req, res) {
     token: req.csrfToken()
   });
 };
+
+exports.new = function(req, res) {
+  res.render('property/new', {
+    title: 'Avenue - Add Property',
+    token: req.csrfToken()
+  });
+};

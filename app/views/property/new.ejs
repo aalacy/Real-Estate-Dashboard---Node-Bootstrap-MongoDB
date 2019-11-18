@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+      <% include ../partials/head %>
+  </head>
+  <body>
+
+      <% include ../partials/modals %>
+
+      <% include ../partials/topnav %>
+
+      <!-- JAVASCRIPT
+    ================================================== -->
+    <% include ../partials/scripts %>
+
+    <script>
+        $('#modalAddNewProperty').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+        .on('hidden.bs.modal', function (e) {
+            window.history.back();
+        });
+
+        $(function() {
+            initAutocomplete();
+        });
+    </script>
+
+  </body>
+</html>
