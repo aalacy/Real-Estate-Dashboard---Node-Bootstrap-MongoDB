@@ -61,11 +61,20 @@ const componentForm = {
     postal_code: 'short_name'
 };
 
-const initAutocomplete = function() {
+const addressDetail = {
+    street_number: '',
+    route: '',
+    locality: '',
+    administrative_area_level_1: '',
+    country: '',
+    postal_code: ''
+}
+
+function initAutocomplete() {
     // Create the autocomplete object, restricting the search predictions to
     // geographical location types.
     autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById('propertyAutocomplete'), {types: ['address'], componentRestrictions: {country: 'us'}});
+        document.getElementById('propertyAutocomplete'), {types: ['geocode']});
   
     // Avoid paying for data that you don't need by restricting the set of
     // place fields that are returned to just the address components.
@@ -80,20 +89,17 @@ const getAddress = function() {
     // Get the place details from the autocomplete object.
     var place = autocomplete.getPlace();
   
-    for (var component in componentForm) {
-      document.getElementById(component).value = '';
-      document.getElementById(component).disabled = false;
-    }
-  
     // Get each component of the address from the place details,
     // and then fill-in the corresponding field on the form.
     for (var i = 0; i < place.address_components.length; i++) {
       var addressType = place.address_components[i].types[0];
       if (componentForm[addressType]) {
         var val = place.address_components[i][componentForm[addressType]];
-        document.getElementById(addressType).value = val;
+        addressDetail[addressType] = val;
       }
     }
+
+    console.log(addressDetail)
 }
 
 $(function() {
