@@ -58,23 +58,26 @@ const componentForm = {
     locality: 'long_name',
     administrative_area_level_1: 'short_name',
     country: 'long_name',
-    postal_code: 'short_name'
+    postal_code: 'short_name',
+    postal_town: 'long_name',
+    neighborhood: 'long_name'
 };
 
 const addressDetail = {
     street_number: '',
     route: '',
-    locality: '',
     administrative_area_level_1: '',
     country: '',
-    postal_code: ''
+    postal_code: '',
+    postal_town: '',
+    neighborhood: ''
 }
 
 function initAutocomplete() {
     // Create the autocomplete object, restricting the search predictions to
     // geographical location types.
     autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById('propertyAutocomplete'), {types: ['geocode']});
+        document.getElementById('propertyAutocomplete'), {types: ['geocode'], componentRestrictions: {country: 'gb'}});
   
     // Avoid paying for data that you don't need by restricting the set of
     // place fields that are returned to just the address components.
@@ -99,7 +102,12 @@ const getAddress = function() {
       }
     }
 
-    console.log(addressDetail)
+    // console.log(addressDetail)
+    $("#property_address").val($('#propertyAutocomplete').val());
+    $('#property_city').val(addressDetail.postal_town);
+    $('#property_neighborhood').val(addressDetail.neighborhood);
+    $('#property_zip').val(addressDetail.postal_code);
+    $('#property_country').val(addressDetail.administrative_area_level_1);
 }
 
 $(function() {
@@ -293,4 +301,39 @@ $(function() {
     if ($('#map')[0]) {
         drawMap();
     }
+
+    /**
+     * Property
+     */
+
+    //  Add new property
+    // $('#search-address-form').submit(function(e) {
+    //     e.preventDefault();
+    //     let data = {
+    //         address: $(this).serializeArray()
+    //     };
+    //     const token = $('meta[name="csrf"]').attr('content');
+    //     fetch('/property/review', {
+    //         credentials: 'same-origin', // <-- includes cookies in the request
+    //         headers: {
+    //           'CSRF-Token': token, // <-- is the csrf token as a header
+    //           'Content-Type': 'application/json'
+    //         },
+    //         method: 'POST',
+    //         body: JSON.stringify(data)
+    //     })
+    //     .then(response => response.json())
+    //     .then(function(res) {
+    //         if (res.status == 200) {
+    //             makeToast({message: res.message}).on('hidden.bs.toast', function () {
+    //                 window.location.href = '/property/review';
+    //             });
+    //         } else if (res.status == 422 || res.status == 400){
+    //         }
+    //         console.log(res);
+    //     })
+    //     .catch(error => {
+    //         console.log(error);
+    //     });
+    // });
 });
