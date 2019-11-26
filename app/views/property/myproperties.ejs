@@ -81,17 +81,9 @@
                           <div class="col">
                             <div class="row align-items-center no-gutters">
                                 <div class="col-auto">
-    
-                                  <% if (property.land_title) { %>
-                                    <span class="badge badge-soft-primary ml-1 mt-n1 text-capitalize"><%= property.land_title %></span>
-                                  <% }%>
                                   <% if (property.status) { %>
-                                    <span class="badge badge-soft-success ml-1 mt-n1 text-capitalize"><%= property.status %></span>
+                                    <h2><span class="badge badge-soft-primary ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
                                   <% }%>
-                                  <% if (property.units) { %>
-                                    <span class="badge badge-soft-info ml-1 mt-n1 text-capitalize"><%= property.units %></span>
-                                  <% }%>
-                                
                                 </div>
     
                             </div> <!-- / .row -->
