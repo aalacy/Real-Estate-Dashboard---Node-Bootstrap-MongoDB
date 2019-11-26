@@ -37,18 +37,24 @@
 
                 <!-- Title -->
                 <h1 class="header-title">
-                  29 Tythe Barn Lane
+                  <%= property.address%>
                 </h1>
 
               </div>
 
             </div> <!-- / .row -->
 			
-			<h2>
-			<span class="badge badge-soft-primary ml-1 mt-n1">Freehold</span>
-			<span class="badge badge-soft-primary ml-1 mt-n1">Occupied</span>
-			<span class="badge badge-soft-primary ml-1 mt-n1">Single Unit</span>
-			</h2>
+          <h2 class="mt-2">
+            <% if (property.land_title) { %>
+              <span class="badge badge-soft-primary ml-1 mt-n1 text-capitalize"><%= property.land_title %></span>
+            <% }%>
+            <% if (property.status) { %>
+              <span class="badge badge-soft-success ml-1 mt-n1 text-capitalize"><%= property.status %></span>
+            <% }%>
+            <% if (property.units) { %>
+              <span class="badge badge-soft-info ml-1 mt-n1 text-capitalize"><%= property.units %></span>
+            <% }%>
+          </h2>
 			
           </div>
 
@@ -91,41 +97,46 @@
                 </div>
 				
                 <div class="card-body">
-					
-                  <!-- Title -->
-                  <h6 class="card-title text-uppercase text-muted mb-2">
-                    Est Market Value
-                  </h6>
-                  
-                  <!-- Heading -->
-                  <span class="h2 mb-0">
-                    £524,500
-                  </span>
-				  
-                  <!-- Badge -->
-                  <span class="badge badge-soft-success mt-n1">
-                    +£24,500
-                  </span>
-				  
-                  <!-- Title -->
-                  <h6 class="card-title text-uppercase text-muted mb-2">
-                    Annualised Income
-                  </h6>
-                  
-                  <!-- Heading -->
-                  <span class="h2 mb-0">
-                    £20,000
-                  </span>
-				  
-                  <!-- Title -->
-                  <h6 class="card-title text-uppercase text-muted mb-2">
-                    Yield
-                  </h6>
-                  
-                  <!-- Heading -->
-                  <span class="h2 mb-0">
-                    3.8%
-                  </span>
+                    <div class="row align-items-center no-gutters">
+                      <div class="col-4 text-center border-right">
+                        <!-- Title -->
+                        <h6 class="card-title text-uppercase text-muted mb-2">
+                          Est Market Value
+                        </h6>
+                
+                        <!-- Heading -->
+                        <span class="h2 mb-0">
+                          £524,500
+                        </span>
+                      
+                      </div>
+                      <div class="col-4 text-center border-right">
+                          <!-- Title -->
+                        <h6 class="card-title text-uppercase text-muted mb-2">
+                          Annual Income
+                        </h6>
+                
+                        <!-- Heading -->
+                        <span class="h2 mb-0">
+                            +£24,500
+                        </span>
+                      
+                      </div>
+
+                      <div class="col-4 text-center">
+                          <!-- Title -->
+                        <h6 class="card-title text-uppercase text-muted mb-2">
+                            Rental Yield
+                        </h6>
+                
+                        <!-- Heading -->
+                        <span class="h2 mb-0">
+                            3.8%
+                        </span>
+                      
+                      </div>
+
+                  </div> <!-- / .row -->
                 
               </div> 
 		  </div>
@@ -157,21 +168,48 @@
                 </div>
 				
                 <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                  
+                      <!-- Avatar -->
+                      <h1 class="mb-0">
+                        <i class="fe fe-file-text"></i>
+                      </h1>
+  
+                    </div>
+                    <div class="col ml-n2 mr-auto">
+  
+                      <!-- Title -->
+                      <h4 class="card-title mb-1">
+                        <a href="project-overview.html">Launchday logo</a>
+                      </h4>
+  
+                      <!-- Time -->
+                      <p class="card-text small text-muted">
+                        1.5mb PNG Dave
+                      </p>
+                    </div>
 
-                  <!-- Text -->
-                  <p class="mb-3">
-                    Unit name
-                  </p>
-				  
-                  <p class="mb-3">
-                    Income (Weekly, Fortnightly, Monthly, or Annual)
-                  </p>
-				 
-
+                    <div class="col-auto text-right">
+                      <!-- Title -->
+                      <h4 class="card-title mb-1">
+                          <a href="project-overview.html"> £524,500</a>
+                        </h4>
+    
+                        <!-- Time -->
+                        <p class="card-text small text-muted">
+                          Monthly
+                        </p>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fe fe-chevron-right"></i>
+                    </div>
+                  </div>
+                  
                   <!-- Divider -->
                   <hr>
 				  
-                  <p class="mb-3">
+                  <p class="mb-3 d-none">
                     No active tenancies
                   </p>
 
@@ -221,7 +259,7 @@
                     <div class="col-auto">
                     
                       <time class="small text-muted" datetime="1988-24-10">
-                        24/10/88
+                        <%= property.purchase_date%>
                       </time>
 
                     </div>
@@ -241,8 +279,8 @@
                     </div>
                     <div class="col-auto">
                     
-                      <small class="small text-muted"> 
-                        House
+                      <small class="small text-muted text-capitalize"> 
+                        <%= property.type%>
                       </small>
 
                     </div>
@@ -262,8 +300,8 @@
                     </div>
                     <div class="col-auto">
                     
-                      <small class="text-muted">
-                        Pre-1914
+                      <small class="text-muted text-capitalize">
+                        <%= property.construction_date%>
                       </small>
 
                     </div>
@@ -304,7 +342,7 @@
                     <div class="col-auto">
                     
                       <small class="text-muted">
-                        Single Unit
+                        <%= property.units%>
                       </small>
 
                     </div>
@@ -325,9 +363,9 @@
                 </div>
                 <div class="card-body">
                 
-  				<div class="embed-responsive embed-responsive-21by9 rounded">
-  				  <div class="embed-responsive-item" data-toggle="map" data-options='{"center": [-118.244615, 34.052979], "zoom": 12}'></div>
-  				</div>
+                <div class="embed-responsive embed-responsive-21by9 rounded">
+                  <div class="embed-responsive-item" id="map" data-toggle="map" data-options='{"center": [<%= property.lng%>, <%= property.lat%>], "zoom": 12}'></div>
+                </div>
 
                 </div>
               </div>
@@ -354,6 +392,12 @@
     <!-- JAVASCRIPT
     ================================================== -->
     <% include ../partials/scripts %>
+
+    <script>
+      $(function() {
+
+      });
+    </script>
 
   </body>
 </html>

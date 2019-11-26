@@ -36,130 +36,278 @@
                         </h1>
         
                       </div>
+                      <div class="col-auto">
+                        
+                        <!-- Button -->
+                        <a href="/" class="btn btn-outline-primary mb-2">
+                          Cancel
+                        </a>
+      
+                      </div>
                     </div> <!-- / .row -->
                   </div> <!-- / .header-body -->
         
                 </div>
               </div> <!-- / .header -->
               
-
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
+              <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col-12 col-lg-10 col-xl-8">
+                    
                     <div class="row">
-                        <div class="col-12 col-xl-8">
-                            <!-- Card -->
-                            <div class="card">
-                                <div class="card-body">
-
-                                    <h1 class="header-title mb-2">
-                                        3434 S Grand Ave, Los Angeles, CA
-                                    </h1>
-                                    <h3>Please review and correct any information if needed.</h3>
-                                    <form id="onboardingForm" class="edit_property" action="/property/add" accept-charset="UTF-8" method="post" novalidate="novalidate"><input name="utf8" type="hidden" value="✓">
-                                        <input type="hidden" name="_csrf" value="<%= token %>">
-                                        <input type="hidden" name="property[portfolio_id]" id="property_portfolio_id">
-                                        <div id="editPropertyRows" class="row">
-                                          <div class="col-sm-12">
-                                            <div class="row">
-                                              <div class="col-sm-12 form-horizontal-compact">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-6 control-label" for="property_num_units">Number of Units</label>
-                                                    <div class="col-sm-6 input-group">
-                                                        <div class="property-label collapse show in" aria-expanded="true" style="">
-                                                        <span class="input-value"></span>
-                                                        <a href="#num_unitsForm" class="show-form collapsed" data-toggle="collapse" aria-expanded="false">
-                                                            <i class="fe fe-edit pull-right"></i>
-                                                        </a>
-                                                        </div>
-                                                        <div id="num_unitsForm" class="collapse" aria-expanded="false" style="height: 0px;">
-                                                        <input min="1" step="1" class="form-control valid" type="number" value="" placeholder="1" name="property[num_units]" id="property_num_units" aria-invalid="false">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-6 control-label" for="property_year_built">Year built</label>
-                                                    <div class="col-sm-6 input-group">
-                                                        <div class="collapse show in property-label">
-                                                        <span class="input-value"></span>
-                                                        <a href="#year_builtForm" class="show-form" data-toggle="collapse">
-                                                            <i class="fe fe-edit pull-right"></i>
-                                                        </a>
-                                                        </div>
-                                                        <div id="year_builtForm" class="collapse">
-                                                        <input min="1776" step="1" class="form-control" type="number" value="" placeholder="1968" name="property[year_built]" id="property_year_built">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-6 control-label" for="property_neighborhood">Neighborhood</label>
-                                                    <div class="col-sm-6 input-group">
-                                                        <div class="collapse show in property-label">
-                                                        <span class="input-value"></span>
-                                                        <a href="#neighborhoodForm" class="show-form" data-toggle="collapse">
-                                                            <i class="fe fe-edit pull-right"></i>
-                                                        </a>
-                                                        </div>
-                                                        <div id="neighborhoodForm" class="collapse">
-                                                        <input class="form-control" type="text" value="" placeholder="Echo Park" name="property[neighborhood]" id="property_neighborhood">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-6 control-label" for="property_finished_square_feet">Square Feet</label>
-                                                    <div class="col-sm-6 input-group">
-                                                        <div class="collapse show in property-label">
-                                                        <span class="input-value"></span>
-                                                        <a href="#finished_square_feetForm" class="show-form" data-toggle="collapse">
-                                                            <i class="fe fe-edit pull-right"></i>
-                                                        </a>
-                                                        </div>
-                                                        <div id="finished_square_feetForm" class="collapse">
-                                                        <input min="0" step="1" class="form-control" type="number" value="" placeholder="66697" name="property[finished_square_feet]" id="property_finished_square_feet">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-6 control-label" for="property_lot_size_square_feet">Lot Size</label>
-                                                    <div class="col-sm-6 input-group">
-                                                        <div class="collapse show in property-label">
-                                                        <span class="input-value"></span>
-                                                        <a href="#lot_size_square_feetForm" class="show-form" data-toggle="collapse">
-                                                            <i class="fe fe-edit pull-right"></i>
-                                                        </a>
-                                                        </div>
-                                                        <div id="lot_size_square_feetForm" class="collapse">
-                                                        <input min="0" step="1" class="form-control" type="number" value="" placeholder="83854" name="property[lot_size_square_feet]" id="property_lot_size_square_feet">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                              
-                                            </div>
-                                            <div class="row">
-                                              <div class="col-md-12">
-                                                <div class="not-my-property">
-                                                  <a href="/" class="not-my-property-link">
-                                                    Oops, this is not my property <i class="fe fe-angle-double-right"></i>
-                                                  </a>
-                                                </div>
-                                              </div>
-                                              <div class="col-md-12 col-sm-12 col-md-push-3 col-sm-push-3">
-                                                <button style="margin: 30px 0 30px 0;" class="ladda-button btn btn-lg btn-primary" type="submit" data-style="zoom-in"><span class="ladda-label">
-                                                  Add this property to my account
-                                                </span><span class="ladda-spinner"></span></button>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                </form>
-                                </div>
-                            </div>
+                      <div class="col-12 col-md-6">
+                        <div class="card bg-light border lift cursor-hand property-unit" style="height: 90%;" data-name="single unit">
+                          <div class="card-body text-center">
+                            <h1 class="mb-4"><i class="fe fe-home"></i> <i class="fe fe-check-circle text-success float-right unit-check"></i></h1>
+                            <h3 class="mb-2">
+                              Single-unit property
+                            </h3>
+          
+                            <p class="small text-muted mb-0">
+                              A single-unit property is property that is or would be rented as a single entity.
+                            </p>
+                          </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>  
+                      </div>
+                      <div class="col-12 col-md-6">
+        
+                        <!-- Warning -->
+                        <div class="card bg-light border lift cursor-hand property-unit" data-name="multiple units">
+                          <div class="card-body text-center">
+                            <h1 class="mb-4"><i class="fe fe-layers"></i> <i class="fe fe-check-circle text-success float-right unit-check d-c-none"></i></h1>
+                            <h3 class="mb-2">
+                               Multi-unit property
+                            </h3>
+        
+                            <p class="small text-muted mb-0">
+                              A multi-unit property is a property that has been divided into multiple units that are rented independently to different tenants.
+                            </p>
+        
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div> <!-- / .row -->
+        
+                    <!-- Form -->
+                    <form class="mb-4" id="create-property-form" method="post" action="/property/create">
+                      <input type="hidden" name="_csrf" value="<%= token %>">
+                      <input type="hidden" name="property[units]" value="single unit">
+                      <input type="hidden" name="property[lat]" value="<%= property.lat %>">
+                      <input type="hidden" name="property[lng]" value="<%= property.lng %>">
+                      <!-- Project name -->
+                      
+        
+                      <div class="row">
+                        <div class="col-12 col-md-6">
+                          <div class="form-group">
+                            <label>
+                              Property Purchased Date
+                            </label>
+                            <input type="text" class="form-control" name="property[purchase_date]"  placeholder="Purchased Date" data-toggle="flatpickr">
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                          <div class="form-group">
+                            <label>
+                              Property Purchased Price
+                            </label>
+                            <input type="text" class="form-control" name="property[purchase_price]" placeholder="Purchased Price" value="">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12 col-md-6">
+                          <div class="form-group">
+                            <label>
+                              Property Type
+                            </label>
+                            <select class="form-control" name="property[type]" data-toggle="select" data-options='{"placeholder": "Select a property type"}'>
+                              <option></option>
+                              <option value="detached">Detached House</option>
+                              <option value="semi-detached">Semi Detached House</option>
+                              <option value="terraced">Terraced House</option>
+                              <option value="flat">Flat</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                          <div class="form-group">
+                            <label>
+                              Construction Date
+                            </label>
+                            <select class="form-control" name="property[construction_date]" data-toggle="select" data-options='{"placeholder": "Select a contruction date"}'>
+                              <option></option>
+                              <option value="pre_1914">Before 1914</option>
+                              <option value="1914_2000">Between 1914 and 2000</option>
+                              <option value="2000_onwards">After 2000</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12 col-md-6">
+                          <div class="form-group">
+                            <label>
+                              # of Bedrooms
+                            </label>
+                            <input type="text" class="form-control" name="property[bedrooms]" placeholder="Bedrooms" value="">
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                          <div class="form-group">
+                            <label>
+                              # of Bathrooms
+                            </label>
+                            <input type="text" class="form-control" name="property[bathrooms]" placeholder="Bathrooms" value="">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12 col-md-6">
+                          <div class="form-group">
+                            <label>
+                              Finish Quality
+                            </label>
+                            <select class="form-control" name="property[finish_quality]" data-toggle="select" data-options='{"placeholder": "Select a finish quality"}'>
+                              <option></option>
+                              <option value="very_high">Very High</option>
+                              <option value="high">High</option>
+                              <option value="average">Average</option>
+                              <option value="below_average">Below Average</option>
+                              <option value="unmodernised">Unmodernised</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                          <div class="form-group">
+                            <label>
+                              Status
+                            </label>
+                            <select class="form-control" name="property[status]" data-toggle="select" data-options='{"placeholder": "Select a status"}' required>
+                              <option></option>
+                              <option value="occupied">Occupied</option>
+                              <option value="vacant">Vacant</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12 col-md-6">
+                          <div class="form-group">
+                            <label>
+                              Outdoor Space
+                            </label>
+                            <select class="form-control" name="property[outdoor_space]" data-toggle="select" data-options='{"placeholder": "Select a outdoor space"}'>
+                              <option value="none">None</option>
+                              <option value="balcony_terrace">Balcony Terrace</option>
+                              <option value="garden">Gargen</option>
+                              <option value="garden_very_large">Garden Very Large</option>
+                            </select>
+                          </div>
+                        </div>
+                        
+                        <div class="col-12 col-md-6">
+                          <div class="form-group">
+                            <label>
+                              Land Title
+                            </label>
+                            <select class="form-control" name="property[land_title]" data-toggle="select" data-options='{"placeholder": "Select a land title"}'>
+                              <option></option>
+                              <option value="freehold">Freehold</option>
+                              <option value="leasehold">Leasehold</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Divider -->
+                      <hr>
+        
+                      <div class="row">
+                        <div class="col-12 col-md-6">
+                          
+                          <!-- Start date -->
+                          <div class="form-group">
+                            <label>
+                              Street Address
+                            </label>
+                            <input type="text" class="form-control" name="property[address]" placeholder="Enter an address" value="<%= property.street_number %> <%= property.route %>" required>
+                          </div>
+        
+                        </div>
+                        <div class="col-12 col-md-6">
+                          
+                          <!-- Start date -->
+                          <div class="form-group">
+                            <label>
+                              Address 2
+                            </label>
+                            <input type="text" class="form-control"  name="property[address2]">
+                          </div>
+        
+                        </div>
+                      </div> <!-- / .row -->
+                
+                      <div class="row">
+                        <div class="col-12 col-md-4">
+                          
+                          <!-- City -->
+                          <div class="form-group">
+                            <label>
+                              City
+                            </label>
+                            <input type="text" class="form-control"  name="property[city]" value="<%= property.city %>" required>
+                          </div>
+        
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                          
+                            <!-- Region -->
+                            <div class="form-group">
+                              <label>
+                                Region
+                              </label>
+                              <input type="text" class="form-control"  name="property[region]" value="<%= property.region %>" required>
+                            </div>
+          
+                          </div>
+                     
+                        <div class="col-12 col-md-4">
+                          
+                          <!-- Pos Code -->
+                          <div class="form-group">
+                            <label>
+                              Post code
+                            </label>
+                            <input type="text" class="form-control" name="property[zip]" value="<%= property.zip%>" required>
+                          </div>
+        
+                        </div>
+                      </div> <!-- / .row -->
+        
+                      <!-- Divider -->
+                      <hr class="mt-5 mb-5">
+        
+                      <!-- Buttons -->
+                      <button type="submit" class="btn btn-block btn-primary">
+                        Create property
+                      </button>
+        
+                    </form>
+        
+                  </div>
+                </div> <!-- / .row -->
+              </div> 
     </div>
 
     <!-- JAVASCRIPT
@@ -169,65 +317,7 @@
     <script type="text/javascript">
                               
         $(document).ready(function(){
-          $('.collapse.in').on("click", function() {
-            $(this).collapse("toggle")
-            $(this).siblings('.collapse').collapse("toggle")
-          })
-          $(".collapse").on('shown.bs.collapse', function(){
-            var v = $(this).find('input').val();
-            $(this).find('input').focus().val(v);
-          })
-          $('a.show-form').parents("div.input-group").find("input").on("keyup", function(e){
-            if (e.keyCode == '13')  {
-              $(this).blur();
-            }
-          });
-        
-          $('a.show-form').parents("div.input-group").find("input").on("blur", function(e){
-            if ($(this)[0].checkValidity()){
-              $(this).parents("div.input-group").find(".input-value").html($(this).val());
-              $(this).parents("div.input-group").find(".collapse").collapse("toggle");
-            }
-          });
-          $('a.show-form').parents("div.input-group").find("select").on("change", function(e){
-              $(this).parents("div.input-group").find(".input-value").html($(this).find("option:selected").text());
-              $(this).parents("div.input-group").find(".collapse").collapse("toggle");
-          });
-        
-        
-          $(".input-group-disabled .input-group-addon a").on("click", function(e){
-            e.preventDefault();
-            $(this).parents(".input-group-disabled").removeClass("input-group input-group-disabled").find("input[readonly]").prop('readonly', false);
-            $(this).parents(".input-group-addon").remove();
-          });
-        
-          $("select#property_property_type").change(function(e){
-            var units = { single_family: 1,  duplex: 2, triplex: 3, apartment: 1 }[$(this).val()];
-            if (units) {
-              $("input#property_num_units").val(units);
-              $("input#property_num_units").parents("div.input-group").find(".input-value").html(units);
-            }
-        
-          });
-        
-          var onerr = function(e, data, status, xhr){
-              Ladda.stopAll();
-              if (!data.responseJSON) { return; }
-              var $validator = $('form.edit_property').validate();
-              var errors = data.responseJSON;
-              var errorMessages = {};
-              for (key in errors) {
-                if (errors[key].length == 0) continue;
-                errorMessages['property[' + key + ']'] =
-                  key.charAt(0).toUpperCase() +
-                  key.substr(1) + ' ' +
-                  errors[key][0];
-              }
-              $validator.showErrors(errorMessages);
-          }
-        
-          $("form.edit_property").on("ajax:error", onerr);
-        
+         
         
         });
         </script>

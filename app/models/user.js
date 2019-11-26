@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+var moment = require('moment');
 
 /**
  * User schema
@@ -75,11 +76,11 @@ UsersSchema.methods.toAuthJSON = function() {
  */
 
 UsersSchema.methods.setDate = function() {
-  this.created_at = this.updated_at = new Date();
+  this.created_at = this.updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
 };
 
 UsersSchema.methods.updateDate = function() {
-  this.updated_at = new Date();
+  this.updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
 };
 
 UsersSchema.methods.setPasswordResetLink = function(id) {

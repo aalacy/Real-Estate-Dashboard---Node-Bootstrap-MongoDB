@@ -70,7 +70,7 @@ const addressDetail = {
     country: '',
     postal_code: '',
     postal_town: '',
-    neighborhood: ''
+    neighborhood: '',
 }
 
 function initAutocomplete() {
@@ -104,11 +104,55 @@ const getAddress = function() {
 
     // console.log(addressDetail)
     $("#property_address").val($('#propertyAutocomplete').val());
+    $('#property_street_number').val(addressDetail.street_number);
+    $('#property_route').val(addressDetail.route);
     $('#property_city').val(addressDetail.postal_town);
     $('#property_neighborhood').val(addressDetail.neighborhood);
     $('#property_zip').val(addressDetail.postal_code);
-    $('#property_country').val(addressDetail.administrative_area_level_1);
+    $('#property_region').val(addressDetail.administrative_area_level_1);
+    $('#property_country').val(addressDetail.country);
 }
+
+// Map
+const drawMap = function(options) {
+    // const coordinates = [-74.50, 40];
+    // const zoom = 9;
+    mapboxgl.accessToken = 'pk.eyJ1IjoidG9wZGV2MDAzIiwiYSI6ImNqcHg1bmw4ODBpN2c0OW9kc2JjZW1zdWoifQ.50gYTaOTgxBYvtIi6eQVGA';
+
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        zoom: options.zoom,
+        center: options.center
+    });
+    map.on('load', function() {
+        map.loadImage('/img/map/marker_small.png', function(error, image) {
+            if (error) throw error;
+            map.addImage('cat', image);
+            map.addLayer({
+                "id": "points",
+                "type": "symbol",
+                "source": {
+                    "type": "geojson",
+                    "data": {
+                        "type": "FeatureCollection",
+                        "features": [{
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": options.center
+                            }
+                        }]
+                    }
+                },
+                "layout": {
+                    "icon-image": "cat",
+                    "icon-size": 0.25
+                }
+            });
+        });
+    });
+};
 
 $(function() {
     /**
@@ -258,82 +302,22 @@ $(function() {
     /**
      * Map
      */
-    const drawMap = function() {
-        const coordinates = [-74.50, 40];
-        const zoom = 9;
-        mapboxgl.accessToken = 'pk.eyJ1IjoidG9wZGV2MDAzIiwiYSI6ImNqcHg1bmw4ODBpN2c0OW9kc2JjZW1zdWoifQ.50gYTaOTgxBYvtIi6eQVGA';
-    
-        var map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            zoom: zoom,
-            center: coordinates
-        });
-        map.on('load', function() {
-            map.loadImage('/img/map/marker_small.png', function(error, image) {
-                if (error) throw error;
-                map.addImage('cat', image);
-                map.addLayer({
-                    "id": "points",
-                    "type": "symbol",
-                    "source": {
-                        "type": "geojson",
-                        "data": {
-                            "type": "FeatureCollection",
-                            "features": [{
-                                "type": "Feature",
-                                "geometry": {
-                                    "type": "Point",
-                                    "coordinates": coordinates
-                                }
-                            }]
-                        }
-                    },
-                    "layout": {
-                        "icon-image": "cat",
-                        "icon-size": 0.25
-                    }
-                });
-            });
-        });
-    };
 
-    if ($('#map')[0]) {
-        drawMap();
+    if ($('*[data-toggle="map"]')) {
+        $('*[data-toggle="map"]').map(function(i, item){
+            drawMap($(item).data('options'));
+        });
+        
     }
 
     /**
      * Property
      */
 
-    //  Add new property
-    // $('#search-address-form').submit(function(e) {
-    //     e.preventDefault();
-    //     let data = {
-    //         address: $(this).serializeArray()
-    //     };
-    //     const token = $('meta[name="csrf"]').attr('content');
-    //     fetch('/property/review', {
-    //         credentials: 'same-origin', // <-- includes cookies in the request
-    //         headers: {
-    //           'CSRF-Token': token, // <-- is the csrf token as a header
-    //           'Content-Type': 'application/json'
-    //         },
-    //         method: 'POST',
-    //         body: JSON.stringify(data)
-    //     })
-    //     .then(response => response.json())
-    //     .then(function(res) {
-    //         if (res.status == 200) {
-    //             makeToast({message: res.message}).on('hidden.bs.toast', function () {
-    //                 window.location.href = '/property/review';
-    //             });
-    //         } else if (res.status == 422 || res.status == 400){
-    //         }
-    //         console.log(res);
-    //     })
-    //     .catch(error => {
-    //         console.log(error);
-    //     });
-    // });
+    //  Create new property
+    $('.property-unit').click(function(){
+        $('.property-unit').find('.unit-check').addClass('d-c-none');
+        $(this).find('.unit-check').removeClass('d-c-none');
+        $('input[name="property[unit]"]').val($(this).data('name'));
+    });
 });

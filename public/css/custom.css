@@ -1,0 +1,18 @@
+
+.cursor-hand {
+    cursor: pointer;
+}
+
+.d-c-none {
+    opacity: 0;
+}
+
+.badge-group {
+    position: absolute;
+    right: 1rem;
+    top: 0.75rem;
+}
+
+.main-content {
+    margin-top: 67px;
+}
