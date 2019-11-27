@@ -15,29 +15,30 @@ var moment = require('moment');
 const PropertiesSchema = new Schema({
     id: {type: String, default: uuidv4()},
     address: { type: String, default: '' },
-    fulladdress: { type: String, default: '' },
     address2: { type: String, default: '' },
     city: { type: String, default: '' },
     county: { type: String, default: '' },
     country: { type: String, default: '' },
     lat: {type: String, default: ''},
     lng: {type: String, default: ''},
+    fulladdress: { type: String, default: '' },
     zip: { type: String, default: '' },
-    units: { type: String, default: '' },
-    current_value: { type: Number, default: '' },
-    purchase_price: { type: Number, default: '' },
-    purchase_date: { type: String, default: '' },
-    income: { type: Number, default: '' },
-    bedrooms: { type: Number, default: '' },
-    bathrooms: { type: Number, default: '' },
+    units: { type: String, default: '' }, // Single Unit / Multiple Units
+    current_value: { type: Number, default: '' }, //£240
+    purchase_price: { type: Number, default: '' }, // £240
+    purchase_date: { type: String, default: '' }, // 2019-01-02
+    bedrooms: { type: Number, default: '' }, // 1
+    bathrooms: { type: Number, default: '' }, // 2
     square_feet: { type: Number, default: '' },
-    type: { type: String, default: '' },
-    finish_quality: { type: String, default: '' },
-    outdoor_space: { type: String, default: '' },
-    ownership: { type: String, default: '' },
-    construction_date: { type: String, default: '' },
-    is_new: { type: Boolean, default: true },
-    status: { type: String, default: 'vacant' }, // vacant or occupied
+    type: { type: String, default: '' }, // Detached House / Semi Detached House / Terraced House / Flat
+    finish_quality: { type: String, default: '' }, // Very High / High / Average / Below Average / Unmordernised
+    outdoor_space: { type: String, default: '' }, // None / Balcony Terrace / Garden / Garden (Large)
+    ownership: { type: String, default: '' }, // Freehold / Leasehold
+    construction_date: { type: String, default: '' }, // 2019-01-02
+    rental_yield: { type: Number, default: '' }, // 3.8%
+    rental_income: { type: Number, default: '' }, // £240pcm
+    is_new: { type: Boolean, default: true }, // used to display alert on top of the overview page
+    status: { type: String, default: 'vacant' }, // Vacant or Occupied
     created_at: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') },
     updated_at: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') }
 });

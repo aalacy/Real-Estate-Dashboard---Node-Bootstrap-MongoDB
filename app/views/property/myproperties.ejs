@@ -186,16 +186,10 @@
                             <div class="row align-items-center no-gutters">
                                 <div class="col-auto">
     
-                                  <% if (property.land_title) { %>
-                                    <span class="badge badge-soft-primary ml-1 mt-n1 text-capitalize"><%= property.land_title %></span>
-                                  <% }%>
                                   <% if (property.status) { %>
-                                    <span class="badge badge-soft-success ml-1 mt-n1 text-capitalize"><%= property.status %></span>
+                                    <h2><span class="badge badge-soft-primary ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
                                   <% }%>
-                                  <% if (property.units) { %>
-                                    <span class="badge badge-soft-info ml-1 mt-n1 text-capitalize"><%= property.units %></span>
-                                  <% }%>
-                                
+                              
                                 </div>
     
                             </div> <!-- / .row -->
@@ -298,14 +292,8 @@
                             <div class="row align-items-center no-gutters">
                                 <div class="col-auto">
     
-                                  <% if (property.land_title) { %>
-                                    <span class="badge badge-soft-primary ml-1 mt-n1 text-capitalize"><%= property.land_title %></span>
-                                  <% }%>
                                   <% if (property.status) { %>
-                                    <span class="badge badge-soft-success ml-1 mt-n1 text-capitalize"><%= property.status %></span>
-                                  <% }%>
-                                  <% if (property.units) { %>
-                                    <span class="badge badge-soft-info ml-1 mt-n1 text-capitalize"><%= property.units %></span>
+                                    <h2><span class="badge badge-soft-primary ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
                                   <% }%>
                                 
                                 </div>
@@ -322,7 +310,7 @@
                           
                               <!-- Title -->
                               <h3 class="card-title mb-2 name">
-                                  <a href="/property/overview/<%=property.id%>"><%= property.address %></a>
+                                  <a href="/property/overview/<%=property.id%>"><%= property.address %>, <%= property.city %></a>
                               </h3>
       
                               <!-- Subtitle -->

@@ -85,10 +85,9 @@ exports.create = async function(req, res) {
 exports.update = async function(req, res) {
   const { body: { property } } = req;
 
-  const myproperty = new Properties(property);
-  myproperty.is_new = false;
-  myproperty.updateDate();
-  const new_values = { $set: myproperty };
+  property.is_new = false;
+  property.update_at = moment().format('YYYY-MM-DD HH:mm:ss');
+  const new_values = { $set: property };
 
   await Properties.updateOne({ id: property.id }, new_values);
   res.redirect('/property/overview/' + property.id);

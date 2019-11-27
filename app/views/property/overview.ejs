@@ -37,7 +37,7 @@
 
                 <!-- Title -->
                 <h1 class="header-title">
-                  <%= property.address%>
+                  <%= property.address%>, <%= property.city%>
                 </h1>
 
               </div>
@@ -54,7 +54,7 @@
          <!-- Alert -->
         <% if (property.is_new) {%>
 			  <div class="alert alert-warning" role="alert">
-          This property profile is only 50% complete. <a href="#" class="alert-link">Add more details here</a>
+          This property profile is only 50% complete. <a href="/property/detail/<%=property.id%>" class="alert-link">Add more details here</a>
         </div>
         <% } %>
         
@@ -201,7 +201,7 @@
                     <div class="col-auto text-right">
                       <!-- Title -->
                       <h4 class="card-title mb-1">
-                          <a href="project-overview.html"> £524,500</a>
+                          £524,500
                         </h4>
     
                         <!-- Time -->
@@ -260,27 +260,6 @@
                     
                       <!-- Title -->
                       <h5 class="mb-0">
-                        Acquired on
-                      </h5>
-
-                    </div>
-                    <div class="col-auto">
-                    
-                      <time class="small text-muted" datetime="1988-24-10">
-                        <%= property.purchase_date%>
-                      </time>
-
-                    </div>
-                  </div> <!-- / .row -->
-
-                  <!-- Divider -->
-                  <hr>
-
-                  <div class="row align-items-center">
-                    <div class="col">
-                    
-                      <!-- Title -->
-                      <h5 class="mb-0">
                         Property Type
                       </h5>
 
@@ -290,6 +269,44 @@
                       <small class="small text-muted text-capitalize"> 
                         <%= property.type%>
                       </small>
+
+                    </div>
+                  </div> <!-- / .row -->
+                   <!-- Divider -->
+                   <hr>
+                  <div class="row align-items-center">
+                    <div class="col">
+                    
+                      <!-- Title -->
+                      <h5 class="mb-0">
+                        Ownership
+                      </h5>
+
+                    </div>
+                    <div class="col-auto">
+                    
+                      <small class="small text-muted text-capitalize"> 
+                        <%= property.ownership%>
+                      </small>
+
+                    </div>
+                  </div> <!-- / .row -->
+                   <!-- Divider -->
+                   <hr>
+                  <div class="row align-items-center">
+                    <div class="col">
+                    
+                      <!-- Title -->
+                      <h5 class="mb-0">
+                        Acquired on
+                      </h5>
+
+                    </div>
+                    <div class="col-auto">
+                    
+                      <time class="small text-muted" datetime="1988-24-10">
+                        <%= property.purchase_date%>
+                      </time>
 
                     </div>
                   </div> <!-- / .row -->
@@ -349,7 +366,7 @@
                     </div>
                     <div class="col-auto">
                     
-                      <small class="text-muted">
+                      <small class="text-muted text-capitalize">
                         <%= property.units%>
                       </small>
 

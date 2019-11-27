@@ -240,8 +240,6 @@
             </div>
           </div> <!-- / .row -->
       
-      
-      
             <div class="row">
               <div class="col-12">
               
@@ -250,114 +248,80 @@
                   <div class="card-header">
                     <div class="row align-items-center">
                       <div class="col">
-  
+                      
                         <!-- Title -->
                         <h4 class="card-header-title">
-                          Properties
+                          Top performing properties
                         </h4>
   
                       </div>
                       <div class="col-auto">
-  
-                        <!-- Button -->
-                        <a href="#!" class="btn btn-sm btn-white">
-                          View all
-                        </a>
                       
+                        <!-- Link -->
+                        <a href="#!" class="small">View all</a>
+  
                       </div>
                     </div> <!-- / .row -->
                   </div>
-                  <div class="table-responsive mb-0" data-toggle="lists" data-options='{"valueNames": ["goal-project", "goal-status", "goal-progress", "goal-date"]}'>
+                  <div class="table-responsive mb-0" data-toggle="lists" data-options='{"valueNames": ["tables-address", "tables-type", "tables-status", "tables-purchase-price", "tables-current-value", "tables-rental-income", "tables-rental-yield"]}'>
                     <table class="table table-sm table-nowrap card-table">
                       <thead>
                         <tr>
-                          <th>
-                              Address
+                          <th scope="col">
+                            <a href="#" class="text-muted sort" data-sort="tables-address">Address</a>
                           </th>
-                          <th>
-                              Units
+                          <th scope="col">
+                            <a href="#" class="text-muted sort" data-sort="tables-type">Type</a>
                           </th>
-                          <th>
-                              Current value
+                          <th scope="col">
+                            <a href="#" class="text-muted sort" data-sort="tables-status">Status</a>
                           </th>
-                          <th>
-                              Purchase price
+                          <th scope="col">
+                            <a href="#" class="text-muted sort" data-sort="tables-purchase-price">Purchase Price</a>
                           </th>
-                          <th>
-                              Income
+                          <th scope="col">
+                            <a href="#" class="text-muted sort" data-sort="tables-current-value">Current Value</a>    
+                          <th scope="col">
+                            <a href="#" class="text-muted sort" data-sort="tables-rental-income">Rental Income</a>    
                           </th>
-                         <th>
-                             Status
-                         </th>
+                          <th scope="col">
+                              <a href="#" class="text-muted sort" data-sort="tables-rental-yield">Rental Yield</a>  
+                          </th>
                         </tr>
                       </thead>
                       <tbody class="list">
+                        <% properties.forEach(function(property){%>
                         <tr>
-                          <td class="goal-project">
-                            29 Tythe Barn Lane
+                          <th scope="row" class="tables-address">
+                            <%=property.address%>, <%=property.city%>
+                          </th>
+                          <td class="tables-type">
+                            <%=property.units%>
                           </td>
-                          <td class="goal-status">
-                            3
+                          <td class="tables-status">
+                            <span class="text-<%=property.status == 'Occupied' ? 'success' : 'danger'%> ">●</span> <%=property.status%>
                           </td>
-                          <td class="goal-progress">
-                            £235,000
+                          <td class="tables-purchase-price">
+                            <%=property.purchase_price ? '£'+property.purchase_price : ''%>
                           </td>
-                          <td class="goal-date">
-                            £210,000
+                          <td class="tables-current-value">
+                            <%=property.current_value ? '£'+property.current_value : ''%>
                           </td>
-                          <td>
-                            £500
+                          <td class="tables-rental-income">
+                            <%=property.rental_income ? '£'+property.rental_income+'pcm' : ''%>
                           </td>
-                          <td>
-                            <span class="text-warning">●</span> Part occupied
+                          <td class="tables-rental-yield">
+                            <h4>
+                              <span class="badge badge-soft-<%=property.rental_yield < 1 ? 'success' : 'danger'%>">3.8%</span>
+                            </h4>
                           </td>
                         </tr>
-                        <tr>
-                           <td class="goal-project">
-                             29 Tythe Barn Lane
-                           </td>
-                           <td class="goal-status">
-                             3
-                           </td>
-                           <td class="goal-progress">
-                             £235,000
-                           </td>
-                           <td class="goal-date">
-                             £210,000
-                           </td>
-                           <td>
-                             £500
-                           </td>
-                           <td>
-                             <span class="text-success">●</span> Occupied
-                           </td>
-                         </tr>
-                        </tr>
-                        <tr>
-                           <td class="goal-project">
-                             29 Tythe Barn Lane
-                           </td>
-                           <td class="goal-status">
-                             3
-                           </td>
-                           <td class="goal-progress">
-                             £235,000
-                           </td>
-                           <td class="goal-date">
-                             £210,000
-                           </td>
-                           <td>
-                             £500
-                           </td>
-                           <td>
-                             <span class="text-danger">●</span> Vacant
-                           </td>
-                         </tr>
-                        </tr>
+                        <% })%>
                       </tbody>
                     </table>
                   </div>
                 </div>
+    
           </div>
   
                 </div> <!-- / .card-body -->
