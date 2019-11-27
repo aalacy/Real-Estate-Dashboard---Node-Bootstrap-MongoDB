@@ -103,7 +103,7 @@ const getAddress = function() {
       }
     }
 
-    $("#property_address").val($('#propertyAutocomplete').val());
+    $("#property_fulladdress").val($('#propertyAutocomplete').val());
     $('#propertyAutocomplete').val(`${addressDetail.street_number} ${addressDetail.route}`);
 
     // $('#property_street_number').val(addressDetail.street_number);
@@ -111,7 +111,7 @@ const getAddress = function() {
     $('#property_city').val(addressDetail.postal_town);
     // $('#property_neighborhood').val(addressDetail.neighborhood);
     $('#property_zip').val(addressDetail.postal_code);
-    $('#property_region').val(addressDetail.administrative_area_level_1);
+    $('#property_county').val(addressDetail.administrative_area_level_1);
     // $('#property_country').val(addressDetail.country);
 }
 
@@ -320,6 +320,6 @@ $(function() {
     $('.property-unit').click(function(){
         $('.property-unit').find('.unit-check').addClass('d-c-none');
         $(this).find('.unit-check').removeClass('d-c-none');
-        $('input[name="property[unit]"]').val($(this).data('name'));
+        $('#property_units').val($(this).data('name'));
     });
 });

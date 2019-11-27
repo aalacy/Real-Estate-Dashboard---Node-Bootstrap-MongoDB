@@ -43,8 +43,11 @@ router.get('/', auth.checkToken, dashboard.index);
 
 router.get('/property/my', auth.checkToken, property.my);
 router.use('/property/overview/:id', auth.checkToken, property.overview);
+router.use('/property/detail/:id', auth.checkToken, property.detail);
 router.use('/property/new', auth.checkToken, property.new);
 router.use('/property/review', auth.checkToken, property.review);
 router.use('/property/create', auth.checkToken, property.create);
+router.use('/property/update', auth.checkToken, property.update);
+router.use('/property/remove', auth.checkToken, property.remove);
 
 module.exports = router;

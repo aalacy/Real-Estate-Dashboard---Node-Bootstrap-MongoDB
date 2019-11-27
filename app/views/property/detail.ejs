@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <% include ../partials/head %>
+    </head>
+    <body>
+    <% include ../partials/topnav %>
+
+    <div class="main-content">
+      
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-10 col-xl-8">
+            
+            <!-- Form -->
+            <form class="mb-4" method="POST" action="/property/update">
+            <!-- Header -->
+            <div class="header mt-md-5">
+              <div class="header-body">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h1 class="header-title">
+                      Property Details
+                    </h1>
+
+                  </div>
+                <div class="col-auto">
+                
+                  <!-- Button -->
+                  <button type="submit" class="btn btn-block btn-primary mb-2">
+                    Update
+                  </button>
+
+                </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+            
+              <input type="hidden" name="_csrf" value="<%= token %>">
+              <input type="hidden" name="property[id]" value="<%= property.id%>">
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      Address
+                    </label>
+                    <input type="text" name="property[address]" class="form-control" placeholder="Enter an address" value="<%= property.address%>" required>
+                  </div>
+
+                </div>
+                <div class="col-12 col-md-6">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      Address 2
+                    </label>
+                    <input type="text" name="property[address2]" class="form-control" value="<%= property.address2%>">
+                  </div>
+
+                </div>
+              </div> <!-- / .row -->
+        
+              <div class="row">
+                <div class="col-12 col-md-4">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      City
+                    </label>
+                    <input type="text" name="property[city]" class="form-control" value="<%= property.city%>" required>
+                  </div>
+
+                </div>
+                <div class="col-12 col-md-4">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      County
+                    </label>
+                    <input type="text" name="property[county]" class="form-control" value="<%= property.county%>" required>
+                  </div>
+
+                </div>
+                <div class="col-12 col-md-4">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      Post code
+                    </label>
+                    <input type="text" name="property[zip]" class="form-control" value="<%= property.zip%>">
+                  </div>
+
+                </div>
+              </div> <!-- / .row -->
+
+              <!-- Divider -->
+              <hr class="mt-5 mb-5">
+        
+              <div class="row">
+          
+                <div class="col-12 col-md-4">
+                  
+                <div class="form-group">
+                  <label>
+                    Ownership
+                  </label>
+                  <select class="form-control" name="property[ownership]" data-toggle="select" value="<%= property.ownership%>" data-options='{"placeholder": "Freehold or Leasehold"}'>
+                    <option></option>
+                    <option value="Freehold">Freehold</option>
+                    <option value="Leasehold">Leasehold</option>
+                  </select>
+                </div>
+
+                </div>
+        
+                <div class="col-12 col-md-4">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      Purchase Price
+                    </label>
+                    <div class="input-group input-group-merge mb-3">
+                        <input type="text" name="property[construction_price]" class="form-control form-control-prepended" value="<%= property.purchase_price%>">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">
+                            <span>£</span>
+                          </div>
+                        </div>
+                      </div>
+                    
+                  </div>
+
+                </div>
+                <div class="col-12 col-md-4">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      Purchase Date
+                    </label>
+                    <input type="text" name="property[purchase_date]" class="form-control" value="<%= property.purchase_date%>"  data-toggle="flatpickr">
+                  </div>
+
+                </div>
+              </div> <!-- / .row -->
+        
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  
+                  <div class="form-group">
+                    <label>
+                      Property Type
+                    </label>
+                    <select class="form-control" name="property[property_type]" data-toggle="select" data-options='{"placeholder": "Select a property type"}'>
+                      <option></option>
+                      <option value="Detached House" <% if (property.type == 'Detached House'){ %><%='selected'%><%}%>>Detached House</option>
+                      <option value="Semi Detached House" <% if (property.type == 'semi_detached_house'){ %><%='selected'%><%}%>>Semi Detached House</option>
+                      <option value="Terraced House" <% if (property.type == 'etrraced_house'){ %><%='selected'%><%}%>>Terraced House</option>
+                      <option value="Flat" <% if (property.type == 'flat'){ %><%='selected'%><%}%>>Flat</option>
+                    </select>
+                  </div>
+
+                </div>
+                <div class="col-12 col-md-6">
+                  
+                  <div class="form-group">
+                    <label>
+                      Construction Date
+                    </label>
+                    <select class="form-control" name="property[construction_date]" data-toggle="select" data-options='{"placeholder": "When"}'>
+                      <option></option>
+                      <option <% if (property.type == 'Pre-1914'){ %><%='selected'%><%}%>>Pre-1914</option>
+                      <option <% if (property.type == 'Between 1914-2000'){ %><%='selected'%><%}%>>Between 1914-2000</option>
+                      <option <% if (property.type == '2000 onwards'){ %><%='selected'%><%}%>>2000 onwards</option>
+                    </select>
+                  </div>
+
+                </div>
+              </div> <!-- / .row -->
+        
+        
+              <div class="row">
+                <div class="col-12 col-md-4">
+                  
+                  <div class="form-group">
+                    <label>
+                      Bedrooms
+                    </label>
+                    <input type="text" name="property[bedrooms]" class="form-control" value="<%=property.bedrooms%>">
+                  </div>
+
+                </div>
+        
+                <div class="col-12 col-md-4">
+                  
+                  <div class="form-group">
+                    <label>
+                      Bathrooms
+                    </label>
+                    <input type="text" name="property[bathrooms]" class="form-control" value="<%=property.bathrooms%>">
+                  </div>
+
+                </div>
+        
+                <div class="col-12 col-md-4">
+                  
+                <div class="form-group">
+                  <label>
+                    Finish Quality
+                  </label>
+                  <select class="form-control" name="property[finish_quality]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
+                    <option></option>
+                    <option <% if (property.type == 'Very High'){ %><%='selected'%><%}%>>Very High</option>
+                    <option <% if (property.type == 'High'){ %><%='selected'%><%}%>>High</option>
+                    <option <% if (property.type == 'Average'){ %><%='selected'%><%}%>>Average</option>
+                    <option <% if (property.type == 'Below Average'){ %><%='selected'%><%}%>>Below Average</option>
+                    <option <% if (property.type == 'Unmodernised'){ %><%='selected'%><%}%>>Unmodernised</option>
+                  </select>
+                </div>
+
+                </div>
+        
+              </div> <!-- / .row -->
+        
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      Internal Square Feet
+                    </label>
+                    <input type="text" name="property[square_feet]" class="form-control" value="<%=property.square_feet%>">
+                  </div>
+
+                </div>
+                <div class="col-12 col-md-6">
+                  
+                <div class="form-group">
+                  <label>
+                    Outdoor Space
+                  </label>
+                  <select class="form-control" name="property[outdoor_space]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
+                    <option></option>
+                    <option <% if (property.type == 'None'){ %><%='selected'%><%}%>>None</option>
+                    <option <% if (property.type == 'Balcony Terrace'){ %><%='selected'%><%}%>>Balcony Terrace</option>
+                    <option <% if (property.type == 'Garden'){ %><%='selected'%><%}%>>Garden</option>
+                    <option <% if (property.type == 'Garden (Large)'){ %><%='selected'%><%}%>>Garden (Large)</option>
+                  </select>
+                </div>
+
+                </div>
+              </div> <!-- / .row -->
+      
+        
+              <!-- Divider -->
+              <hr class="mt-5 mb-5">
+
+              </form>
+              <!-- Buttons -->
+              <form method="POST" action="/property/remove ">
+                <input type="hidden" name="_csrf" value="<%= token %>">
+                <input type="hidden" name="property[id]" value="<%= property.id%>">
+                <button type="submit" class="btn btn-block btn-danger">
+                  Remove property
+                </button>
+              </form>
+          </div>
+        </div> <!-- / .row -->
+      </div>
+        
+    </div>
+
+    <!-- JAVASCRIPT
+  ================================================== -->
+    <% include ../partials/scripts %>
+
+    <script type="text/javascript">
+                              
+        $(document).ready(function(){
+         
+        
+        });
+        </script>
+
+    </body>
+</html>

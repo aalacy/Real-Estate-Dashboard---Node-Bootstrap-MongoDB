@@ -31,6 +31,17 @@ exports.overview = async function(req, res) {
   });
 };
 
+exports.detail = async function(req, res) {
+  const { params: { id } } = req;
+  const property = await Properties.findOne({ id: id }, { _id: 0 });
+
+  res.render('property/detail', {
+    title: 'Avenue - Overview',
+    token: req.csrfToken(),
+    property: property
+  });
+};
+
 exports.new = function(req, res) {
   res.render('property/new', {
     title: 'Avenue - Add Property',
@@ -40,7 +51,7 @@ exports.new = function(req, res) {
 
 exports.review = async function(req, res) {
   const { body: { property } } = req;
-  const address = `https://maps.googleapis.com/maps/api/geocode/json?address=${property.address.split(' ').join('+')}&key=${process.env.GOOGLE_MAP_KEY}`
+  const address = `https://maps.googleapis.com/maps/api/geocode/json?address=${property.fulladdress.split(' ').join('+')}&key=${process.env.GOOGLE_MAP_KEY}`
   
   request({uri: address, json: true}).then(geo_data => {
     property.lat = geo_data.results[0].geometry.location.lat;
@@ -64,13 +75,28 @@ exports.create = async function(req, res) {
     property.lng = geo_data.results[0].geometry.location.lng;
   
     const myproperty = new Properties(property);
-    myproperty.setDate();
-    myproperty.setID();
 
     return myproperty.save().then(_property => {
       res.redirect('/property/overview/' + _property.id);
     });
   }).catch(err => console.log(err));
+};
 
-  
+exports.update = async function(req, res) {
+  const { body: { property } } = req;
+
+  const myproperty = new Properties(property);
+  myproperty.is_new = false;
+  myproperty.updateDate();
+  const new_values = { $set: myproperty };
+
+  await Properties.updateOne({ id: property.id }, new_values);
+  res.redirect('/property/overview/' + property.id);
+};
+
+exports.remove = async function(req, res) {
+  const { body: { property } } = req;
+
+  await Properties.deleteOne({ id: property.id });
+  res.redirect('/property/my');
 };

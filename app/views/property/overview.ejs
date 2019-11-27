@@ -51,6 +51,26 @@
 
       <!-- CONTENT -->
       <div class="container">
+         <!-- Alert -->
+        <% if (property.is_new) {%>
+			  <div class="alert alert-warning" role="alert">
+          This property profile is only 50% complete. <a href="#" class="alert-link">Add more details here</a>
+        </div>
+        <% } %>
+        
+        <!-- Alert -->
+        <% if (property.status == 'vacant') {%>
+        <div class="alert alert-secondary">
+          This property is vacant and has no active tenancies
+
+          <!-- Close -->
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+
+        </div>
+        <% } %>
+
         <div class="row">
           <div class="col-12">
         
@@ -127,7 +147,7 @@
                   </div> <!-- / .row -->
                 
               </div> 
-		  </div>
+		      </div>
 			  
               <!-- Card -->
               <div class="card">
@@ -225,7 +245,7 @@
                       <div class="col-auto">
 
                         <!-- Button -->
-                        <a href="#!" class="btn btn-sm btn-white">
+                        <a href="/property/detail/<%= property.id%>" class="btn btn-sm btn-white">
                           Edit
                         </a>
                     

@@ -13,10 +13,12 @@ var moment = require('moment');
  */
 
 const PropertiesSchema = new Schema({
-    id: {type: String, default: ''},
+    id: {type: String, default: uuidv4()},
     address: { type: String, default: '' },
+    fulladdress: { type: String, default: '' },
     address2: { type: String, default: '' },
-    region: { type: String, default: '' },
+    city: { type: String, default: '' },
+    county: { type: String, default: '' },
     country: { type: String, default: '' },
     lat: {type: String, default: ''},
     lng: {type: String, default: ''},
@@ -28,15 +30,16 @@ const PropertiesSchema = new Schema({
     income: { type: Number, default: '' },
     bedrooms: { type: Number, default: '' },
     bathrooms: { type: Number, default: '' },
-    square_feets: { type: Number, default: '' },
+    square_feet: { type: Number, default: '' },
     type: { type: String, default: '' },
     finish_quality: { type: String, default: '' },
     outdoor_space: { type: String, default: '' },
-    land_title: { type: String, default: '' },
+    ownership: { type: String, default: '' },
     construction_date: { type: String, default: '' },
-    status: { type: String, default: '' }, // vacant or occupied
-    created_at: { type: String, default: '' },
-    updated_at: { type: String, default: '' }
+    is_new: { type: Boolean, default: true },
+    status: { type: String, default: 'vacant' }, // vacant or occupied
+    created_at: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') },
+    updated_at: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') }
 });
 
 PropertiesSchema.methods.setData = function(property) {
@@ -61,8 +64,8 @@ PropertiesSchema.methods.setID = function() {
     this.id = uuidv4();
 }
 
-PropertiesSchema.methods.setDate = function() {
-    this.created_at = this.updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
+PropertiesSchema.methods.updateDate = function() {
+    this.updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
 };
 
 mongoose.model('Properties', PropertiesSchema);

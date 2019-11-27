@@ -78,8 +78,8 @@
                     <!-- Form -->
                     <form class="mb-4" id="create-property-form" method="post" action="/property/create">
                       <input type="hidden" name="_csrf" value="<%= token %>">
-                      <input type="hidden" name="property[units]" value="single unit">
-                      <input type="hidden" name="property[address]" value="">
+                      <input type="hidden" id="property_units" name="property[units]" value="single unit">
+                      <input type="hidden" id="property_fulladdress" name="property[fulladdress]" value="">
                       <!-- Project name -->
                       <div class="row">
                         <div class="col-12 col-md-12">
@@ -141,12 +141,12 @@
 
                         <div class="col-12 col-md-4">
                           
-                            <!-- Region -->
+                            <!-- County -->
                             <div class="form-group">
                               <label>
-                                Region
+                                County
                               </label>
-                              <input type="text" id="property_region" class="form-control"  name="property[region]" value=" " required>
+                              <input type="text" id="property_county" class="form-control"  name="property[county]" value=" " required>
                             </div>
           
                           </div>
