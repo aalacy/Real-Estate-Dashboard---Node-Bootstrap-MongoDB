@@ -57,11 +57,20 @@ exports.review = async function(req, res) {
 exports.create = async function(req, res) {
   const { body: { property } } = req;
 
-  const myproperty = new Properties(property);
-  myproperty.setDate();
-  myproperty.setID();
+  const address = `https://maps.googleapis.com/maps/api/geocode/json?address=${property.address.split(' ').join('+')}&key=${process.env.GOOGLE_MAP_KEY}`
+  
+  request({uri: address, json: true}).then(geo_data => {
+    property.lat = geo_data.results[0].geometry.location.lat;
+    property.lng = geo_data.results[0].geometry.location.lng;
+  
+    const myproperty = new Properties(property);
+    myproperty.setDate();
+    myproperty.setID();
 
-  return myproperty.save().then(_property => {
-    res.redirect('/property/overview/' + _property.id);
-  });
+    return myproperty.save().then(_property => {
+      res.redirect('/property/overview/' + _property.id);
+    });
+  }).catch(err => console.log(err));
+
+  
 };

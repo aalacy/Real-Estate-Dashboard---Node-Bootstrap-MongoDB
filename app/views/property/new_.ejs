@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+      <% include ../partials/head %>
+
+      <style>
+        .pac-container {
+            z-index: 9999;
+        }
+      </style>
+  </head>
+  <body>
+
+    <% include ../partials/modals %>
+
+    <% include ../partials/topnav %>
+
+      <!-- JAVASCRIPT
+    ================================================== -->
+    <% include ../partials/scripts %>
+
+    <script>
+        $('#modalAddNewProperty').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+        .on('shown.bs.modal', function (e) {
+            initAutocomplete();
+        })
+        .on('hidden.bs.modal', function (e) {
+            window.history.back();
+        });
+
+    </script>
+
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVk3qkTbB7KTW1oHsN_yMZ-rBY2Wd6wpc&libraries=places&callback=initAutocomplete"
+    async defer></script>
+  </body>
+</html>

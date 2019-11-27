@@ -89,6 +89,7 @@ function initAutocomplete() {
 }
 
 const getAddress = function() {
+    
     // Get the place details from the autocomplete object.
     var place = autocomplete.getPlace();
   
@@ -102,15 +103,16 @@ const getAddress = function() {
       }
     }
 
-    // console.log(addressDetail)
     $("#property_address").val($('#propertyAutocomplete').val());
-    $('#property_street_number').val(addressDetail.street_number);
-    $('#property_route').val(addressDetail.route);
+    $('#propertyAutocomplete').val(`${addressDetail.street_number} ${addressDetail.route}`);
+
+    // $('#property_street_number').val(addressDetail.street_number);
+    // $('#property_route').val(addressDetail.route);
     $('#property_city').val(addressDetail.postal_town);
-    $('#property_neighborhood').val(addressDetail.neighborhood);
+    // $('#property_neighborhood').val(addressDetail.neighborhood);
     $('#property_zip').val(addressDetail.postal_code);
     $('#property_region').val(addressDetail.administrative_area_level_1);
-    $('#property_country').val(addressDetail.country);
+    // $('#property_country').val(addressDetail.country);
 }
 
 // Map

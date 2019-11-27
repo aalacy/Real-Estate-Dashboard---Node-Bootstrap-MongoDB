@@ -1,40 +1,197 @@
 <!doctype html>
 <html lang="en">
-  <head>
-      <% include ../partials/head %>
-
-      <style>
-        .pac-container {
-            z-index: 9999;
-        }
-      </style>
-  </head>
-  <body>
-
-    <% include ../partials/modals %>
-
+    <head>
+        <% include ../partials/head %>
+    </head>
+    <body>
     <% include ../partials/topnav %>
 
-      <!-- JAVASCRIPT
-    ================================================== -->
+    <div class="main-content">
+         <!-- HEADER -->
+         <div class="header">
+                <div class="container">
+        
+                  <!-- Body -->
+                  <div class="header-body">
+                    <div class="row align-items-end">
+                      <div class="col">
+        
+                        <!-- Title -->
+                        <h1 class="header-title">
+                          Create A New Property 
+                        </h1>
+        
+                      </div>
+                      <div class="col-auto">
+                        
+                        <!-- Button -->
+                        <a href="/" class="btn btn-outline-primary mb-2">
+                          Cancel
+                        </a>
+      
+                      </div>
+                    </div> <!-- / .row -->
+                  </div> <!-- / .header-body -->
+        
+                </div>
+              </div> <!-- / .header -->
+              
+              <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col-12 col-lg-10 col-xl-8">
+                    
+                    <div class="row">
+                      <div class="col-12 col-md-6">
+                        <div class="card bg-light border lift cursor-hand property-unit" style="height: 90%;" data-name="single unit">
+                          <div class="card-body text-center">
+                            <h1 class="mb-4"><i class="fe fe-home"></i> <i class="fe fe-check-circle text-success float-right unit-check"></i></h1>
+                            <h3 class="mb-2">
+                              Single-unit property
+                            </h3>
+          
+                            <p class="small text-muted mb-0">
+                              A single-unit property is property that is or would be rented as a single entity.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-md-6">
+        
+                        <!-- Warning -->
+                        <div class="card bg-light border lift cursor-hand property-unit" data-name="multiple units">
+                          <div class="card-body text-center">
+                            <h1 class="mb-4"><i class="fe fe-layers"></i> <i class="fe fe-check-circle text-success float-right unit-check d-c-none"></i></h1>
+                            <h3 class="mb-2">
+                               Multi-unit property
+                            </h3>
+        
+                            <p class="small text-muted mb-0">
+                              A multi-unit property is a property that has been divided into multiple units that are rented independently to different tenants.
+                            </p>
+        
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div> <!-- / .row -->
+        
+                    <!-- Form -->
+                    <form class="mb-4" id="create-property-form" method="post" action="/property/create">
+                      <input type="hidden" name="_csrf" value="<%= token %>">
+                      <input type="hidden" name="property[units]" value="single unit">
+                      <input type="hidden" name="property[address]" value="">
+                      <!-- Project name -->
+                      <div class="row">
+                        <div class="col-12 col-md-12">
+                          <div class="form-group">
+                            <label>
+                              Property Type
+                            </label>
+                            <select class="form-control" name="property[type]" data-toggle="select" data-options='{"placeholder": "Select a property type"}'>
+                              <option></option>
+                              <option value="detached">Detached House</option>
+                              <option value="semi-detached">Semi Detached House</option>
+                              <option value="terraced">Terraced House</option>
+                              <option value="flat">Flat</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Divider -->
+                      <hr>
+        
+                      <div class="row">
+                        <div class="col-12 col-md-6">
+                          
+                          <!-- Start date -->
+                          <div class="form-group">
+                            <label>
+                              Street Address
+                            </label>
+                            <input id="propertyAutocomplete" type="text" class="form-control" name="property[address]" placeholder="Enter an address" value="" required>
+                          </div>
+        
+                        </div>
+                        <div class="col-12 col-md-6">
+                          
+                          <!-- Start date -->
+                          <div class="form-group">
+                            <label>
+                              Address 2
+                            </label>
+                            <input type="text" class="form-control"  name="property[address2]">
+                          </div>
+        
+                        </div>
+                      </div> <!-- / .row -->
+                
+                      <div class="row">
+                        <div class="col-12 col-md-4">
+                          
+                          <!-- City -->
+                          <div class="form-group">
+                            <label>
+                              City
+                            </label>
+                            <input type="text" id="property_city" class="form-control"  name="property[city]" value=" " required>
+                          </div>
+        
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                          
+                            <!-- Region -->
+                            <div class="form-group">
+                              <label>
+                                Region
+                              </label>
+                              <input type="text" id="property_region" class="form-control"  name="property[region]" value=" " required>
+                            </div>
+          
+                          </div>
+                     
+                        <div class="col-12 col-md-4">
+                          
+                          <!-- Pos Code -->
+                          <div class="form-group">
+                            <label>
+                              Post code
+                            </label>
+                            <input type="text" id="property_zip" class="form-control" name="property[zip]" value=" " required>
+                          </div>
+        
+                        </div>
+                      </div> <!-- / .row -->
+        
+                      <!-- Divider -->
+                      <hr class="mt-5 mb-5">
+        
+                      <!-- Buttons -->
+                      <button type="submit" class="btn btn-block btn-primary">
+                        Create property
+                      </button>
+        
+                    </form>
+        
+                  </div>
+                </div> <!-- / .row -->
+              </div> 
+    </div>
+
+    <!-- JAVASCRIPT
+  ================================================== -->
     <% include ../partials/scripts %>
 
-    <script>
-        $('#modalAddNewProperty').modal({
-            backdrop: 'static',
-            keyboard: false
-        })
-        .on('shown.bs.modal', function (e) {
-            initAutocomplete();
-        })
-        .on('hidden.bs.modal', function (e) {
-            window.history.back();
+    <script type="text/javascript">
+                              
+        $(document).ready(function(){
+          initAutocomplete();
         });
 
     </script>
-
     
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVk3qkTbB7KTW1oHsN_yMZ-rBY2Wd6wpc&libraries=places&callback=initAutocomplete"
     async defer></script>
-  </body>
+    </body>
 </html>
