@@ -28,9 +28,8 @@ const auth = {
       console.log('checkToken', req.session.user);
       next({ message: 'Not logged in', status: 405 });
     } else {
-        next();
+      next();
     }
-
   }
 };
 

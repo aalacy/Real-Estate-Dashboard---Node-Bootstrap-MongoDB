@@ -51,7 +51,7 @@ exports.new = function(req, res) {
 
 exports.review = async function(req, res) {
   const { body: { property } } = req;
-  const address = `https://maps.googleapis.com/maps/api/geocode/json?address=${property.fulladdress.split(' ').join('+')}&key=${process.env.GOOGLE_MAP_KEY}`
+  const address = `https://maps.googleapis.com/maps/api/geocode/json?address=${property.fulladdress.split(' ').join('+')}&key=${process.env.GOOGLE_MAP_KEY}`;
   
   request({uri: address, json: true}).then(geo_data => {
     property.lat = geo_data.results[0].geometry.location.lat;
@@ -68,7 +68,7 @@ exports.review = async function(req, res) {
 exports.create = async function(req, res) {
   const { body: { property } } = req;
 
-  const address = `https://maps.googleapis.com/maps/api/geocode/json?address=${property.address.split(' ').join('+')}&key=${process.env.GOOGLE_MAP_KEY}`
+  const address = `https://maps.googleapis.com/maps/api/geocode/json?address=${property.address.split(' ').join('+')}&key=${process.env.GOOGLE_MAP_KEY}`;
   
   request({uri: address, json: true}).then(geo_data => {
     property.lat = geo_data.results[0].geometry.location.lat;
