@@ -50,4 +50,9 @@ router.use('/property/create', auth.checkToken, property.create);
 router.use('/property/update', auth.checkToken, property.update);
 router.use('/property/remove', auth.checkToken, property.remove);
 
+// Add Tenancy
+router.use('/property/unit/new', auth.checkToken, property.new_unit);
+router.use('/property/unit/delete', auth.checkToken, property.delete_unit);
+router.use('/property/ajust_summary', auth.checkToken, property.adjust_summary);
+
 module.exports = router;

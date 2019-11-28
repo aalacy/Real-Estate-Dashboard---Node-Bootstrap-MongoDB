@@ -74,6 +74,9 @@ const addressDetail = {
 }
 
 function initAutocomplete() {
+    if (!$('#propertyAutocomplete')[0]) {
+        return;
+    }
     // Create the autocomplete object, restricting the search predictions to
     // geographical location types.
     autocomplete = new google.maps.places.Autocomplete(
@@ -305,11 +308,15 @@ $(function() {
      * Map
      */
 
-    if ($('*[data-toggle="map"]')) {
-        $('*[data-toggle="map"]').map(function(i, item){
-            drawMap($(item).data('options'));
+    if ($('*[data-toggle="cmap"]')) {
+        $('*[data-toggle="cmap"]').map(function(i, item){
+            try {
+                if ($(item).data('option').center) {
+                    drawMap($(item).data('option'));
+                }
+            } catch (error) {
+            }
         });
-        
     }
 
     /**
@@ -321,5 +328,37 @@ $(function() {
         $('.property-unit').find('.unit-check').addClass('d-c-none');
         $(this).find('.unit-check').removeClass('d-c-none');
         $('#property_units').val($(this).data('name'));
+    });
+
+    // Adjust tenancey
+    $('.edit-unit').click(function(e){
+        e.preventDefault();
+        const unit = $(this).data('unit');
+        $('#unit_description').val(unit.description);
+        $('#unit_start_date').val(unit.start_date);
+        $('#unit_end_date').val(unit.end_date);
+        $('#unit_rent_frequency').val(unit.rent_frequency);
+        $('#unit_rent_price').val(unit.rent_price);
+        $('input[name="unit[id]"]').val(unit.id);
+        $(".btn-unit-delete").removeClass('d-none');
+        $('#modalAddNewUnit').modal()
+        .on('hidden.bs.modal', function() {
+            $(".btn-unit-delete").addClass('d-none');
+        });
+    })
+
+    // Delete the unit
+    $(".btn-unit-delete").click(function(e){
+        e.preventDefault();
+        const _csrf = $('input[name="_csrf"]').val();
+        const property_id = $('input[name="property[id]"]').val();
+        const unit_id = $('input[name="unit[id]"]').val();
+        fetch(new Request('/property/unit/delete', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, _csrf})}))
+        .then(function() {
+            location.reload();
+        }).catch(function(text) {
+            console.log(text);
+        });
+          
     });
 });

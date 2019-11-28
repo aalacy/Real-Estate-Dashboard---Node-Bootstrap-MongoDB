@@ -24,8 +24,8 @@ const PropertiesSchema = new Schema({
     fulladdress: { type: String, default: '' },
     zip: { type: String, default: '' },
     units: { type: String, default: '' }, // Single Unit / Multiple Units
-    current_value: { type: Number, default: '' }, //£240
-    purchase_price: { type: Number, default: '' }, // £240
+    current_value: { type: Number, default: 0.0 }, //£240
+    purchase_price: { type: Number, default: 0.0 }, // £240
     purchase_date: { type: String, default: '' }, // 2019-01-02
     bedrooms: { type: Number, default: '' }, // 1
     bathrooms: { type: Number, default: '' }, // 2
@@ -35,10 +35,11 @@ const PropertiesSchema = new Schema({
     outdoor_space: { type: String, default: '' }, // None / Balcony Terrace / Garden / Garden (Large)
     ownership: { type: String, default: '' }, // Freehold / Leasehold
     construction_date: { type: String, default: '' }, // 2019-01-02
-    rental_yield: { type: Number, default: '' }, // 3.8%
-    rental_income: { type: Number, default: '' }, // £240pcm
+    rental_yield: { type: Number, default: 0.0 }, // 3.8%
+    rental_income: { type: Number, default: 0.0 }, // £240pcm
     is_new: { type: Boolean, default: true }, // used to display alert on top of the overview page
     status: { type: String, default: 'vacant' }, // Vacant or Occupied
+    tenancies: { type: Array, default: [] }, // Tenancies
     created_at: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') },
     updated_at: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') }
 });
@@ -67,6 +68,10 @@ PropertiesSchema.methods.setID = function() {
 
 PropertiesSchema.methods.updateDate = function() {
     this.updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
+};
+
+PropertiesSchema.methods.addUnit = function(unit) {
+    this.tenancies.push(unit);
 };
 
 mongoose.model('Properties', PropertiesSchema);
