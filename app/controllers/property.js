@@ -8,6 +8,11 @@ const Properties = mongoose.model('Properties');
 var moment = require('moment');
 const uuidv4 = require('uuid/v4');
 
+const calcRentalYield = function(purchase_price, rental_income) {
+  let rental_yield = purchase_price == 0 ? 0 : parseFloat(rental_income) * 0.01 / parseFloat(purchase_price);
+  return rental_yield.toFixed(2);
+}
+
 exports.my = async function(req, res, next) {
   const all_properties = await Properties.find({}, { _id: 0 });
   const occupied_properties = await Properties.find({ status: 'occupied' }, { _id: 0 });
@@ -95,7 +100,7 @@ exports.update = async function(req, res) {
     property.lng = geo_data.results[0].geometry.location.lng;
   
     property.is_new = false;
-    property.rental_yield = property.purchase_price == 0 ? 0 : parseFloat(myproperty.rental_income) * 0.01 / parseFloat(property.purchase_price);
+    property.rental_yield = calcRentalYield(property.purchase_price, myproperty.rental_income);
     property.update_at = moment().format('YYYY-MM-DD HH:mm:ss');
     const new_values = { $set: property };
 
@@ -156,7 +161,7 @@ exports.adjust_summary = async function(req, res) {
   const { body: { property: { current_value, id } } } = req;
 
   const myproperty = await Properties.findOne({ id: id }, { _id: 0 });
-  let rental_yield = myproperty.purchase_price == 0 ? 0 : parseFloat(myproperty.rental_income) * 0.01 / parseFloat(myproperty.purchase_price);
+  let rental_yield = calcRentalYield(myproperty.purchase_price, myproperty.rental_income);
   const new_values = { $set: { current_value, rental_yield } };
   return Properties.updateOne({ id }, new_values).then(() => {
     res.redirect('/property/overview/' + id);
