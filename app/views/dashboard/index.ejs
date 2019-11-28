@@ -312,7 +312,7 @@
                           </td>
                           <td class="tables-rental-yield">
                             <h4>
-                              <span class="badge badge-soft-<%=parseFloat(property.rental_yield) < 1 ? 'danger' : 'success'%>"><%=property.rental_yield%>%</span>
+                              <span class="badge badge-soft-<%=parseFloat(property.rental_yield) < 1 ? 'danger' : 'success'%>"><%=property.rental_yield.toFixed(2)%>%</span>
                             </h4>
                           </td>
                         </tr>
