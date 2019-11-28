@@ -302,13 +302,13 @@
                             <span class="text-<%=property.status == 'Occupied' ? 'success' : 'danger'%> ">●</span> <%=property.status%>
                           </td>
                           <td class="tables-purchase-price">
-                            <%=property.purchase_price ? '£'+property.purchase_price : ''%>
+                            <%=property.purchase_price ? '£'+property.purchase_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : ''%>
                           </td>
                           <td class="tables-current-value">
-                            <%=property.current_value ? '£'+property.current_value : ''%>
+                            <%=property.current_value ? '£'+property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : ''%>
                           </td>
                           <td class="tables-rental-income">
-                            <%=property.rental_income ? '£'+property.rental_income+'pcm' : ''%>
+                            <%=property.rental_income ? '£'+property.rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+'pcm' : ''%>
                           </td>
                           <td class="tables-rental-yield">
                             <h4>

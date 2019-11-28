@@ -159,6 +159,10 @@ const drawMap = function(options) {
     });
 };
 
+const formatNumber = function(num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
+
 $(function() {
     /**
      * User Authentication

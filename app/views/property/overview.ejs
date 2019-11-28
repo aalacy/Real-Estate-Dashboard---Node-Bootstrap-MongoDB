@@ -232,15 +232,14 @@
         
         <!-- Alert -->
         <% if (property.status == 'vacant') {%>
-        <div class="alert alert-secondary">
+        <!-- <div class="alert alert-secondary">
           This property is vacant and has no active tenancies
 
-          <!-- Close -->
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
 
-        </div>
+        </div> -->
         <% } %>
 
         <div class="row">
@@ -286,7 +285,7 @@
                 
                         <!-- Heading -->
                         <span class="h2 mb-0">
-                          £<%=property.current_value%>
+                          £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                         </span>
                       
                       </div>
@@ -298,7 +297,7 @@
                 
                         <!-- Heading -->
                         <span class="h2 mb-0">
-                          +£<%=property.rental_income%>
+                          +£<%=property.rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                         </span>
                       
                       </div>
@@ -353,7 +352,7 @@
                     <div class="col-auto">
                   
                       <!-- Avatar -->
-                      <h1 class="mb-0 avatar avatar-xs">
+                      <h1 class="mb-0 avatar avatar-md">
                         <img src="/img/icons/unit.png" class="avatar-img">
                       </h1>
   
@@ -374,7 +373,7 @@
                     <div class="col-auto text-right">
                       <!-- Title -->
                       <h4 class="card-title mb-1">
-                        £<%= unit.rent_price%>
+                        £<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                       </h4>
                       
                       <!-- Time -->
@@ -519,7 +518,7 @@
                     <div class="col-auto">
                     
                       <small class="text-muted">
-                        250
+                          <%= property.square_feet.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                       </small>
 
                     </div>
