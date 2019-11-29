@@ -41,7 +41,7 @@
       </div> <!-- / .header -->
             <div class="row">
               <div class="col-12 col-md-6">
-                <div class="card bg-light border lift cursor-hand property-unit" style="height: 90%;" data-name="Single Unit">
+                <div class="card bg-light border lift cursor-hand property-unit" style="height: 90%;" data-name="1">
                   <div class="card-body text-center">
                     <h1 class="mb-4"><i class="fe fe-home"></i> <i class="fe fe-check-circle text-success float-right unit-check"></i></h1>
                     <h3 class="mb-2">
@@ -57,7 +57,7 @@
               <div class="col-12 col-md-6">
 
                 <!-- Warning -->
-                <div class="card bg-light border lift cursor-hand property-unit" data-name="Multiple Units">
+                <div class="card bg-light border lift cursor-hand property-unit" data-name="2">
                   <div class="card-body text-center">
                     <h1 class="mb-4"><i class="fe fe-layers"></i> <i class="fe fe-check-circle text-success float-right unit-check d-c-none"></i></h1>
                     <h3 class="mb-2">
@@ -77,7 +77,7 @@
             <!-- Form -->
             <form class="mb-4" id="create-property-form" method="post" action="/property/create">
               <input type="hidden" name="_csrf" value="<%= token %>">
-              <input type="hidden" id="property_units" name="property[units]" value="Single Unit">
+              <input type="hidden" id="property_units" name="property[units]" value="1">
               <input type="hidden" id="property_fulladdress" name="property[fulladdress]" value="">
               <!-- Project name -->
               <div class="row">

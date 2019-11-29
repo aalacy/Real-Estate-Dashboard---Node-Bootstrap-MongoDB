@@ -9,14 +9,14 @@ var moment = require('moment');
 const uuidv4 = require('uuid/v4');
 
 const calcRentalYield = function(purchase_price, rental_income) {
-  let rental_yield = purchase_price == 0 ? 0 : parseFloat(rental_income) * 0.01 / parseFloat(purchase_price);
+  let rental_yield = purchase_price == 0 ? 0 : parseFloat(rental_income) * 100 / parseFloat(purchase_price);
   return rental_yield.toFixed(2);
 }
 
 exports.my = async function(req, res, next) {
   const all_properties = await Properties.find({}, { _id: 0 });
-  const occupied_properties = await Properties.find({ status: 'occupied' }, { _id: 0 });
-  const vacant_properties = await Properties.find({ status: 'vacant' }, { _id: 0 });
+  const occupied_properties = await Properties.find({ status: 'Occupied' }, { _id: 0 });
+  const vacant_properties = await Properties.find({ status: 'Vacant' }, { _id: 0 });
   res.render('property/myproperties', {
     title: 'Avenue - MyProperties',
     token: req.csrfToken(),
@@ -129,11 +129,12 @@ exports.new_unit = async function(req, res) {
     Monthly: 12
   };
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
+  const units = myproperty.units + 1;
   const rental_income = myproperty.rental_income + freq[unit.rent_frequency] * parseFloat(unit.rent_price);
   let rental_yield = myproperty.purchase_price == 0 ? 0 : rental_income * 0.01 / parseFloat(myproperty.purchase_price);
   const new_values = {
     $push: { tenancies: unit },
-    $set: { rental_income, rental_yield }
+    $set: { rental_income, rental_yield, units }
   };
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
     res.redirect('/property/overview/' + property.id);
@@ -152,6 +153,7 @@ exports.delete_unit = async function(req, res) {
     }
   });
   myproperty.tenancies = new_tenancies;
+  myproperty.units -= 1;
   console.log(myproperty);
   await myproperty.save();
   return res.redirect('/property/overview/' + property_id);

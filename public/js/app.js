@@ -134,30 +134,51 @@ const drawMap = function(options) {
         map.loadImage('/img/map/marker_small.png', function(error, image) {
             if (error) throw error;
             map.addImage('cat', image);
-            map.addLayer({
-                "id": "points",
-                "type": "symbol",
-                "source": {
-                    "type": "geojson",
-                    "data": {
-                        "type": "FeatureCollection",
-                        "features": [{
-                            "type": "Feature",
-                            "geometry": {
-                                "type": "Point",
-                                "coordinates": options.center
-                            }
-                        }]
+            options.markers.map( (marker, i) => {
+                map.addLayer({
+                    "id": "points" + i,
+                    "type": "symbol",
+                    "source": {
+                        "type": "geojson",
+                        "data": {
+                            "type": "FeatureCollection",
+                            "features": [{
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Point",
+                                    "coordinates": [marker.lng, marker.lat]
+                                }
+                            }]
+                        }
+                    },
+                    "layout": {
+                        "icon-image": "cat",
+                        "icon-size": 0.25
                     }
-                },
-                "layout": {
-                    "icon-image": "cat",
-                    "icon-size": 0.25
-                }
-            });
+                });
+            })
         });
     });
 };
+
+// Chart
+ function chartInit(chart, data) {
+    new Chart(chart, {
+      type: 'doughnut',
+      options: {
+        responsive: true,
+        legend: {
+            position: 'bottom',
+            display: true
+        },
+        animation: {
+            animateScale: true,
+            animateRotate: true
+        }
+      },
+      data: data
+    });
+  }
 
 const formatNumber = function(num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
@@ -365,4 +386,54 @@ $(function() {
         });
           
     });
+
+    /**
+    * Donught chart on dashboard
+    */
+
+      //
+      // Events
+      //
+
+      var randomScalingFactor = function() {
+            return Math.round(Math.random() * 100);
+        };
+      
+      if ($('#marketChart')[0]) {
+        const labels = $('#marketChart').data('option').labels;
+        const dataset = $('#marketChart').data('option').dataset;
+        const data = {
+            labels: labels,
+            datasets: [{
+              data: dataset,
+              backgroundColor: [
+                '#2C7BE5',
+                '#A6C5F7',
+                '#D2DDEC',
+                '#A6C347',
+                '#D223EC'
+              ]
+            }]
+          }
+        chartInit(document.getElementById('marketChart').getContext('2d'), data);
+      }
+
+    if ($('#incomeChart')[0]) {
+        const labels = $('#incomeChart').data('option').labels;
+        const dataset = $('#incomeChart').data('option').dataset;
+        const data = {
+            labels: labels,
+            datasets: [{
+              data: dataset,
+              backgroundColor: [
+                '#2C7BE5',
+                '#A6C5F7',
+                '#D2DDEC',
+                '#A6C347',
+                '#D223EC'
+              ]
+            }]
+          }
+        chartInit($('#incomeChart')[0], data);
+  }
 });

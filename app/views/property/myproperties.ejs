@@ -98,7 +98,7 @@
                           
                               <!-- Title -->
                               <h3 class="card-title mb-2 name">
-                                  <a href="/property/overview/<%=property.id%>"><%= property.address %></a>
+                                  <a href="/property/overview/<%=property.id%>"><%= property.address %>, <%= property.city %></a>
                               </h3>
       
                               <!-- Subtitle -->
@@ -144,7 +144,7 @@
                         
                                 <!-- Heading -->
                                 <span class="h2 mb-0">
-                                    £235,000
+                                    £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                                 </span>
                               
                               </div>
@@ -156,7 +156,7 @@
                         
                                 <!-- Heading -->
                                 <span class="h2 mb-0">
-                                    3.8%
+                                  <%=property.rental_yield.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>%
                                 </span>
                               
                               </div>
@@ -204,7 +204,7 @@
                           
                               <!-- Title -->
                               <h3 class="card-title mb-2 name">
-                                  <a href="/property/overview/<%=property.id%>"><%= property.address %></a>
+                                  <a href="/property/overview/<%=property.id%>"><%= property.address %>, <%= property.city %></a>
                               </h3>
       
                               <!-- Subtitle -->
@@ -250,7 +250,7 @@
                         
                                 <!-- Heading -->
                                 <span class="h2 mb-0">
-                                    £235,000
+                                    £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                                 </span>
                               
                               </div>
@@ -262,7 +262,7 @@
                         
                                 <!-- Heading -->
                                 <span class="h2 mb-0">
-                                    3.8%
+                                  <%=property.rental_yield.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>%
                                 </span>
                               
                               </div>
@@ -351,12 +351,12 @@
                               <div class="col-6 text-center border-right">
                                 <!-- Title -->
                                 <h6 class="card-title text-uppercase text-muted mb-2">
-                                    Property Value
+                                  Property Value
                                 </h6>
                         
                                 <!-- Heading -->
                                 <span class="h2 mb-0">
-                                    £235,000
+                                  £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                                 </span>
                               
                               </div>
@@ -368,7 +368,7 @@
                         
                                 <!-- Heading -->
                                 <span class="h2 mb-0">
-                                    3.8%
+                                  <%=property.rental_yield.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>%
                                 </span>
                               
                               </div>

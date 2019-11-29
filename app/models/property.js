@@ -23,7 +23,7 @@ const PropertiesSchema = new Schema({
     lng: {type: String, default: ''},
     fulladdress: { type: String, default: '' },
     zip: { type: String, default: '' },
-    units: { type: String, default: '' }, // Single Unit / Multiple Units
+    units: { type: Number, default: 1 }, // Single Unit / Multiple Units
     current_value: { type: Number, default: 0.0 }, //£240
     purchase_price: { type: Number, default: 0.0 }, // £240
     purchase_date: { type: String, default: '' }, // 2019-01-02
@@ -38,7 +38,7 @@ const PropertiesSchema = new Schema({
     rental_yield: { type: Number, default: 0.0 }, // 3.8%
     rental_income: { type: Number, default: 0.0 }, // £240pcm
     is_new: { type: Boolean, default: true }, // used to display alert on top of the overview page
-    status: { type: String, default: 'vacant' }, // Vacant or Occupied
+    status: { type: String, default: 'Vacant' }, // Vacant or Occupied
     tenancies: { type: Array, default: [] }, // Tenancies
     created_at: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') },
     updated_at: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') }

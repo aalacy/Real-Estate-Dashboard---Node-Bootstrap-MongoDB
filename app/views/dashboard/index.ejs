@@ -60,14 +60,14 @@
                       
                       <!-- Heading -->
                       <span class="h2 mb-0">
-                        £524,500
+                        £<%=portfolio_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                       </span>
   
                       <!-- Badge -->
-                      <span class="badge badge-soft-success mt-n1">
+                      <!-- <span class="badge badge-soft-success mt-n1">
                         +£24,500
                       </span>
-  
+   -->
                     </div>
                   </div> <!-- / .row -->
   
@@ -90,7 +90,7 @@
                       
                       <!-- Heading -->
                       <span class="h2 mb-0">
-                        £3,300
+                        £<%=rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                       </span>
   
                     </div>
@@ -118,7 +118,7 @@
   
                           <!-- Heading -->
                           <span class="h2 mr-2 mb-0">
-                            84.5%
+                            <%=occupancy%>%
                           </span>
                           
                         </div>
@@ -147,7 +147,7 @@
                       
                       <!-- Heading -->
                       <span class="h2 mb-0">
-                        10
+                        <%=all_units.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                       </span>
   
                     </div>
@@ -159,7 +159,7 @@
             </div>
           </div> <!-- / .row -->
           <div class="row">
-            <div class="col-12 col-xl-8">
+            <div class="col-12 col-xl-7">
               
               <!-- Orders -->
               <div class="card">
@@ -181,7 +181,7 @@
                 <div class="card-body">
                   
                   <div class="embed-responsive embed-responsive-21by9 rounded">
-                    <div class="embed-responsive-item" id="map" data-toggle="map" data-options='{"center": [-118.244615, 34.052979], "zoom": 12}'>
+                    <div class="embed-responsive-item" id="map" data-toggle="cmap" data-option='{"center": [-1.352459, 51.504860], "zoom": 6, "markers": <%=markers%>}'>
                       
                     </div>
                   </div>
@@ -190,7 +190,7 @@
               </div>
   
             </div>
-            <div class="col-12 col-xl-4">
+            <div class="col-12 col-xl-5">
   
               <!-- Devices -->
               <div class="card">
@@ -208,13 +208,13 @@
   
                       <!-- Tabs -->
                       <ul class="nav nav-tabs nav-tabs-sm card-header-tabs">
-                        <li class="nav-item" data-toggle="chart" data-target="#devicesChart" data-update='{"data":{"datasets":[{"data":[60,25,15]}]}}'>
-                          <a href="#" class="nav-link active" data-toggle="tab">
+                        <li class="nav-item">
+                          <a href="#market" class="nav-link active" data-toggle="tab">
                             Value
                           </a>
                         </li>
-                        <li class="nav-item" data-toggle="chart" data-target="#devicesChart" data-update='{"data":{"datasets":[{"data":[15,45,20]}]}}'>
-                          <a href="#" class="nav-link" data-toggle="tab">
+                        <li class="nav-item">
+                          <a href="#income" class="nav-link" data-toggle="tab">
                             Income
                           </a>
                         </li>
@@ -227,13 +227,19 @@
                 <div class="card-body">
                   
                   <!-- Chart -->
-                  <div class="chart chart-appended">
-                    <canvas id="devicesChart" class="chart-canvas" data-toggle="legend" data-target="#devicesChartLegend"></canvas>
+                  <div class="tab-content">
+                    <div class="tab-pane fade active show" id="market" role="tabpanel">
+                      <div class="chart chart-appended">
+                        <canvas id="marketChart" class="chart-canvas" data-option='{"labels": <%=JSON.stringify(labels)%>, "dataset": [<%=market_data%>]}'></canvas>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="income" role="tabpanel">
+                      <div class="chart chart-appended">
+                        <canvas id="incomeChart" class="chart-canvas" data-option='{"labels": <%=JSON.stringify(labels)%>, "dataset": [<%=income_data%>]}'></canvas>
+                      </div>
+                    </div>
                   </div>
-  
-                  <!-- Legend -->
-                  <div id="devicesChartLegend" class="chart-legend"></div>
-  
+    
                 </div>
               </div>
               
