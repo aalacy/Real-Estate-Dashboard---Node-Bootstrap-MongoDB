@@ -407,11 +407,11 @@ $(function() {
             datasets: [{
               data: dataset,
               backgroundColor: [
-                '#2C7BE5',
-                '#A6C5F7',
-                '#D2DDEC',
-                '#A6C347',
-                '#D223EC'
+                '#4dc9f6',
+                '#f67019',
+                '#f53794',
+                '#537bc4',
+                '#acc236'
               ]
             }]
           }
@@ -426,11 +426,11 @@ $(function() {
             datasets: [{
               data: dataset,
               backgroundColor: [
-                '#2C7BE5',
-                '#A6C5F7',
-                '#D2DDEC',
-                '#A6C347',
-                '#D223EC'
+                '#4dc9f6',
+                '#f67019',
+                '#f53794',
+                '#537bc4',
+                '#acc236'
               ]
             }]
           }
