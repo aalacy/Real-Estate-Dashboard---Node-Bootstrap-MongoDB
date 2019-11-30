@@ -9,7 +9,7 @@ var moment = require('moment');
 const uuidv4 = require('uuid/v4');
 
 const calcRentalYield = function(purchase_price, rental_income) {
-  let rental_yield = purchase_price == 0 ? 0 : parseFloat(rental_income) * 100 / parseFloat(purchase_price);
+  let rental_yield = purchase_price == 0 ? 0 : (parseFloat(rental_income) * 100 / parseFloat(purchase_price)).toFixed(2);
   return rental_yield.toFixed(2);
 }
 
