@@ -8,6 +8,13 @@ const Properties = mongoose.model('Properties');
 var moment = require('moment');
 const uuidv4 = require('uuid/v4');
 
+const freq = {
+  Daily: 365,
+  Weekly: 52,
+  Fortnightly: 26,
+  Monthly: 12
+};
+
 const calcRentalYield = function(purchase_price, rental_income) {
   let rental_yield = purchase_price == 0 ? 0 : parseFloat(rental_income) * 100 / parseFloat(purchase_price);
   console.log('rental_yield', rental_yield)
@@ -133,12 +140,7 @@ exports.remove = async function(req, res) {
 exports.new_unit = async function(req, res) {
   const { body: { property, unit } } = req;
 
-  const freq = {
-    Daily: 365,
-    Weekly: 52,
-    Fortnightly: 26,
-    Monthly: 12
-  };
+  
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
   status = 'Occupied';
   let rental_income = myproperty.rental_income;
