@@ -68,7 +68,7 @@
                       Rent Price
                     </label>
                     <div class="input-group input-group-merge mb-3">
-                      <input type="text" id="unit_rent_price" name="unit[rent_price]" class="form-control form-control-prepended" value="" required>
+                      <input type="number" min="1" id="unit_rent_price" name="unit[rent_price]" class="form-control form-control-prepended" value="" required>
                       <div class="input-group-prepend">
                         <div class="input-group-text">
                           <span>£</span>
@@ -104,7 +104,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary">Add</button>
+              <button type="submit" class="btn btn-primary" id="addUnitBtn">Add</button>
             </div>
           </div>
         </form>

@@ -9,7 +9,8 @@ var moment = require('moment');
 const uuidv4 = require('uuid/v4');
 
 const calcRentalYield = function(purchase_price, rental_income) {
-  let rental_yield = purchase_price == 0 ? 0 : (parseFloat(rental_income) * 100 / parseFloat(purchase_price)).toFixed(2);
+  let rental_yield = purchase_price == 0 ? 0 : parseFloat(rental_income) * 100 / parseFloat(purchase_price);
+  console.log('rental_yield', rental_yield)
   return rental_yield.toFixed(2);
 }
 
@@ -131,7 +132,6 @@ exports.remove = async function(req, res) {
 exports.new_unit = async function(req, res) {
   const { body: { property, unit } } = req;
 
-  unit.id = uuidv4();
   const freq = {
     Daily: 365,
     Weekly: 52,
@@ -140,13 +140,32 @@ exports.new_unit = async function(req, res) {
   };
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
   status = 'Occupied';
-  const units = myproperty.units + 1;
-  const rental_income = myproperty.rental_income + freq[unit.rent_frequency] * parseFloat(unit.rent_price);
-  let rental_yield = myproperty.purchase_price == 0 ? 0 : rental_income * 0.01 / parseFloat(myproperty.purchase_price);
-  const new_values = {
-    $push: { tenancies: unit },
-    $set: { rental_income, rental_yield, units, status }
-  };
+  let rental_income = myproperty.rental_income;
+  let rental_yield = myproperty.rental_yield;
+  let new_values = {};
+  let units = myproperty.units;
+  if (!unit.id) {
+    unit.id = uuidv4();
+    units += 1;
+    rental_income = myproperty.rental_income + freq[unit.rent_frequency] * parseFloat(unit.rent_price);
+    rental_yield = myproperty.purchase_price == 0 ? 0 : rental_income * 0.01 / parseFloat(myproperty.purchase_price);
+    new_values = {
+      $push: { tenancies: unit },
+      $set: { rental_income, rental_yield, units, status }
+    };
+  } else {
+    let tenancies = [];
+    myproperty.tenancies.map(element => {
+      if (element.id != unit.id) {
+        tenancies.push(element);
+      } else {
+        tenancies.push(unit)
+      }
+    });
+    new_values = {
+      $set: { rental_income, rental_yield, units, status, tenancies }
+    };
+  }
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
     res.redirect('/property/overview/' + property.id);
   });

@@ -370,12 +370,15 @@ $(function() {
         $('#unit_start_date').val(unit.start_date);
         $('#unit_end_date').val(unit.end_date);
         $('#unit_rent_frequency').val(unit.rent_frequency);
+        $('#unit_rent_frequency').trigger('change');
         $('#unit_rent_price').val(unit.rent_price);
         $('input[name="unit[id]"]').val(unit.id);
         $(".btn-unit-delete").removeClass('d-none');
+        $('#addUnitBtn').text('Update');
         $('#modalAddNewUnit').modal()
         .on('hidden.bs.modal', function() {
             $(".btn-unit-delete").addClass('d-none');
+            $('#addUnitBtn').text('Add');
         });
     })
 
