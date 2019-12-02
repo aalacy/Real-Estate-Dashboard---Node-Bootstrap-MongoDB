@@ -373,7 +373,9 @@ $(function() {
         $('#unit_rent_frequency').trigger('change');
         $('#unit_rent_price').val(unit.rent_price);
         $('input[name="unit[id]"]').val(unit.id);
-        $(".btn-unit-delete").removeClass('d-none');
+        if ($('.unit-item').length > 1) {
+            $(".btn-unit-delete").removeClass('d-none');
+        } 
         $('#addUnitBtn').text('Update');
         $('#modalAddNewUnit').modal()
         .on('hidden.bs.modal', function() {
