@@ -83,6 +83,7 @@ exports.create = async function(req, res) {
   
     const myproperty = new Properties(property);
     myproperty.status = 'Vacant';
+    myproperty.id = uuidv4();
     for (let i = 1; i <= parseInt(property.units); i++) {
       const unit = {
         id: uuidv4(),
