@@ -181,7 +181,7 @@
                 <div class="card-body">
                   
                   <div class="embed-responsive embed-responsive-21by9 rounded">
-                    <div class="embed-responsive-item" id="map" data-toggle="cmap" data-option='{"center": [-1.352459, 51.504860], "zoom": 6, "markers": <%=markers%>}'>
+                    <div class="embed-responsive-item" id="map" data-toggle="cmap" data-option='{"center": [-1.352459, 51.504860], "zoom": 4, "markers": <%=markers%>}'>
                       
                     </div>
                   </div>
@@ -302,7 +302,7 @@
                             <%=property.address%>, <%=property.city%>
                           </th>
                           <td class="tables-type">
-                            <%=property.units == 1 ? 'Single Unit' : 'Multi Units'%>
+                            <%=property.units == 1 ? 'Single Unit' : 'Multi Unit'%>
                           </td>
                           <td class="tables-status">
                             <span class="text-<%=property.status == 'Occupied' ? 'success' : 'danger'%> ">●</span> <%=property.status%>
@@ -318,7 +318,7 @@
                           </td>
                           <td class="tables-rental-yield">
                             <h4>
-                              <span class="badge badge-soft-<%=parseFloat(property.rental_yield) < 1 ? 'danger' : 'success'%>"><%=property.rental_yield.toFixed(2)%>%</span>
+                              <span class="badge badge-soft-<%=parseFloat(property.rental_yield) > 0 ? 'success' : 'danger'%>"><%=property.rental_yield.toFixed(2)%>%</span>
                             </h4>
                           </td>
                         </tr>

@@ -94,7 +94,7 @@ exports.create = async function(req, res) {
     for (let i = 1; i <= parseInt(property.units); i++) {
       const unit = {
         id: uuidv4(),
-        description: 'Unit' + i,
+        description: 'Unit ' + i,
         rent_price: 0,
         rent_frequency: 'Vacant'
       }

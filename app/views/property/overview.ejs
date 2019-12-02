@@ -297,7 +297,7 @@
                 
                         <!-- Heading -->
                         <span class="h2 mb-0">
-                          +£<%=property.rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                          £<%=property.rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                         </span>
                       
                       </div>
@@ -382,7 +382,9 @@
                       </p>
                     </div>
                     <div class="col-auto">
-                      <i class="fe fe-chevron-right"></i>
+                      <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>">
+                        <i class="fe fe-chevron-right"></i>
+                      </a>
                     </div>
                   </div>
                   
