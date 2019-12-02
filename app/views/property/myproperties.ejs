@@ -82,7 +82,7 @@
                             <div class="row align-items-center no-gutters">
                                 <div class="col-auto">
                                   <% if (property.status) { %>
-                                    <h2><span class="badge badge-soft-primary ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
+                                    <h2><span class="badge badge-soft-<%= property.status == 'Occupied' ? 'primary' : 'danger' %> ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
                                   <% }%>
                                 </div>
     
@@ -295,7 +295,7 @@
                                 <div class="col-auto">
     
                                   <% if (property.status) { %>
-                                    <h2><span class="badge badge-soft-primary ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
+                                    <h2><span class="badge badge-soft-danger ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
                                   <% }%>
                                 
                                 </div>
