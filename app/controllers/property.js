@@ -145,11 +145,11 @@ exports.new_unit = async function(req, res) {
   let rental_yield = myproperty.rental_yield;
   let new_values = {};
   let units = myproperty.units;
+  rental_income = myproperty.rental_income + freq[unit.rent_frequency] * parseFloat(unit.rent_price);
+  rental_yield = myproperty.purchase_price == 0 ? 0 : rental_income * 0.01 / parseFloat(myproperty.purchase_price);
   if (!unit.id) {
     unit.id = uuidv4();
     units += 1;
-    rental_income = myproperty.rental_income + freq[unit.rent_frequency] * parseFloat(unit.rent_price);
-    rental_yield = myproperty.purchase_price == 0 ? 0 : rental_income * 0.01 / parseFloat(myproperty.purchase_price);
     new_values = {
       $push: { tenancies: unit },
       $set: { rental_income, rental_yield, units, status }
@@ -178,12 +178,17 @@ exports.delete_unit = async function(req, res) {
   console.log(unit_id, '==', property_id);
   const myproperty = await Properties.findOne({ id: property_id });
   let new_tenancies = [];
+  let rental_income = 0;
   myproperty.tenancies.map(element => {
     if (element.id != unit_id) {
       new_tenancies.push(element);
+      rental_income += freq[element.rent_frequency] * parseFloat(element.rent_price);
     }
   });
+  let rental_yield = myproperty.purchase_price == 0 ? 0 : rental_income * 0.01 / parseFloat(myproperty.purchase_price);
   myproperty.tenancies = new_tenancies;
+  myproperty.rental_yield = rental_yield;
+  myproperty.rental_income = rental_income;
   myproperty.units -= 1;
   console.log(myproperty);
   await myproperty.save();

@@ -385,6 +385,10 @@ $(function() {
     // Delete the unit
     $(".btn-unit-delete").click(function(e){
         e.preventDefault();
+        if ($('.unit-item').length == 1) {
+            makeToast({message: 'Each property has at least one unit.'});
+            return;
+        }
         const _csrf = $('input[name="_csrf"]').val();
         const property_id = $('input[name="property[id]"]').val();
         const unit_id = $('input[name="unit[id]"]').val();
