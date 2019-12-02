@@ -152,7 +152,7 @@
                         Purchase Price
                       </label>
                       <div class="input-group input-group-merge mb-3">
-                        <input type="text" name="property[purchase_price]" class="form-control form-control-prepended" value="<%= property.purchase_price%>">
+                        <input type="number" min="0" name="property[purchase_price]" class="form-control form-control-prepended" value="<%= property.purchase_price%>">
                         <div class="input-group-prepend">
                           <div class="input-group-text">
                             <span>£</span>
@@ -177,7 +177,7 @@
                 </div> <!-- / .row -->
           
                 <div class="row">
-                  <div class="col-12 col-md-4">
+                  <div class="col-12 col-md-6">
                     
                     <div class="form-group">
                       <label>
@@ -193,7 +193,7 @@
                     </div>
 
                   </div>
-                  <div class="col-12 col-md-4">
+                  <div class="col-12 col-md-6">
                     
                     <div class="form-group">
                       <label>
@@ -204,20 +204,6 @@
                         <option <% if (property.construction_date == 'Pre-1914'){ %><%='selected'%><%}%>>Pre-1914</option>
                         <option <% if (property.construction_date == 'Between 1914-2000'){ %><%='selected'%><%}%>>Between 1914-2000</option>
                         <option <% if (property.construction_date == '2000 onwards'){ %><%='selected'%><%}%>>2000 onwards</option>
-                      </select>
-                    </div>
-
-                  </div>
-                  <div class="col-12 col-md-4">
-                    
-                    <div class="form-group">
-                      <label>
-                        Status
-                      </label>
-                      <select class="form-control" name="property[status]" data-toggle="select" data-options='{"placeholder": "Occupied or Vacant"}'>
-                        <option></option>
-                        <option value="Occupied" <% if (property.status == 'Occupied'){ %><%='selected'%><%}%>>Occupied</option>
-                        <option value="Vacant" <% if (property.status == 'Vacant'){ %><%='selected'%><%}%>>Vacant</option>
                       </select>
                     </div>
 
@@ -276,7 +262,7 @@
                       <label>
                         Internal Square Feet
                       </label>
-                      <input type="text" name="property[square_feet]" class="form-control" value="<%=property.square_feet%>">
+                      <input type="number" min="0" name="property[square_feet]" class="form-control" value="<%=property.square_feet%>">
                     </div>
 
                   </div>

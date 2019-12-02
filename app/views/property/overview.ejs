@@ -85,7 +85,7 @@
                     <label>
                       Rent Frequency
                     </label>
-                    <select class="form-control" id="unit_rent_frequency" name="unit[rent_frequency]" data-toggle="select" data-options='{"placeholder": "Select a frequency"}'>
+                    <select class="form-control" id="unit_rent_frequency" name="unit[rent_frequency]" data-toggle="select" data-options='{"placeholder": "Select a frequency"}' required>
                       <option></option>
                       <option value="Daily">Daily</option>
                       <option value="Weekly">Weekly</option>
@@ -373,7 +373,7 @@
                     <div class="col-auto text-right">
                       <!-- Title -->
                       <h4 class="card-title mb-1">
-                        £<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                        <% if (parseInt(unit.rent_price) > 0) {%>£<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><%}%>
                       </h4>
                       
                       <!-- Time -->

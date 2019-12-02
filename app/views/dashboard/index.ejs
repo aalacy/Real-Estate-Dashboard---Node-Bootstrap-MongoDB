@@ -302,7 +302,7 @@
                             <%=property.address%>, <%=property.city%>
                           </th>
                           <td class="tables-type">
-                            <%=property.type%>
+                            <%=property.units == 1 ? 'Single Unit' : 'Multi Units'%>
                           </td>
                           <td class="tables-status">
                             <span class="text-<%=property.status == 'Occupied' ? 'success' : 'danger'%> ">●</span> <%=property.status%>

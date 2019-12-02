@@ -81,6 +81,16 @@ exports.create = async function(req, res) {
     property.lng = geo_data.results[0].geometry.location.lng;
   
     const myproperty = new Properties(property);
+    myproperty.status = 'Vacant';
+    for (let i = 1; i <= parseInt(property.units); i++) {
+      const unit = {
+        id: uuidv4(),
+        description: 'Unit' + i,
+        rent_price: 0,
+        rent_frequency: 'Vacant'
+      }
+      myproperty.tenancies.push(unit)
+    }
 
     return myproperty.save().then(_property => {
       res.redirect('/property/overview/' + _property.id);
@@ -129,12 +139,13 @@ exports.new_unit = async function(req, res) {
     Monthly: 12
   };
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
+  status = 'Occupied';
   const units = myproperty.units + 1;
   const rental_income = myproperty.rental_income + freq[unit.rent_frequency] * parseFloat(unit.rent_price);
   let rental_yield = myproperty.purchase_price == 0 ? 0 : rental_income * 0.01 / parseFloat(myproperty.purchase_price);
   const new_values = {
     $push: { tenancies: unit },
-    $set: { rental_income, rental_yield, units }
+    $set: { rental_income, rental_yield, units, status }
   };
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
     res.redirect('/property/overview/' + property.id);

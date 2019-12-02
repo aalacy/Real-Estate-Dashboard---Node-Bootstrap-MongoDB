@@ -353,6 +353,13 @@ $(function() {
         $('.property-unit').find('.unit-check').addClass('d-c-none');
         $(this).find('.unit-check').removeClass('d-c-none');
         $('#property_units').val($(this).data('name'));
+        if ($(this).hasClass('multi-unit')) {
+            $('#property_units').prop('readonly', false);
+            $('#property_units').attr('min', '2');
+        } else {
+            $('#property_units').prop('readonly', true);
+            $('#property_units').attr('min', '1');
+        }
     });
 
     // Adjust tenancey
