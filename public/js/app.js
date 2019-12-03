@@ -329,6 +329,44 @@ $(function() {
         });
     });
 
+    $('#settings-form').submit(async function(e){
+        e.preventDefault();
+        if (($('#password1').val() || $('#password2').val()) && $('#password1').val() != $('#password2').val()) {
+            $('#password1').addClass('is-invalid');
+            $('#password2').addClass('is-invalid');
+            return;
+        }
+        const data = {
+            user:  {
+                id: $('#user_id').val(),
+                first_name: $('#first_name').val(),
+                last_name: $('#last_name').val(),
+                password: $('#password1').val(),
+                old_password: $('#password').val()
+            }
+        }
+        const token = $('meta[name="csrf"]').attr('content');
+        fetch('/settings/update', {
+            credentials: 'same-origin', // <-- includes cookies in the request
+            headers: {
+                'CSRF-Token': token, 
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(function(res) {
+            makeToast({message: res.message});
+            if (res.status == 422) {
+                $('#password').addClass('is-invalid');
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    });
+
     /**
      * Map
      */
@@ -451,5 +489,5 @@ $(function() {
             }]
           }
         chartInit($('#incomeChart')[0], data);
-  }
+    }
 });

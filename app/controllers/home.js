@@ -117,6 +117,7 @@ exports.signup_post = async function(req, res) {
 
   finalUser.setPassword(user.password);
   finalUser.setDate();
+  finalUser.setID();
 
   return finalUser.save().then(_user => {
     req.session.user = _user;
@@ -230,12 +231,41 @@ exports.password_reset_generate = async function(req, res) {
   }
 };
 
-exports.settings = function(req, res) {
+exports.settings = async function(req, res) {
+  const { user } = req.session;
+  const myuser = await Users.findOne({ id: user.id });
   res.render('auth/settings', {
     token: req.csrfToken(),
-    title: 'Avenue - Settings'
+    title: 'Avenue - Settings',
+    user: myuser
   });
 };
+
+exports.update_settings = async function(req, res) {
+  const { body: { user } } = req;
+  const myuser = await Users.findOne({ id: user.id });
+  if (!myuser) {
+    return res.json({
+      status: 404,
+      message: 'User with this email does not exist'
+    });
+  }
+  if (user.password && !myuser.validatePassword(user.old_password)) {
+    return res.status(200).json({
+      status: 422,
+      message: 'Old password is not correct!'
+    });
+  }
+  myuser.first_name = user.first_name;
+  myuser.last_name = user.last_name;
+  myuser.setPassword(user.password);
+  return myuser.save().then(() => {
+    res.json({
+      status: 200,
+      message: 'Successfully Changed'
+    });
+  });
+}
 
 exports.current = function(req, res) {
   // eslint-disable-next-line prettier/prettier

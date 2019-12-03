@@ -1,3 +1,4 @@
+
 /*!
  * Module dependencies
  */
@@ -7,12 +8,14 @@ const Schema = mongoose.Schema;
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 var moment = require('moment');
+const uuidv4 = require('uuid/v4');
 
 /**
  * User schema
  */
 
 const UsersSchema = new Schema({
+  id: { type: String, default: ''},
   first_name: { type: String, default: '' },
   last_name: { type: String, default: '' },
   email: { type: String, default: '' },
@@ -82,6 +85,10 @@ UsersSchema.methods.setDate = function() {
 UsersSchema.methods.updateDate = function() {
   this.updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
 };
+
+UsersSchema.methods.setID = function() {
+    this.id = uuidv4();
+}
 
 UsersSchema.methods.setPasswordResetLink = function(id) {
   this.reset_link = id;
