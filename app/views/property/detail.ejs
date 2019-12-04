@@ -183,13 +183,16 @@
                       <label>
                         Property Type
                       </label>
-                      <select class="form-control" name="property[type]" data-toggle="select" data-options='{"placeholder": "Select a property type"}'>
+                      <select class="form-control" id="property_type" name="property[type]" data-toggle="select" data-options='{"placeholder": "Select a property type"}'>
                         <option></option>
                         <option value="detached_house" <% if (property.type == 'detached_house'){ %><%='selected'%><%}%>>Detached House</option>
                         <option value="semi-detached_house" <% if (property.type == 'semi-detached_house'){ %><%='selected'%><%}%>>Semi Detached House</option>
                         <option value="terraced_house" <% if (property.type == 'terraced_house'){ %><%='selected'%><%}%>>Terraced House</option>
                         <option value="flat" <% if (property.type == 'flat'){ %><%='selected'%><%}%>>Flat</option>
                       </select>
+                      <div class="invalid-feedback">
+                        Please select a type
+                      </div>
                     </div>
 
                   </div>
@@ -199,12 +202,15 @@
                       <label>
                         Construction Date
                       </label>
-                      <select class="form-control" name="property[construction_date]" data-toggle="select" data-options='{"placeholder": "When"}'>
+                      <select class="form-control" id="construction_date" name="property[construction_date]" data-toggle="select" data-options='{"placeholder": "When"}'>
                         <option></option>
                         <option value="pre_1914" <% if (property.construction_date == 'pre_1914'){ %><%='selected'%><%}%>>Pre-1914</option>
                         <option value="1914_2000" <% if (property.construction_date == '1914_2000'){ %><%='selected'%><%}%>>Between 1914-2000</option>
                         <option value="2000_onwards" <% if (property.construction_date == '2000_onwards'){ %><%='selected'%><%}%>>2000 onwards</option>
                       </select>
+                      <div class="invalid-feedback">
+                        Please provide a construnction date
+                      </div>
                     </div>
 
                   </div>
@@ -218,7 +224,10 @@
                       <label>
                         Bedrooms
                       </label>
-                      <input type="text" onkeypress="return isNumberKey(event)" name="property[bedrooms]" class="form-control number" value="<%=property.bedrooms.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
+                      <input type="text" id="bedrooms" onkeypress="return isNumberKey(event)" name="property[bedrooms]" class="form-control number" value="<%=property.bedrooms.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
+                      <div class="invalid-feedback">
+                        Please provide bedrooms
+                      </div>
                     </div>
 
                   </div>
@@ -229,7 +238,10 @@
                       <label>
                         Bathrooms
                       </label>
-                      <input type="text" onkeypress="return isNumberKey(event)" name="property[bathrooms]" class="form-control number" value="<%=property.bathrooms.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
+                      <input type="text" id="bathrooms" onkeypress="return isNumberKey(event)" name="property[bathrooms]" class="form-control number" value="<%=property.bathrooms.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
+                      <div class="invalid-feedback">
+                        Please provide bathrooms
+                      </div>
                     </div>
 
                   </div>
@@ -240,7 +252,7 @@
                     <label>
                       Finish Quality
                     </label>
-                    <select class="form-control" name="property[finish_quality]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
+                    <select class="form-control" id="finish_quality" name="property[finish_quality]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
                       <option></option>
                       <option value="very_high" <% if (property.finish_quality == 'very_high'){ %><%='selected'%><%}%>>Very High</option>
                       <option value="high" <% if (property.finish_quality == 'high'){ %><%='selected'%><%}%>>High</option>
@@ -248,6 +260,9 @@
                       <option value="below_average" <% if (property.finish_quality == 'below_average'){ %><%='selected'%><%}%>>Below Average</option>
                       <option value="unmodernised" <% if (property.finish_quality == 'unmodernised'){ %><%='selected'%><%}%>>Unmodernised</option>
                     </select>
+                    <div class="invalid-feedback">
+                      Please select a finish quality
+                    </div>
                   </div>
 
                   </div>
@@ -262,7 +277,10 @@
                       <label>
                         Internal Square Feet
                       </label>
-                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[square_feet]" class="form-control number" value="<%=property.square_feet.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
+                      <input type="text" id="square_feet" onkeypress="return isNumberKey(event)"  name="property[square_feet]" class="form-control number" value="<%=property.square_feet.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
+                      <div class="invalid-feedback">
+                        Please provide a square feet
+                      </div>
                     </div>
 
                   </div>
@@ -272,13 +290,16 @@
                       <label>
                         Outdoor Space
                       </label>
-                      <select class="form-control" name="property[outdoor_space]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
+                      <select class="form-control"  id="outdoor_space" name="property[outdoor_space]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
                         <option></option>
                         <option value="none" <% if (property.outdoor_space == 'none'){ %><%='selected'%><%}%>>None</option>
                         <option value="balcony_terrace" <% if (property.outdoor_space == 'balcony_terrace'){ %><%='selected'%><%}%>>Balcony Terrace</option>
                         <option value="garden" <% if (property.outdoor_space == 'garden'){ %><%='selected'%><%}%>>Garden</option>
                         <option value="garden_very_large" <% if (property.outdoor_space == 'garden_very_large'){ %><%='selected'%><%}%>>Garden (Large)</option>
                       </select>
+                      <div class="invalid-feedback">
+                        Please select a finish quality
+                      </div>
                     </div>
 
                   </div>
@@ -288,13 +309,16 @@
                       <label>
                         Off Street Parking
                       </label>
-                      <select class="form-control" name="property[off_street_parking]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
+                      <select class="form-control" id="off_street_parking" name="property[off_street_parking]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
                         <option></option>
                         <option value="0" <% if (property.off_street_parking == 0){ %><%='selected'%><%}%>>No parking</option>
                         <option value="1" <% if (property.off_street_parking == 1){ %><%='selected'%><%}%>>1 Space</option>
                         <option value="2" <% if (property.off_street_parking == 2){ %><%='selected'%><%}%>>2 Spaces</option>
                         <option value="3" <% if (property.off_street_parking == 3){ %><%='selected'%><%}%>>3+ Spaces</option>
                       </select>
+                      <div class="invalid-feedback">
+                        Please select a off street parking
+                      </div>
                     </div>
 
                   </div>
@@ -329,6 +353,19 @@
     <!-- JAVASCRIPT
   ================================================== -->
     <% include ../partials/scripts %>
+
+    <script type="text/javascript">
+      $(function(){
+        try {
+          const ids = JSON.parse(localStorage.getItem('est_missing_ids'));
+          ids.map(id => {
+            $(id).addClass('is-invalid');
+          })
+        } catch (e){
+        }
+        localStorage.setItem('est_missing_ids', '');
+      });
+    </script>
     
     </body>
 </html>

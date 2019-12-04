@@ -452,36 +452,51 @@ $(function() {
     $('#estimatePropertyBtn').click(function(e){
         const property = $(this).data('property');
         let missing_value = '';
+        let ids = []
         if (!property.zip) {
             missing_value += 'postal code, ';
+            ids.push('#property_zip');
         } 
         if (!property.type ) {
             missing_value += 'type, ';
+            ids.push('#property_type');
         } 
         if (!property.construction_date) {
            missing_value += 'construction date, ';
+           ids.push('#construction_date');
         } 
         if (!property.square_feet) {
             missing_value += 'square feet, ';
+            ids.push('#square_feet');
         } 
         if (!property.bedrooms) {
             missing_value += 'bedrooms, ';
+            ids.push('#bedrooms');
         } 
         if (!property.bathrooms) {
             missing_value += 'bathrooms, ';
+            ids.push('#bathrooms');
         } 
         if (!property.finish_quality) {
             missing_value += 'finish quality, ';
+            ids.push('#finish_quality');
         } 
         if (!property.outdoor_space) {
             missing_value += 'out spacing, ';
+            ids.push('#out_spacing');
         } 
         if (!property.off_street_parking) {
             missing_value += 'off street parking, ';
+            ids.push('#off_street_parking');
         }
+        localStorage.setItem('est_missing_ids', JSON.stringify(ids));
         missing_value = missing_value.substr(0, missing_value.length-2)
-        $('#modalAdjustSummary').modal('hide');
-        return makeToast({ message: `Please add ${missing_value}` });
+        if (missing_value) {
+            $('#modalAdjustSummary').modal('hide');
+            makeToast({ message: `Please add ${missing_value}` });
+            location.href = `/property/detail/${property.id}`;
+            return;
+        }
 
         const self = $(this);
         self.find('span').removeClass('d-none');
