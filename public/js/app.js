@@ -444,42 +444,37 @@ $(function() {
     // Use property value from api in adjust summary popup
     $('#estimatePropertyBtn').click(function(e){
         const property = $(this).data('property');
+        let missing_value = '';
         if (!property.zip) {
-            $('#modalAdjustSummary').modal('hide');
-            return makeToast({ message: 'Please fill out the postal code' });
+            missing_value += 'postal code, ';
         } 
         if (!property.type ) {
-            $('#modalAdjustSummary').modal('hide');
-            return makeToast({ message: 'Please select a type' });
+            missing_value += 'type, ';
         } 
         if (!property.construction_date) {
-            $('#modalAdjustSummary').modal('hide');
-            return makeToast({ message: 'Please select a construction date' });
+           missing_value += 'construction date, ';
         } 
         if (!property.square_feet) {
-            $('#modalAdjustSummary').modal('hide');
-            return makeToast({ message: 'Please select a square feet' });
+            missing_value += 'square feet, ';
         } 
         if (!property.bedrooms) {
-            $('#modalAdjustSummary').modal('hide');
-            return makeToast({ message: 'Please fill out the bedrooms' });
+            missing_value += 'bedrooms, ';
         } 
         if (!property.bathrooms) {
-            $('#modalAdjustSummary').modal('hide');
-            return makeToast({ message: 'Please fill out the bathrooms' });
+            missing_value += 'bathrooms, ';
         } 
         if (!property.finish_quality) {
-            $('#modalAdjustSummary').modal('hide');
-            return makeToast({ message: 'Please select a finish quality' });
+            missing_value += 'finish quality, ';
         } 
         if (!property.outdoor_space) {
-            $('#modalAdjustSummary').modal('hide');
-            return makeToast({ message: 'Please select a finish quality' });
+            missing_value += 'out spacing, ';
         } 
         if (!property.off_street_parking) {
-            $('#modalAdjustSummary').modal('hide');
-            return makeToast({ message: 'Please select a off string parking' });
+            missing_value += 'off street parking, ';
         }
+        missing_value = missing_value.substr(0, missing_value.length-2)
+        $('#modalAdjustSummary').modal('hide');
+        return makeToast({ message: `Please add ${missing_value}` });
 
         const self = $(this);
         self.find('span').removeClass('d-none');
