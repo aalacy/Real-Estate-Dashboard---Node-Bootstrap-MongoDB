@@ -258,6 +258,29 @@ exports.update_settings = async function(req, res) {
   }
   myuser.first_name = user.first_name;
   myuser.last_name = user.last_name;
+  return myuser.save().then(() => {
+    res.json({
+      status: 200,
+      message: 'Successfully Changed'
+    });
+  });
+}
+
+exports.update_password = async function(req, res) {
+  const { body: { user } } = req;
+  const myuser = await Users.findOne({ id: user.id });
+  if (!myuser) {
+    return res.json({
+      status: 404,
+      message: 'User with this email does not exist'
+    });
+  }
+  if (user.password && !myuser.validatePassword(user.old_password)) {
+    return res.status(200).json({
+      status: 422,
+      message: 'Old password is not correct!'
+    });
+  }
   myuser.setPassword(user.password);
   return myuser.save().then(() => {
     res.json({

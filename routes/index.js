@@ -28,6 +28,7 @@ router.post('/password_reset_post', home.password_reset_post);
 
 router.get('/settings', auth.checkToken, home.settings);
 router.post('/settings/update', home.update_settings);
+router.post('/settings/password', home.update_password);
 
 //GET current route (required, only authenticated users have access)
 router.use('/current', auth.required, home.current);

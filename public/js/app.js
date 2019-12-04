@@ -9,25 +9,10 @@
   */
 
 const makeToast = function({title='Avenue', message=''}) {
-    $('body').prepend(`<div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
-    <div style="position: absolute; top: 2rem; right: 1rem;">
-  
-      <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-          <img src="/img/logo.svg" style="width: 20px; height: auto;" class="rounded mr-2" alt="logo">
-          <strong class="mr-auto">${title}</strong>
-          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="toast-body">
-          ${message}
-        </div>
-      </div>
-    </div>
-  </div>`);
+    $('.toast .toast-body').html(message);
+    $('.toast .toast-title').html(title);
 
-  return $('.toast').toast({delay: 3000}).toast('show');
+    return $('.toast').toast({delay: 3000}).toast('show');
 }
 
 const logout = function() {
@@ -329,20 +314,15 @@ $(function() {
         });
     });
 
-    $('#settings-form').submit(async function(e){
+
+    // Update the general settings
+    $('#settings-general-form').submit(async function(e){
         e.preventDefault();
-        if (($('#password1').val() || $('#password2').val()) && $('#password1').val() != $('#password2').val()) {
-            $('#password1').addClass('is-invalid');
-            $('#password2').addClass('is-invalid');
-            return;
-        }
         const data = {
             user:  {
                 id: $('#user_id').val(),
                 first_name: $('#first_name').val(),
                 last_name: $('#last_name').val(),
-                password: $('#password1').val(),
-                old_password: $('#password').val()
             }
         }
         const token = $('meta[name="csrf"]').attr('content');
@@ -358,8 +338,44 @@ $(function() {
         .then(response => response.json())
         .then(function(res) {
             makeToast({message: res.message});
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    });
+
+    // update password
+    $('#settings-password-form').submit(async function(e){
+        e.preventDefault();
+        if (($('#password1').val() || $('#password2').val()) && $('#password1').val() != $('#password2').val()) {
+            $('#password1').addClass('is-invalid');
+            $('#password2').addClass('is-invalid');
+            return;
+        }
+        const data = {
+            user:  {
+                id: $('#user_id').val(),
+                password: $('#password1').val(),
+                old_password: $('#password').val()
+            }
+        }
+        const token = $('meta[name="csrf"]').attr('content');
+        fetch('/settings/password', {
+            credentials: 'same-origin', // <-- includes cookies in the request
+            headers: {
+                'CSRF-Token': token, 
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(function(res) {
+            makeToast({message: res.message});
             if (res.status == 422) {
                 $('#password').addClass('is-invalid');
+            } else if (res.status == 200) {
+                $('input[type="password"]').removeClass('is-invalid').val('');
             }
         })
         .catch(error => {

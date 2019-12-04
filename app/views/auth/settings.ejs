@@ -8,6 +8,7 @@
     <!-- MODALS
     ================================================== -->
     <% include ../partials/modals %>
+
     <% include ../partials/topnav %>
 
     <!-- MAIN CONTENT
@@ -42,23 +43,13 @@
                     <!-- Nav -->
                     <ul class="nav nav-tabs nav-overflow header-tabs">
                       <li class="nav-item">
-                        <a href="#!" class="nav-link active">
+                        <a href="#general" data-toggle="tab" role="tab" class="nav-link active">
                           General
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="#!" class="nav-link">
-                          Profile
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#!" class="nav-link">
-                          Billing
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#!" class="nav-link">
-                          Notifications
+                        <a href="#passwordtab" data-toggle="tab" role="tab" class="nav-link">
+                          Password
                         </a>
                       </li>
                     </ul>
@@ -68,161 +59,170 @@
               </div>
             </div>
 
-            <!-- Form -->
-            <form class="mb-4" method="POST" action="/settings/update" id="settings-form">
-              <input type="hidden" name="_csrf" value="<%= token %>">
-              <input type="hidden" id="user_id" value="<%=user.id%>">
-              <div class="row">
-                <div class="col-12 col-md-6">
-                  
-                  <!-- First name -->
-                  <div class="form-group">
-
-                    <!-- Label -->
-                    <label>
-                      First name
-                    </label>
-
-                    <!-- Input -->
-                    <input type="text" class="form-control" id="first_name" name="user[first_name]" value="<%=user.first_name%>">
-
-                  </div>
-
-                </div>
-                <div class="col-12 col-md-6">
-                  
-                  <!-- Last name -->
-                  <div class="form-group">
-
-                    <!-- Label -->
-                    <label>
-                      Last name
-                    </label>
-
-                    <!-- Input -->
-                    <input type="text" class="form-control" id="last_name" name="user[last_name]" value="<%=user.last_name%>">
-
-                  </div>
-
-                </div>
-                <div class="col-12">
-                  
-                  <!-- Email address -->
-                  <div class="form-group">
-
-                    <!-- Label -->
-                    <label class="mb-1">
-                      Email address
-                    </label>
-
-                    <!-- Form text -->
-                    <small class="form-text text-muted">
-                      This contact will be shown to others publicly, so choose it carefully.
-                    </small>
-
-                    <!-- Input -->
-                    <input type="email" class="form-control" name="user[email]" value="<%=user.email%>" disabled>
-
-                  </div>
-
-                </div>
-              </div> <!-- / .row -->
-
-              <!-- Divider -->
-              <hr class="mt-4 mb-5">
-
-              <div class="row">
-                <div class="col-12 col-md-6 order-md-2">
-                  
-                  <!-- Card -->
-                  <div class="card bg-light border ml-md-4">
-                    <div class="card-body">
+            <div class="tab-content">
+              <div class="tab-pane fade active show" id="general" role="tabpanel">
+                <!-- Form -->
+                <form class="mb-4" method="POST" action="/settings/update" id="settings-general-form">
+                  <input type="hidden" name="_csrf" value="<%= token %>">
+                  <input type="hidden" id="user_id" value="<%=user.id%>">
+                  <div class="row">
+                    <div class="col-12 col-md-6">
                       
-                      <p class="mb-2">
-                        Password requirements
-                      </p>
+                      <!-- First name -->
+                      <div class="form-group">
 
-                      <p class="small text-muted mb-2">
-                        To create a new password, you have to meet all of the following requirements:
-                      </p>
+                        <!-- Label -->
+                        <label>
+                          First name
+                        </label>
 
-                      <ul class="small text-muted pl-4 mb-0">
-                        <li>
-                          Minimum 8 character
-                        </li>
-                        <li>
-                          At least one special character
-                        </li>
-                        <li>
-                          At least one number
-                        </li>
-                        <li>
-                        Can’t be the same as a previous password
-                        </li>
-                      </ul>
+                        <!-- Input -->
+                        <input type="text" class="form-control" id="first_name" name="user[first_name]" value="<%=user.first_name%>">
+
+                      </div>
 
                     </div>
-                  </div>
+                    <div class="col-12 col-md-6">
+                      
+                      <!-- Last name -->
+                      <div class="form-group">
 
-                </div>
-                <div class="col-12 col-md-6">
+                        <!-- Label -->
+                        <label>
+                          Last name
+                        </label>
 
-                  <!-- Password -->
-                  <div class="form-group">
+                        <!-- Input -->
+                        <input type="text" class="form-control" id="last_name" name="user[last_name]" value="<%=user.last_name%>">
 
-                    <!-- Label -->
-                    <label>
-                      Old Password
-                    </label>
+                      </div>
 
-                    <!-- Input -->
-                    <input type="password" class="form-control" id="password">
-                    <div class="invalid-feedback">
-                      Password is incorrect
                     </div>
-                  </div>
+                    <div class="col-12">
+                      
+                      <!-- Email address -->
+                      <div class="form-group">
 
-                  <!-- New password -->
-                  <div class="form-group">
+                        <!-- Label -->
+                        <label class="mb-1">
+                          Email address
+                        </label>
 
-                    <!-- Label -->
-                    <label>
-                      New password
-                    </label>
+                        <!-- Form text -->
+                        <small class="form-text text-muted">
+                          This contact will be shown to others publicly, so choose it carefully.
+                        </small>
 
-                    <!-- Input -->
-                    <input type="password" class="form-control" name="user[password]" id="password1">
-                    <div class="invalid-feedback">
-                      Password does not match
+                        <!-- Input -->
+                        <input type="email" class="form-control" name="user[email]" value="<%=user.email%>" disabled>
+
+                      </div>
+
                     </div>
+                  </div> <!-- / .row -->
 
-                  </div>
-
-                  <!-- Confirm new password -->
-                  <div class="form-group">
-
-                    <!-- Label -->
-                    <label>
-                      Confirm new password
-                    </label>
-
-                    <!-- Input -->
-                    <input type="password" class="form-control" name="user[password]" id="password2">
-                    <div class="invalid-feedback">
-                      Password does not match
-                    </div>
-
-                  </div>
-
-                  <!-- Submit -->
-                  <button type="submit" class="btn btn-primary lift">
-                    Update password
+                  <!-- Divider -->
+                  <hr class="mt-4 mb-5">
+                   <!-- Submit -->
+                  <button type="submit" class="btn btn-primary btn-block lift">
+                    Update
                   </button>
-                  
-                </div>
-              </div> <!-- / .row -->
+                </form>
+              </div>
+              <div class="tab-pane fade" id="passwordtab" role="tabpanel">
+                 <div class="row">
+                    <div class="col-12 col-md-6 order-md-2">
+                      
+                      <!-- Card -->
+                      <div class="card bg-light border ml-md-4">
+                        <div class="card-body">
+                          
+                          <p class="mb-2">
+                            Password requirements
+                          </p>
 
-            </form>
+                          <p class="small text-muted mb-2">
+                            To create a new password, you have to meet all of the following requirements:
+                          </p>
+
+                          <ul class="small text-muted pl-4 mb-0">
+                            <li>
+                              Minimum 8 character
+                            </li>
+                            <li>
+                              At least one special character
+                            </li>
+                            <li>
+                              At least one number
+                            </li>
+                            <li>
+                            Can’t be the same as a previous password
+                            </li>
+                          </ul>
+
+                        </div>
+                      </div>
+                    </div>
+                   <div class="col-12 col-md-6">
+                    <form class="mb-4" method="POST" action="/settings/update" id="settings-password-form">
+                      <input type="hidden" name="_csrf" value="<%= token %>">
+                      <input type="hidden" id="user_id" value="<%=user.id%>">
+                      <!-- Password -->
+                      <div class="form-group">
+
+                        <!-- Label -->
+                        <label>
+                          Old Password
+                        </label>
+
+                        <!-- Input -->
+                        <input type="password" class="form-control" id="password">
+                        <div class="invalid-feedback">
+                          Password is incorrect
+                        </div>
+                      </div>
+
+                      <!-- New password -->
+                      <div class="form-group">
+
+                        <!-- Label -->
+                        <label>
+                          New password
+                        </label>
+
+                        <!-- Input -->
+                        <input type="password" class="form-control" name="user[password]" id="password1">
+                        <div class="invalid-feedback">
+                          Password does not match
+                        </div>
+
+                      </div>
+
+                      <!-- Confirm new password -->
+                      <div class="form-group">
+
+                        <!-- Label -->
+                        <label>
+                          Confirm new password
+                        </label>
+
+                        <!-- Input -->
+                        <input type="password" class="form-control" name="user[password]" id="password2">
+                        <div class="invalid-feedback">
+                          Password does not match
+                        </div>
+
+                      </div>
+
+                      <!-- Submit -->
+                      <button type="submit" class="btn btn-primary lift">
+                        Update password
+                      </button>
+                      </form>
+                    </div>
+                  </div> <!-- / .row -->
+              </div>
+            </div>
 
           </div>
         </div> <!-- / .row -->
