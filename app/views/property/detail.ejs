@@ -224,7 +224,7 @@
                       <label>
                         Bedrooms
                       </label>
-                      <input type="text" id="bedrooms" onkeypress="return isNumberKey(event)" name="property[bedrooms]" class="form-control number" value="<%=property.bedrooms.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
+                      <input type="number" min="1" max="5" id="bedrooms" name="property[bedrooms]" class="form-control number" value="<%=property.bedrooms%>">
                       <div class="invalid-feedback">
                         Please provide bedrooms
                       </div>
@@ -238,7 +238,7 @@
                       <label>
                         Bathrooms
                       </label>
-                      <input type="text" id="bathrooms" onkeypress="return isNumberKey(event)" name="property[bathrooms]" class="form-control number" value="<%=property.bathrooms.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
+                      <input type="number" min="1" max="5" id="bathrooms"  name="property[bathrooms]" class="form-control number" value="<%=property.bathrooms%>">
                       <div class="invalid-feedback">
                         Please provide bathrooms
                       </div>
