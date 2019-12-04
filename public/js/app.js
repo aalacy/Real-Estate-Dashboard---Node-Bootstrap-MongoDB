@@ -481,7 +481,7 @@ $(function() {
             missing_value += 'finish quality, ';
             ids.push('#finish_quality');
         } 
-        if (property.outdoor_space && property.outdoor_space != 'none') {
+        if (property.outdoor_space && property.outdoor_space == 'none') {
             missing_value += 'out spacing, ';
             ids.push('#outdoor_space');
         } 
