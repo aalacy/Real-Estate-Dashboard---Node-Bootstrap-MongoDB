@@ -159,7 +159,7 @@
                         
                                 <!-- Heading -->
                                 <span class="h2 mb-0">
-                                  <%=property.rental_yield.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>%
+                                  <%=parseFloat(property.rental_yield.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')).toFixed(2)%>%
                                 </span>
                               
                               </div>
