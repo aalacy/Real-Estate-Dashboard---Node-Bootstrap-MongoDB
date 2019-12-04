@@ -160,7 +160,7 @@ exports.new_unit = async function(req, res) {
   let new_values = {};
   let units = myproperty.units;
   rental_income = myproperty.rental_income + freq[unit.rent_frequency] * parseFloat(unit.rent_price);
-  rental_yield = myproperty.purchase_price == 0 ? 0 : rental_income * 0.01 / parseFloat(myproperty.purchase_price);
+  rental_yield = calcRentalYield(myproperty.purchase_price, rental_income);
   if (!unit.id) {
     unit.id = uuidv4();
     units += 1;
