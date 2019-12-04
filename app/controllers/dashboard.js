@@ -8,6 +8,8 @@ const Properties = mongoose.model('Properties');
 exports.index = async function(req, res) {
   const properties = await Properties.find({}, { _id: 0 }).sort('-current_value');
   let portfolio_value = 0;
+  let total_purchase_price = 0;
+  let badge_value = 0;
   let rental_income = 0;
   let all_units = 0;
   let occupied = 0;
@@ -17,6 +19,7 @@ exports.index = async function(req, res) {
   let labels = []
   properties.map(property => {
   	portfolio_value += property.current_value;
+    total_purchase_price += property.purchase_price;
   	rental_income += property.rental_income;
   	all_units += property.units;
   	if (property.status == 'Occupied') {
@@ -27,6 +30,10 @@ exports.index = async function(req, res) {
     income_data.push(property.rental_income);
     labels.push(property.address.toString());
   })
+
+  if (portfolio_value && total_purchase_price ) {
+    badge_value = portfolio_value - total_purchase_price;
+  } 
 
   const occupancy = all_units == 0 ? 0.0 : (occupied * 100 / all_units).toFixed(2);
   console.log(labels)
@@ -41,6 +48,7 @@ exports.index = async function(req, res) {
     markers: JSON.stringify(markers),
     market_data,
     income_data,
-    labels
+    labels,
+    badge_value
   });
 };

@@ -64,10 +64,11 @@
                       </span>
   
                       <!-- Badge -->
-                      <!-- <span class="badge badge-soft-success mt-n1">
-                        +£24,500
+                      <% if (badge_value) { %>
+                      <span class="badge badge-soft-success mt-n1">
+                        £<%=badge_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                       </span>
-   -->
+                      <% } %>
                     </div>
                   </div> <!-- / .row -->
   
