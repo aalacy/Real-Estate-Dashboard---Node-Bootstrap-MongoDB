@@ -483,7 +483,7 @@ $(function() {
         } 
         if (!property.outdoor_space) {
             missing_value += 'out spacing, ';
-            ids.push('#out_spacing');
+            ids.push('#outdoor_space');
         } 
         if (!property.off_street_parking) {
             missing_value += 'off street parking, ';
