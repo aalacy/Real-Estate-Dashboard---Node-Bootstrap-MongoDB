@@ -68,7 +68,7 @@
                       Rent Price
                     </label>
                     <div class="input-group input-group-merge mb-3">
-                      <input type="number" min="1" id="unit_rent_price" name="unit[rent_price]" class="form-control form-control-prepended" value="" required>
+                      <input type="text" id="unit_rent_price" onkeypress="return isNumberKey(event)"  name="unit[rent_price]" class="form-control form-control-prepended number">
                       <div class="input-group-prepend">
                         <div class="input-group-text">
                           <span>£</span>
