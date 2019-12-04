@@ -129,11 +129,17 @@ exports.update = async function(req, res) {
   request({uri: address, json: true}).then(geo_data => {
     property.lat = geo_data.results[0].geometry.location.lat;
     property.lng = geo_data.results[0].geometry.location.lng;
+    property.purchase_price = property.purchase_price.replace(/,/g, '') ? parseFloat(property.purchase_price.replace(/,/g, '')) : 0;
+    property.bedrooms = property.bedrooms.replace(/,/g, '') ? parseInt(property.bedrooms.replace(/,/g, '')) : 0;
+    property.bathrooms = property.bathrooms.replace(/,/g, '') ? parseInt(property.bathrooms.replace(/,/g, '')) : 0;
+    property.square_feet = property.square_feet.replace(/,/g, '') ? parseFloat(property.square_feet.replace(/,/g, '')) : 0;
   
     property.is_new = false;
     property.rental_yield = calcRentalYield(property.purchase_price, myproperty.rental_income);
     property.update_at = moment().format('YYYY-MM-DD HH:mm:ss');
     const new_values = { $set: property };
+
+    console.log('===property', property);
 
     return Properties.updateOne({ id: property.id }, new_values).then(_property => {
       res.redirect('/property/overview/' + property.id);

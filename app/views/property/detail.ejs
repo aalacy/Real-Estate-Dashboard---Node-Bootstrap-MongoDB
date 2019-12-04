@@ -152,7 +152,7 @@
                         Purchase Price
                       </label>
                       <div class="input-group input-group-merge mb-3">
-                        <input type="number" min="0" name="property[purchase_price]" class="form-control form-control-prepended" value="<%= property.purchase_price%>">
+                        <input type="text" min="0" onkeypress="return isNumberKey(event)"  name="property[purchase_price]" class="form-control form-control-prepended number" value="<%= property.purchase_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
                         <div class="input-group-prepend">
                           <div class="input-group-text">
                             <span>£</span>
@@ -218,7 +218,7 @@
                       <label>
                         Bedrooms
                       </label>
-                      <input type="text" name="property[bedrooms]" class="form-control" value="<%=property.bedrooms%>">
+                      <input type="text" onkeypress="return isNumberKey(event)" name="property[bedrooms]" class="form-control number" value="<%=property.bedrooms.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
                     </div>
 
                   </div>
@@ -229,7 +229,7 @@
                       <label>
                         Bathrooms
                       </label>
-                      <input type="text" name="property[bathrooms]" class="form-control" value="<%=property.bathrooms%>">
+                      <input type="text" onkeypress="return isNumberKey(event)" name="property[bathrooms]" class="form-control number" value="<%=property.bathrooms.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
                     </div>
 
                   </div>
@@ -262,7 +262,7 @@
                       <label>
                         Internal Square Feet
                       </label>
-                      <input type="number" min="0" name="property[square_feet]" class="form-control" value="<%=property.square_feet%>">
+                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[square_feet]" class="form-control number" value="<%=property.square_feet.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
                     </div>
 
                   </div>
@@ -290,10 +290,10 @@
                       </label>
                       <select class="form-control" name="property[off_street_parking]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
                         <option></option>
-                        <option value="0" <% if (property.off_street_parking == 0){ %><%='selected'%><%}%>>0 Spaces</option>
-                        <option value="1" <% if (property.off_street_parking == 1){ %><%='selected'%><%}%>>1 Spaces</option>
+                        <option value="0" <% if (property.off_street_parking == 0){ %><%='selected'%><%}%>>No parking</option>
+                        <option value="1" <% if (property.off_street_parking == 1){ %><%='selected'%><%}%>>1 Space</option>
                         <option value="2" <% if (property.off_street_parking == 2){ %><%='selected'%><%}%>>2 Spaces</option>
-                        <option value="3" <% if (property.off_street_parking == 3){ %><%='selected'%><%}%>>3 Spaces</option>
+                        <option value="3" <% if (property.off_street_parking == 3){ %><%='selected'%><%}%>>3+ Spaces</option>
                       </select>
                     </div>
 

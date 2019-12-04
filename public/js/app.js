@@ -15,6 +15,13 @@ const makeToast = function({title='Avenue', message=''}) {
     return $('.toast').toast({delay: 3000}).toast('show');
 }
 
+const isNumberKey = function(evt){
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
+
 const logout = function() {
     const token = $('meta[name="csrf"]').attr('content');
     fetch('/logout', {
@@ -561,4 +568,18 @@ $(function() {
           }
         chartInit($('#incomeChart')[0], data);
     }
+
+    // thousands separator on input
+    $('input.number').keyup(function(event) {
+      // skip for arrow keys
+      if(event.which >= 37 && event.which <= 40) return;
+
+      // format number
+      $(this).val(function(index, value) {
+        return value
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        ;
+      });
+    });
 });
