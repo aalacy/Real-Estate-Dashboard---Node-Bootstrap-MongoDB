@@ -16,3 +16,7 @@
 .main-content {
     margin-top: 67px;
 }
+
+.toast {
+	z-index: 1070;
+}

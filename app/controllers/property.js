@@ -82,7 +82,19 @@ exports.review = async function(req, res) {
 exports.create = async function(req, res) {
   const { body: { property } } = req;
 
+  console.log(property)
+
   const address = `https://maps.googleapis.com/maps/api/geocode/json?address=${property.fulladdress.split(' ').join('+')}&key=${process.env.GOOGLE_MAP_KEY}`;
+
+  const floor_area_url = `https://api.propertydata.co.uk/floor-areas?key=${process.env.PROPERTYDATA_API_KEY}&postcode=${property.zip.split(' ').join('+')}`
+
+
+  const floor_area_list = await request({ uri: floor_area_url, json: true });
+  floor_area_list['known_floor_areas'].map(area => {
+    if (area.address.includes(property.address)) {
+      property.square_feet = parseFloat(area.square_feet);
+    }
+  });
   
   request({uri: address, json: true}).then(geo_data => {
     property.lat = geo_data.results[0].geometry.location.lat;
@@ -207,3 +219,24 @@ exports.adjust_summary = async function(req, res) {
     res.redirect('/property/overview/' + id);
   });
 };
+
+exports.estimated_sale = async function(req, res) {
+  const { body: { property_id } } = req;
+  const property = await Properties.findOne({ id: property_id }, { _id: 0 });
+  const estimate_url = `https://api.propertydata.co.uk/valuation-sale?key=${process.env.PROPERTYDATA_API_KEY}&postcode=${property.zip.replace(' ','')}&internal_area=${property.square_feet}&property_type=${property.type}&construction_date=${property.construction_date}&bedrooms=${property.bedrooms}&bathrooms=${property.bathrooms}&finish_quality=${property.finish_quality}&outdoor_space=${property.outdoor_space}&off_street_parking=${property.off_street_parking}`;
+  const est_res = await request({ uri: estimate_url, json: true });
+  console.log(est_res);
+  if (est_res.status == 'success') {
+    return res.json({
+      status: 200,
+      message: 'Sucessfully got the estimate',
+      estimate: est_res.result.estimate,
+      margin: est_res.result.margin
+    })
+  } else {
+    return res.json({
+      status: 400,
+      message: est_res.message
+    })
+  }
+}

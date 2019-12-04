@@ -42,6 +42,7 @@ const componentForm = {
     route: 'long_name',
     locality: 'long_name',
     administrative_area_level_1: 'short_name',
+    administrative_area_level_2: 'short_name',
     country: 'long_name',
     postal_code: 'short_name',
     postal_town: 'long_name',
@@ -52,6 +53,7 @@ const addressDetail = {
     street_number: '',
     route: '',
     administrative_area_level_1: '',
+    administrative_area_level_2: '',
     country: '',
     postal_code: '',
     postal_town: '',
@@ -100,6 +102,7 @@ const getAddress = function() {
     // $('#property_neighborhood').val(addressDetail.neighborhood);
     $('#property_zip').val(addressDetail.postal_code);
     $('#property_county').val(addressDetail.administrative_area_level_1);
+    $('#property_region').val(addressDetail.administrative_area_level_2);
     // $('#property_country').val(addressDetail.country);
 }
 
@@ -438,12 +441,69 @@ $(function() {
         });
     })
 
+    // Use property value from api in adjust summary popup
+    $('#estimatePropertyBtn').click(function(e){
+        const property = $(this).data('property');
+        if (!property.zip) {
+            $('#modalAdjustSummary').modal('hide');
+            return makeToast({ message: 'Please fill out the postal code' });
+        } 
+        if (!property.type ) {
+            $('#modalAdjustSummary').modal('hide');
+            return makeToast({ message: 'Please select a type' });
+        } 
+        if (!property.construction_date) {
+            $('#modalAdjustSummary').modal('hide');
+            return makeToast({ message: 'Please select a construction date' });
+        } 
+        if (!property.square_feet) {
+            $('#modalAdjustSummary').modal('hide');
+            return makeToast({ message: 'Please select a square feet' });
+        } 
+        if (!property.bedrooms) {
+            $('#modalAdjustSummary').modal('hide');
+            return makeToast({ message: 'Please fill out the bedrooms' });
+        } 
+        if (!property.bathrooms) {
+            $('#modalAdjustSummary').modal('hide');
+            return makeToast({ message: 'Please fill out the bathrooms' });
+        } 
+        if (!property.finish_quality) {
+            $('#modalAdjustSummary').modal('hide');
+            return makeToast({ message: 'Please select a finish quality' });
+        } 
+        if (!property.outdoor_space) {
+            $('#modalAdjustSummary').modal('hide');
+            return makeToast({ message: 'Please select a finish quality' });
+        } 
+        if (!property.off_street_parking) {
+            $('#modalAdjustSummary').modal('hide');
+            return makeToast({ message: 'Please select a off string parking' });
+        }
+
+        const self = $(this);
+        self.find('span').removeClass('d-none');
+        const _csrf = $('input[name="_csrf"]').val();
+        fetch(new Request('/property/estimated_sale/', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({property_id:property.id, _csrf})}))
+        .then(response => response.json())
+        .then(function(res) {
+            self.find('span').addClass('d-none');
+            if (res.status == 200) {
+                $('#property_current_value').val(res.estimate);
+            } 
+
+            return makeToast({ message: res.message});
+        }).catch(function(text) {
+            self.find('span').addClass('d-none');
+            console.log(text);
+        });
+    });
+
     // Delete the unit
     $(".btn-unit-delete").click(function(e){
         e.preventDefault();
         if ($('.unit-item').length == 1) {
-            makeToast({message: 'Each property has at least one unit.'});
-            return;
+            return makeToast({message: 'Each property has at least one unit.'});
         }
         const _csrf = $('input[name="_csrf"]').val();
         const property_id = $('input[name="property[id]"]').val();

@@ -137,8 +137,8 @@
                     </label>
                     <select class="form-control" name="property[ownership]" data-toggle="select" value="<%= property.ownership%>" data-options='{"placeholder": "Freehold or Leasehold"}'>
                       <option></option>
-                      <option value="Freehold" <% if (property.ownership == 'Freehold'){ %><%='selected'%><%}%>>Freehold</option>
-                      <option value="Leasehold" <% if (property.ownership == 'Leasehold'){ %><%='selected'%><%}%>>Leasehold</option>
+                      <option value="freehold" <% if (property.ownership == 'freehold'){ %><%='selected'%><%}%>>Freehold</option>
+                      <option value="leasehold" <% if (property.ownership == 'leasehold'){ %><%='selected'%><%}%>>Leasehold</option>
                     </select>
                   </div>
 
@@ -185,10 +185,10 @@
                       </label>
                       <select class="form-control" name="property[type]" data-toggle="select" data-options='{"placeholder": "Select a property type"}'>
                         <option></option>
-                        <option value="Detached House" <% if (property.type == 'Detached House'){ %><%='selected'%><%}%>>Detached House</option>
-                        <option value="Semi Detached House" <% if (property.type == 'Semi Detached House'){ %><%='selected'%><%}%>>Semi Detached House</option>
-                        <option value="Terraced House" <% if (property.type == 'Terraced House'){ %><%='selected'%><%}%>>Terraced House</option>
-                        <option value="Flat" <% if (property.type == 'Flat'){ %><%='selected'%><%}%>>Flat</option>
+                        <option value="detached_house" <% if (property.type == 'detached_house'){ %><%='selected'%><%}%>>Detached House</option>
+                        <option value="semi-detached_house" <% if (property.type == 'semi-detached_house'){ %><%='selected'%><%}%>>Semi Detached House</option>
+                        <option value="terraced_house" <% if (property.type == 'terraced_house'){ %><%='selected'%><%}%>>Terraced House</option>
+                        <option value="flat" <% if (property.type == 'flat'){ %><%='selected'%><%}%>>Flat</option>
                       </select>
                     </div>
 
@@ -201,9 +201,9 @@
                       </label>
                       <select class="form-control" name="property[construction_date]" data-toggle="select" data-options='{"placeholder": "When"}'>
                         <option></option>
-                        <option <% if (property.construction_date == 'Pre-1914'){ %><%='selected'%><%}%>>Pre-1914</option>
-                        <option <% if (property.construction_date == 'Between 1914-2000'){ %><%='selected'%><%}%>>Between 1914-2000</option>
-                        <option <% if (property.construction_date == '2000 onwards'){ %><%='selected'%><%}%>>2000 onwards</option>
+                        <option value="pre_1914" <% if (property.construction_date == 'pre_1914'){ %><%='selected'%><%}%>>Pre-1914</option>
+                        <option value="1914_2000" <% if (property.construction_date == '1914_2000'){ %><%='selected'%><%}%>>Between 1914-2000</option>
+                        <option value="2000_onwards" <% if (property.construction_date == '2000_onwards'){ %><%='selected'%><%}%>>2000 onwards</option>
                       </select>
                     </div>
 
@@ -242,11 +242,11 @@
                     </label>
                     <select class="form-control" name="property[finish_quality]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
                       <option></option>
-                      <option <% if (property.finish_quality == 'Very High'){ %><%='selected'%><%}%>>Very High</option>
-                      <option <% if (property.finish_quality == 'High'){ %><%='selected'%><%}%>>High</option>
-                      <option <% if (property.finish_quality == 'Average'){ %><%='selected'%><%}%>>Average</option>
-                      <option <% if (property.finish_quality == 'Below Average'){ %><%='selected'%><%}%>>Below Average</option>
-                      <option <% if (property.finish_quality == 'Unmodernised'){ %><%='selected'%><%}%>>Unmodernised</option>
+                      <option value="very_high" <% if (property.finish_quality == 'very_high'){ %><%='selected'%><%}%>>Very High</option>
+                      <option value="high" <% if (property.finish_quality == 'high'){ %><%='selected'%><%}%>>High</option>
+                      <option value="average" <% if (property.finish_quality == 'average'){ %><%='selected'%><%}%>>Average</option>
+                      <option value="below_average" <% if (property.finish_quality == 'below_average'){ %><%='selected'%><%}%>>Below Average</option>
+                      <option value="unmodernised" <% if (property.finish_quality == 'unmodernised'){ %><%='selected'%><%}%>>Unmodernised</option>
                     </select>
                   </div>
 
@@ -255,7 +255,7 @@
                 </div> <!-- / .row -->
           
                 <div class="row">
-                  <div class="col-12 col-md-6">
+                  <div class="col-12 col-md-4">
                     
                     <!-- Start date -->
                     <div class="form-group">
@@ -266,20 +266,36 @@
                     </div>
 
                   </div>
-                  <div class="col-12 col-md-6">
+                  <div class="col-12 col-md-4">
                     
-                  <div class="form-group">
-                    <label>
-                      Outdoor Space
-                    </label>
-                    <select class="form-control" name="property[outdoor_space]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
-                      <option></option>
-                      <option <% if (property.outdoor_space == 'None'){ %><%='selected'%><%}%>>None</option>
-                      <option <% if (property.outdoor_space == 'Balcony Terrace'){ %><%='selected'%><%}%>>Balcony Terrace</option>
-                      <option <% if (property.outdoor_space == 'Garden'){ %><%='selected'%><%}%>>Garden</option>
-                      <option <% if (property.outdoor_space == 'Garden (Large)'){ %><%='selected'%><%}%>>Garden (Large)</option>
-                    </select>
+                    <div class="form-group">
+                      <label>
+                        Outdoor Space
+                      </label>
+                      <select class="form-control" name="property[outdoor_space]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
+                        <option></option>
+                        <option value="none" <% if (property.outdoor_space == 'none'){ %><%='selected'%><%}%>>None</option>
+                        <option value="balcony_terrace" <% if (property.outdoor_space == 'balcony_terrace'){ %><%='selected'%><%}%>>Balcony Terrace</option>
+                        <option value="garden" <% if (property.outdoor_space == 'garden'){ %><%='selected'%><%}%>>Garden</option>
+                        <option value="garden_very_large" <% if (property.outdoor_space == 'garden_very_large'){ %><%='selected'%><%}%>>Garden (Large)</option>
+                      </select>
+                    </div>
+
                   </div>
+                  <div class="col-12 col-md-4">
+                    
+                    <div class="form-group">
+                      <label>
+                        Off Street Parking
+                      </label>
+                      <select class="form-control" name="property[off_street_parking]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
+                        <option></option>
+                        <option value="0" <% if (property.off_street_parking == 0){ %><%='selected'%><%}%>>0 Spaces</option>
+                        <option value="1" <% if (property.off_street_parking == 1){ %><%='selected'%><%}%>>1 Spaces</option>
+                        <option value="2" <% if (property.off_street_parking == 2){ %><%='selected'%><%}%>>2 Spaces</option>
+                        <option value="3" <% if (property.off_street_parking == 3){ %><%='selected'%><%}%>>3 Spaces</option>
+                      </select>
+                    </div>
 
                   </div>
                 </div> <!-- / .row -->

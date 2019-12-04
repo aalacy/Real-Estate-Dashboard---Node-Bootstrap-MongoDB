@@ -17,6 +17,7 @@ const PropertiesSchema = new Schema({
     address: { type: String, default: '' },
     address2: { type: String, default: '' },
     city: { type: String, default: '' },
+    region: { type: String, default: '' },
     county: { type: String, default: '' },
     country: { type: String, default: '' },
     lat: {type: String, default: ''},
@@ -37,6 +38,7 @@ const PropertiesSchema = new Schema({
     construction_date: { type: String, default: '' }, // 2019-01-02
     rental_yield: { type: Number, default: 0.0 }, // 3.8%
     rental_income: { type: Number, default: 0.0 }, // £240pcm
+    off_street_parking: { type: String, default: '' }, // 0 ~ 3 Spaces
     is_new: { type: Boolean, default: true }, // used to display alert on top of the overview page
     status: { type: String, default: 'Vacant' }, // Vacant or Occupied
     tenancies: { type: Array, default: [] }, // Tenancies
@@ -47,7 +49,7 @@ const PropertiesSchema = new Schema({
 PropertiesSchema.methods.setData = function(property) {
     this.address = property.address;
     this.address2 = property.address2;
-    this.region = property.region;
+    this.county = property.county;
     this.country = property.country;
     this.zip = property.zip;
     this.units = property.units;

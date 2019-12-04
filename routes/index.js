@@ -56,5 +56,6 @@ router.use('/property/remove', auth.checkToken, property.remove);
 router.use('/property/unit/new', auth.checkToken, property.new_unit);
 router.use('/property/unit/delete', auth.checkToken, property.delete_unit);
 router.use('/property/ajust_summary', auth.checkToken, property.adjust_summary);
+router.use('/property/estimated_sale', auth.checkToken, property.estimated_sale);
 
 module.exports = router;

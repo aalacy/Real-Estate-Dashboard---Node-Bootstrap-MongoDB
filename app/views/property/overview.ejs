@@ -8,7 +8,7 @@
     <!-- Modal Add New Unit -->
     <div class="modal  fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
-        <form id="search-address-form" method="post" action="/property/unit/new">
+        <form id="search-address-form" method="post" action="/property/unit/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" name="property[id]" value="<%= property.id%>">
           <input type="hidden" name="unit[id]" value="">
@@ -114,7 +114,7 @@
     <!-- Modal Adjust Summary -->
     <div class="modal fade" id="modalAdjustSummary" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
-        <form id="search-address-form" method="post" action="/property/ajust_summary">
+        <form id="search-address-form" method="post" action="/property/ajust_summary/">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" name="property[id]" value="<%= property.id%>">
           <div class="modal-content bg-lighter">
@@ -135,12 +135,15 @@
                     <label>
                       Current Valuation
                     </label>
-                    <input type="text" name="property[current_value]" class="form-control" placeholder="" value="" required>
+                    <input type="text" name="property[current_value]" id="property_current_value" class="form-control" placeholder="" value="" required>
                   </div>
     
                 </div>
                 <div class="col-12 col-md-6 d-flex align-items-center">
-                  <button type="button" class="btn btn-primary">Use Avenue Estimate</button>
+                  <button type="button" class="btn btn-primary" id="estimatePropertyBtn" data-property="<%=JSON.stringify(property)%>">
+                    <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span> 
+                    Use Avenue Estimate 
+                  </button>
                 </div>
               </div>
               <div class="row">
@@ -526,24 +529,24 @@
                     </div>
                   </div> <!-- / .row -->
 				  
-                  <!-- <hr> -->
+                  <hr>
 
-                  <!-- <div class="row align-items-center">
+                  <div class="row align-items-center">
                     <div class="col">
                     
                       <h5 class="mb-0">
-                        Units
+                        Off Street Parking
                       </h5>
 
                     </div>
                     <div class="col-auto">
                     
                       <small class="text-muted text-capitalize">
-                        <%= property.units%>
+                        <%= property.off_street_parking ? property.off_street_parking + ' spaces' : '' %> 
                       </small>
 
                     </div>
-                  </div>  -->
+                  </div> 
 
                 </div>
               </div>

@@ -75,9 +75,10 @@
             </div> <!-- / .row -->
 
             <!-- Form -->
-            <form class="mb-4" id="create-property-form" method="post" action="/property/create">
+            <form class="mb-4" id="create-property-form" method="post" action="/property/create/">
               <input type="hidden" name="_csrf" value="<%= token %>">
               <input type="hidden" id="property_fulladdress" name="property[fulladdress]" value="">
+              <input type="hidden" id="property_region" name="property[region]" value="">
               <!-- Project name -->
               <div class="row">
                 <div class="col-12 col-md-6">
