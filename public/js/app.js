@@ -493,7 +493,7 @@ $(function() {
         missing_value = missing_value.substr(0, missing_value.length-2)
         if (missing_value) {
             $('#modalAdjustSummary').modal('hide');
-            makeToast({ message: `Please add ${missing_value}` });
+            makeToast({ message: `Complete missing property details to get valuation estimate` });
             location.href = `/property/detail/${property.id}`;
             return;
         }

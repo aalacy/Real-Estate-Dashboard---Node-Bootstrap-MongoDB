@@ -358,9 +358,12 @@
       $(function(){
         try {
           const ids = JSON.parse(localStorage.getItem('est_missing_ids'));
-          ids.map(id => {
-            $(id).addClass('is-invalid');
-          })
+          if (ids.length) {
+            ids.map(id => {
+              $(id).addClass('is-invalid');
+            })
+            $('a[href="#furtherDetails"]').click();
+          }
         } catch (e){
         }
         localStorage.setItem('est_missing_ids', '');
