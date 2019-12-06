@@ -210,7 +210,7 @@ exports.remove = async function(req, res) {
 exports.new_unit = async function(req, res) {
   const { body: { property, unit } } = req;
 
-  if (!unit.rent_price) {
+  if (!unit.rent_price || unit.rent_price == 0) {
     unit.rent_frequency = 'Vacant';
   }
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });

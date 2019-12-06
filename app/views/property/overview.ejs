@@ -135,7 +135,7 @@
                     <label>
                       Current Valuation
                     </label>
-                    <input type="text" name="property[current_value]" id="property_current_value" class="form-control" placeholder="" value="" required>
+                    <input type="text" onkeypress="return isNumberKey(event)" name="property[current_value]" id="property_current_value" class="form-control number" placeholder="" value="<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>" required>
                   </div>
     
                 </div>
