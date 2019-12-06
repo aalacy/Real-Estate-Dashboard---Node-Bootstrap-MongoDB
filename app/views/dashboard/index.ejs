@@ -299,8 +299,11 @@
                       <tbody class="list">
                         <% properties.forEach(function(property){%>
                         <tr>
+
                           <th scope="row" class="tables-address">
-                            <%=property.address%>, <%=property.city%>
+                            <a href="/property/overview/<%=property.id%>">
+                              <%=property.address%>, <%=property.city%>
+                            </a>
                           </th>
                           <td class="tables-type">
                             <%=property.units == 1 ? 'Single Unit' : 'Multi Unit'%>

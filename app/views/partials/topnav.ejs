@@ -12,11 +12,11 @@
     </a>
 
     <!-- Form -->
-    <form class="form-inline mr-4 d-none d-lg-flex">
+    <div class="form-inline mr-4 d-none d-lg-flex" method="GET">
       <div class="input-group input-group-rounded input-group-merge" data-toggle="lists" data-options='{"valueNames": ["name"]}'>
 
         <!-- Input -->
-        <input type="search" class="form-control form-control-prepended  dropdown-toggle search" data-toggle="dropdown" placeholder="Search" aria-label="Search">
+        <input type="search" class="form-control form-control-prepended  dropdown-toggle" id="property-search" placeholder="Search" aria-label="Search">
         <div class="input-group-prepend">
           <div class="input-group-text">
             <i class="fe fe-search"></i>
@@ -24,88 +24,11 @@
         </div>
 
         <!-- Menu -->
-        <div class="dropdown-menu dropdown-menu-card">
+        <div class="dropdown-menu dropdown-menu-card"  id="property-search-list">
           <div class="card-body">
 
             <!-- List group -->
             <div class="list-group list-group-flush list my-n3">
-              <a href="#" class="list-group-item px-0">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    
-                    <!-- Avatar -->
-                    <div class="avatar avatar-4by3">
-                      <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
-                    </div>
-
-                  </div>
-                  <div class="col ml-n2">
-
-                    <!-- Title -->
-                    <h4 class="text-body mb-1 name">
-                      29 Tythe Barn Lane
-                    </h4>
-
-                    <!-- Time -->
-                    <p class="small text-muted mb-0">
-                      <time datetime="2018-05-24">Semi Detached House</time>
-                    </p>
-                    
-                  </div>
-                </div> <!-- / .row -->
-              </a>
-              <a href="#" class="list-group-item px-0">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    
-                    <!-- Avatar -->
-                    <div class="avatar avatar-4by3">
-                      <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
-                    </div>
-
-                  </div>
-                  <div class="col ml-n2">
-
-                    <!-- Title -->
-                    <h4 class="text-body mb-1 name">
-                      43 Regent Street
-                    </h4>
-
-                    <!-- Time -->
-                    <p class="small text-muted mb-0">
-                      <time datetime="2018-05-24">Flat</time>
-                    </p>
-                    
-                  </div>
-                </div> <!-- / .row -->
-              </a>
-              <a href="#" class="list-group-item px-0">
-
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    
-                    <!-- Avatar -->
-                    <div class="avatar avatar-4by3">
-                      <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
-                    </div>
-
-                  </div>
-                  <div class="col ml-n2">
-
-                    <!-- Title -->
-                    <h4 class="text-body mb-1 name">
-                      55 Dover Street
-                    </h4>
-
-                    <!-- Time -->
-                    <p class="small text-muted mb-0">
-                      <time datetime="2018-05-24">Detached house</time>
-                    </p>
-                    
-                  </div>
-                </div> <!-- / .row -->
-
-              </a>
               
             </div>
           
@@ -113,7 +36,7 @@
         </div> <!-- / .dropdown-menu -->
 
       </div>
-    </form>
+    </div>
 
     <!-- User -->
     <div class="navbar-user">

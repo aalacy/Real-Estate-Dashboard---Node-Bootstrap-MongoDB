@@ -8,11 +8,52 @@ const Properties = mongoose.model('Properties');
 var moment = require('moment');
 const uuidv4 = require('uuid/v4');
 
+ /**
+  * Constants map for the property details
+  */
+
 const freq = {
   Daily: 365,
   Weekly: 52,
   Fortnightly: 26,
-  Monthly: 12
+  Monthly: 12,
+  Vacant: 0,
+};
+
+const PROPERTY_TYPE = {
+    detached_house: 'Detached House',
+    'semi-detached_house': 'Semi Detached House',
+    terraced_house: 'Terraced House',
+    flat: 'Flat'
+};
+
+const CONSTRUCTION_DATE = {
+  pre_1914: 'Pre-1914',
+  '1914_2000': 'Between 1914-2000',
+  '2000_onwards': '2000 onwards'
+};
+
+const FINISH_QUALITY = {
+  very_high: 'Very High',
+  high: 'High',
+  average: 'Average',
+  below_average: 'Below Average',
+  unmodernised: 'Unmodernised'
+};
+
+const OUTDOOR_SPACE = {
+  none: 'None',
+  balcony_terrace: 'Balcony Terrace',
+  garden: 'Garden',
+  garden_very_large: 'Garden (Large)',
+
+};
+
+const OFF_STREET_PARKING = {
+  '0': 'No parking',
+  '1': '1 Space',
+  '2': '2 Spaces',
+  '3': '3+ Spaces'
 };
 
 const calcRentalYield = function(purchase_price, rental_income) {
@@ -37,7 +78,11 @@ exports.my = async function(req, res, next) {
 exports.overview = async function(req, res) {
   const { params: { id } } = req;
   const property = await Properties.findOne({ id: id }, { _id: 0 });
-  
+  property.type = PROPERTY_TYPE[property.type];
+  property.construction_date = CONSTRUCTION_DATE[property.construction_date];
+  property.outdoor_space = OUTDOOR_SPACE[property.outdoor_space];
+  property.finish_quality = FINISH_QUALITY[property.finish_quality];
+  property.off_street_parking = OFF_STREET_PARKING[property.off_street_parking];
   res.render('property/overview', {
     title: 'Avenue - Overview',
     token: req.csrfToken(),
@@ -79,10 +124,18 @@ exports.review = async function(req, res) {
   }).catch(err => console.log(err));
 };
 
+exports.search = async function(req, res) {
+  const { params: { query } } = req;
+  console.log('============', query);
+  const properties = await Properties.find( {$or: [{ address: {$regex: query, $options: "i" }}]}, { _id: 0 }).limit(5);
+  return res.json({
+    status: 200,
+    properties
+  })
+};
+
 exports.create = async function(req, res) {
   const { body: { property } } = req;
-
-  console.log(property)
 
   const address = `https://maps.googleapis.com/maps/api/geocode/json?address=${property.fulladdress.split(' ').join('+')}&key=${process.env.GOOGLE_MAP_KEY}`;
 
@@ -158,7 +211,9 @@ exports.remove = async function(req, res) {
 exports.new_unit = async function(req, res) {
   const { body: { property, unit } } = req;
 
-  
+  if (!unit.rent_price) {
+    unit.rent_frequency = 'Vacant';
+  }
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
   unit.rent_price = unit.rent_price.replace(/,/g, '') ? parseFloat(unit.rent_price.replace(/,/g, '')) : 0;
   status = 'Occupied';
@@ -177,13 +232,17 @@ exports.new_unit = async function(req, res) {
     };
   } else {
     let tenancies = [];
+    rental_income = 0;
     myproperty.tenancies.map(element => {
       if (element.id != unit.id) {
+        rental_income += freq[element.rent_frequency] * parseFloat(element.rent_price);
         tenancies.push(element);
       } else {
-        tenancies.push(unit)
+        rental_income += freq[unit.rent_frequency] * parseFloat(unit.rent_price);
+        tenancies.push(unit);
       }
     });
+    rental_yield = calcRentalYield(myproperty.purchase_price, rental_income);
     new_values = {
       $set: { rental_income, rental_yield, units, status, tenancies }
     };
@@ -219,6 +278,7 @@ exports.delete_unit = async function(req, res) {
 exports.adjust_summary = async function(req, res) {
   const { body: { property: { current_value, id } } } = req;
 
+  current_value = current_value.replace(/,/g, '')
   const myproperty = await Properties.findOne({ id: id }, { _id: 0 });
   let rental_yield = calcRentalYield(myproperty.purchase_price, myproperty.rental_income);
   const new_values = { $set: { current_value, rental_yield } };

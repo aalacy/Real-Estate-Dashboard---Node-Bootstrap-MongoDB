@@ -4,6 +4,13 @@
  * 2019/11/15
  */
 
+const PROPERTY_TYPE = {
+    detached_house: 'Detached House',
+    'semi-detached_house': 'Semi Detached House',
+    terraced_house: 'Terraced House',
+    flat: 'Flat'
+};
+
  /**
   * Making toast
   */
@@ -506,7 +513,7 @@ $(function() {
         .then(function(res) {
             self.find('span').addClass('d-none');
             if (res.status == 200) {
-                $('#property_current_value').val(res.estimate);
+                $('#property_current_value').val(res.estimate.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
             } 
 
             return makeToast({ message: res.message});
@@ -597,4 +604,54 @@ $(function() {
         ;
       });
     });
+
+    $('#property-search').blur(function(e){
+        $('#property-search-list').removeClass('show');
+    })
+
+    $('#property-search').keyup(function(e){
+        e.preventDefault()
+        if (e.keyCode == 13 || e.which == 13) {
+            fetch('/property/search/' + $(this).val(), {method: 'GET'})
+            .then(res => res.json())
+            .then(res => {
+                $('#property-search-list .card-body .list-group').html('');
+                res.properties.map(property => {
+                    $('#property-search-list .card-body .list-group').append(`<a href="/property/overview/${property.id}" class="list-group-item px-0">
+                        <div class="row align-items-center">
+                          <div class="col-auto">
+                            
+                            <!-- Avatar -->
+                            <div class="avatar avatar-4by3">
+                              <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
+                            </div>
+
+                          </div>
+                          <div class="col ml-n2">
+
+                            <!-- Title -->
+                            <h4 class="text-body mb-1 name">
+                              ${property.address}, ${property.city}
+                            </h4>
+
+                            <!-- Time -->
+                            <p class="small text-muted mb-0">
+                              <time datetime="2018-05-24">${PROPERTY_TYPE[property.type]}</time>
+                            </p>
+                            
+                          </div>
+                        </div> <!-- / .row -->
+                      </a>`)
+                });
+                if (res.properties) {
+                    $('#property-search-list').addClass('show');
+                } else {
+                    $('#property-search-list').removeClass('show');
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        }
+    })
 });
