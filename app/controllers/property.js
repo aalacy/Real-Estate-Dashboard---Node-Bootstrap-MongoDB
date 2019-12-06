@@ -126,7 +126,6 @@ exports.review = async function(req, res) {
 
 exports.search = async function(req, res) {
   const { params: { query } } = req;
-  console.log('============', query);
   const properties = await Properties.find( {$or: [{ address: {$regex: query, $options: "i" }}]}, { _id: 0 }).limit(5);
   return res.json({
     status: 200,
@@ -278,10 +277,11 @@ exports.delete_unit = async function(req, res) {
 exports.adjust_summary = async function(req, res) {
   const { body: { property: { current_value, id } } } = req;
 
-  current_value = current_value.replace(/,/g, '')
+  const _current_value = current_value.replace(/,/g, '');
+  console.log(_current_value);
   const myproperty = await Properties.findOne({ id: id }, { _id: 0 });
   let rental_yield = calcRentalYield(myproperty.purchase_price, myproperty.rental_income);
-  const new_values = { $set: { current_value, rental_yield } };
+  const new_values = { $set: { current_value: _current_value, rental_yield } };
   return Properties.updateOne({ id }, new_values).then(() => {
     res.redirect('/property/overview/' + id);
   });
