@@ -147,11 +147,13 @@ exports.create = async function(req, res) {
 
 
   const floor_area_list = await request({ uri: floor_area_url, json: true });
-  floor_area_list['known_floor_areas'].map(area => {
-    if (area.address.replace(',', '').replace(' ', '').toLowerCase().includes(property.address.replace(',', '').replace(' ', '').toLowerCase())) {
-      property.square_feet = parseFloat(area.square_feet);
-    }
-  });
+  if (floor_area_list['known_floor_areas']) {
+    floor_area_list['known_floor_areas'].map(area => {
+      if (area.address.replace(',', '').replace(' ', '').toLowerCase().includes(property.address.replace(',', '').replace(' ', '').toLowerCase())) {
+        property.square_feet = parseFloat(area.square_feet);
+      }
+    });
+  }
   
   request({uri: address, json: true}).then(geo_data => {
     property.lat = geo_data.results[0].geometry.location.lat;
