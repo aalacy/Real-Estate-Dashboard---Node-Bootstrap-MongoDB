@@ -63,9 +63,10 @@ const calcRentalYield = function(purchase_price, rental_income) {
 }
 
 exports.my = async function(req, res, next) {
-  const all_properties = await Properties.find({}, { _id: 0 });
-  const occupied_properties = await Properties.find({ status: 'Occupied' }, { _id: 0 });
-  const vacant_properties = await Properties.find({ status: 'Vacant' }, { _id: 0 });
+  const { user } = req.session;
+  const all_properties = await Properties.find({user_id: user.id}, { _id: 0 });
+  const occupied_properties = await Properties.find({ status: 'Occupied', user_id: user.id }, { _id: 0 });
+  const vacant_properties = await Properties.find({ status: 'Vacant', user_id: user.id }, { _id: 0 });
   res.render('property/myproperties', {
     title: 'Avenue - MyProperties',
     token: req.csrfToken(),
@@ -126,6 +127,7 @@ exports.review = async function(req, res) {
 
 exports.search = async function(req, res) {
   const { params: { query } } = req;
+  const { user } = req.session;
   const properties = await Properties.find( {$or: [{ address: {$regex: query, $options: "i" }}]}, { _id: 0 }).limit(5);
   return res.json({
     status: 200,
@@ -135,6 +137,9 @@ exports.search = async function(req, res) {
 
 exports.create = async function(req, res) {
   const { body: { property } } = req;
+
+  const { user } = req.session;
+  property.user_id = user.id;
 
   const address = `https://maps.googleapis.com/maps/api/geocode/json?address=${property.fulladdress.split(' ').join('+')}&key=${process.env.GOOGLE_MAP_KEY}`;
 
@@ -190,8 +195,6 @@ exports.update = async function(req, res) {
     property.rental_yield = calcRentalYield(property.purchase_price, myproperty.rental_income);
     property.update_at = moment().format('YYYY-MM-DD HH:mm:ss');
     const new_values = { $set: property };
-
-    console.log('===property', property);
 
     return Properties.updateOne({ id: property.id }, new_values).then(_property => {
       res.redirect('/property/overview/' + property.id);

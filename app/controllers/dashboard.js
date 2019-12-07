@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const Properties = mongoose.model('Properties');
 
 exports.index = async function(req, res) {
-  const properties = await Properties.find({}, { _id: 0 }).sort('-current_value');
+  const { user } = req.session;
+  const properties = await Properties.find({ user_id: user.id }, { _id: 0 }).sort('-current_value');
   let portfolio_value = 0;
   let total_purchase_price = 0;
   let badge_value = 0;
