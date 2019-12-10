@@ -20,3 +20,8 @@
 .toast {
 	z-index: 1070;
 }
+
+.navbar-dark {
+    background-color: #051A35;
+    border-color: #051A35;
+}
