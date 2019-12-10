@@ -450,6 +450,10 @@ $(function() {
         $('#property_fulladdress').val(`${$('#propertyAutocomplete').val()}, ${$('#property_city').val()}, UK`);
     })
 
+    $('#updatePropertyBtn').click(function(e){
+        $('#property_fulladdress').val(`${$('#propertyAutocomplete').val()}, ${$('#property_city').val()}, UK`);
+    })
+
     // Adjust tenancey
     $('.edit-unit').click(function(e){
         e.preventDefault();
