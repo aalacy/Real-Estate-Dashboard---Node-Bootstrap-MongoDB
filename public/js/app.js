@@ -465,10 +465,12 @@ $(function() {
             $(".btn-unit-delete").removeClass('d-none');
         } 
         $('#addUnitBtn').text('Update');
+        $('#unit-modal-title').text('Edit Unit');
         $('#modalAddNewUnit').modal()
         .on('hidden.bs.modal', function() {
             $(".btn-unit-delete").addClass('d-none');
             $('#addUnitBtn').text('Add');
+            $('#unit-modal-title').text('Create a New Unit');
         });
     })
 
