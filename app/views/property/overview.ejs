@@ -135,7 +135,14 @@
                     <label>
                       Current Valuation
                     </label>
-                    <input type="text" onkeypress="return isNumberKey(event)" name="property[current_value]" id="property_current_value" class="form-control number" placeholder="" value="<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>" required>
+                    <div class="input-group input-group-merge mb-3">
+                      <input type="text" onkeypress="return isNumberKey(event)" name="property[current_value]" id="property_current_value" class="form-control form-control-prepended number" placeholder="" value="<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>" required>
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          <span>£</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
     
                 </div>
@@ -154,7 +161,14 @@
                     <label>
                       Annual Income
                     </label>
-                    <input type="text" name="property[rental_income]" class="form-control" placeholder="<%= property.rental_income%>" value="" required readonly>
+                    <div class="input-group input-group-merge mb-3">
+                      <input type="text" name="property[rental_income]" class="form-control form-control-prepended" placeholder="<%= property.rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>" value="" required readonly>
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          <span>£</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
     
                 </div>
@@ -167,7 +181,8 @@
                     <label>
                       Rental Yield % 
                     </label>
-                    <input type="text" name="property[rental_yield]" class="form-control" placeholder="<%= property.rental_yield.toFixed(2)%>" value="" required readonly>
+                    <input type="text" name="property[rental_yield]" class="form-control " placeholder="<%= property.rental_yield.toFixed(2)%>" value="" required readonly>
+                 
                   </div>
     
                 </div>
