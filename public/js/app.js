@@ -19,7 +19,9 @@ const makeToast = function({title='Avenue', message=''}) {
     $('.toast .toast-body').html(message);
     $('.toast .toast-title').html(title);
 
-    return $('.toast').toast({delay: 3000}).toast('show');
+    return $('.toast').toast({delay: 3000}).toast('show').removeClass('d-none').on('hidden.bs.toast', function(){
+        $('.toast').addClass('d-none');
+    });
 }
 
 const isNumberKey = function(evt){
@@ -476,6 +478,41 @@ $(function() {
             $('#addUnitBtn').text('Add');
             $('#unit-modal-title').text('Create a New Unit');
         });
+    });
+
+    $('.del-unit').click(function(e){
+        e.preventDefault();
+        const unit = $(this).data('unit');
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.value) {
+            const _csrf = $('input[name="_csrf"]').val();
+            fetch(new Request('/property/unit/del', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({id:unit.id, _csrf})}))
+                .then(response => response.json())
+                .then(function(res) {
+                    self.find('span').addClass('d-none');
+                    if (res.status == 200) {
+                        Swal.fire(
+                          'Deleted!',
+                          'One tenancy has been deleted.',
+                          'success'
+                        )
+                    } 
+
+                    return makeToast({ message: res.message});
+                }).catch(function(text) {
+                    self.find('span').addClass('d-none');
+                    console.log(text);
+                });
+          }
+        })
     })
 
     // Use property value from api in adjust summary popup
@@ -561,7 +598,19 @@ $(function() {
         }).catch(function(text) {
             console.log(text);
         });
-          
+    });
+
+    $(".btn-unit-clear").click(function(e){
+        e.preventDefault();
+        const _csrf = $('input[name="_csrf"]').val();
+        const property_id = $('input[name="property[id]"]').val();
+        const unit_id = $('input[name="unit[id]"]').val();
+        fetch(new Request('/property/unit/clear', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, _csrf})}))
+        .then(function() {
+            location.reload();
+        }).catch(function(text) {
+            console.log(text);
+        });
     });
 
     /**

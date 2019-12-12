@@ -100,7 +100,11 @@
                           
                               <!-- Title -->
                               <h3 class="card-title mb-2 name">
-                                  <a href="/property/overview/<%=property.id%>"><%= property.address %>, <%= property.city %></a>
+                                  <a href="/property/overview/<%=property.id%>">
+                                    <div class="text-ellipsis">
+                                      <%= property.address %>, <%= property.city %>
+                                    </div>
+                                  </a>
                               </h3>
       
                               <!-- Subtitle -->

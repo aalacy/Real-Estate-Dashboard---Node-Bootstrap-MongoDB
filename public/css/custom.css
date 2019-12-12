@@ -25,3 +25,9 @@
     background-color: #051A35;
     border-color: #051A35;
 }
+
+.text-ellipsis {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}

@@ -100,6 +100,9 @@
                 <div class="col-12 col-md-6">
                   <button type="submit" class="btn btn-outline-danger d-none btn-unit-delete">Delete this unit</button>
                 </div>
+                <div class="col-12 col-md-6">
+                  <button type="submit" class="btn btn-outline-danger btn-unit-clear">Clear this tenancy</button>
+                </div>
               </div>
             </div>
             <div class="modal-footer">
@@ -384,7 +387,7 @@
   
                       <!-- Time -->
                       <p class="card-text small text-muted">
-                          <%= unit.start_date%> ~ <%= unit.end_date%>
+                        <%= unit.start_date%> <%= unit.end_date ? '~' : ''%> <%= unit.end_date%>
                       </p>
                     </div>
 
@@ -400,7 +403,7 @@
                       </p>
                     </div>
                     <div class="col-auto">
-                      <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>">
+                      <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>" title="Edit">
                         <i class="fe fe-chevron-right"></i>
                       </a>
                     </div>
