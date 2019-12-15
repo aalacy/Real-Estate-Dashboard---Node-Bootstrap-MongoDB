@@ -468,8 +468,11 @@ $(function() {
         $('#unit_rent_price').val(unit.rent_price);
         $('input[name="unit[id]"]').val(unit.id);
         if ($('.unit-item').length > 1) {
-            $(".btn-unit-delete").removeClass('d-none');
+            $(".action-unit").removeClass('d-none').removeClass('btn-unit-clear').addClass('btn-unit-delete').text('Delete this unit');
         } 
+        if ($('.unit-item').length == 1) {
+            $(".action-unit").removeClass('d-none').removeClass('btn-unit-delete').addClass('btn-unit-clear').text('Clear this unit');
+        }
         $('#addUnitBtn').text('Update');
         $('#unit-modal-title').text('Edit Unit');
         $('#modalAddNewUnit').modal()
@@ -584,33 +587,29 @@ $(function() {
     });
 
     // Delete the unit
-    $(".btn-unit-delete").click(function(e){
+    $(".action-unit").click(function(e){
         e.preventDefault();
-        if ($('.unit-item').length == 1) {
-            return makeToast({message: 'Each property has at least one unit.'});
+        const _csrf = $('input[name="_csrf"]').val();
+        const property_id = $('input[name="property[id]"]').val();
+        const unit_id = $('input[name="unit[id]"]').val();
+        if ($(this).hasClass('btn-unit-delete')) {
+            if ($('.unit-item').length == 1) {
+                return makeToast({message: 'Each property has at least one unit.'});
+            }
+            fetch(new Request('/property/unit/delete', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, _csrf})}))
+            .then(function() {
+                location.reload();
+            }).catch(function(text) {
+                console.log(text);
+            });
+        } else {
+            fetch(new Request('/property/unit/clear', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, _csrf})}))
+            .then(function() {
+                location.reload();
+            }).catch(function(text) {
+                console.log(text);
+            });
         }
-        const _csrf = $('input[name="_csrf"]').val();
-        const property_id = $('input[name="property[id]"]').val();
-        const unit_id = $('input[name="unit[id]"]').val();
-        fetch(new Request('/property/unit/delete', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, _csrf})}))
-        .then(function() {
-            location.reload();
-        }).catch(function(text) {
-            console.log(text);
-        });
-    });
-
-    $(".btn-unit-clear").click(function(e){
-        e.preventDefault();
-        const _csrf = $('input[name="_csrf"]').val();
-        const property_id = $('input[name="property[id]"]').val();
-        const unit_id = $('input[name="unit[id]"]').val();
-        fetch(new Request('/property/unit/clear', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, _csrf})}))
-        .then(function() {
-            location.reload();
-        }).catch(function(text) {
-            console.log(text);
-        });
     });
 
     /**

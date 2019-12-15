@@ -318,7 +318,7 @@
                             <%=property.current_value ? '£'+property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : ''%>
                           </td>
                           <td class="tables-rental-income">
-                            <%=property.rental_income ? '£'+property.rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+'pcm' : ''%>
+                            <%=property.rental_income ? '£'+(property.rental_income / 12).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+'pcm' : ''%>
                           </td>
                           <td class="tables-rental-yield">
                             <h4>
