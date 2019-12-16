@@ -64,15 +64,30 @@ const calcRentalYield = function(purchase_price, rental_income) {
 
 exports.my = async function(req, res, next) {
   const { user } = req.session;
-  const all_properties = await Properties.find({user_id: user.id}, { _id: 0 });
-  const occupied_properties = await Properties.find({ status: 'Occupied', user_id: user.id }, { _id: 0 });
-  const vacant_properties = await Properties.find({ status: 'Vacant', user_id: user.id }, { _id: 0 });
+  let all_properties = await Properties.find({user_id: user.id}, { _id: 0 });
+  const new_all_properties = [];
+  all_properties.map(property => {
+    property.type = PROPERTY_TYPE[property.type];
+    new_all_properties.push(property);
+  })
+  let occupied_properties = await Properties.find({ status: 'Occupied', user_id: user.id }, { _id: 0 });
+  let new_occupied_properties = [];
+  occupied_properties.map(property => {
+    property.type = PROPERTY_TYPE[property.type];
+    new_occupied_properties.push(property);
+  })
+  let vacant_properties = await Properties.find({ status: 'Vacant', user_id: user.id }, { _id: 0 });
+  let new_vacant_properties = [];
+  vacant_properties = vacant_properties.map(property => {
+    property.type = PROPERTY_TYPE[property.type];
+    new_vacant_properties.push(property);
+  })
   res.render('property/myproperties', {
     title: 'Avenue - MyProperties',
     token: req.csrfToken(),
-    all_properties,
-    occupied_properties,
-    vacant_properties
+    all_properties: new_all_properties,
+    occupied_properties: new_occupied_properties,
+    vacant_properties: new_vacant_properties
   });
 };
 
