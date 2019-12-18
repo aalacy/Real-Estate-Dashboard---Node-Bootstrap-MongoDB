@@ -356,7 +356,7 @@
 
                       <!-- Button -->
                       <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAddNewUnit">
-                        Add Unit
+                        Manage Units
                       </button>
                   
                     </div>
@@ -384,7 +384,7 @@
   
                       <!-- Time -->
                       <p class="card-text small text-muted">
-                        <%= unit.start_date%> <%= unit.end_date ? '~' : ''%> <%= unit.end_date%>
+                        <%= unit.start_date%> <%= unit.end_date ? '-' : ''%> <%= unit.end_date%>
                       </p>
                     </div>
 
@@ -489,7 +489,7 @@
                     
                       <!-- Title -->
                       <h5 class="mb-0">
-                        Acquired on
+                        Date of acquisition
                       </h5>
 
                     </div>
@@ -510,14 +510,14 @@
                     
                       <!-- Title -->
                       <h5 class="mb-0">
-                        Construction date
+                        Acquired for
                       </h5>
 
                     </div>
                     <div class="col-auto">
                     
                       <small class="text-muted text-capitalize">
-                        <%= property.construction_date%>
+                        <%= property.purchase_price%>
                       </small>
 
                     </div>
@@ -531,38 +531,19 @@
                     
                       <!-- Title -->
                       <h5 class="mb-0">
-                        Square feet (internal)
+                        Property size
                       </h5>
 
                     </div>
                     <div class="col-auto">
                     
                       <small class="text-muted">
-                          <%= property.square_feet.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                          <%= property.square_feet.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " sq ft"%>
                       </small>
 
                     </div>
                   </div> <!-- / .row -->
 				  
-                  <hr>
-
-                  <div class="row align-items-center">
-                    <div class="col">
-                    
-                      <h5 class="mb-0">
-                        Off Street Parking
-                      </h5>
-
-                    </div>
-                    <div class="col-auto">
-                    
-                      <small class="text-muted text-capitalize">
-                        <%= property.off_street_parking ? property.off_street_parking : '' %> 
-                      </small>
-
-                    </div>
-                  </div> 
-
                 </div>
               </div>
 

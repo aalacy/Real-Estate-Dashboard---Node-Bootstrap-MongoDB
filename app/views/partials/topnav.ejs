@@ -6,11 +6,6 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Brand -->
-    <a class="navbar-brand mr-auto" href="/">
-      <img src="/img/logo.svg" alt="..." class="navbar-brand-img">
-    </a>
-
     <!-- Form -->
     <div class="form-inline mr-4 d-none d-lg-flex" method="GET">
       <div class="input-group input-group-rounded input-group-merge" data-toggle="lists" data-options='{"valueNames": ["name"]}'>
@@ -102,6 +97,9 @@
 
         <!-- Menu -->
         <div class="dropdown-menu dropdown-menu-right">
+          <a href="settings.html" class="dropdown-item">Settings</a>
+		  <a href="#" class="dropdown-item">Help</a>
+          <hr class="dropdown-divider">
           <a href="javascript:logout()" class="dropdown-item">Logout</a>
         </div>
 
@@ -126,12 +124,17 @@
         </li>
         <li class="nav-item">
           <a class="nav-link @@if(category=='pages'){active}" href="/property/my" id="topnavPages" role="button" aria-haspopup="true" aria-expanded="false">
-            My Properties
+            Properties
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @@if(category=='settings'){active}" href="/settings"  role="button" aria-haspopup="true" aria-expanded="false">
-            Settings
+          <a class="nav-link @@if(category=='tenancies'){active}" href="#"  role="button" aria-haspopup="true" aria-expanded="false">
+            Tenancies
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link @@if(category=='documents'){active}" href="#"  role="button" aria-haspopup="true" aria-expanded="false">
+            Documents
           </a>
         </li>
       </ul>
