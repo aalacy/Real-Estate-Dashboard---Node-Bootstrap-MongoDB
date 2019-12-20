@@ -242,11 +242,9 @@
       <!-- CONTENT -->
       <div class="container">
          <!-- Alert -->
-        <% if (property.is_new) {%>
-			  <div class="alert alert-warning" role="alert">
+        <div class="alert alert-warning" role="alert">
           This property profile is only <%=empty_cnt%>% complete. <a href="/property/detail/<%=property.id%>" class="alert-link">Add more details here</a>
         </div>
-        <% } %>
         
         <!-- Alert -->
         <% if (property.status == 'vacant') {%>
