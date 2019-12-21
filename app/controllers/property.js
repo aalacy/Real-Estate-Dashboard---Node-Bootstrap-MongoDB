@@ -94,6 +94,19 @@ exports.my = async function(req, res, next) {
 exports.overview = async function(req, res) {
   const { params: { id } } = req;
   const property = await Properties.findOne({ id: id }, { _id: 0 });
+  let empty_cnt = 0;
+  if (property.ownership == "") empty_cnt++;
+  if (property.purchase_price == 0) empty_cnt++;
+  if (property.purchase_date == "") empty_cnt++;
+  if (property.type == "") empty_cnt++;
+  if (property.construction_date == "") empty_cnt++;
+  if (property.finish_quality == "") empty_cnt++;
+  if (property.square_feet == 0) empty_cnt++;
+  if (property.outdoor_space == 0) empty_cnt++;
+  if (property.off_street_parking == "") empty_cnt++;
+  empty_cnt = (11 - empty_cnt) / 11 * 100;
+  empty_cnt = empty_cnt.toFixed(0);
+
   property.type = PROPERTY_TYPE[property.type];
   property.construction_date = CONSTRUCTION_DATE[property.construction_date];
   property.outdoor_space = OUTDOOR_SPACE[property.outdoor_space];
@@ -102,7 +115,8 @@ exports.overview = async function(req, res) {
   res.render('property/overview', {
     title: 'Avenue - Overview',
     token: req.csrfToken(),
-    property: property
+    property: property,
+    empty_cnt
   });
 };
 
