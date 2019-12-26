@@ -15,9 +15,14 @@ const PROPERTY_TYPE = {
   * Making toast
   */
 
-const makeToast = function({title='Avenue', message=''}) {
+const makeToast = function({title='Avenue', message='', showLogo=true}) {
     $('.toast .toast-body').html(message);
     $('.toast .toast-title').html(title);
+    if (!showLogo) {
+        $('.alert-logo').addClass('d-none');
+    } else {
+        $('.alert-logo').removeClass('d-none');
+    }
 
     return $('.toast').toast({delay: 3000}).toast('show').removeClass('d-none').on('hidden.bs.toast', function(){
         $('.toast').addClass('d-none');
@@ -226,7 +231,7 @@ $(function() {
         .then(response => response.json())
         .then(function(res) {
             if (res.status == 200) {
-                makeToast({message: res.message}).on('hidden.bs.toast', function () {
+                makeToast({message: res.message, showLogo: false, title: `Welcome back ${res.user.username}`}).on('hidden.bs.toast', function () {
                     window.location.href = '/';
                 });
             } else if (res.status == 422 || res.status == 400){

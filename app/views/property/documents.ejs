@@ -1,53 +1,119 @@
 <!doctype html>
 <html lang="en">
   <head>
-    @@include("partials/head.html", {
-      "title": "Dashkit"
-    })
+      <% include ../partials/head %>
   </head>
   <body>
+    <!-- Modal Upload -->
+    <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <form id="my-awesome-dropzone" method="post" action="/property/ajust_summary/" >
+          <input type="hidden" name="_csrf" value="<%= token %>">
+          <div class="modal-content bg-lighter">
+            <div class="modal-header">
+                <!-- Header -->
+              <h3 class="modal-title">Adjust Summary</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="row">
+                    <div class="col-12">
+                      
+                      <!-- Start date -->
+                      <div class="form-group">
+                        <label>
+                          Current Valuation
+                        </label>
+                          
+                      </div>
+        
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      
+                      <!-- Start date -->
+                      <div class="form-group">
+                        <label>
+                          Annual Income
+                        </label>
+                      </div>
+        
+                    </div>
+                   
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <!-- Start date -->
+                      <div class="form-group">
+                        <label>
+                          Rental Yield % 
+                        </label>
+                        
+                      </div>
+        
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="dropzone dropzone-multiple" data-toggle="dropzone" data-options='{"url": "/property/documents/upload?_csrf=<%=token%>"}'>
 
-    <!-- MODALS
-    ================================================== -->
-    @@include("partials/modals.html")
+                    <!-- Fallback -->
+                    <div class="fallback">
+                      <input type="file" class="custom-file-input" id="customFileUploadMultiple">
+                    </div>
 
-    <!-- NAVIGATION
-    ================================================== -->
-    @@if (navPosition == 'sidenav' || navPosition == 'combo' || demoMode) {
-      @@if (sidebarSize == 'base' || demoMode) {
-        @@include("partials/sidebar.html", {
-          "category": "pages",
-          "subcategory": "project",
-          "page": "project-files.html"
-        })
-      }
-      @@if (sidebarSize == 'small' || demoMode) {
-        @@include("partials/sidebar-sm.html", {
-          "category": "pages",
-          "subcategory": "project",
-          "page": "project-files.html"
-        })
-      }
-    }
-    @@if (navPosition == 'topnav' || demoMode) {
-      @@include("partials/topnav.html", {
-        "category": "pages",
-        "subcategory": "project",
-        "page": "project-files.html"
-      })
-    }
+                    <!-- Preview -->
+                    <ul class="dz-preview dz-preview-multiple list-group list-group-lg list-group-flush">
+                      <li class="list-group-item px-0">
+                        <div class="row align-items-center">
+                          <div class="col-auto">
+                            <div class="avatar">
+                              <img class="avatar-img rounded" src="..." alt="..." data-dz-thumbnail>
+                            </div>
+                          </div>
+                          <div class="col ml-n3">
+                            <h4 class="mb-1" data-dz-name>...</h4>
+                            <p class="small text-muted mb-0" data-dz-size>...</p>
+                          </div>
+                          <div class="col-auto">
+                            
+                            <div class="dropdown">
+                              <a href="#" class="dropdown-item" data-dz-remove>
+                                <i class="fe fe-trash"></i>
+                              </a>
+                            </div>
+
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <% include ../partials/topnav %>
 
     <!-- MAIN CONTENT
     ================================================== -->
     <div class="main-content">
 
-      @@if (navPosition == 'combo' || demoMode) {
-        @@include("partials/topbar.html")
-      }
-
       <!-- HEADER -->
       <div class="header">
-        <div class="@@if(navPosition=='sidenav'||navPosition=='combo'){container-fluid}@@if(navPosition=='topnav'){container}">
+        <div class="container">
           
           <!-- Body -->
           <div class="header-body">
@@ -69,7 +135,7 @@
       </div> <!-- / .header -->
 
       <!-- CONTENT -->
-      <div class="@@if(navPosition=='sidenav'||navPosition=='combo'){container-fluid}@@if(navPosition=='topnav'){container}">
+      <div class="container">
         <div class="row">
           <div class="col-12">
             
@@ -100,12 +166,11 @@
                         <a class="dropdown-item sort" data-sort="name" href="#!">
                           All
                         </a>  
-                        <a class="dropdown-item sort" data-sort="name" href="#!">
-                          Property 1
-                        </a>
-                        <a class="dropdown-item sort" data-sort="name" href="#!">
-                          Property 2
-                        </a>
+                        <% properties.forEach(function(property, i){%>
+                          <a class="dropdown-item sort" data-sort="name" href="#!">
+                            Property <%=i+1 %>
+                          </a>
+                        <% })%>
                       </div>
 
                     </div>
@@ -114,7 +179,7 @@
                   <div class="col-auto">
                     
                     <!-- Button -->
-                    <a href="#!" class="btn btn-sm btn-primary">
+                    <a href="#" data-toggle="modal" data-target="#modalUpload" class="btn btn-sm btn-primary">
                       Upload
                     </a>
 
@@ -273,7 +338,65 @@
 
     <!-- JAVASCRIPT
     ================================================== -->
-    @@include("partials/scripts.html")
+    <% include ../partials/scripts %>
+
+    <script type="text/javascript">
+      $(function(){
+        // Dropzone.options.myAwesomeDropzone = { // The camelized version of the ID of the form element
+
+        //   // The configuration we've talked about above
+        //   autoProcessQueue: false,
+        //   uploadMultiple: true,
+        //   parallelUploads: 100,
+        //   maxFiles: 100,
+
+        //   // The setting up of the dropzone
+        //   init: function() {
+        //     var myDropzone = this;
+
+        //     // First change the button to actually tell Dropzone to process the queue.
+        //     this.element.querySelector("button[type=submit]").addEventListener("click", function(e) {
+        //       // Make sure that the form isn't actually being sent.
+        //       e.preventDefault();
+        //       e.stopPropagation();
+        //       myDropzone.processQueue();
+        //     });
+
+        //     // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+        //     // of the sending event because uploadMultiple is set to true.
+        //     this.on("sendingmultiple", function() {
+        //       // Gets triggered when the form is actually being sent.
+        //       // Hide the success button or the complete form.
+        //     });
+        //     this.on("successmultiple", function(files, response) {
+        //       // Gets triggered when the files have successfully been sent.
+        //       // Redirect user or notify of success.
+        //     });
+        //     this.on("errormultiple", function(files, response) {
+        //       // Gets triggered when there was an error sending the files.
+        //       // Maybe show form again, and notify user of error
+        //     });
+        //   }
+         
+        // }
+
+        $('#tagSelect').select2({
+          createTag: function (params) {
+            var term = $.trim(params.term);
+
+            if (term === '') {
+              return null;
+            }
+
+            return {
+              id: term,
+              text: term,
+              newTag: true // add additional parameters
+            }
+          }
+        });
+      });
+    </script>
 
   </body>
 </html>

@@ -41,6 +41,7 @@ exports.index = async function(req, res) {
   res.render('dashboard/index', {
     token: req.csrfToken(),
     title: 'Avenue - Dashboard',
+    username: user.first_name,
     properties: properties,
     portfolio_value,
     rental_income,

@@ -93,6 +93,15 @@ exports.signup_post = async function(req, res) {
     });
   }
 
+  if (!user.first_name || !user.last_name) {
+    return res.status(200).json({
+      errors: {
+        status: 422,
+        email: 'Username is required'
+      }
+    });
+  }
+
   const find_user = await Users.findOne({ email: user.email });
   console.log(find_user);
   if (find_user) {

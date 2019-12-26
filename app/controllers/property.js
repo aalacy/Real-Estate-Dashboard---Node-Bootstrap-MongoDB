@@ -2,6 +2,7 @@
  * Module dependencies.
  */
 
+const fs = require('fs');
 const request = require('request-promise');
 const mongoose = require('mongoose');
 const Properties = mongoose.model('Properties');
@@ -241,6 +242,29 @@ exports.remove = async function(req, res) {
 };
 
 // Tenancy
+exports.documents = async function(req, res) {
+  const { user } = req.session;  
+  const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
+  res.render('property/documents', {
+    token: req.csrfToken(),
+    title: 'Avenue - Documents',
+    properties
+  });
+};
+
+exports.documents_upload = async function(req, res) {
+  console.log(req.file);
+  return res.status( 200 ).send( req.file );
+};
+
+exports.tenancies = async function(req, res) {
+  const { user } = req.session;  
+  res.render('property/tenancies', {
+    token: req.csrfToken(),
+    title: 'Avenue - Tenancies',
+  });
+};
+
 exports.new_unit = async function(req, res) {
   const { body: { property, unit } } = req;
 

@@ -102,6 +102,7 @@
 
         <!-- Menu -->
         <div class="dropdown-menu dropdown-menu-right">
+          <a href="/settings" class="dropdown-item">Settings</a>
           <a href="javascript:logout()" class="dropdown-item">Logout</a>
         </div>
 
@@ -120,18 +121,23 @@
       <!-- Navigation -->
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link @@if(category=='dashboards'){active}" href="/" id="topnavDashboards" role="button" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link" href="/" id="topnavDashboards" role="button" aria-haspopup="true" aria-expanded="false">
             Dashboard
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @@if(category=='pages'){active}" href="/property/my" id="topnavPages" role="button" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link" href="/property/my" id="topnavPages" role="button" aria-haspopup="true" aria-expanded="false">
             My Properties
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @@if(category=='settings'){active}" href="/settings"  role="button" aria-haspopup="true" aria-expanded="false">
-            Settings
+          <a class="nav-link" href="/property/documents"  role="button" aria-haspopup="true" aria-expanded="false">
+            Documents
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/property/tenancies"  role="button" aria-haspopup="true" aria-expanded="false">
+            Tenancies
           </a>
         </li>
       </ul>
@@ -143,7 +149,7 @@
 
   <div class="toast d-none" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header">
-      <img src="/img/logo.svg" style="width: 20px; height: auto;" class="rounded mr-2" alt="logo" />
+      <img src="/img/logo.svg" style="width: 20px; height: auto;" class="rounded mr-2 alert-logo" alt="logo" />
       <strong class="mr-auto toast-title"></strong>
       <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
         <span aria-hidden="true">&times;</span>

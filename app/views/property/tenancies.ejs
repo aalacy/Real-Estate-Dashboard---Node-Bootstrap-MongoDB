@@ -1,51 +1,23 @@
 <!doctype html>
 <html lang="en">
   <head>
-    @@include("partials/head.html", {
-      "title": "Dashkit"
-    })
+      <% include ../partials/head %>
   </head>
   <body>
-
-    <!-- MODALS
-    ================================================== -->
-    @@include("partials/modals.html")
+    <% include ../partials/topnav %>
 
     <!-- NAVIGATION
     ================================================== -->
-    @@if (navPosition == 'sidenav' || navPosition == 'combo' || demoMode) {
-      @@if (sidebarSize == 'base' || demoMode) {
-        @@include("partials/sidebar.html", {
-          "category": "pages",
-          "subcategory": "",
-          "page": "orders.html"
-        })
-      }
-      @@if (sidebarSize == 'small' || demoMode) {
-        @@include("partials/sidebar-sm.html", {
-          "category": "pages",
-          "subcategory": "",
-          "page": "orders.html"
-        })
-      }
-    }
-    @@if (navPosition == 'topnav' || demoMode) {
-      @@include("partials/topnav.html", {
-        "category": "pages",
-        "subcategory": "",
-        "page": "orders.html"
-      })
-    }
-
+   
     <!-- MAIN CONTENT
     ================================================== -->
     <div class="main-content">
-
+<!-- 
       @@if (navPosition == 'combo' || demoMode) {
         @@include("partials/topbar.html")
-      }
+      } -->
 
-      <div class="@@if(navPosition=='sidenav'||navPosition=='combo'){container-fluid}@@if(navPosition=='topnav'){container}">
+      <div class="container">
         <div class="row justify-content-center">
           <div class="col-12">
             
@@ -444,7 +416,7 @@
 
     <!-- JAVASCRIPT
     ================================================== -->
-    @@include("partials/scripts.html")
+    <% include ../partials/scripts %>
 
   </body>
 </html>
