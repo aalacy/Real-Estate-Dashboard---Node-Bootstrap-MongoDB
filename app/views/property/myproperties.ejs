@@ -59,345 +59,336 @@
         </div>
     
         <!-- CONTENT -->
-        <div data-toggle="lists" data-options='{"valueNames": ["name"]}'>
-            <div class="container" data-toggle="lists" data-options='{"valueNames": ["name"], "listClass": "listAlias"}'>
-            <div class="row mb-4">
-                <div class="col">
-    
-                </div>
-                <div class="col-auto">
-                
-                </div>
-            </div> <!-- / .row -->
-    
-            <!-- Tab content -->
-            <div class="tab-content">
-              <div class="tab-pane fade active show" id="all" role="tabpanel">
-                <div class="row listAlias">
-                  <% all_properties.forEach(function(property){%>
-                    <div class="col-12 col-md-6 col-xl-4">
-    
-                      <!-- Card -->
-                      <div class="card p-relative">
-                        <div class="row align-items-center badge-group">
-                          <div class="col">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col-auto">
-                                  <% if (property.status) { %>
-                                    <h2><span class="badge badge-soft-<%= property.status == 'Occupied' ? 'primary' : 'danger' %> ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
-                                  <% }%>
-                                </div>
-    
-                            </div> <!-- / .row -->
-                          </div>
-                        </div> <!-- / .row -->
-                          <a href="/property/overview/<%=property.id%>">
-                          <img src="/img/avatars/projects/project-1.jpg" alt="..." class="card-img-top">
-                          </a>
-                          <div class="card-body">
-                          <div class="row align-items-center">
-                              <div class="col">
-                          
-                              <!-- Title -->
-                              <h3 class="card-title mb-2 name">
-                                  <a href="/property/overview/<%=property.id%>">
-                                    <div class="text-ellipsis">
-                                      <%= property.address %>, <%= property.city %>
-                                    </div>
-                                  </a>
-                              </h3>
-      
-                              <!-- Subtitle -->
-                              <p class="card-text medium text-muted text-capitalize">
-                                  <%= property.type %>
-                              </p>
-      
-                              </div>
-                              <div class="col-auto">
-                              
-                              <!-- Dropdown -->
-                              <div class="dropdown">
-                                  <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  <i class="fe fe-more-vertical"></i>
-                                  </a>
-                                  <div class="dropdown-menu dropdown-menu-right">
-                                   <a href="/property/overview/<%=property.id%>" class="dropdown-item">
-                                      Edit
-                                  </a>
-                                  <form method="POST" action="/property/remove/">
-                                    <input type="hidden" name="_csrf" value="<%= token %>">
-                                    <input type="hidden" name="property[id]" value="<%= property.id%>">
-                                    <button type="submit" class="dropdown-item">
-                                        Remove
-                                    </button>
-                                  </form>
-                                  </div>
-                              </div>
-      
-                              </div>
-                          </div> <!-- / .row -->
-    
-                        <!-- Divider -->
-                        <hr>
-    
-                        <div class="row align-items-center">
-                          <div class="col">
+        
+        <div class="container">
+  
+          <!-- Tab content -->
+          <div class="tab-content">
+            <div class="tab-pane fade active show" id="all" role="tabpanel">
+              <div class="row listAlias">
+                <% all_properties.forEach(function(property){%>
+                  <div class="col-12 col-md-6 col-xl-4">
+  
+                    <!-- Card -->
+                    <div class="card p-relative">
+                      <div class="row align-items-center badge-group">
+                        <div class="col">
                           <div class="row align-items-center no-gutters">
-                              <div class="col-6 text-center border-right">
-                                <!-- Title -->
-                                <h6 class="card-title text-uppercase text-muted mb-2">
-                                    Property Value
-                                </h6>
-                        
-                                <!-- Heading -->
-                                <span class="h2 mb-0">
-                                    £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                                </span>
-                              
-                              </div>
-                              <div class="col-6 text-center">
-                                  <!-- Title -->
-                                <h6 class="card-title text-uppercase text-muted mb-2">
-                                    Rental Yield
-                                </h6>
-                        
-                                <!-- Heading -->
-                                <span class="h2 mb-0">
-                                  <%=property.rental_yield.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>%
-                                </span>
-                              
+                              <div class="col-auto">
+                                <% if (property.status) { %>
+                                  <h2><span class="badge badge-soft-<%= property.status == 'Occupied' ? 'primary' : 'danger' %> ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
+                                <% }%>
                               </div>
   
                           </div> <!-- / .row -->
-                          </div>
-                      
-                      </div> <!-- / .row --> 
-    
-                        </div> <!-- / .card-body -->
-                    </div>
-                    
-                    </div>
-                  <% })%>
-                </div> <!-- / .row -->
-              </div>
-
-              <div class="tab-pane fade" id="occupied" role="tabpanel">
-                <div class="row listAlias">
-                  <% occupied_properties.forEach(function(property){%>
-                    <div class="col-12 col-md-6 col-xl-4">
-    
-                      <!-- Card -->
-                      <div class="card p-relative">
-                        <div class="row align-items-center badge-group">
-                          <div class="col">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col-auto">
-    
-                                  <% if (property.status) { %>
-                                    <h2><span class="badge badge-soft-primary ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
-                                  <% }%>
-                              
-                                </div>
-    
-                            </div> <!-- / .row -->
-                          </div>
-                        </div> <!-- / .row -->
-                          <a href="/property/overview/<%=property.id%>">
-                          <img src="/img/avatars/projects/project-1.jpg" alt="..." class="card-img-top">
-                          </a>
-                          <div class="card-body">
-                          <div class="row align-items-center">
-                              <div class="col">
-                          
-                              <!-- Title -->
-                              <h3 class="card-title mb-2 name">
-                                  <a href="/property/overview/<%=property.id%>"><%= property.address %>, <%= property.city %></a>
-                              </h3>
-      
-                              <!-- Subtitle -->
-                              <p class="card-text medium text-muted text-capitalize">
-                                  <%= property.type %>
-                              </p>
-      
-                              </div>
-                              <div class="col-auto">
-                              
-                              <!-- Dropdown -->
-                              <div class="dropdown">
-                                  <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  <i class="fe fe-more-vertical"></i>
-                                  </a>
-                                  <div class="dropdown-menu dropdown-menu-right">
-                                  <a href="/property/overview/<%=property.id%>" class="dropdown-item">
-                                      Edit
-                                  </a>
-                                  <form method="POST" action="/property/remove/">
-                                    <input type="hidden" name="_csrf" value="<%= token %>">
-                                    <input type="hidden" name="property[id]" value="<%= property.id%>">
-                                    <button href="#!" class="dropdown-item">
-                                        Remove
-                                    </button>
-                                  </form>
-                                  </div>
-                              </div>
-      
-                              </div>
-                          </div> <!-- / .row -->
-    
-                        <!-- Divider -->
-                        <hr>
-    
+                        </div>
+                      </div> <!-- / .row -->
+                        <a href="/property/overview/<%=property.id%>">
+                        <img src="/img/avatars/projects/project-1.jpg" alt="..." class="card-img-top">
+                        </a>
+                        <div class="card-body">
                         <div class="row align-items-center">
-                          <div class="col">
-                          <div class="row align-items-center no-gutters">
-                              <div class="col-6 text-center border-right">
-                                <!-- Title -->
-                                <h6 class="card-title text-uppercase text-muted mb-2">
-                                    Property Value
-                                </h6>
+                            <div class="col">
                         
-                                <!-- Heading -->
-                                <span class="h2 mb-0">
-                                    £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                                </span>
-                              
-                              </div>
-                              <div class="col-6 text-center">
-                                  <!-- Title -->
-                                <h6 class="card-title text-uppercase text-muted mb-2">
-                                    Rental Yield
-                                </h6>
-                        
-                                <!-- Heading -->
-                                <span class="h2 mb-0">
-                                  <%=property.rental_yield.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>%
-                                </span>
-                              
-                              </div>
+                            <!-- Title -->
+                            <h3 class="card-title mb-2 name">
+                                <a href="/property/overview/<%=property.id%>">
+                                  <div class="text-ellipsis">
+                                    <%= property.address %>, <%= property.city %>
+                                  </div>
+                                </a>
+                            </h3>
+    
+                            <!-- Subtitle -->
+                            <p class="card-text medium text-muted text-capitalize">
+                                <%= property.type %>
+                            </p>
+    
+                            </div>
+                            <div class="col-auto">
+                            
+                            <!-- Dropdown -->
+                            <div class="dropdown">
+                                <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fe fe-more-vertical"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                 <a href="/property/overview/<%=property.id%>" class="dropdown-item">
+                                    Edit
+                                </a>
+                                <form method="POST" action="/property/remove/">
+                                  <input type="hidden" name="_csrf" value="<%= token %>">
+                                  <input type="hidden" name="property[id]" value="<%= property.id%>">
+                                  <button type="submit" class="dropdown-item">
+                                      Remove
+                                  </button>
+                                </form>
+                                </div>
+                            </div>
+    
+                            </div>
+                        </div> <!-- / .row -->
   
-                          </div> <!-- / .row -->
-                          </div>
-                      
-                      </div> <!-- / .row --> 
-    
-                        </div> <!-- / .card-body -->
-                    </div>
-                    
-                    </div>
-                  <% })%>
-                </div> <!-- / .row -->
-              </div>
-
-              <div class="tab-pane fade" id="vacant" role="tabpanel">
-                <div class="row listAlias">
-                  <% vacant_properties.forEach(function(property){%>
-                    <div class="col-12 col-md-6 col-xl-4">
-    
-                      <!-- Card -->
-                      <div class="card p-relative">
-                        <div class="row align-items-center badge-group">
-                          <div class="col">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col-auto">
-    
-                                  <% if (property.status) { %>
-                                    <h2><span class="badge badge-soft-danger ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
-                                  <% }%>
-                                
-                                </div>
-    
-                            </div> <!-- / .row -->
-                          </div>
-                        </div> <!-- / .row -->
-                          <a href="/property/overview/<%=property.id%>">
-                          <img src="/img/avatars/projects/project-1.jpg" alt="..." class="card-img-top">
-                          </a>
-                          <div class="card-body">
-                          <div class="row align-items-center">
-                              <div class="col">
-                          
+                      <!-- Divider -->
+                      <hr>
+  
+                      <div class="row align-items-center">
+                        <div class="col">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col-6 text-center border-right">
                               <!-- Title -->
-                              <h3 class="card-title mb-2 name">
-                                  <a href="/property/overview/<%=property.id%>"><%= property.address %>, <%= property.city %></a>
-                              </h3>
-      
-                              <!-- Subtitle -->
-                              <p class="card-text medium text-muted text-capitalize">
-                                  <%= property.type %>
-                              </p>
-      
-                              </div>
-                              <div class="col-auto">
-                              
-                              <!-- Dropdown -->
-                              <div class="dropdown">
-                                  <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  <i class="fe fe-more-vertical"></i>
-                                  </a>
-                                  <div class="dropdown-menu dropdown-menu-right">
-                                   <a href="/property/overview/<%=property.id%>" class="dropdown-item">
-                                      Edit
-                                  </a>
-                                  <form method="POST" action="/property/remove/">
-                                    <input type="hidden" name="_csrf" value="<%= token %>">
-                                    <input type="hidden" name="property[id]" value="<%= property.id%>">
-                                    <button href="#!" class="dropdown-item">
-                                        Remove
-                                    </button>
-                                  </form>
-                                  </div>
-                              </div>
-      
-                              </div>
-                          </div> <!-- / .row -->
-    
-                        <!-- Divider -->
-                        <hr>
-    
-                        <div class="row align-items-center">
-                          <div class="col">
-                          <div class="row align-items-center no-gutters">
-                              <div class="col-6 text-center border-right">
-                                <!-- Title -->
-                                <h6 class="card-title text-uppercase text-muted mb-2">
+                              <h6 class="card-title text-uppercase text-muted mb-2">
                                   Property Value
-                                </h6>
-                        
-                                <!-- Heading -->
-                                <span class="h2 mb-0">
+                              </h6>
+                      
+                              <!-- Heading -->
+                              <span class="h2 mb-0">
                                   £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                                </span>
-                              
+                              </span>
+                            
+                            </div>
+                            <div class="col-6 text-center">
+                                <!-- Title -->
+                              <h6 class="card-title text-uppercase text-muted mb-2">
+                                  Rental Yield
+                              </h6>
+                      
+                              <!-- Heading -->
+                              <span class="h2 mb-0">
+                                <%=property.rental_yield.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>%
+                              </span>
+                            
+                            </div>
+
+                        </div> <!-- / .row -->
+                        </div>
+                    
+                    </div> <!-- / .row --> 
+  
+                      </div> <!-- / .card-body -->
+                  </div>
+                  
+                  </div>
+                <% })%>
+              </div> <!-- / .row -->
+            </div>
+
+            <div class="tab-pane fade" id="occupied" role="tabpanel">
+              <div class="row listAlias">
+                <% occupied_properties.forEach(function(property){%>
+                  <div class="col-12 col-md-6 col-xl-4">
+  
+                    <!-- Card -->
+                    <div class="card p-relative">
+                      <div class="row align-items-center badge-group">
+                        <div class="col">
+                          <div class="row align-items-center no-gutters">
+                              <div class="col-auto">
+  
+                                <% if (property.status) { %>
+                                  <h2><span class="badge badge-soft-primary ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
+                                <% }%>
+                            
                               </div>
-                              <div class="col-6 text-center">
-                                  <!-- Title -->
-                                <h6 class="card-title text-uppercase text-muted mb-2">
-                                    Rental Yield
-                                </h6>
+  
+                          </div> <!-- / .row -->
+                        </div>
+                      </div> <!-- / .row -->
+                        <a href="/property/overview/<%=property.id%>">
+                        <img src="/img/avatars/projects/project-1.jpg" alt="..." class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
                         
-                                <!-- Heading -->
-                                <span class="h2 mb-0">
-                                  <%=property.rental_yield.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>%
-                                </span>
+                            <!-- Title -->
+                            <h3 class="card-title mb-2 name">
+                                <a href="/property/overview/<%=property.id%>"><%= property.address %>, <%= property.city %></a>
+                            </h3>
+    
+                            <!-- Subtitle -->
+                            <p class="card-text medium text-muted text-capitalize">
+                                <%= property.type %>
+                            </p>
+    
+                            </div>
+                            <div class="col-auto">
+                            
+                            <!-- Dropdown -->
+                            <div class="dropdown">
+                                <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fe fe-more-vertical"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                <a href="/property/overview/<%=property.id%>" class="dropdown-item">
+                                    Edit
+                                </a>
+                                <form method="POST" action="/property/remove/">
+                                  <input type="hidden" name="_csrf" value="<%= token %>">
+                                  <input type="hidden" name="property[id]" value="<%= property.id%>">
+                                  <button href="#!" class="dropdown-item">
+                                      Remove
+                                  </button>
+                                </form>
+                                </div>
+                            </div>
+    
+                            </div>
+                        </div> <!-- / .row -->
+  
+                      <!-- Divider -->
+                      <hr>
+  
+                      <div class="row align-items-center">
+                        <div class="col">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col-6 text-center border-right">
+                              <!-- Title -->
+                              <h6 class="card-title text-uppercase text-muted mb-2">
+                                  Property Value
+                              </h6>
+                      
+                              <!-- Heading -->
+                              <span class="h2 mb-0">
+                                  £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                              </span>
+                            
+                            </div>
+                            <div class="col-6 text-center">
+                                <!-- Title -->
+                              <h6 class="card-title text-uppercase text-muted mb-2">
+                                  Rental Yield
+                              </h6>
+                      
+                              <!-- Heading -->
+                              <span class="h2 mb-0">
+                                <%=property.rental_yield.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>%
+                              </span>
+                            
+                            </div>
+
+                        </div> <!-- / .row -->
+                        </div>
+                    
+                    </div> <!-- / .row --> 
+  
+                      </div> <!-- / .card-body -->
+                  </div>
+                  
+                  </div>
+                <% })%>
+              </div> <!-- / .row -->
+            </div>
+
+            <div class="tab-pane fade" id="vacant" role="tabpanel">
+              <div class="row listAlias">
+                <% vacant_properties.forEach(function(property){%>
+                  <div class="col-12 col-md-6 col-xl-4">
+  
+                    <!-- Card -->
+                    <div class="card p-relative">
+                      <div class="row align-items-center badge-group">
+                        <div class="col">
+                          <div class="row align-items-center no-gutters">
+                              <div class="col-auto">
+  
+                                <% if (property.status) { %>
+                                  <h2><span class="badge badge-soft-danger ml-1 mt-n1 text-capitalize"><%= property.status %></span><h2>
+                                <% }%>
                               
                               </div>
   
                           </div> <!-- / .row -->
-                          </div>
-                      
-                      </div> <!-- / .row --> 
+                        </div>
+                      </div> <!-- / .row -->
+                        <a href="/property/overview/<%=property.id%>">
+                        <img src="/img/avatars/projects/project-1.jpg" alt="..." class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+                        
+                            <!-- Title -->
+                            <h3 class="card-title mb-2 name">
+                                <a href="/property/overview/<%=property.id%>"><%= property.address %>, <%= property.city %></a>
+                            </h3>
     
-                        </div> <!-- / .card-body -->
-                    </div>
+                            <!-- Subtitle -->
+                            <p class="card-text medium text-muted text-capitalize">
+                                <%= property.type %>
+                            </p>
+    
+                            </div>
+                            <div class="col-auto">
+                            
+                            <!-- Dropdown -->
+                            <div class="dropdown">
+                                <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fe fe-more-vertical"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                 <a href="/property/overview/<%=property.id%>" class="dropdown-item">
+                                    Edit
+                                </a>
+                                <form method="POST" action="/property/remove/">
+                                  <input type="hidden" name="_csrf" value="<%= token %>">
+                                  <input type="hidden" name="property[id]" value="<%= property.id%>">
+                                  <button href="#!" class="dropdown-item">
+                                      Remove
+                                  </button>
+                                </form>
+                                </div>
+                            </div>
+    
+                            </div>
+                        </div> <!-- / .row -->
+  
+                      <!-- Divider -->
+                      <hr>
+  
+                      <div class="row align-items-center">
+                        <div class="col">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col-6 text-center border-right">
+                              <!-- Title -->
+                              <h6 class="card-title text-uppercase text-muted mb-2">
+                                Property Value
+                              </h6>
+                      
+                              <!-- Heading -->
+                              <span class="h2 mb-0">
+                                £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                              </span>
+                            
+                            </div>
+                            <div class="col-6 text-center">
+                                <!-- Title -->
+                              <h6 class="card-title text-uppercase text-muted mb-2">
+                                  Rental Yield
+                              </h6>
+                      
+                              <!-- Heading -->
+                              <span class="h2 mb-0">
+                                <%=property.rental_yield.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>%
+                              </span>
+                            
+                            </div>
+
+                        </div> <!-- / .row -->
+                        </div>
                     
-                    </div>
-                  <% })%>
-                </div> <!-- / .row -->
-              </div>
+                    </div> <!-- / .row --> 
+  
+                      </div> <!-- / .card-body -->
+                  </div>
+                  
+                  </div>
+                <% })%>
+              </div> <!-- / .row -->
             </div>
           </div>
+        </div>
       
-          </div> <!-- / .main-content -->
        <!-- JAVASCRIPT
   ================================================== -->
     <% include ../partials/scripts %>

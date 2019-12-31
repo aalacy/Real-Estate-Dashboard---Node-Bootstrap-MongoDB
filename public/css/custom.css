@@ -31,3 +31,18 @@
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
+
+.header-title {
+    text-transform: capitalize;
+}
+
+.page.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.select2.select2-container {
+    min-width: 144px;
+}

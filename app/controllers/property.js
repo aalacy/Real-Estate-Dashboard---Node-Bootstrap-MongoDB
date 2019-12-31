@@ -6,6 +6,7 @@ const fs = require('fs');
 const request = require('request-promise');
 const mongoose = require('mongoose');
 const Properties = mongoose.model('Properties');
+const Documents = mongoose.model('Documents');
 var moment = require('moment');
 const uuidv4 = require('uuid/v4');
 
@@ -175,7 +176,6 @@ exports.create = async function(req, res) {
 
   const floor_area_url = `https://api.propertydata.co.uk/floor-areas?key=${process.env.PROPERTYDATA_API_KEY}&postcode=${property.zip.split(' ').join('+')}`
 
-
   const floor_area_list = await request({ uri: floor_area_url, json: true });
   if (floor_area_list['known_floor_areas']) {
     floor_area_list['known_floor_areas'].map(area => {
@@ -245,17 +245,69 @@ exports.remove = async function(req, res) {
 exports.documents = async function(req, res) {
   const { user } = req.session;  
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
+  const documents = await Documents.find({ user_id: user.id, status: 'alive' }, { _id: 0 });
   res.render('property/documents', {
     token: req.csrfToken(),
     title: 'Avenue - Documents',
-    properties
+    properties,
+    documents
   });
 };
 
 exports.documents_upload = async function(req, res) {
-  console.log(req.file);
-  return res.status( 200 ).send( req.file );
+  const { user } = req.session;  
+  const mydocument = new Documents();
+  mydocument.id = uuidv4();
+  mydocument.user_id = user.id;
+  mydocument.size = req.file.size;
+  mydocument.mimetype = req.file.mimetype;
+  mydocument.filename = req.file.originalname;
+  mydocument.path = req.file.path.replace('public/', '');
+  await mydocument.save();
+  return res.status( 200 ).send( mydocument.id );
 };
+
+exports.documents_delete = async function(req, res) {
+  const { user } = req.session;
+  const { body: { document } } = req;
+  new_values = {
+    $set: { status: 'deleted' }
+  };
+  return Documents.updateOne({ id: document.id }, new_values).then(() => {
+    res.json({
+      status: 200,
+      message: "Successfully deleted."
+    });
+  }).catch(e => {
+    res.json({
+      status: 422,
+      message: "Failed to delete the document."
+    });
+  });
+}
+
+exports.upload_doc_to_property = async function(req, res) {
+  const { body: { document } } = req;
+  const mydocument = await Documents.findOne({ id: document.id });
+  const tag = document.tag;
+  const property_id = document.property_id;
+  const tenancy_id = document.tenancy_id;
+  const update_at = moment().format('YYYY-MM-DD HH:mm:ss');
+  new_values = {
+    $set: { tag, property_id, tenancy_id, update_at }
+  };
+  return Documents.updateOne({ id: document.id }, new_values).then(() => {
+    res.json({
+      status: 200,
+      message: "Successfully uploaded."
+    })
+  }).catch(e => {
+    res.json({
+      status: 422,
+      message: "Failed to upload the document."
+    })
+  });
+}
 
 exports.tenancies = async function(req, res) {
   const { user } = req.session;  
@@ -264,6 +316,15 @@ exports.tenancies = async function(req, res) {
     title: 'Avenue - Tenancies',
   });
 };
+
+exports.all_unit = async function(req, res) {
+  const { body: { property } } = req;
+  const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
+  return res.json({
+    status: 200,
+    tenancies:myproperty.tenancies
+  })
+}
 
 exports.new_unit = async function(req, res) {
   const { body: { property, unit } } = req;

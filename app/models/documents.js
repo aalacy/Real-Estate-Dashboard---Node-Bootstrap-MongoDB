@@ -1,0 +1,53 @@
+
+/*!
+ * Module dependencies
+ */
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+var moment = require('moment');
+const uuidv4 = require('uuid/v4');
+
+/**
+ * User schema
+ */
+
+const DocumentsSchema = new Schema({
+  id: { type: String, default: ''},
+  user_id: { type: String, default: ''},
+  tag: { type: Array, default: []},
+  property_id: { type: String, default: ''},
+  tenancy_id: { type: String, default: ''},
+  filename: { type: String, default: '' },
+  size: { type: String, default: '' },
+  path: { type: String, default: '' },
+  mimetype: { type: String, default: '' },
+  status: { type: String, default: 'alive' },
+  created_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
+  updated_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') }
+});
+
+/**
+ * Add your
+ * - pre-save hooks
+ * - validations
+ * - virtuals
+ */
+
+/**
+ * Methods
+ */
+
+DocumentsSchema.methods.setDate = function() {
+  this.created_at = this.updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
+};
+
+DocumentsSchema.methods.updateDate = function() {
+  this.updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
+};
+
+DocumentsSchema.methods.setID = function() {
+    this.id = uuidv4();
+}
+
+mongoose.model('Documents', DocumentsSchema);

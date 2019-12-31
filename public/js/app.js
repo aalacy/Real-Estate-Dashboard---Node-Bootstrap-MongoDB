@@ -729,5 +729,47 @@ $(function() {
                 console.log(err);
             })
         }
+    });
+
+    /*
+    *   Documents
+    */
+
+    $('#uploadDocumentBtn').click(function(e) {
+      if ($('#document_id').val().length == 0) {
+        return makeToast({message: "Please upload a document"});
+      }
+      e.preventDefault();
+      const data = {
+        document:  {
+          id: $('#document_id').val(),
+          property_id: $('#document_property').val(),
+          tenancy_id: $('#document_tenancy').val(),
+          tag: $('#document_tag').val(),
+        }
+      }
+      const token = $('meta[name="csrf"]').attr('content');
+      fetch('/property/documents/upload_all', {
+          credentials: 'same-origin', // <-- includes cookies in the request
+          headers: {
+              'CSRF-Token': token, 
+              'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(function(res) {
+          makeToast({message: res.message});
+          if (res.status == 422) {
+          } else if (res.status == 200) {
+            location.reload();
+          }
+      })
+      .catch(error => {
+          console.log(error);
+      });
     })
+
+    
 });

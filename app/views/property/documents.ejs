@@ -4,15 +4,19 @@
       <% include ../partials/head %>
   </head>
   <body>
+
+    <input type="hidden" id="hidden_documents" value="<%= JSON.stringify(documents) %>">
+    <input type="hidden" id="hidden_properties" value="<%= JSON.stringify(properties) %>">
     <!-- Modal Upload -->
     <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
-        <form id="my-awesome-dropzone" method="post" action="/property/ajust_summary/" >
+        <form id="document-upload-form" method="post" action="/property/documents/upload_all" >
           <input type="hidden" name="_csrf" value="<%= token %>">
+          <input type="hidden" id="document_id" name="document[id]" value="">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
                 <!-- Header -->
-              <h3 class="modal-title">Adjust Summary</h3>
+              <h3 class="modal-title">Upload Document</h3>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -26,41 +30,36 @@
                       <!-- Start date -->
                       <div class="form-group">
                         <label>
-                          Current Valuation
+                          Properties
                         </label>
-                          
+                        <select class="form-control" id="document_property" name="document[property]" data-toggle="select"  data-options='{"placeholder": "Select a Property"}' required>
+                          <option></option>
+                          <% properties.map(property => {%>
+                          <option value="<%=property.id%>"><%=property.address + ', ' + property.city%></option>
+                          <%})%>
+                        </select>  
                       </div>
-        
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-12">
-                      
                       <!-- Start date -->
                       <div class="form-group">
                         <label>
-                          Annual Income
+                          Tenancies
                         </label>
+                        <select class="form-control" id="document_tenancy" name="document[tenancy]" data-toggle="select"  data-options='{"placeholder": "Select a Tenancy"}'>
+                          <option></option>
+                        </select>  
                       </div>
         
                     </div>
                    
                   </div>
-                  <div class="row">
-                    <div class="col-12">
-                      <!-- Start date -->
-                      <div class="form-group">
-                        <label>
-                          Rental Yield % 
-                        </label>
-                        
-                      </div>
-        
-                    </div>
-                  </div>
+                  
                 </div>
                 <div class="col-12 col-md-6">
-                  <div class="dropzone dropzone-multiple" data-toggle="dropzone" data-options='{"url": "/property/documents/upload?_csrf=<%=token%>"}'>
+                  <div class="dropzone dropzone-multiple">
 
                     <!-- Fallback -->
                     <div class="fallback">
@@ -83,7 +82,7 @@
                           <div class="col-auto">
                             
                             <div class="dropdown">
-                              <a href="#" class="dropdown-item" data-dz-remove>
+                              <a href="#" class="dropdown-item" title="Remove file" data-dz-remove>
                                 <i class="fe fe-trash"></i>
                               </a>
                             </div>
@@ -96,10 +95,24 @@
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-12">
+                  <!-- Start date -->
+                  <div class="form-group mt-3">
+                    <label>
+                      Tag
+                    </label>
+                    <select class="form-control" name="document[tag]" id="document_tag" multiple="multiple">
+                      <option>House</option>
+                    </select>
+                  </div>
+    
+                </div>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary">Save Changes</button>
+              <button type="button" id="uploadDocumentBtn" class="btn btn-primary">Save Changes</button>
             </div>
           </div>
         </form>
@@ -157,21 +170,14 @@
                     <div class="dropdown">
 
                       <!-- Toggle -->
-                      <a href="#" class="small text-muted dropdown-toggle" data-toggle="dropdown">
-                        All properties
-                      </a>
-
-                      <!-- Menu -->
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item sort" data-sort="name" href="#!">
-                          All
-                        </a>  
-                        <% properties.forEach(function(property, i){%>
-                          <a class="dropdown-item sort" data-sort="name" href="#!">
-                            Property <%=i+1 %>
-                          </a>
-                        <% })%>
-                      </div>
+                   
+                      <select class="form-control" id="filterByProperty" data-toggle="select"  data-options='{"placeholder": "All Properties"}' required>
+                          <option></option>
+                          <option value="all">All</option>
+                          <% properties.map(property => {%>
+                          <option value="<%=property.id%>"><%=property.address + ', ' + property.city%></option>
+                          <%})%>
+                        </select>  
 
                     </div>
     
@@ -208,125 +214,12 @@
               <div class="card-body">
 
                 <!-- List -->
-                <ul class="list-group list-group-lg list-group-flush list my-n4">
-                  <li class="list-group-item px-0">
-                    
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        
-                        <!-- Avatar -->
-                        <a href="#!" class="avatar avatar-lg">
-                          <span class="avatar-title rounded bg-white text-secondary">
-                            <span class="fe fe-file"></span>
-                          </span>
-                        </a>
-
-                      </div>
-                      <div class="col ml-n2">
-
-                        <!-- Title -->
-                        <h4 class="card-title mb-1 name">
-                          <a href="#!">File name</a>
-                        </h4>
-
-                        <!-- Text -->
-                        <p class="card-text small text-muted mb-1">
-                          Property &bull; Tag
-                        </p>
-
-                        <!-- Time -->
-                        <p class="card-text small text-muted">
-                          Uploaded on <time datetime="2018-01-03">Jan 3, 2018</time>
-                        </p>
-                        
-                      </div>
-                      <div class="col-auto">
-                        
-                        <!-- Button -->
-                        <a href="#!" class="btn btn-sm btn-white d-none d-md-inline-block">
-                          Download
-                        </a>
-
-                      </div>
-                      <div class="col-auto">
-                        
-                        <!-- Dropdown -->
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#!" class="dropdown-item">
-                              Delete
-                            </a>
-                          </div>
-                        </div>
-
-                      </div>
-                    </div> <!-- / .row -->
-
-                  </li>
-				  
-                  <li class="list-group-item px-0">
-                    
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        
-                        <!-- Avatar -->
-                        <a href="#!" class="avatar avatar-lg">
-                          <span class="avatar-title rounded bg-white text-secondary">
-                            <span class="fe fe-file"></span>
-                          </span>
-                        </a>
-
-                      </div>
-                      <div class="col ml-n2">
-
-                        <!-- Title -->
-                        <h4 class="card-title mb-1 name">
-                          <a href="#!">File name</a>
-                        </h4>
-
-                        <!-- Text -->
-                        <p class="card-text small text-muted mb-1">
-                          Property &bull; Tag
-                        </p>
-
-                        <!-- Time -->
-                        <p class="card-text small text-muted">
-                          Uploaded on <time datetime="2018-01-03">Jan 3, 2018</time>
-                        </p>
-                        
-                      </div>
-                      <div class="col-auto">
-                        
-                        <!-- Button -->
-                        <a href="#!" class="btn btn-sm btn-white d-none d-md-inline-block">
-                          Download
-                        </a>
-
-                      </div>
-                      <div class="col-auto">
-                        
-                        <!-- Dropdown -->
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#!" class="dropdown-item">
-                              Delete
-                            </a>
-                          </div>
-                        </div>
-
-                      </div>
-                    </div> <!-- / .row -->
-
-                  </li>
-              
+                <ul class="list-group list-group-lg list-group-flush list my-n4" id="documentList">
+                  <% if(!documents.length) { %>
+                    <p class="text-center p-3">There is no any documents yet.</p>
+                  <% } %>
                 </ul>
-
+                <ul id="documentPagination" class="pagination-md mt-5"></ul>
               </div>
             </div>
 
@@ -341,46 +234,222 @@
     <% include ../partials/scripts %>
 
     <script type="text/javascript">
+      let all_items = $('#hidden_documents').val();
+      let properties = $('#hidden_properties').val();
+      try {
+        properties = JSON.parse(properties);
+      } catch(e) { properties = [];}
+      let items = []
+      try {
+        all_items = JSON.parse(all_items);
+        items = all_items;
+      } catch(e) {}
+
+      function doPopulate() {
+        $('#documentList').empty();
+        let page = 0; 
+        items.map( (doc, idx) => {
+          if (idx % 3 == 0) { 
+            page = (parseInt(idx/3) + 1)
+          } else {
+            page = (parseInt(idx/3) + 1) + ' d-none' 
+          }
+          const date = new Date(doc.created_at);
+          const uploaded_at = date.getMonth()+1 + '/' + date.getDate() + '/' + date.getFullYear();
+          const property_name = properties.map( function(property) { return property.id == doc.property_id ? property.address + ', ' + property.city : "" });
+          $('#documentList').append(`<li class="list-group-item px-0 page${page}">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  
+                  <!-- Avatar -->
+                  <h1 class="mb-0 avatar avatar-md">
+                    <img src="/img/icons/unit.png" class="avatar-img">
+                  </h1>
+
+                </div>
+                <div class="col ml-n2">
+
+                  <!-- Title -->
+                  <h4 class="card-title mb-1 name">
+                    <a href="#!">${doc.filename}</a>
+                  </h4>
+
+                  <!-- Text -->
+                  <p class="card-text small text-muted mb-1">
+                    ${property_name} &bull;${doc.tag}
+                  </p>
+
+                  <!-- Time -->
+                  <p class="card-text small text-muted">
+                    Uploaded on <time datetime="${uploaded_at}">${uploaded_at}></time>
+                  </p>
+                  
+                </div>
+                <div class="col-auto">
+                  
+                  <!-- Button -->
+                  <a href="/${doc.path}" target="_blank" class="btn btn-sm btn-white d-none d-md-inline-block">
+                    Download
+                  </a>
+
+                </div>
+                <div class="col-auto">
+                  
+                  <!-- Dropdown -->
+                  <div class="dropdown">
+                    <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fe fe-more-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <button class="dropdown-item delete-document" data-id="${doc.id}">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+            </li>`);
+           })
+      }
+      function doPaginate() {
+        // $('#documentPagination').empty();
+        try {
+          const pageCnt = Math.ceil(items.length / 3);
+          var visiblePageCnt = Math.min(3, pageCnt);
+          $('#documentPagination').twbsPagination('destroy');
+          $('#documentPagination').twbsPagination({
+              totalPages: pageCnt,
+              // the current page that show on start
+              startPage: 1,
+              // maximum visible pages
+              visiblePages: visiblePageCnt,
+              initiateStartPageClick: true,
+              // template for pagination links
+              href: false,
+              // variable name in href template for page number
+              hrefVariable: '{{number}}',
+              // Text labels
+              first: '<<',
+              prev: 'Prev',
+              next: 'Next',
+              last: '>>',
+              // carousel-style pagination
+              loop: false,
+              // callback function
+              onPageClick: function (event, page) {
+                $('#documentList .list-group-item').addClass('d-none');
+                $('.page'+page).removeClass('d-none');
+              },
+              // pagination Classes
+              paginationClass: 'pagination',
+              nextClass: 'next',
+              prevClass: 'prev',
+              lastClass: 'last',
+              firstClass: 'first',
+              pageClass: 'page',
+              activeClass: 'active',
+              disabledClass: 'disabled'
+          });
+        } catch(e) {}
+      }
+
+      function Dropzone_init(el) {
+        Dropzone.autoDiscover = false;
+        Dropzone.thumbnailWidth = null;
+        Dropzone.thumbnailHeight = null;
+
+        var currentFile = undefined;
+        var elementOptions = el.dataset.options;
+            elementOptions = elementOptions ? JSON.parse(elementOptions) : {};
+        var defaultOptions = {
+          url: "/property/documents/upload?_csrf=<%=token%>",
+          maxFiles: 1,
+          previewsContainer: el.querySelector('.dz-preview'),
+          previewTemplate: el.querySelector('.dz-preview').innerHTML,
+          init: function() {
+            this.on('addedfile', function(file) {
+              var maxFiles = elementOptions.maxFiles;
+              if (maxFiles == 1 && currentFile) {
+                this.removeFile(currentFile);
+              }
+              currentFile = file;
+            });
+
+            this.on('removedfile', function(file){
+              $('#document_id').val('');
+            });
+          },
+          success: function(res) {
+            if (res.status == "success") {
+              try {
+                const document_id = res.xhr.response;
+                $('#document_id').val(document_id);
+              } catch(e) {}
+            } else {
+              makeToast({message: "Sorry, Something wrong happened on the server while uploading your document"});
+            }
+          }
+        }
+        var options = Object.assign(elementOptions, defaultOptions);
+
+        // Clear preview
+        el.querySelector('.dz-preview').innerHTML = '';
+
+        // Init dropzone
+        new Dropzone(el, options);
+      }
+
       $(function(){
-        // Dropzone.options.myAwesomeDropzone = { // The camelized version of the ID of the form element
+        doPopulate();
+        doPaginate();
 
-        //   // The configuration we've talked about above
-        //   autoProcessQueue: false,
-        //   uploadMultiple: true,
-        //   parallelUploads: 100,
-        //   maxFiles: 100,
+        if (document.querySelector('.dropzone')) {
+          Dropzone_init( document.querySelector('.dropzone'));
+        }
 
-        //   // The setting up of the dropzone
-        //   init: function() {
-        //     var myDropzone = this;
+        $('#filterByProperty').on('select2:select', function (e) {
+          if (e.params.data.id == 'all') {
+            items = all_items;
+          } else {
+            items = all_items.filter(item => item.property_id == e.params.data.id);
+          }
+          doPopulate();
+          doPaginate();
+        });
 
-        //     // First change the button to actually tell Dropzone to process the queue.
-        //     this.element.querySelector("button[type=submit]").addEventListener("click", function(e) {
-        //       // Make sure that the form isn't actually being sent.
-        //       e.preventDefault();
-        //       e.stopPropagation();
-        //       myDropzone.processQueue();
-        //     });
+        $('#document_property').on('select2:select', function (e) {
+          var data = {
+            property: {
+              id: e.params.data.id
+            }
+          };
+          const token = $('input[name="_csrf"]').val();
+          fetch('/property/unit/all', {
+              credentials: 'same-origin', // <-- includes cookies in the request
+              headers: {
+                  'CSRF-Token': token, 
+                  'Content-Type': 'application/json'
+              },
+              method: 'POST',
+              body: JSON.stringify(data)
+          })
+          .then(response => response.json())
+          .then(function(res) {
+            if (res.status == 200) {
+              $('#document_tenancy').val(null).trigger('change');
+              res.tenancies.map(tenancy => {
+                var option = new Option(tenancy.description, data.id, true, true);
+                $('#document_tenancy').append(option);
+              })
+            }
+          })
+          .catch(error => {
+              console.log(error);
+          });
+        });
 
-        //     // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
-        //     // of the sending event because uploadMultiple is set to true.
-        //     this.on("sendingmultiple", function() {
-        //       // Gets triggered when the form is actually being sent.
-        //       // Hide the success button or the complete form.
-        //     });
-        //     this.on("successmultiple", function(files, response) {
-        //       // Gets triggered when the files have successfully been sent.
-        //       // Redirect user or notify of success.
-        //     });
-        //     this.on("errormultiple", function(files, response) {
-        //       // Gets triggered when there was an error sending the files.
-        //       // Maybe show form again, and notify user of error
-        //     });
-        //   }
-         
-        // }
-
-        $('#tagSelect').select2({
+        $('#document_tag').select2({
+          tags: true,
           createTag: function (params) {
             var term = $.trim(params.term);
 
@@ -395,6 +464,37 @@
             }
           }
         });
+        $('.delete-document').click(function(e) {
+          e.preventDefault();
+          const id = $(this).data('id');
+          const parent = $(this).parents('.list-group-item');
+          const token = $('meta[name="csrf"]').attr('content');
+          const data = {
+              document: {
+                id 
+              }
+          };
+          fetch('/property/documents/delete', {
+            credentials: 'same-origin', // <-- includes cookies in the request
+            headers: {
+                'CSRF-Token': token, 
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(data)
+          })
+          .then(response => response.json())
+          .then(function(res) {
+            makeToast({message: res.message});
+            if (res.status == 422) {
+            } else if (res.status == 200) {
+              parent.remove();
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      })
       });
     </script>
 

@@ -22,8 +22,8 @@ const UsersSchema = new Schema({
   hash: { type: String, default: '' },
   salt: { type: String, default: '' },
   reset_link: { type: String, default: '' },
-  created_at: { type: Date, default: '' },
-  updated_at: { type: Date, default: '' }
+  created_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
+  updated_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') }
 });
 
 /**
