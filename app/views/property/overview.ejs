@@ -233,6 +233,35 @@
               </div>
 
             </div> <!-- / .row -->
+            <div class="row align-items-center">
+              <div class="col">
+                
+                <!-- Nav -->
+                <ul class="nav nav-tabs nav-overflow header-tabs">
+                  <li class="nav-item">
+                    <a href="#overview" data-toggle="tab" role="tab" class="nav-link active">
+                      Overview
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#units" data-toggle="tab" role="tab" class="nav-link">
+                      Units <span class="badge badge-pill badge-soft-secondary">3</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#income_expenses" data-toggle="tab" role="tab" class="nav-link">
+                      Income & Expenses
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#documents" data-toggle="tab" role="tab" class="nav-link">
+                      Documents <span class="badge badge-pill badge-soft-secondary">3</span>
+                    </a>
+                  </li>
+                </ul>
+
+              </div>
+            </div>
 			
           </div>
 
@@ -241,57 +270,55 @@
 
       <!-- CONTENT -->
       <div class="container">
+        <div class="tab-content">
+          <div class="tab-pane fade active show" id="overview" role="tabpanel">
          <!-- Alert -->
-        <div class="alert alert-warning" role="alert">
-          This property profile is only <%=empty_cnt%>% complete. <a href="/property/detail/<%=property.id%>" class="alert-link">Add more details here</a>
-        </div>
-        
-        <!-- Alert -->
-        <% if (property.status == 'vacant') {%>
-        <!-- <div class="alert alert-secondary">
-          This property is vacant and has no active tenancies
-
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-
-        </div> -->
-        <% } %>
-
-        <div class="row">
-          <div class="col-12">
-        
-          <div class="row">
-			
-            <div class="col-12 col-xl-8">
+            <div class="alert alert-warning" role="alert">
+              This property profile is only <%=empty_cnt%>% complete. <a href="/property/detail/<%=property.id%>" class="alert-link">Add more details here</a>
+            </div>
             
-              <!-- Card -->
-              <div class="card">
-				  
-                <div class="card-header">
-                  <div class="row align-items-center">
-                    <div class="col">
+            <!-- Alert -->
+            <% if (property.status == 'vacant') {%>
+            <!-- <div class="alert alert-secondary">
+              This property is vacant and has no active tenancies
 
-                      <!-- Title -->
-                      <h4 class="card-header-title">
-                        Summary
-                      </h4>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
 
-                    </div>
-					
-                    <div class="col-auto">
+            </div> -->
+            <% } %>
 
-                      <!-- Button -->
-                      <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAdjustSummary">
-                        Adjust
-                      </button>
-                  
-                    </div>
-                   
-                  </div> <!-- / .row -->
-                </div>
-				
-                <div class="card-body">
+            <div class="row">
+              <div class="col-12 col-xl-8">
+              
+                <!-- Card -->
+                <div class="card">
+  				  
+                  <div class="card-header">
+                    <div class="row align-items-center">
+                      <div class="col">
+
+                        <!-- Title -->
+                        <h4 class="card-header-title">
+                          Summary
+                        </h4>
+
+                      </div>
+  					
+                      <div class="col-auto">
+
+                        <!-- Button -->
+                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAdjustSummary">
+                          Adjust
+                        </button>
+                    
+                      </div>
+                     
+                    </div> <!-- / .row -->
+                  </div>
+  				
+                  <div class="card-body">
                     <div class="row align-items-center no-gutters">
                       <div class="col-4 text-center border-right">
                         <!-- Title -->
@@ -331,361 +358,382 @@
                       
                       </div>
 
-                  </div> <!-- / .row -->
-                
-              </div> 
-		      </div>
-			  
+                    </div> <!-- / .row -->
+                  
+                    </div> 
+      		      </div>
+  			  
               <!-- Card -->
-              <div class="card">
-				  
-                <div class="card-header">
-                  <div class="row align-items-center">
-                    <div class="col">
-
-                      <!-- Title -->
-                      <h4 class="card-header-title">
-                        Occupancy
-                      </h4>
-
-                    </div>
-					
-                    <div class="col-auto">
-
-                      <!-- Button -->
-                      <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAddNewUnit">
-                        Manage Units
-                      </button>
-                  
-                    </div>
-                   
-                  </div> <!-- / .row -->
-                </div>
-				
-                <div class="card-body">
-                  <% property.tenancies.forEach( function(unit){ %>
-                  <div class="row align-items-center unit-item">
-                    <div class="col-auto">
-                  
-                      <!-- Avatar -->
-                      <h1 class="mb-0 avatar avatar-md">
-                        <img src="/img/icons/unit.png" class="avatar-img">
-                      </h1>
-  
-                    </div>
-                    <div class="col ml-n2 mr-auto">
-  
-                      <!-- Title -->
-                      <h4 class="card-title mb-1">
-                        <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
-                      </h4>
-  
-                      <!-- Time -->
-                      <p class="card-text small text-muted">
-                        <%= unit.start_date%> <%= unit.end_date ? '-' : ''%> <%= unit.end_date%>
-                      </p>
-                    </div>
-
-                    <div class="col-auto text-right">
-                      <!-- Title -->
-                      <h4 class="card-title mb-1">
-                        <% if (parseInt(unit.rent_price) > 0) {%>£<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><%}%>
-                      </h4>
-                      
-                      <!-- Time -->
-                      <p class="card-text small text-muted">
-                        <%= unit.rent_frequency%>
-                      </p>
-                    </div>
-                    <div class="col-auto">
-                      <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>" title="Edit">
-                        <i class="fe fe-chevron-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                  
-                  <!-- Divider -->
-                  <hr>
-                  <% })%>
-                  <% if (property.tenancies.length == 0){%>
-                  <p class="mb-3">
-                    This property is currently vacant and has no active tenancies.
-                  </p>
-                  <% }%>
-                </div>
-              </div>
-			  
-            </div>
-			
-            <div class="col-12 col-xl-4">
-            
-              <!-- Card -->
-              <div class="card">
+                <div class="card">
+      		  
                   <div class="card-header">
                     <div class="row align-items-center">
                       <div class="col">
 
                         <!-- Title -->
                         <h4 class="card-header-title">
-                          Property Details
+                          Occupancy
+                        </h4>
+
+                      </div>
+      			
+                      <div class="col-auto">
+
+                        <!-- Button -->
+                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAddNewUnit">
+                          Manage
+                        </button>
+                    
+                      </div>
+                     
+                    </div> <!-- / .row -->
+                  </div>
+      		
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col-4 text-center border-right">
+                        <!-- Heading -->
+                        <div class="chart chart-appended">
+                          <canvas id="tenancyChart" class="chart-canvas" data-labels="<%=chart_labels%>" data-dataset="[<%=chart_data%>]"></canvas>
+                        </div>
+                      </div>
+                      <div class="col-4 text-center border-right">
+                        <!-- Heading -->
+                        <span class="h3">
+                          <%=total_units%>
+                        </span>
+                        <h5 class="card-title text-uppercase mt-2">
+                          Units in total
+                        </h5>
+                      </div>
+                      <div class="col-4 text-center border-right">
+                        <!-- Heading -->
+                        <span class="h3">
+                          <%=vacant_cnt%>
+                        </span>
+                        <h5 class="card-title text-uppercase mt-2">
+                          Vacant
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card">
+            
+                  <div class="card-header">
+                    <div class="row align-items-center">
+                      <div class="col">
+
+                        <!-- Title -->
+                        <h4 class="card-header-title">
+                          Income & Expenses
+                        </h4>
+
+                      </div>
+            
+                      <div class="col-auto">
+
+                        <!-- Button -->
+                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAddNewUnit">
+                          Manage
+                        </button>
+                    
+                      </div>
+                     
+                    </div> <!-- / .row -->
+                  </div>
+                  <div class="card-body">
+                  </div>
+                </div>
+      			  
+              </div>
+    			
+              <div class="col-12 col-xl-4">
+              
+                <!-- Card -->
+                <div class="card">
+                    <div class="card-header">
+                      <div class="row align-items-center">
+                        <div class="col">
+
+                          <!-- Title -->
+                          <h4 class="card-header-title">
+                            Property Details
+                          </h4>
+
+                        </div>
+                        <div class="col-auto">
+
+                          <!-- Button -->
+                          <a href="/property/detail/<%= property.id%>" class="btn btn-sm btn-white">
+                            Edit
+                          </a>
+                      
+                        </div>
+                      </div> <!-- / .row -->
+                    </div>
+  				  
+                  <div class="card-body">
+
+                    <div class="row align-items-center">
+                      <div class="col">
+                      
+                        <!-- Title -->
+                        <h5 class="mb-0">
+                          Property Type
+                        </h5>
+
+                      </div>
+                      <div class="col-auto">
+                      
+                        <small class="small text-muted text-capitalize"> 
+                          <%=property.type%>
+                        </small>
+
+                      </div>
+                    </div> <!-- / .row -->
+                     <!-- Divider -->
+                     <hr>
+                    <div class="row align-items-center">
+                      <div class="col">
+                      
+                        <!-- Title -->
+                        <h5 class="mb-0">
+                          Ownership
+                        </h5>
+
+                      </div>
+                      <div class="col-auto">
+                      
+                        <small class="small text-muted text-capitalize"> 
+                          <%= property.ownership%>
+                        </small>
+
+                      </div>
+                    </div> <!-- / .row -->
+                     <!-- Divider -->
+                     <hr>
+                    <div class="row align-items-center">
+                      <div class="col">
+                      
+                        <!-- Title -->
+                        <h5 class="mb-0">
+                          Date of acquisition
+                        </h5>
+
+                      </div>
+                      <div class="col-auto">
+                      
+                        <time class="small text-muted" datetime="1988-24-10">
+                          <%= property.purchase_date%>
+                        </time>
+
+                      </div>
+                    </div> <!-- / .row -->
+
+                    <!-- Divider -->
+                    <hr>
+
+                    <div class="row align-items-center">
+                      <div class="col">
+                      
+                        <!-- Title -->
+                        <h5 class="mb-0">
+                          Acquired for
+                        </h5>
+
+                      </div>
+                      <div class="col-auto">
+                      
+                        <small class="text-muted text-capitalize">
+                          <%= property.purchase_price%>
+                        </small>
+
+                      </div>
+                    </div> <!-- / .row -->
+
+                    <!-- Divider -->
+                    <hr>
+
+                    <div class="row align-items-center">
+                      <div class="col">
+                      
+                        <!-- Title -->
+                        <h5 class="mb-0">
+                          Property size
+                        </h5>
+
+                      </div>
+                      <div class="col-auto">
+                      
+                        <small class="text-muted">
+                            <%= property.square_feet.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " sq ft"%>
+                        </small>
+
+                      </div>
+                    </div> <!-- / .row -->
+  				  
+                  </div>
+                </div>
+
+                <!-- Weekly Hours -->
+                <div class="card">
+                  <div class="card-header">
+                  
+                    <!-- Title -->
+                    <h4 class="card-header-title">
+                      Location
+                    </h4>
+
+                  </div>
+                  <div class="card-body">
+                  
+                  <div class="embed-responsive embed-responsive-21by9 rounded">
+                    <div class="embed-responsive-item" id="map" data-toggle="cmap" data-option='{"center": [<%= property.lng%>, <%= property.lat%>], "zoom": 12, "markers": [{"lng":<%= property.lng%>, "lat":<%= property.lat%>}]}'></div>
+                  </div>
+
+                  </div>
+                </div>
+  			  
+                <!-- Latest Files -->
+                <div class="card">
+                  <div class="card-header">
+                    <div class="row align-items-center">
+                      <div class="col">
+                      
+                        <!-- Title -->
+                        <h4 class="card-header-title">
+                          Latest Files
                         </h4>
 
                       </div>
                       <div class="col-auto">
 
-                        <!-- Button -->
-                        <a href="/property/detail/<%= property.id%>" class="btn btn-sm btn-white">
-                          Edit
-                        </a>
-                    
+                        <!-- Link -->
+                        <a href="#!" class="small">View all</a>
+                      
                       </div>
                     </div> <!-- / .row -->
                   </div>
-				  
-                <div class="card-body">
+                  <div class="card-body">
 
-                  <div class="row align-items-center">
-                    <div class="col">
-                    
-                      <!-- Title -->
-                      <h5 class="mb-0">
-                        Property Type
-                      </h5>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                      
+                        <!-- Avatar -->
+                        <a href="#!" class="avatar">
+                          <div class="avatar-title rounded bg-white text-secondary">
+                            <span class="fe fe-file"></span>
+                          </div>
+                        </a>
 
-                    </div>
-                    <div class="col-auto">
-                    
-                      <small class="small text-muted text-capitalize"> 
-                        <%=property.type%>
-                      </small>
+                      </div>
+                      <div class="col ml-n2">
 
-                    </div>
-                  </div> <!-- / .row -->
-                   <!-- Divider -->
-                   <hr>
-                  <div class="row align-items-center">
-                    <div class="col">
-                    
-                      <!-- Title -->
-                      <h5 class="mb-0">
-                        Ownership
-                      </h5>
+                        <!-- Title -->
+                        <h4 class="card-title mb-1">
+                          <a href="#!">Document name</a>
+                        </h4>
 
-                    </div>
-                    <div class="col-auto">
-                    
-                      <small class="small text-muted text-capitalize"> 
-                        <%= property.ownership%>
-                      </small>
+                        <!-- Time -->
+                        <p class="card-text small text-muted">
+                          Tag &bull; Upload Date
+                        </p>
+                      
+                      </div>
+                      
+                    </div> <!-- / .row -->
 
-                    </div>
-                  </div> <!-- / .row -->
-                   <!-- Divider -->
-                   <hr>
-                  <div class="row align-items-center">
-                    <div class="col">
-                    
-                      <!-- Title -->
-                      <h5 class="mb-0">
-                        Date of acquisition
-                      </h5>
+                    <!-- Divider -->
+                    <hr>
 
-                    </div>
-                    <div class="col-auto">
-                    
-                      <time class="small text-muted" datetime="1988-24-10">
-                        <%= property.purchase_date%>
-                      </time>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                      
+                        <!-- Avatar -->
+                        <a href="#!" class="avatar">
+                          <div class="avatar-title rounded bg-white text-secondary">
+                            <span class="fe fe-file"></span>
+                          </div>
+                        </a>
 
-                    </div>
-                  </div> <!-- / .row -->
+                      </div>
+                      <div class="col ml-n2">
 
-                  <!-- Divider -->
-                  <hr>
+                        <!-- Title -->
+                        <h4 class="card-title mb-1">
+                          <a href="#!">Document name</a>
+                        </h4>
 
-                  <div class="row align-items-center">
-                    <div class="col">
-                    
-                      <!-- Title -->
-                      <h5 class="mb-0">
-                        Acquired for
-                      </h5>
+                        <!-- Time -->
+                        <p class="card-text small text-muted">
+                          Tag &bull; Upload Date
+                        </p>
+                      
+                      </div>
+                      
+                    </div> <!-- / .row -->
 
-                    </div>
-                    <div class="col-auto">
-                    
-                      <small class="text-muted text-capitalize">
-                        <%= property.purchase_price%>
-                      </small>
+                    <!-- Divider -->
+                    <hr>
 
-                    </div>
-                  </div> <!-- / .row -->
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                      
+                        <!-- Avatar -->
+                        <a href="#!" class="avatar">
+                          <div class="avatar-title rounded bg-white text-secondary">
+                            <span class="fe fe-file"></span>
+                          </div>
+                        </a>
 
-                  <!-- Divider -->
-                  <hr>
+                      </div>
+                      <div class="col ml-n2">
 
-                  <div class="row align-items-center">
-                    <div class="col">
-                    
-                      <!-- Title -->
-                      <h5 class="mb-0">
-                        Property size
-                      </h5>
+                        <!-- Title -->
+                        <h4 class="card-title mb-1">
+                          <a href="#!">Document name</a>
+                        </h4>
 
-                    </div>
-                    <div class="col-auto">
-                    
-                      <small class="text-muted">
-                          <%= property.square_feet.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " sq ft"%>
-                      </small>
+                        <!-- Time -->
+                        <p class="card-text small text-muted">
+                          Tag &bull; Upload Date
+                        </p>
+                      
+                      </div>
+                      
+                    </div> <!-- / .row -->
 
-                    </div>
-                  </div> <!-- / .row -->
-				  
-                </div>
+                  </div> <!-- / .card-body -->
+                </div> <!-- / .card -->
+
               </div>
-
-              <!-- Weekly Hours -->
-              <div class="card">
-                <div class="card-header">
-                
-                  <!-- Title -->
-                  <h4 class="card-header-title">
-                    Location
-                  </h4>
-
-                </div>
-                <div class="card-body">
-                
-                <div class="embed-responsive embed-responsive-21by9 rounded">
-                  <div class="embed-responsive-item" id="map" data-toggle="cmap" data-option='{"center": [<%= property.lng%>, <%= property.lat%>], "zoom": 12, "markers": [{"lng":<%= property.lng%>, "lat":<%= property.lat%>}]}'></div>
-                </div>
-
-                </div>
-              </div>
-			  
-              <!-- Latest Files -->
-              <div class="card">
-                <div class="card-header">
-                  <div class="row align-items-center">
-                    <div class="col">
-                    
-                      <!-- Title -->
-                      <h4 class="card-header-title">
-                        Latest Files
-                      </h4>
-
-                    </div>
-                    <div class="col-auto">
-
-                      <!-- Link -->
-                      <a href="#!" class="small">View all</a>
-                    
-                    </div>
-                  </div> <!-- / .row -->
-                </div>
-                <div class="card-body">
-
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                    
-                      <!-- Avatar -->
-                      <a href="#!" class="avatar">
-                        <div class="avatar-title rounded bg-white text-secondary">
-                          <span class="fe fe-file"></span>
-                        </div>
-                      </a>
-
-                    </div>
-                    <div class="col ml-n2">
-
-                      <!-- Title -->
-                      <h4 class="card-title mb-1">
-                        <a href="#!">Document name</a>
-                      </h4>
-
-                      <!-- Time -->
-                      <p class="card-text small text-muted">
-                        Tag &bull; Upload Date
-                      </p>
-                    
-                    </div>
-                    
-                  </div> <!-- / .row -->
-
-                  <!-- Divider -->
-                  <hr>
-
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                    
-                      <!-- Avatar -->
-                      <a href="#!" class="avatar">
-                        <div class="avatar-title rounded bg-white text-secondary">
-                          <span class="fe fe-file"></span>
-                        </div>
-                      </a>
-
-                    </div>
-                    <div class="col ml-n2">
-
-                      <!-- Title -->
-                      <h4 class="card-title mb-1">
-                        <a href="#!">Document name</a>
-                      </h4>
-
-                      <!-- Time -->
-                      <p class="card-text small text-muted">
-                        Tag &bull; Upload Date
-                      </p>
-                    
-                    </div>
-                    
-                  </div> <!-- / .row -->
-
-                  <!-- Divider -->
-                  <hr>
-
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                    
-                      <!-- Avatar -->
-                      <a href="#!" class="avatar">
-                        <div class="avatar-title rounded bg-white text-secondary">
-                          <span class="fe fe-file"></span>
-                        </div>
-                      </a>
-
-                    </div>
-                    <div class="col ml-n2">
-
-                      <!-- Title -->
-                      <h4 class="card-title mb-1">
-                        <a href="#!">Document name</a>
-                      </h4>
-
-                      <!-- Time -->
-                      <p class="card-text small text-muted">
-                        Tag &bull; Upload Date
-                      </p>
-                    
-                    </div>
-                    
-                  </div> <!-- / .row -->
-
-                </div> <!-- / .card-body -->
-              </div> <!-- / .card -->
-
-            </div>
-        
-              </div>
-              
-            </div>
-
+            
+            </div> <!-- / .row -->
           </div>
-          
-        </div> <!-- / .row -->
-		
+
+          <div class="tab-pane fade" id="units" role="tabpanel">
+            <div class="row">
+              <div class="col-12 col-xl-8">
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="income_expenses" role="tabpanel">
+            <div class="row">
+              <div class="col-12 col-xl-8">
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="documents" role="tabpanel">
+            <div class="row">
+              <div class="col-12 col-xl-8">
+              </div>
+            </div>
+          </div>
+		    </div>
       </div>
       
     </div> <!-- / .main-content -->

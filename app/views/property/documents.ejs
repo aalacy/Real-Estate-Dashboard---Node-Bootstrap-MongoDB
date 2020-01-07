@@ -46,9 +46,9 @@
                       <!-- Start date -->
                       <div class="form-group">
                         <label>
-                          Tenancies
+                          Unit
                         </label>
-                        <select class="form-control" id="document_tenancy" name="document[tenancy]" data-toggle="select"  data-options='{"placeholder": "Select a Tenancy"}'>
+                        <select class="form-control" id="document_tenancy" name="document[tenancy]" data-toggle="select"  data-options='{"placeholder": "Select a Unit"}'>
                           <option></option>
                         </select>  
                       </div>
@@ -64,6 +64,11 @@
                     <!-- Fallback -->
                     <div class="fallback">
                       <input type="file" class="custom-file-input" id="customFileUploadMultiple">
+                    </div>
+
+                    <div class="dz-message" data-dz-message>
+                      <span class="fe fe-download" style="font-size: 2.5rem;"></span>
+                      <div>Choose a file or drag it here</div>
                     </div>
 
                     <!-- Preview -->
@@ -134,12 +139,20 @@
               <div class="col ml-n3 ml-md-n2">
 
                 <!-- Title -->
-                <h2 class="header-title">
-                  Document library
-                </h2>
+                <h1 class="header-title">
+                  Documents
+                </h1>
 
               </div>
 
+              <div class="col-auto">
+                  
+                  <!-- Button -->
+                  <a href="#" data-toggle="modal" data-target="#modalUpload" class="btn lift btn-primary">
+                    Upload
+                  </a>
+
+              </div>
             </div> <!-- / .row -->
           
           </div>
@@ -182,14 +195,7 @@
                     </div>
     
                   </div>
-                  <div class="col-auto">
-                    
-                    <!-- Button -->
-                    <a href="#" data-toggle="modal" data-target="#modalUpload" class="btn btn-sm btn-primary">
-                      Upload
-                    </a>
-
-                  </div>
+                
                 </div> <!-- / .row -->
               </div>
               <div class="card-header">

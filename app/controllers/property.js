@@ -114,11 +114,24 @@ exports.overview = async function(req, res) {
   property.outdoor_space = OUTDOOR_SPACE[property.outdoor_space];
   property.finish_quality = FINISH_QUALITY[property.finish_quality];
   property.off_street_parking = OFF_STREET_PARKING[property.off_street_parking];
+  const total_units = property.tenancies.length;
+  let vacant_cnt = 0;
+  const chart_labels = JSON.stringify(['Tenancy', 'Vacant']);
+  property.tenancies.map(tenancy => {
+    if (tenancy.rent_frequency == 'Vacant') {
+      vacant_cnt++;
+    }
+  });
+  const chart_data = [((total_units-vacant_cnt)/total_units*100).toFixed(0), (vacant_cnt/total_units*100).toFixed(0)];
   res.render('property/overview', {
     title: 'Avenue - Overview',
     token: req.csrfToken(),
     property: property,
-    empty_cnt
+    empty_cnt,
+    total_units,
+    vacant_cnt,
+    chart_labels,
+    chart_data
   });
 };
 

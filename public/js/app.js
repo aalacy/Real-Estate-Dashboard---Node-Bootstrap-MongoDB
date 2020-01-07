@@ -171,33 +171,36 @@ const drawMap = function(options) {
 };
 
 // Chart
- function chartInit(chart, data) {
+ function chartInit(chart, data, percentage=false) {
     new Chart(chart, {
-      type: 'doughnut',
-      options: {
-        responsive: true,
-        legend: {
-            position: 'bottom',
-            display: true
-        },
-        animation: {
-            animateScale: true,
-            animateRotate: true
-        },
-        tooltips: {
-          callbacks: {
+        type: 'doughnut',
+        options: {
+            responsive: true,
+            legend: {
+                position: 'bottom',
+                display: true
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            },
+            tooltips: {
+                callbacks: {
             // this callback is used to create the tooltip label
-            label: function(tooltipItem, data) {
-              // get the data label and data value to display
-              // convert the data value to local string so it uses a comma seperated number
-              var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
-              // return the text to display on the tooltip
-              return value;
+                    label: function(tooltipItem, data) {
+                      // get the data label and data value to display
+                      // convert the data value to local string so it uses a comma seperated number
+                      var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
+                      // return the text to display on the tooltip
+                      if (percentage) {
+                        value += '%';
+                      }
+                      return value;
+                    }
+                  }
             }
-          }
-        }
-      },
-      data: data
+        },
+        data: data
     });
   }
 
@@ -646,7 +649,7 @@ $(function() {
             }]
           }
         chartInit(document.getElementById('marketChart').getContext('2d'), data);
-      }
+    }
 
     if ($('#incomeChart')[0]) {
         const labels = $('#incomeChart').data('option').labels;
@@ -666,6 +669,25 @@ $(function() {
           }
         chartInit($('#incomeChart')[0], data);
     }
+
+    if ($('#tenancyChart')[0]) {
+        const labels = $('#tenancyChart').data('labels');
+        const dataset = $('#tenancyChart').data('dataset');
+        const data = {
+            labels: labels,
+            datasets: [{
+              data: dataset,
+              backgroundColor: [
+                '#4dc9f6',
+                '#f67019',
+                '#f53794',
+                '#537bc4',
+                '#acc236'
+              ]
+            }]
+          }
+        chartInit(document.getElementById('tenancyChart').getContext('2d'), data, true);
+      }
 
     // thousands separator on input
     $('input.number').keyup(function(event) {
