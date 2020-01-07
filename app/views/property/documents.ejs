@@ -287,7 +287,7 @@
 
                   <!-- Time -->
                   <p class="card-text small text-muted">
-                    Uploaded on <time datetime="${uploaded_at}">${uploaded_at}></time>
+                    Uploaded on <time datetime="${uploaded_at}">${uploaded_at}</time>
                   </p>
                   
                 </div>
@@ -295,7 +295,7 @@
                   
                   <!-- Button -->
                   <a href="/${doc.path}" target="_blank" class="btn btn-sm btn-white d-none d-md-inline-block">
-                    Download
+                    View
                   </a>
 
                 </div>
@@ -307,6 +307,9 @@
                       <i class="fe fe-more-vertical"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
+                      <button class="dropdown-item edit-document" data-id="${doc.id}">
+                        Edit
+                      </button>
                       <button class="dropdown-item delete-document" data-id="${doc.id}">
                         Delete
                       </button>
