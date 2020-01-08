@@ -606,7 +606,7 @@
                   </div>
                   <div class="card-body">
                     <% for (var i = 0; i < documents.length; i++) { %>
-                      <% var date = new Date(documents[i].created_at); var uploaded_at = date.getMonth()+1 + '/' + date.getDate() + '/' + date.getFullYear();%>
+                      <% var date = new Date(documents[i].created_at); var uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();%>
                       <div class="row align-items-center">
                         <div class="col-auto">
                         

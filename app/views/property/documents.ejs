@@ -261,7 +261,7 @@
             page = (parseInt(idx/3) + 1) + ' d-none' 
           }
           const date = new Date(doc.created_at);
-          const uploaded_at = date.getMonth()+1 + '/' + date.getDate() + '/' + date.getFullYear();
+          const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
           const property_name = properties.map( function(property) { return property.id == doc.property_id ? property.address + ', ' + property.city : "" });
           $('#documentList').append(`<li class="list-group-item px-0 page${page}">
               <div class="row align-items-center">
