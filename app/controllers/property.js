@@ -95,7 +95,9 @@ exports.my = async function(req, res, next) {
 
 exports.overview = async function(req, res) {
   const { params: { id } } = req;
+  const { user } = req.session;
   const property = await Properties.findOne({ id: id }, { _id: 0 });
+  const documents = await Documents.find({ user_id: user.id, property_id: id, status: 'alive' }, { _id: 0 });
   let empty_cnt = 0;
   if (property.ownership == "") empty_cnt++;
   if (property.purchase_price == 0) empty_cnt++;
@@ -131,7 +133,8 @@ exports.overview = async function(req, res) {
     total_units,
     vacant_cnt,
     chart_labels,
-    chart_data
+    chart_data,
+    documents
   });
 };
 
