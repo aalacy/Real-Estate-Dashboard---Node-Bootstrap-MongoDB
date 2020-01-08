@@ -280,7 +280,7 @@ exports.documents_upload = async function(req, res) {
   mydocument.filename = req.file.originalname;
   mydocument.path = req.file.path.replace('public/', '');
   await mydocument.save();
-  return res.status( 200 ).send( mydocument.id );
+  return res.status( 200 ).send( mydocument );
 };
 
 exports.documents_delete = async function(req, res) {
@@ -305,13 +305,33 @@ exports.documents_delete = async function(req, res) {
 exports.upload_doc_to_property = async function(req, res) {
   const { body: { document } } = req;
   const mydocument = await Documents.findOne({ id: document.id });
-  const tag = document.tag;
-  const property_id = document.property_id;
-  const tenancy_id = document.tenancy_id;
-  const update_at = moment().format('YYYY-MM-DD HH:mm:ss');
+  const property_name = document.property_name;
+  const unit_name = document.unit_name;
+  const new_document = {
+    tag: document.tag,
+    property_id: document.property_id,
+    unit_id: document.unit_id,
+    display_name: property_name + '-' + unit_name,
+    property_name,
+    unit_name,
+    update_at: moment().format('YYYY-MM-DD HH:mm:ss'),
+    status: 'alive',
+    size: mydocument.size,
+    mimetype: mydocument.mimetype,
+    filename: mydocument.filename,
+    path: mydocument.path
+  }
+
+  if (document.status == 'edit') {
+    new_document.size = document.size;
+    new_document.mimetype = document.mimetype;
+    new_document.filename = document.filename;
+    new_document.path = document.path;
+  }
   new_values = {
-    $set: { tag, property_id, tenancy_id, update_at }
+    $set: new_document
   };
+
   return Documents.updateOne({ id: document.id }, new_values).then(() => {
     res.json({
       status: 200,
@@ -333,12 +353,12 @@ exports.tenancies = async function(req, res) {
   });
 };
 
-exports.all_unit = async function(req, res) {
+exports.all_units = async function(req, res) {
   const { body: { property } } = req;
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
   return res.json({
     status: 200,
-    tenancies:myproperty.tenancies
+    units:myproperty.tenancies
   })
 }
 

@@ -17,12 +17,15 @@ const DocumentsSchema = new Schema({
   user_id: { type: String, default: ''},
   tag: { type: Array, default: []},
   property_id: { type: String, default: ''},
-  tenancy_id: { type: String, default: ''},
+  property_name: { type: String, default: ''},
+  unit_id: { type: String, default: ''},
+  unit_name: { type: String, default: ''},
   filename: { type: String, default: '' },
+  display_name: { type: String, default: '' },
   size: { type: String, default: '' },
   path: { type: String, default: '' },
   mimetype: { type: String, default: '' },
-  status: { type: String, default: 'alive' },
+  status: { type: String, default: 'dead' },
   created_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
   updated_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') }
 });

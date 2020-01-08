@@ -9,10 +9,15 @@
     <input type="hidden" id="hidden_properties" value="<%= JSON.stringify(properties) %>">
     <!-- Modal Upload -->
     <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
         <form id="document-upload-form" method="post" action="/property/documents/upload_all" >
           <input type="hidden" name="_csrf" value="<%= token %>">
+          <input type="hidden" id="status" name="document[status]" value="upload">
           <input type="hidden" id="document_id" name="document[id]" value="">
+          <input type="hidden" id="document_size" name="document[size]" value="">
+          <input type="hidden" id="document_mimetype" name="document[mimetype]" value="">
+          <input type="hidden" id="document_filename" name="document[filename]" value="">
+          <input type="hidden" id="document_path" name="document[path]" value="">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
                 <!-- Header -->
@@ -34,9 +39,6 @@
                         </label>
                         <select class="form-control" id="document_property" name="document[property]" data-toggle="select"  data-options='{"placeholder": "Select a Property"}' required>
                           <option></option>
-                          <% properties.map(property => {%>
-                          <option value="<%=property.id%>"><%=property.address + ', ' + property.city%></option>
-                          <%})%>
                         </select>  
                       </div>
                     </div>
@@ -48,7 +50,7 @@
                         <label>
                           Unit
                         </label>
-                        <select class="form-control" id="document_tenancy" name="document[tenancy]" data-toggle="select"  data-options='{"placeholder": "Select a Unit"}'>
+                        <select class="form-control" id="document_unit" name="document[unit]" data-toggle="select"  data-options='{"placeholder": "Select a Unit"}'>
                           <option></option>
                         </select>  
                       </div>
@@ -100,20 +102,25 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-12">
+              <div class="row mt-3">
+                <div class="col-12 col-md-6">
                   <!-- Start date -->
-                  <div class="form-group mt-3">
-                    <label>
-                      Tag
-                    </label>
+                  <div class="form-group">
+                    <label> Tag </label>
                     <select class="form-control" name="document[tag]" id="document_tag" multiple="multiple">
                       <option>House</option>
                     </select>
                   </div>
     
                 </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group d-none" id="documentUploadImage">
+                    <label> Original Document </label>
+                    <div class="document-upload-image"></div>
+                  </div>
+                </div>
               </div>
+              
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -123,6 +130,7 @@
         </form>
       </div>
     </div>
+
     <% include ../partials/topnav %>
 
     <!-- MAIN CONTENT
@@ -148,7 +156,7 @@
               <div class="col-auto">
                   
                   <!-- Button -->
-                  <a href="#" data-toggle="modal" data-target="#modalUpload" class="btn lift btn-primary">
+                  <a href="#" class="btn lift btn-primary modal-upload">
                     Upload
                   </a>
 
@@ -258,11 +266,10 @@
           if (idx % 3 == 0) { 
             page = (parseInt(idx/3) + 1)
           } else {
-            page = (parseInt(idx/3) + 1) + ' d-none' 
+            page = (parseInt(idx/3) + 1) + ' d-none'
           }
           const date = new Date(doc.created_at);
           const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
-          const property_name = properties.map( function(property) { return property.id == doc.property_id ? property.address + ', ' + property.city : "" });
           $('#documentList').append(`<li class="list-group-item px-0 page${page}">
               <div class="row align-items-center">
                 <div class="col-auto">
@@ -282,7 +289,7 @@
 
                   <!-- Text -->
                   <p class="card-text small text-muted mb-1">
-                    ${property_name} &bull;${doc.tag}
+                    ${doc.display_name} &bull;${doc.tag}
                   </p>
 
                   <!-- Time -->
@@ -307,7 +314,7 @@
                       <i class="fe fe-more-vertical"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <button class="dropdown-item edit-document" data-id="${doc.id}">
+                      <button class="dropdown-item edit-document modal-upload" data-id="${doc.id}" data-property_id="${doc.property_id}" data-property_name="${doc.property_name}" data-unit_id="${doc.unit_id}" data-unit_name="${doc.unit_name}" data-tag="${doc.tag}" data-path="${doc.path}" data-size="${doc.size}" data-filename="${doc.filename}" data-mimetype="${doc.mimetype}">
                         Edit
                       </button>
                       <button class="dropdown-item delete-document" data-id="${doc.id}">
@@ -385,14 +392,23 @@
             });
 
             this.on('removedfile', function(file){
-              $('#document_id').val('');
+              if ($('#status').val() == 'upload') {
+                $('#document_id').val('');
+              }
             });
           },
           success: function(res) {
             if (res.status == "success") {
               try {
-                const document_id = res.xhr.response;
-                $('#document_id').val(document_id);
+                var mydoc = JSON.parse(res.xhr.response);
+                if ($('#status').val() == 'upload') {
+                  $('#document_id').val(mydoc.id);
+                } else {
+                  $('#document_size').val(mydoc.size);
+                  $('#document_mimetype').val( mydoc.mimetype);
+                  $('#document_filename').val(mydoc.filename);
+                  $('#document_path').val(mydoc.path);
+                }
               } catch(e) {}
             } else {
               makeToast({message: "Sorry, Something wrong happened on the server while uploading your document"});
@@ -445,10 +461,11 @@
           .then(response => response.json())
           .then(function(res) {
             if (res.status == 200) {
-              $('#document_tenancy').val(null).trigger('change');
-              res.tenancies.map(tenancy => {
-                var option = new Option(tenancy.description, data.id, true, true);
-                $('#document_tenancy').append(option);
+              $('#document_unit').empty();
+              $('#document_unit').val(null).trigger('change');
+              res.units.map(unit => {
+                var option = new Option(unit.description, unit.id, true, true);
+                $('#document_unit').append(option);
               })
             }
           })
@@ -473,6 +490,49 @@
             }
           }
         });
+
+        $('.modal-upload').click(function(e) {
+          e.preventDefault()
+          $('#document_property').empty();
+          properties.map(property => {
+            var property_name = property.address + ', ' + property.city;
+            option = new Option(property_name, property.id, true, true);
+            $('#document_property').append(option);
+          });
+          $('#document_unit').empty();
+          if ($(this).hasClass('edit-document')) {
+            const unit_name = $(this).data('unit_name');
+            const unit_id = $(this).data('unit_id');
+            const property_id = $(this).data('property_id');
+            const property_name = $(this).data('property_name');
+            const tag = $(this).data('tag');
+            const image = $(this).data('path');
+            var option = new Option(unit_name, unit_id, true, true);
+            $('#document_unit').append(option);
+            $('#document_property').val(property_id).trigger('change');
+            option = new Option(tag, tag, true, true);
+            $('#document_tag').append(option);
+            $('#document_id').val($(this).data('id'));
+            $('#document_size').val($(this).data('size'));
+            $('#document_path').val(image);
+            $('#document_mimetype').val($(this).data('mimetype'));
+            $('#document_filename').val($(this).data('filename'));
+            $('#documentUploadImage').removeClass('d-none').children('div').css('background-image', `url('/${image}')`);
+            $('#modalUpload .modal-title').text('Edit Document');
+            $('#modalUpload #status').val('edit');
+          } else {
+            $('#document_property').val(null).trigger("change");
+            $('#document_tag').empty();
+            
+            $('#document_id').val('');
+            $('#documentUploadImage').addClass('d-none');
+            $('#modalUpload .modal-title').text('Upload Document');
+            $('#modalUpload #status').val('upload');
+          }
+
+          $('#modalUpload').modal();
+        });
+
         $('.delete-document').click(function(e) {
           e.preventDefault();
           const id = $(this).data('id');

@@ -766,8 +766,15 @@ $(function() {
         document:  {
           id: $('#document_id').val(),
           property_id: $('#document_property').val(),
-          tenancy_id: $('#document_tenancy').val(),
+          property_name: $('#document_property option:selected').text(),
+          unit_id: $('#document_unit').val(),
+          unit_name: $('#document_unit option:selected').text(),
           tag: $('#document_tag').val(),
+          status: $('#status').val(),
+          size: $('#document_size').val(),
+          path: $('#document_path').val(),
+          mimetype: $('#document_mimetype').val(),
+          filename: $('#document_filename').val(),
         }
       }
       const token = $('meta[name="csrf"]').attr('content');
