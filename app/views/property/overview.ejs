@@ -647,54 +647,154 @@
 
           <div class="tab-pane fade" id="units" role="tabpanel">
             <div class="col-12">
-              <% property.tenancies.forEach( function(unit){ %>
-              <div class="card">
-                <div class="card-body">
-                  <div class="row align-items-center unit-item">
-                    <div class="col-auto">
-                  
-                      <!-- Avatar -->
-                      <h1 class="mb-0 avatar avatar-md">
-                        <img src="/img/icons/unit.png" class="avatar-img">
-                      </h1>
-  
-                    </div>
-                    <div class="col ml-n2 mr-auto">
-  
-                      <!-- Title -->
-                      <h4 class="card-title mb-1">
-                        <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
-                      </h4>
-  
-                      <!-- Time -->
-                      <p class="card-text small text-muted">
-                        <%= unit.start_date%> <%= unit.end_date ? '-' : ''%> <%= unit.end_date%>
-                      </p>
-                    </div>
+              <div id="accordion">
+                <div class="card">
+                  <div class="card-header bg-light" id="headingOccupied">
+                    <h5 class="mb-0 align-items-center d-flex justify-content-between">
+                      <button class="btn btn-link text-body m-0" data-toggle="collapse" data-target="#occupiedCollapse" aria-expanded="true" aria-controls="occupiedCollapse">
+                        <h2 class="m-0">Tenancies (<%= occupied_units.length%>)</h2>
+                      </button>
+                      <i class="fe fe-plus font-weight-bold"></i>
+                    </h5>
+                  </div>
 
-                    <div class="col-auto text-right">
-                      <!-- Title -->
-                      <h4 class="card-title mb-1">
-                        <% if (parseInt(unit.rent_price) > 0) {%>£<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><%}%>
-                      </h4>
-                      
-                      <!-- Time -->
-                      <p class="card-text small text-muted">
-                        <%= unit.rent_frequency%>
-                      </p>
-                    </div>
-                    <div class="col-auto">
-                      <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>" title="Edit">
-                        <i class="fe fe-chevron-right"></i>
-                      </a>
+                  <div id="occupiedCollapse" class="collapse show" aria-labelledby="headingOccupied" data-parent="#accordion">
+                    <div class="card-body">
+                      <% occupied_units.forEach(unit => {%>
+                        <div class="row align-items-center unit-item">
+                          <div class="col-auto">
+                        
+                            <!-- Avatar -->
+                            <h1 class="mb-0 avatar avatar-md">
+                              <img src="/img/icons/unit.png" class="avatar-img">
+                            </h1>
+        
+                          </div>
+                          <div class="col-12 col-md-3 ml-n2">
+        
+                            <!-- Title -->
+                            <h4 class="card-title mb-1">
+                              <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>"><%= property.address%></a>
+                            </h4>
+        
+                            <!-- Time -->
+                            <p class="card-text small text-muted">
+                              <%= unit.description%>
+                            </p>
+                          </div>
+                          <div class="col ml-n2 mr-auto">
+                            <div class="row">
+                              <div class="col d-flex">
+                                <div style="min-width: 100px;">
+                                  <div class="font-weight-bold"><%= unit.start_date%></div>
+                                  <div class="card-text small text-muted">Start Date</div>
+                                </div>
+                                <div class="d-flex align-items-center text-muted font-weight-bold"> <i class="fe fe-arrow-right"></i> </div>
+                                <div style="min-width: 100px; margin-left: 15px;">
+                                  <div class="font-weight-bold"><%= unit.end_date%></div>
+                                  <div class="card-text small text-muted">End Date</div>
+                                </div>
+                              </div>
+                              <div class="col">
+                                <div>
+                                  <div class="font-weight-bold"><% if (parseInt(unit.rent_price) > 0) {%>£<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><%}%></div>
+                                  <div class="card-text small text-muted">Monthly Rent</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
+                          <div class="col-auto text-right">
+                            <a href="#" class="btn btn-info" data-unit="<%=JSON.stringify(unit)%>">Awaiting Payment  <i class="fe fe-chevron-right"></i></a>
+                          </div>
+                          <div class="col-auto">
+                            <div class="dropdown">
+                              <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fe fe-more-vertical"></i>
+                              </a>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                <button class="dropdown-item edit-unit" data-unit="<%=JSON.stringify(unit)%>">
+                                  Edit
+                                </button>
+                                <button class="dropdown-item" data-toggle="modal" data-target="#modalConfirm" data-type="unit" data-unit="<%=JSON.stringify(unit)%>">
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div> 
+                      <% })%>
                     </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header bg-light" id="headingOne">
+                    <h5 class="mb-0 align-items-center d-flex justify-content-between">
+                      <button class="btn btn-link text-body m-0" data-toggle="collapse" data-target="#vacantCollapse" aria-expanded="true" aria-controls="vacantCollapse">
+                        <h2 class="m-0">Vacant (<%= vacant_units.length%>)</h2>
+                      </button>
+                      <i class="fe fe-plus font-weight-bold"></i>
+                    </h5>
+                  </div>
 
-                  </div> <!-- / .row -->
-                    <!-- Divider -->
+                  <div id="vacantCollapse" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                      <% vacant_units.forEach(unit => {%>
+                        <div class="row align-items-center unit-item">
+                          <div class="col-auto">
+                        
+                            <!-- Avatar -->
+                            <h1 class="mb-0 avatar avatar-md">
+                              <img src="/img/icons/unit.png" class="avatar-img">
+                            </h1>
+        
+                          </div>
+                          <div class="col ml-n2 mr-auto">
+        
+                            <!-- Title -->
+                            <h4 class="card-title mb-1">
+                              <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>"><%= property.address%></a>
+                            </h4>
+        
+                            <!-- Time -->
+                            <p class="card-text small text-muted">
+                              <%= unit.description%>
+                            </p>
+                          </div>
+
+                          <div class="col-auto text-right">
+                            <a href="#" class="btn btn-secondary" data-unit="<%=JSON.stringify(unit)%>">Add Tenancy</a>
+                            <!-- Title -->
+                            <!-- <h4 class="card-title mb-1">
+                              <% if (parseInt(unit.rent_price) > 0) {%>£<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><%}%>
+                            </h4> -->
+                            
+                            <!-- Time -->
+                            <!-- <p class="card-text small text-muted">
+                              <%= unit.rent_frequency%>
+                            </p> -->
+                          </div>
+                          <div class="col-auto">
+                            <div class="dropdown">
+                              <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fe fe-more-vertical"></i>
+                              </a>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                <button class="dropdown-item edit-unit" data-unit="<%=JSON.stringify(unit)%>">
+                                  Edit
+                                </button>
+                                <button class="dropdown-item" data-toggle="modal" data-target="#modalConfirm" data-type="unit" data-unit="<%=JSON.stringify(unit)%>">
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div> 
+                      <% })%>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <% })%>
             </div>
           </div>
 

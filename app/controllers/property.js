@@ -119,9 +119,14 @@ exports.overview = async function(req, res) {
   const total_units = property.tenancies.length;
   let vacant_cnt = 0;
   const chart_labels = JSON.stringify(['Tenancy', 'Vacant']);
+  let vacant_units = [];
+  let occupied_units = [];
   property.tenancies.map(tenancy => {
     if (tenancy.rent_frequency == 'Vacant') {
       vacant_cnt++;
+      vacant_units.push(tenancy);
+    } else {
+      occupied_units.push(tenancy);
     }
   });
   const chart_data = [((total_units-vacant_cnt)/total_units*100).toFixed(0), (vacant_cnt/total_units*100).toFixed(0)];
@@ -134,7 +139,9 @@ exports.overview = async function(req, res) {
     vacant_cnt,
     chart_labels,
     chart_data,
-    documents
+    documents,
+    vacant_units,
+    occupied_units
   });
 };
 
