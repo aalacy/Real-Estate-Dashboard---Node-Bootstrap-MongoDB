@@ -41,18 +41,18 @@
                     <!-- Nav -->
                     <ul class="nav nav-tabs nav-overflow header-tabs">
                       <li class="nav-item">
-                        <a href="#!" class="nav-link active">
-                          All <span class="badge badge-pill badge-soft-secondary">823</span>
+                        <a href="#all" data-toggle="tab" role="tab" class="nav-link active">
+                          All <span class="badge badge-pill badge-soft-secondary"><%=all_tenancies%></span>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="#!" class="nav-link">
-                          Occupied <span class="badge badge-pill badge-soft-secondary">24</span>
+                        <a href="#occupied" data-toggle="tab" role="tab" class="nav-link">
+                          Occupied <span class="badge badge-pill badge-soft-secondary"><%=occupied_tenancies%></span>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="#!" class="nav-link">
-                          Vacant <span class="badge badge-pill badge-soft-secondary">3</span>
+                        <a href="#vacant" data-toggle="tab" role="tab" class="nav-link">
+                          Vacant <span class="badge badge-pill badge-soft-secondary"><%=vacant_tenancies%></span>
                         </a>
                       </li>
                     </ul>
@@ -62,349 +62,409 @@
               </div>
             </div>
 
-            <!-- Card -->
-            <div class="card" data-toggle="lists" data-options='{"valueNames": ["orders-order", "orders-product", "orders-date", "orders-total", "orders-status", "orders-method"]}'>
-              <div class="card-header">
-                <div class="row align-items-center">
-                  <div class="col">
+            <div class="tab-content">
+              <div class="tab-pane fade active show" id="all" role="tabpanel">
+                <% properties.map((property, i) => {%>
+                <div id="accordion<%=i%>">
+                  <div class="card">
+                    <div class="card-header bg-light" id="headingOccupied<%=i%>">
+                      <div class="row align-items-center">
+                        <div class="col">
 
-                    <!-- Search -->
-                    <form class="row align-items-center">
-                      <div class="col">
-                          <input type="search" class="form-control form-control-flush search" placeholder="Property 1">
-                      </div>
-                    </form>
-                    
-                  </div>
-                  <div class="col-auto">
-                    
-                    <!-- Button -->
+                          <!-- Search -->
+                          <button class="btn btn-link text-body m-0" data-toggle="collapse" data-target="#occupiedCollapse<%=i%>" aria-expanded="true" aria-controls="occupiedCollapse<%=i%>">
+                            <h2 class="m-0"><%=property.address%>, <%=property.city%></h2>
+                          </button>
+                          
+                        </div>
+                        <div class="col-auto">
+                          
+                          <!-- Button -->
 
-                    <div class="dropdown">
-                      <button class="btn btn-sm btn-white" type="button" id="bulkActionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Add Unit
-                      </button>
+                          <div class="dropdown">
+                            <button class="btn btn-sm btn-white" type="button" id="bulkActionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Add Unit
+                            </button>
+                          </div>
+
+                        </div>
+                      </div> <!-- / .row -->
                     </div>
 
+                    <div id="occupiedCollapse<%=i%>" class="collapse show" aria-labelledby="headingOccupied<%=i%>" data-parent="#accordion<%=i%>">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-sm table-nowrap card-table table-hover">
+                            <thead>
+                              <tr>
+                                <th>
+                                  
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Unit
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Tenant Name
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Rent
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Deposit
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Start Date
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    End Date
+                                  </a>
+                                </th>
+                                <th colspan="2">
+                                  <a href="#" class="text-muted">
+                                    Documents
+                                  </a>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody class="list">
+                              <% property.tenancies.forEach(unit => {%>
+                              <tr>
+                                <td>
+                                  <div class="custom-control custom-checkbox table-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="ordersSelect" id="ordersSelectOne">
+                                    <label class="custom-control-label" for="ordersSelectOne">
+                                      &nbsp;
+                                    </label>
+                                  </div>
+                                </td>
+                                <td class="orders-order">
+                                  <%= unit.description%>
+                                </td>
+                                <td class="orders-product">
+                                  John Smith
+                                </td>
+                                <td class="orders-date">
+                                  £500
+                                </td>
+                                <td class="orders-total">
+                                  £650
+                                </td>
+                                <td class="orders-status">
+                                 <time datetime="2018-07-30">07/30/18</time>
+                                </td>
+                                <td class="orders-method">
+                                  <time datetime="2018-07-30">07/30/18</time>
+                                </td>
+                                <td class="orders-total">
+                                  2 Documents
+                                </td>
+                                <td class="text-right">
+                                  <div class="dropdown">
+                                    <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <i class="fe fe-more-vertical"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                      <a href="#!" class="dropdown-item">
+                                        Edit
+                                      </a>
+                                      <a href="#!" class="dropdown-item">
+                                        Delete
+                                      </a>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                              <% }) %>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div> <!-- / .row -->
+                </div>
+                <%})%>
               </div>
-              <div class="table-responsive">
-                <table class="table table-sm table-nowrap card-table table-hover">
-                  <thead>
-                    <tr>
-                      <th>
-                        
-                      </th>
-                      <th>
-                        <a href="#" class="text-muted">
-                          Unit
-                        </a>
-                      </th>
-                      <th>
-                        <a href="#" class="text-muted">
-                          Tenant Name
-                        </a>
-                      </th>
-                      <th>
-                        <a href="#" class="text-muted">
-                          Rent
-                        </a>
-                      </th>
-                      <th>
-                        <a href="#" class="text-muted">
-                          Deposit
-                        </a>
-                      </th>
-                      <th>
-                        <a href="#" class="text-muted">
-                          Start Date
-                        </a>
-                      </th>
-                      <th>
-                        <a href="#" class="text-muted">
-                          End Date
-                        </a>
-                      </th>
-                      <th colspan="2">
-                        <a href="#" class="text-muted">
-                          Documents
-                        </a>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="list">
-                    <tr>
-                      <td>
-                        <div class="custom-control custom-checkbox table-checkbox">
-                          <input type="checkbox" class="custom-control-input" name="ordersSelect" id="ordersSelectOne">
-                          <label class="custom-control-label" for="ordersSelectOne">
-                            &nbsp;
-                          </label>
+
+              <div class="tab-pane fade" id="occupied" role="tabpanel">
+                <% occupied_properties.map((property, i) => {%>
+                <div id="accordion_occupied<%=i%>">
+                  <div class="card">
+                    <div class="card-header bg-light" id="heading2Occupied<%=i%>">
+                      <div class="row align-items-center">
+                        <div class="col">
+
+                          <!-- Search -->
+                          <button class="btn btn-link text-body m-0" data-toggle="collapse" data-target="#occupied2Collapse<%=i%>" aria-expanded="true" aria-controls="occupied2Collapse<%=i%>">
+                            <h2 class="m-0"><%=property.address%>, <%=property.city%></h2>
+                          </button>
+                          
                         </div>
-                      </td>
-                      <td class="orders-order">
-                        Room 1
-                      </td>
-                      <td class="orders-product">
-                        John Smith
-                      </td>
-                      <td class="orders-date">
-                        £500
-                      </td>
-                      <td class="orders-total">
-                        £650
-                      </td>
-                      <td class="orders-status">
-                       <time datetime="2018-07-30">07/30/18</time>
-                      </td>
-                      <td class="orders-method">
-                        <time datetime="2018-07-30">07/30/18</time>
-                      </td>
-                      <td class="orders-total">
-                        2 Documents
-                      </td>
-                      <td class="text-right">
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#!" class="dropdown-item">
-                              Edit
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Delete
-                            </a>
+                        <div class="col-auto">
+                          
+                          <!-- Button -->
+
+                          <div class="dropdown">
+                            <button class="btn btn-sm btn-white" type="button" id="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Add Unit
+                            </button>
                           </div>
+
                         </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="custom-control custom-checkbox table-checkbox">
-                          <input type="checkbox" class="custom-control-input" name="ordersSelect" id="ordersSelectOne">
-                          <label class="custom-control-label" for="ordersSelectOne">
-                            &nbsp;
-                          </label>
+                      </div> <!-- / .row -->
+                    </div>
+
+                    <div id="occupied2Collapse<%=i%>" class="collapse show" aria-labelledby="heading2Occupied<%=i%>" data-parent="#accordion_occupied<%=i%>">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-sm table-nowrap card-table table-hover">
+                            <thead>
+                              <tr>
+                                <th>
+                                  
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Unit
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Tenant Name
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Rent
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Deposit
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Start Date
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    End Date
+                                  </a>
+                                </th>
+                                <th colspan="2">
+                                  <a href="#" class="text-muted">
+                                    Documents
+                                  </a>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody class="list">
+                              <% property.tenancies.forEach(unit => {%>
+                              <tr>
+                                <td>
+                                  <div class="custom-control custom-checkbox table-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="ordersSelect" id="ordersSelectOne">
+                                    <label class="custom-control-label" for="ordersSelectOne">
+                                      &nbsp;
+                                    </label>
+                                  </div>
+                                </td>
+                                <td class="orders-order">
+                                  <%= unit.description%>
+                                </td>
+                                <td class="orders-product">
+                                  John Smith
+                                </td>
+                                <td class="orders-date">
+                                  £500
+                                </td>
+                                <td class="orders-total">
+                                  £650
+                                </td>
+                                <td class="orders-status">
+                                 <time datetime="2018-07-30">07/30/18</time>
+                                </td>
+                                <td class="orders-method">
+                                  <time datetime="2018-07-30">07/30/18</time>
+                                </td>
+                                <td class="orders-total">
+                                  2 Documents
+                                </td>
+                                <td class="text-right">
+                                  <div class="dropdown">
+                                    <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <i class="fe fe-more-vertical"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                      <a href="#!" class="dropdown-item">
+                                        Edit
+                                      </a>
+                                      <a href="#!" class="dropdown-item">
+                                        Delete
+                                      </a>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                              <% }) %>
+                            </tbody>
+                          </table>
                         </div>
-                      </td>
-                      <td class="orders-order">
-                        Room 1
-                      </td>
-                      <td class="orders-product">
-                        John Smith
-                      </td>
-                      <td class="orders-date">
-                        £500
-                      </td>
-                      <td class="orders-total">
-                        £650
-                      </td>
-                      <td class="orders-status">
-                       <time datetime="2018-07-30">07/30/18</time>
-                      </td>
-                      <td class="orders-method">
-                        <time datetime="2018-07-30">07/30/18</time>
-                      </td>
-                      <td class="orders-total">
-                        2 Documents
-                      </td>
-                      <td class="text-right">
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#!" class="dropdown-item">
-                              Edit
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Delete
-                            </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <%})%>
+              </div>
+
+              <div class="tab-pane fade" id="vacant" role="tabpanel">
+                <% vacant_properties.map((property, i) => {%>
+                <div id="accordion_vacant<%=i%>">
+                  <div class="card">
+                    <div class="card-header bg-light" id="heading3Occupied<%=i%>">
+                      <div class="row align-items-center">
+                        <div class="col">
+
+                          <!-- Search -->
+                          <button class="btn btn-link text-body m-0" data-toggle="collapse" data-target="#occupied3Collapse<%=i%>" aria-expanded="true" aria-controls="occupied3Collapse<%=i%>">
+                            <h2 class="m-0"><%=property.address%>, <%=property.city%></h2>
+                          </button>
+                          
+                        </div>
+                        <div class="col-auto">
+                          
+                          <!-- Button -->
+
+                          <div class="dropdown">
+                            <button class="btn btn-sm btn-white" type="button" id="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Add Unit
+                            </button>
                           </div>
+
                         </div>
-                      </td>
-                    </tr>
-                    
-                  </tbody>
-                </table>
+                      </div> <!-- / .row -->
+                    </div>
+
+                    <div id="occupied3Collapse<%=i%>" class="collapse show" aria-labelledby="heading3Occupied<%=i%>" data-parent="#accordion_vacant<%=i%>">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-sm table-nowrap card-table table-hover">
+                            <thead>
+                              <tr>
+                                <th>
+                                  
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Unit
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Tenant Name
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Rent
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Deposit
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    Start Date
+                                  </a>
+                                </th>
+                                <th>
+                                  <a href="#" class="text-muted">
+                                    End Date
+                                  </a>
+                                </th>
+                                <th colspan="2">
+                                  <a href="#" class="text-muted">
+                                    Documents
+                                  </a>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody class="list">
+                              <% property.tenancies.forEach(unit => {%>
+                              <tr>
+                                <td>
+                                  <div class="custom-control custom-checkbox table-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="ordersSelect" id="ordersSelectOne">
+                                    <label class="custom-control-label" for="ordersSelectOne">
+                                      &nbsp;
+                                    </label>
+                                  </div>
+                                </td>
+                                <td class="orders-order">
+                                  <%= unit.description%>
+                                </td>
+                                <td class="orders-product">
+                                   
+                                </td>
+                                <td class="orders-date">
+                                   
+                                </td>
+                                <td class="orders-total">
+                                   
+                                </td>
+                                <td class="orders-status">
+                                 <time datetime="2018-07-30"> </time>
+                                </td>
+                                <td class="orders-method">
+                                  <time datetime="2018-07-30"> </time>
+                                </td>
+                                <td class="orders-total">
+                                  2 Documents
+                                </td>
+                                <td class="text-right">
+                                  <div class="dropdown">
+                                    <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <i class="fe fe-more-vertical"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                      <a href="#!" class="dropdown-item">
+                                        Edit
+                                      </a>
+                                      <a href="#!" class="dropdown-item">
+                                        Delete
+                                      </a>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                              <% }) %>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <%})%>
               </div>
             </div>
-
           </div>
         </div> <!-- / .row -->
 		
-            <!-- Card -->
-            <div class="card" data-toggle="lists" data-options='{"valueNames": ["orders-order", "orders-product", "orders-date", "orders-total", "orders-status", "orders-method"]}'>
-              <div class="card-header">
-                <div class="row align-items-center">
-                  <div class="col">
-
-                    <!-- Search -->
-                    <form class="row align-items-center">
-                      <div class="col">
-                          <input type="search" class="form-control form-control-flush search" placeholder="Property 2">
-                      </div>
-                    </form>
-                    
-                  </div>
-                  <div class="col-auto">
-                    
-                    <!-- Button -->
-
-                    <div class="dropdown">
-                      <button class="btn btn-sm btn-white" type="button" id="bulkActionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Add Unit
-                      </button>
-                    </div>
-
-                  </div>
-                </div> <!-- / .row -->
-              </div>
-              <div class="table-responsive">
-                <table class="table table-sm table-nowrap card-table table-hover">
-                  <thead>
-                    <tr>
-                      <th>
-                        
-                      </th>
-                      <th>
-                        <a href="#" class="text-muted">
-                          Unit
-                        </a>
-                      </th>
-                      <th>
-                        <a href="#" class="text-muted">
-                          Tenant Name
-                        </a>
-                      </th>
-                      <th>
-                        <a href="#" class="text-muted">
-                          Rent
-                        </a>
-                      </th>
-                      <th>
-                        <a href="#" class="text-muted">
-                          Deposit
-                        </a>
-                      </th>
-                      <th>
-                        <a href="#" class="text-muted">
-                          Start Date
-                        </a>
-                      </th>
-                      <th>
-                        <a href="#" class="text-muted">
-                          End Date
-                        </a>
-                      </th>
-                      <th colspan="2">
-                        <a href="#" class="text-muted">
-                          Documents
-                        </a>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="list">
-                    <tr>
-                      <td>
-                        <div class="custom-control custom-checkbox table-checkbox">
-                          <input type="checkbox" class="custom-control-input" name="ordersSelect" id="ordersSelectOne">
-                          <label class="custom-control-label" for="ordersSelectOne">
-                            &nbsp;
-                          </label>
-                        </div>
-                      </td>
-                      <td class="orders-order">
-                        Room 1
-                      </td>
-                      <td class="orders-product">
-                        John Smith
-                      </td>
-                      <td class="orders-date">
-                        £500
-                      </td>
-                      <td class="orders-total">
-                        £650
-                      </td>
-                      <td class="orders-status">
-                       <time datetime="2018-07-30">07/30/18</time>
-                      </td>
-                      <td class="orders-method">
-                        <time datetime="2018-07-30">07/30/18</time>
-                      </td>
-                      <td class="orders-total">
-                        2 Documents
-                      </td>
-                      <td class="text-right">
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#!" class="dropdown-item">
-                              Edit
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Delete
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="custom-control custom-checkbox table-checkbox">
-                          <input type="checkbox" class="custom-control-input" name="ordersSelect" id="ordersSelectOne">
-                          <label class="custom-control-label" for="ordersSelectOne">
-                            &nbsp;
-                          </label>
-                        </div>
-                      </td>
-                      <td class="orders-order">
-                        Room 1
-                      </td>
-                      <td class="orders-product">
-                        John Smith
-                      </td>
-                      <td class="orders-date">
-                        £500
-                      </td>
-                      <td class="orders-total">
-                        £650
-                      </td>
-                      <td class="orders-status">
-                       <time datetime="2018-07-30">07/30/18</time>
-                      </td>
-                      <td class="orders-method">
-                        <time datetime="2018-07-30">07/30/18</time>
-                      </td>
-                      <td class="orders-total">
-                        2 Documents
-                      </td>
-                      <td class="text-right">
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#!" class="dropdown-item">
-                              Edit
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Delete
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
           </div>
         </div> <!-- / .row -->
 		

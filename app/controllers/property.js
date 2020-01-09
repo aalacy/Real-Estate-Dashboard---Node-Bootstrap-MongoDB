@@ -354,9 +354,40 @@ exports.upload_doc_to_property = async function(req, res) {
 
 exports.tenancies = async function(req, res) {
   const { user } = req.session;  
+  const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
+  let occupied_properties = [];
+  let vacant_properties = []
+  let all_tenancies = 0;
+  let occupied_tenancies = 0;
+  let vacant_tenancies = 0;
+  properties.map(property => {
+    all_tenancies += property.tenancies.length;
+    var occupied_property = JSON.parse(JSON.stringify(property));
+    occupied_property.tenancies = [];
+    var vacant_property = JSON.parse(JSON.stringify(property));
+    vacant_property.tenancies = [];
+    property.tenancies.map(unit => {
+      if (unit.rent_frequency = 'Vacant') {
+        vacant_tenancies++;
+        vacant_property.tenancies.push(unit);
+      } else {
+        occupied_tenancies++;
+        occupied_property.tenancies.push(unit);
+      }
+    });
+    occupied_properties.push(occupied_property);
+    vacant_properties.push(vacant_property);
+  });
+
   res.render('property/tenancies', {
     token: req.csrfToken(),
     title: 'Avenue - Tenancies',
+    properties,
+    occupied_properties,
+    vacant_properties,
+    all_tenancies,
+    occupied_tenancies,
+    vacant_tenancies
   });
 };
 
