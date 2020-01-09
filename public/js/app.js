@@ -11,6 +11,74 @@ const PROPERTY_TYPE = {
     flat: 'Flat'
 };
 
+/**
+ * Confirm Dialog
+ */
+
+function confirmDialog(message, handler){
+  $(`<div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-card card">
+        <div class="card-header">
+          <div class="row align-items-center">
+            <div class="col">
+
+              <!-- Title -->
+              <h4 class="card-header-title">
+                Warning
+              </h4>
+          
+            </div>
+            <div class="col-auto">
+
+              <!-- Close -->
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          
+            </div>
+          </div> <!-- / .row -->
+        </div>
+        </div class="card-header">
+        <div class="card-body">
+          <p>
+            ${message}
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-no">Cancel</button>
+          <button type="button" class="btn btn-danger btn-yes delete-document">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`).appendTo('body');
+ 
+  //Trigger the modal
+  $("#modalConfirm").modal({
+     backdrop: 'static',
+     keyboard: false
+  });
+  
+   //Pass true to a callback function
+   $(".btn-yes").click(function () {
+       handler(true);
+       $("#modalConfirm").modal("hide");
+   });
+    
+   //Pass false to callback function
+   $(".btn-no").click(function () {
+       handler(false);
+       $("#modalConfirm").modal("hide");
+   });
+
+   //Remove the modal once it is closed.
+   $("#modalConfirm").on('hidden.bs.modal', function () {
+      $("#modalConfirm").remove();
+   });
+}
+
  /**
   * Making toast
   */
@@ -763,6 +831,7 @@ $(function() {
       }
 
       e.preventDefault();
+      $('#modalUpload').modal('hide');
       const data = {
         document:  {
           id: $('#document_id').val(),
@@ -800,6 +869,4 @@ $(function() {
           console.log(error);
       });
     })
-
-        
 });

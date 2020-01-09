@@ -130,8 +130,6 @@
         </form>
       </div>
     </div>
-    <% include ../partials/modals %>
-
     <% include ../partials/topnav %>
 
     <!-- MAIN CONTENT
@@ -318,7 +316,7 @@
                       <button class="dropdown-item edit-document modal-upload" data-id="${doc.id}" data-property_id="${doc.property_id}" data-property_name="${doc.property_name}" data-unit_id="${doc.unit_id}" data-unit_name="${doc.unit_name}" data-tag="${doc.tag}" data-path="${doc.path}" data-size="${doc.size}" data-filename="${doc.filename}" data-mimetype="${doc.mimetype}">
                         Edit
                       </button>
-                      <button class="dropdown-item" data-toggle="modal" data-target="#modalConfirm" data-type="document" data-id="${doc.id}">
+                      <button class="dropdown-item delete-document" data-id="${doc.id}">
                         Delete
                       </button>
                     </div>
@@ -536,35 +534,42 @@
 
         $('.delete-document').click(function(e) {
           e.preventDefault();
-          const id = $(this).data('id');
-          const parent = $(this).parents('.list-group-item');
-          const token = $('meta[name="csrf"]').attr('content');
-          const data = {
-              document: {
-                id 
-              }
-          };
-          fetch('/property/documents/delete', {
-            credentials: 'same-origin', // <-- includes cookies in the request
-            headers: {
-                'CSRF-Token': token, 
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify(data)
-          })
-          .then(response => response.json())
-          .then(function(res) {
-            makeToast({message: res.message});
-            if (res.status == 422) {
-            } else if (res.status == 200) {
-              parent.remove();
+          var self = $(this);
+          confirmDialog("Are you sure?", (ans) => {
+            if (ans) {
+              const id = self.data('id');
+              const parent = self.parents('.list-group-item');
+              const token = $('meta[name="csrf"]').attr('content');
+              const data = {
+                  document: {
+                    id 
+                  }
+              };
+              fetch('/property/documents/delete', {
+                credentials: 'same-origin', // <-- includes cookies in the request
+                headers: {
+                    'CSRF-Token': token, 
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(data)
+              })
+              .then(response => response.json())
+              .then(function(res) {
+                makeToast({message: res.message});
+                if (res.status == 422) {
+                } else if (res.status == 200) {
+                  parent.remove();
+                }
+              })
+              .catch(error => {
+                console.log(error);
+              });
+            }else {
+              $('#modalConfirm').modal('hide');
             }
-          })
-          .catch(error => {
-            console.log(error);
           });
-      })
+        });
       });
     </script>
 
