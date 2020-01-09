@@ -311,7 +311,7 @@ exports.upload_doc_to_property = async function(req, res) {
     tag: document.tag,
     property_id: document.property_id,
     unit_id: document.unit_id,
-    display_name: property_name + '-' + unit_name,
+    display_name: property_name + ' - ' + unit_name,
     property_name,
     unit_name,
     update_at: moment().format('YYYY-MM-DD HH:mm:ss'),

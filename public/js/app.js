@@ -761,6 +761,7 @@ $(function() {
       if ($('#document_id').val().length == 0) {
         return makeToast({message: "Please upload a document"});
       }
+
       e.preventDefault();
       const data = {
         document:  {
@@ -800,5 +801,5 @@ $(function() {
       });
     })
 
-    
+        
 });
