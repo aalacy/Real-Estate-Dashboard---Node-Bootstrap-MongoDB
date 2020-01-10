@@ -11,6 +11,14 @@ const PROPERTY_TYPE = {
     flat: 'Flat'
 };
 
+const toComma = function(val) {
+    if (val) {
+        return val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    } else {
+        return "0";
+    }
+};
+
 /**
  * Confirm Dialog
  */
@@ -542,6 +550,7 @@ $(function() {
         $('#unit_rent_frequency').val(unit.rent_frequency);
         $('#unit_rent_frequency').trigger('change');
         $('#unit_rent_price').val(unit.rent_price);
+        $('#unit_deposit').val(unit.unit_deposit);
         $('input[name="unit[id]"]').val(unit.id);
         if ($('.unit-item').length > 1) {
             $(".action-unit").removeClass('d-none').removeClass('btn-unit-clear').addClass('btn-unit-delete').text('Delete this unit');
@@ -869,4 +878,7 @@ $(function() {
           console.log(error);
       });
     })
+
+    // Overview
+
 });

@@ -7,6 +7,7 @@ const request = require('request-promise');
 const mongoose = require('mongoose');
 const Properties = mongoose.model('Properties');
 const Documents = mongoose.model('Documents');
+const Tenants = mongoose.model('Tenants');
 var moment = require('moment');
 const uuidv4 = require('uuid/v4');
 
@@ -367,7 +368,7 @@ exports.tenancies = async function(req, res) {
     var vacant_property = JSON.parse(JSON.stringify(property));
     vacant_property.tenancies = [];
     property.tenancies.map(unit => {
-      if (unit.rent_frequency = 'Vacant') {
+      if (unit.rent_frequency == 'Vacant') {
         vacant_tenancies++;
         vacant_property.tenancies.push(unit);
       } else {
@@ -400,6 +401,78 @@ exports.all_units = async function(req, res) {
   })
 }
 
+exports.new_tenant = async function(req, res) {
+  const { body: { property, unit, tenant } } = req;
+
+  let new_tenant = new Tenants(tenant);
+  let new_values = {};
+  if (!tenant.id) {
+    new_tenant.setDate();
+    new_tenant.setID();
+    await new_tenant.save();
+  } else {
+    new_values = {
+      $set: {  
+        first_name: tenant.first_name,
+        last_name: tenant.last_name,
+        email: tenant.email,
+        phone_number: tenant.phone_number
+      }
+    };
+    await Tenants.updateOne({ id: tenant.id }, new_values);
+  }
+
+  const myproperty = await Properties.findOne({ id: property.id });
+  let tenancies = [];
+  myproperty.tenancies.map(_unit => {
+    if (!_unit.tenants) {
+      _unit.tenants = [];
+    } 
+    if (_unit.id == unit.id) {
+      _unit.tenants.push(new_tenant);
+    }
+    tenancies.push(_unit);
+  });
+
+  new_values = {
+    $set: { tenancies }
+  };
+  
+  return Properties.updateOne({ id: property.id }, new_values).then(() => {
+    res.redirect('/property/overview/' + property.id);
+  });
+}
+
+exports.delete_tenant = async function(req, res) {
+  const { body: { property_id, unit_id, tenant_id } } = req;
+
+  const myproperty = await Properties.findOne({ id: property_id });
+  let tenancies = [];
+  const myunit = myproperty.tenancies.map(_unit => {
+    let tenants = []
+    if (_unit.id == unit_id) {
+      _unit.tenants = _unit.tenants.filter(_tenant => _tenant.id != tenant_id);
+    }
+    tenancies.push(_unit);
+  });
+
+  new_values = {
+    $set: { tenancies }
+  };
+  
+  return Properties.updateOne({ id: property_id }, new_values).then(() => {
+    res.json({
+      status: 200,
+      message: 'Success'
+    })
+  }).catch(e => {
+    res.json({
+      status: 500,
+      message: 'Failure'
+    })
+  });
+}
+
 exports.new_unit = async function(req, res) {
   const { body: { property, unit } } = req;
 
@@ -417,6 +490,9 @@ exports.new_unit = async function(req, res) {
   rental_yield = calcRentalYield(myproperty.purchase_price, rental_income);
   if (!unit.id) {
     unit.id = uuidv4();
+    unit.start_date = unit.start_date ? unit.start_date : "";
+    unit.end_date = unit.end_date ? unit.end_date : "";
+    unit.tenants = [];
     units += 1;
     new_values = {
       $push: { tenancies: unit },

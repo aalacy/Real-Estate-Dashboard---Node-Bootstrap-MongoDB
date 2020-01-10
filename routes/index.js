@@ -57,8 +57,8 @@ router.get('/', auth.checkToken, dashboard.index);
  */
 
 router.get('/property/my', auth.checkToken, property.my);
-router.use('/property/overview/:id', auth.checkToken, property.overview);
-router.use('/property/detail/:id', auth.checkToken, property.detail);
+router.get('/property/overview/:id', auth.checkToken, property.overview);
+router.get('/property/detail/:id', auth.checkToken, property.detail);
 router.use('/property/new', auth.checkToken, property.new);
 router.use('/property/review', auth.checkToken, property.review);
 router.use('/property/search/:query', auth.checkToken,  property.search);
@@ -74,6 +74,9 @@ router.use('/property/unit/delete', auth.checkToken, property.delete_unit);
 router.use('/property/unit/clear', auth.checkToken, property.clear_unit);
 router.use('/property/ajust_summary', auth.checkToken, property.adjust_summary);
 router.use('/property/estimated_sale', auth.checkToken, property.estimated_sale);
+
+router.use('/property/unit/tenant/new', auth.checkToken, property.new_tenant);
+router.use('/property/unit/tenant/delete', auth.checkToken, property.delete_tenant);
 
 // documents
 router.get('/property/documents', auth.checkToken, property.documents);
