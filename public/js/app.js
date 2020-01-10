@@ -1200,6 +1200,7 @@ $(function() {
             if (res.status == 422) {
             } else if (res.status == 200) {
               parent.remove();
+              // $('.doc_cnt').html(res.doc_cnt);
             }
           })
           .catch(error => {

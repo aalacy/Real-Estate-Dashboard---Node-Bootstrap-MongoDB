@@ -300,7 +300,9 @@ exports.documents_delete = async function(req, res) {
   new_values = {
     $set: { status: 'deleted' }
   };
-  return Documents.updateOne({ id: document.id }, new_values).then(() => {
+
+  return Documents.updateOne({ id: document.id }, new_values).then(async () => {
+    // const documents = await Documents.find({ proper: document.id, status: 'alive' }, { _id: 0 });
     res.json({
       status: 200,
       message: "Successfully deleted."
