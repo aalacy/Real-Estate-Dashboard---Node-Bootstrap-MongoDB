@@ -1,0 +1,104 @@
+<input type="hidden" id="hidden_documents" value="<%= JSON.stringify(documents) %>">
+<!-- Modal Upload -->
+
+
+  <!-- HEADER -->
+<div class="header">
+  <div class="container">
+    
+    <!-- Body -->
+    <div class="header-body">
+      <div class="row align-items-center">
+        <div class="col ml-n3 ml-md-n2">
+
+          <!-- Title -->
+          <h1 class="header-title">
+            Documents
+          </h1>
+
+        </div>
+
+        <div class="col-auto">
+            
+            <!-- Button -->
+            <a href="#" class="btn lift btn-primary modal-upload">
+              Upload
+            </a>
+
+        </div>
+      </div> <!-- / .row -->
+    
+    </div>
+
+  </div>
+</div> <!-- / .header -->
+
+<!-- CONTENT -->
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      
+      <!-- Files -->
+      <div class="card" data-toggle="lists" data-options='{"valueNames": ["name"]}'>
+        <div class="card-header">
+          <div class="row align-items-center">
+            <div class="col">
+              
+              <!-- Title -->
+              <h4 class="card-header-title">
+                Files
+              </h4>
+
+            </div>
+            <div class="col-auto d-none filter-by-property">
+              
+              <!-- Dropdown -->
+              <div class="dropdown">
+
+                <!-- Toggle -->
+             
+                <select class="form-control" id="filterByProperty" data-toggle="select"  data-options='{"placeholder": "All Properties"}' required>
+                    <option></option>
+                    
+                  </select>  
+
+              </div>
+
+            </div>
+          
+          </div> <!-- / .row -->
+        </div>
+        <div class="card-header">
+          <div class="row">
+            <div class="col-12">
+              
+              <!-- Form -->
+              <form>
+                <div class="input-group input-group-flush input-group-merge">
+                  <input type="search" class="form-control form-control-prepended search" placeholder="Search">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <span class="fe fe-search"></span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div> <!-- / .row -->
+        </div>
+        <div class="card-body">
+
+          <!-- List -->
+          <ul class="list-group list-group-lg list-group-flush list my-n4 documentList">
+            <% if(!documents.length) { %>
+              <p class="text-center p-3">There is no any documents yet.</p>
+            <% } %>
+          </ul>
+          <ul id="documentPagination" class="pagination-md mt-5"></ul>
+        </div>
+      </div>
+
+    </div>
+  </div> <!-- / .row -->
+</div>

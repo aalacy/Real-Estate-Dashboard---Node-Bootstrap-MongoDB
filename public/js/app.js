@@ -19,6 +19,173 @@ const toComma = function(val) {
     }
 };
 
+function doPopulate() {
+    $('.documentList').empty();
+    let page = 0; 
+    items.map( (doc, idx) => {
+      if (idx % 3 == 0) { 
+        page = (parseInt(idx/3) + 1)
+      } else {
+        page = (parseInt(idx/3) + 1) + ' d-none'
+      }
+      const date = new Date(doc.created_at);
+      const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
+      $('.documentList').append(`<li class="list-group-item px-0 page${page}">
+          <div class="row align-items-center">
+            <div class="col-auto">
+              
+              <!-- Avatar -->
+              <h1 class="mb-0 avatar avatar-md">
+                <img src="/img/icons/unit.png" class="avatar-img">
+              </h1>
+
+            </div>
+            <div class="col ml-n2">
+
+              <!-- Title -->
+              <h4 class="card-title mb-1 name">
+                <a target="_blank" href="/${doc.path}">${doc.filename}</a>
+              </h4>
+
+              <!-- Text -->
+              <p class="card-text small text-muted mb-1">
+                ${doc.display_name} &bull;${doc.tag}
+              </p>
+
+              <!-- Time -->
+              <p class="card-text small text-muted">
+                Uploaded on <time datetime="${uploaded_at}">${uploaded_at}</time>
+              </p>
+              
+            </div>
+            <div class="col-auto">
+              
+              <!-- Button -->
+              <a href="/${doc.path}" target="_blank" class="btn btn-sm btn-white d-none d-md-inline-block">
+                View
+              </a>
+
+            </div>
+            <div class="col-auto">
+              
+              <!-- Dropdown -->
+              <div class="dropdown">
+                <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fe fe-more-vertical"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <button class="dropdown-item edit-document modal-upload" data-id="${doc.id}" data-property_id="${doc.property_id}" data-property_name="${doc.property_name}" data-unit_id="${doc.unit_id}" data-unit_name="${doc.unit_name}" data-tag="${doc.tag}" data-path="${doc.path}" data-size="${doc.size}" data-filename="${doc.filename}" data-mimetype="${doc.mimetype}">
+                    Edit
+                  </button>
+                  <button class="dropdown-item delete-document" data-id="${doc.id}">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div> 
+        </li>`);
+       })
+  }
+
+  function doPaginate() {
+    // $('#documentPagination').empty();
+    try {
+      const pageCnt = Math.ceil(items.length / 3);
+      var visiblePageCnt = Math.min(3, pageCnt);
+      $('#documentPagination').twbsPagination('destroy');
+      $('#documentPagination').twbsPagination({
+          totalPages: pageCnt,
+          // the current page that show on start
+          startPage: 1,
+          // maximum visible pages
+          visiblePages: visiblePageCnt,
+          initiateStartPageClick: true,
+          // template for pagination links
+          href: false,
+          // variable name in href template for page number
+          hrefVariable: '{{number}}',
+          // Text labels
+          first: '<<',
+          prev: 'Prev',
+          next: 'Next',
+          last: '>>',
+          // carousel-style pagination
+          loop: false,
+          // callback function
+          onPageClick: function (event, page) {
+            $('.documentList .list-group-item').addClass('d-none');
+            $('.page'+page).removeClass('d-none');
+          },
+          // pagination Classes
+          paginationClass: 'pagination',
+          nextClass: 'next',
+          prevClass: 'prev',
+          lastClass: 'last',
+          firstClass: 'first',
+          pageClass: 'page',
+          activeClass: 'active',
+          disabledClass: 'disabled'
+      });
+    } catch(e) {}
+  }
+
+  function Dropzone_init(el) {
+    const token = $('meta[name="csrf"]').attr('content');
+    Dropzone.autoDiscover = false;
+    Dropzone.thumbnailWidth = null;
+    Dropzone.thumbnailHeight = null;
+
+    var currentFile = undefined;
+    var elementOptions = el.dataset.options;
+        elementOptions = elementOptions ? JSON.parse(elementOptions) : {};
+    var defaultOptions = {
+      url: "/property/documents/upload?_csrf=" + token,
+      maxFiles: 1,
+      previewsContainer: el.querySelector('.dz-preview'),
+      previewTemplate: el.querySelector('.dz-preview').innerHTML,
+      init: function() {
+        this.on('addedfile', function(file) {
+          var maxFiles = elementOptions.maxFiles;
+          if (maxFiles == 1 && currentFile) {
+            this.removeFile(currentFile);
+          }
+          currentFile = file;
+        });
+
+        this.on('removedfile', function(file){
+          if ($('#status').val() == 'upload') {
+            $('#document_id').val('');
+          }
+        });
+      },
+      success: function(res) {
+        if (res.status == "success") {
+          try {
+            var mydoc = JSON.parse(res.xhr.response);
+            if ($('#status').val() == 'upload') {
+              $('#document_id').val(mydoc.id);
+            } else {
+              $('#document_size').val(mydoc.size);
+              $('#document_mimetype').val( mydoc.mimetype);
+              $('#document_filename').val(mydoc.filename);
+              $('#document_path').val(mydoc.path);
+            }
+          } catch(e) {}
+        } else {
+          makeToast({message: "Sorry, Something wrong happened on the server while uploading your document"});
+        }
+      }
+    }
+    var options = Object.assign(elementOptions, defaultOptions);
+
+    // Clear preview
+    el.querySelector('.dz-preview').innerHTML = '';
+
+    // Init dropzone
+    new Dropzone(el, options);
+  }
+
 /**
  * Confirm Dialog
  */
@@ -834,6 +1001,132 @@ $(function() {
     *   Documents
     */
 
+    $('#filterByProperty').on('select2:select', function (e) {
+      if (e.params.data.id == 'all') {
+        items = documents;
+      } else {
+        items = documents.filter(item => item.property_id == e.params.data.id);
+      }
+      doPopulate();
+      doPaginate();
+    });
+
+    $('#document_property').on('select2:select', function (e) {
+      var data = {
+        property: {
+          id: e.params.data.id
+        }
+      };
+      const token = $('input[name="_csrf"]').val();
+      fetch('/property/unit/all', {
+          credentials: 'same-origin', // <-- includes cookies in the request
+          headers: {
+              'CSRF-Token': token, 
+              'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(function(res) {
+        if (res.status == 200) {
+          $('#document_unit').empty();
+          $('#document_unit').val(null).trigger('change');
+          res.units.map(unit => {
+            var option = new Option(unit.description, unit.id, true, true);
+            $('#document_unit').append(option);
+          })
+        }
+      })
+      .catch(error => {
+          console.log(error);
+      });
+    });
+
+    $('#document_tag').select2({
+      tags: true,
+      createTag: function (params) {
+        var term = $.trim(params.term);
+
+        if (term === '') {
+          return null;
+        }
+
+        return {
+          id: term,
+          text: term,
+          newTag: true // add additional parameters
+        }
+      }
+    });
+
+    $(document).on('click', '.modal-upload', function(e) {
+        e.preventDefault()
+        $('#document_property').empty();
+        $('#document_unit').empty();
+        $('.property-row').removeClass('d-none');
+        $('.unit-row').removeClass('d-none');
+      if (!$(this).hasClass('modal-property') && !$(this).hasClass('modal-unit')) {
+          properties.map(property => {
+            var property_name = property.address + ', ' + property.city;
+            var option = new Option(property_name, property.id, true, true);
+            $('#document_property').append(option);
+          });
+      } else {
+        var property = $(this).data('property');
+        var property_name = property.address + ', ' + property.city;
+        var option = new Option(property_name, property.id, true, true);
+        $('#document_property').append(option);
+        $('.property-row').addClass('d-none');
+        if ($(this).hasClass('modal-property')) {
+            units.map(unit => {
+                var option = new Option(unit.description, unit.id, true, true);
+                $('#document_unit').append(option);
+            })
+        }
+        if ($(this).hasClass('modal-unit')) {
+            var unit = $(this).data('unit');
+            option = new Option(unit.description, unit.id, true, true);
+            $('#document_unit').append(option);
+            $('.unit-row').addClass('d-none');
+        }
+      }
+
+      if ($(this).hasClass('edit-document')) {
+        const unit_name = $(this).data('unit_name');
+        const unit_id = $(this).data('unit_id');
+        const property_id = $(this).data('property_id');
+        const property_name = $(this).data('property_name');
+        const tag = $(this).data('tag');
+        const image = $(this).data('path');
+        var option = new Option(unit_name, unit_id, true, true);
+        $('#document_unit').append(option);
+        $('#document_property').val(property_id).trigger('change');
+        option = new Option(tag, tag, true, true);
+        $('#document_tag').append(option);
+        $('#document_id').val($(this).data('id'));
+        $('#document_size').val($(this).data('size'));
+        $('#document_path').val(image);
+        $('#document_mimetype').val($(this).data('mimetype'));
+        $('#document_filename').val($(this).data('filename'));
+        $('#documentUploadImage').removeClass('d-none').children('div').css('background-image', `url('/${image}')`);
+        $('#modalUpload .modal-title').text('Edit Document');
+        $('#modalUpload #status').val('edit');
+      } else {
+        if (!$(this).hasClass('modal-property') && !$(this).hasClass('modal-unit')) {
+            $('#document_property').val(null).trigger("change");
+        }
+        $('#document_tag').empty();
+        
+        $('#document_id').val('');
+        $('#documentUploadImage').addClass('d-none');
+        $('#modalUpload .modal-title').text('Upload Document');
+        $('#modalUpload #status').val('upload');
+      }
+
+      $('#modalUpload').modal();
+    });
+
     $('#uploadDocumentBtn').click(function(e) {
       if ($('#document_id').val().length == 0) {
         return makeToast({message: "Please upload a document"});
@@ -841,6 +1134,7 @@ $(function() {
 
       e.preventDefault();
       $('#modalUpload').modal('hide');
+      const token = $('meta[name="csrf"]').attr('content');
       const data = {
         document:  {
           id: $('#document_id').val(),
@@ -853,14 +1147,13 @@ $(function() {
           size: $('#document_size').val(),
           path: $('#document_path').val(),
           mimetype: $('#document_mimetype').val(),
-          filename: $('#document_filename').val(),
+          filename: $('#document_filename').val()
         }
       }
-      const token = $('meta[name="csrf"]').attr('content');
       fetch('/property/documents/upload_all', {
           credentials: 'same-origin', // <-- includes cookies in the request
           headers: {
-              'CSRF-Token': token, 
+                'CSRF-Token': token, 
               'Content-Type': 'application/json'
           },
           method: 'POST',
@@ -878,6 +1171,45 @@ $(function() {
           console.log(error);
       });
     })
+
+    $(document).on('click', '.delete-document', function(e) {
+      e.preventDefault();
+      var self = $(this);
+      confirmDialog("Are you sure?", (ans) => {
+        if (ans) {
+          const id = self.data('id');
+          const parent = self.parents('.list-group-item');
+          const token = $('meta[name="csrf"]').attr('content');
+          const data = {
+              document: {
+                id 
+              }
+          };
+          fetch('/property/documents/delete', {
+            credentials: 'same-origin', // <-- includes cookies in the request
+            headers: {
+                'CSRF-Token': token, 
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(data)
+          })
+          .then(response => response.json())
+          .then(function(res) {
+            makeToast({message: res.message});
+            if (res.status == 422) {
+            } else if (res.status == 200) {
+              parent.remove();
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        }else {
+          $('#modalConfirm').modal('hide');
+        }
+      });
+    });
 
     // Overview
 
