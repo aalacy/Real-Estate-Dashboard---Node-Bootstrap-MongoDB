@@ -444,7 +444,11 @@ exports.new_tenant = async function(req, res) {
   };
   
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
-    res.redirect('/property/overview/' + property.id);
+    res.json({
+      status: 200,
+      tenant: new_tenant,
+      message: "Sucessfully added."
+    })
   });
 }
 

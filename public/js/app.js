@@ -19,6 +19,44 @@ const toComma = function(val) {
     }
 };
 
+const addTenant = function(tenant, unit) {
+  $('.tenant-list').append(`<div class="col-4 tenant-item"><div class="card">
+    <div class="card-body">
+      <div class="row align-items-center">
+      <div class="col-auto">
+        <a href="#!" class="avatar">
+          <img src="/img/avatars/profiles/avatar-1.jpg" alt="avatar" class="avatar-img rounded-circle">
+        </a>
+      </div>
+      <div class="col ml-n2">
+        <h4 class="card-title mb-1 tenant-name">
+          ${tenant.first_name} ${tenant.last_name}
+        </h4>
+        <p class="card-text small text-muted">
+          <a href="#" class="edit-tenant" data-tenant='${JSON.stringify(tenant)}' data-id="${tenant.id}" data-unit="${unit.id}">View details</a>
+        </p>
+      </div>
+      <div class="col-auto">
+        <div class="dropdown">
+          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fe fe-more-vertical"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a href="#!" class="dropdown-item edit-tenant" data-tenant='${JSON.stringify(tenant)}' data-id="${tenant.id}" data-unit="${unit.id}">
+              Edit
+            </a>
+            <a href="#!" class="dropdown-item delete-tenant" data-id="${tenant.id}">
+              Delete
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div>`);
+}
+
 function doPopulate() {
     $('.documentList').empty();
     let page = 0; 
@@ -1213,5 +1251,42 @@ $(function() {
     });
 
     // Overview
-
+    $('#add-tenant-form').submit(function(e){
+      e.preventDefault();
+      const data = {
+          property: {
+            id: $("input[name='property[id]']").val()
+          },
+          unit: {
+            id:  $("input[name='unit[id]']").val()
+          },
+          tenant: {
+            first_name: $('#tenant_first_name').val(),
+            last_name: $('#tenant_last_name').val(),
+            email: $('#tenant_email').val(),
+            phone_number: $('#tenant_phone_number').val()
+          }
+      };
+      $('#modalAddNewTenant').modal('hide');
+      fetch('/property/unit/tenant/new/', {
+        credentials: 'same-origin', // <-- includes cookies in the request
+        headers: {
+            'CSRF-Token': $('meta[name="csrf"]').attr('content'), 
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(function(res) {
+        makeToast({message: res.message});
+        if (res.status == 422) {
+        } else if (res.status == 200) {
+          addTenant(res.tenant, data.unit);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    })  
 });

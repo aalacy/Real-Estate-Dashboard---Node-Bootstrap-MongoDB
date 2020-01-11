@@ -12,6 +12,7 @@
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" name="property[id]" value="<%= property.id%>">
           <input type="hidden" name="unit[id]" value="">
+          <input type="hidden" id="tenant_id" value="">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
                 <!-- Header -->
@@ -468,8 +469,8 @@
                   </div>
       		
                   <div class="card-body">
-                    <div class="row align-items-center no-gutters">
-                      <div class="col-4 text-center border-right">
+                    <div class="row align-items-center">
+                      <div class="col-4 text-center border-right" style="padding: 0 2rem;">
                         <!-- Heading -->
                         <div class="chart chart-appended">
                           <canvas id="tenancyChart" class="chart-canvas" data-labels="<%=chart_labels%>" data-dataset="[<%=chart_data%>]"></canvas>
@@ -785,12 +786,9 @@
                 <% })%>
               </div>
               <div class="unit-detail-section d-none">
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#" class="back-to-units-list">Units</a></li>
-                    <li class="breadcrumb-item active unit-name" aria-current="page">Unit 1</li>
-                  </ol>
-                </nav>
+                <button class="btn btn-primary back-to-units-list mb-3">
+                  Back to units
+                </button>
 
                 <div class="card">
                   <div class="card-header">
@@ -952,41 +950,7 @@
           // display tenants section
           $('.tenant-list').empty();
           unit.tenants.map(tenant => {
-            $('.tenant-list').append(`<div class="col-4"><div class="card">
-                <div class="card-body">
-                  <div class="row align-items-center">
-                  <div class="col-auto">
-                    <a href="#!" class="avatar">
-                      <img src="/img/avatars/profiles/avatar-1.jpg" alt="avatar" class="avatar-img rounded-circle">
-                    </a>
-                  </div>
-                  <div class="col ml-n2">
-                    <h4 class="card-title mb-1">
-                      ${tenant.first_name} ${tenant.last_name}
-                    </h4>
-                    <p class="card-text small text-muted">
-                      <a href="#">View details</a>
-                    </p>
-                  </div>
-                  <div class="col-auto">
-                    <div class="dropdown">
-                      <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fe fe-more-vertical"></i>
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#!" class="dropdown-item edit-tenant" data-tenant='${JSON.stringify(tenant)}' data-id="${tenant.id}" data-unit="${unit.id}">
-                          Edit
-                        </a>
-                        <a href="#!" class="dropdown-item delete-tenant" data-id="${tenant.id}">
-                          Delete
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> 
-          </div>`);
+            addTenant(tenant, unit);
           });
 
           $('.delete-tenant').click(function() {
@@ -994,10 +958,10 @@
             const property_id = $('input[name="property[id]"]').val();
             const unit_id = $('input[name="unit[id]"]').val();
             const tenant_id = $(this).data('id');
-
+            var parent = $(this).parents('.tenant-item');
             fetch(new Request('/property/unit/tenant/delete', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, tenant_id, _csrf})}))
             .then(function() {
-                location.reload();
+                parent.remove();
             }).catch(function(text) {
                 console.log(text);
             });
@@ -1012,8 +976,9 @@
           })
 
           $('.edit-tenant').click(function() {
+            const tenant_id = $(this).data('id');
             $('input[name="unit[id]"]').val($(this).data('unit'));
-            $('input[name="tenant[id]"]').val($(this).data('id'));
+            $('input[name="tenant[id]"]').val(tenant_id);
             const tenant = $(this).data('tenant');
             $('#tenant_first_name').val(tenant.first_name);
             $('#tenant_last_name').val(tenant.last_name);
@@ -1023,6 +988,7 @@
               .on('shown.bs.modal', function () {
                 $('#tenant-modal-title').html('Edit a Tenant');
                 $('#addTenantBtn').html('Update');
+                $('#tenant_id').val(tenant_id);
               })
               .on('hidden.bs.modal', function () {
                 $('#tenant-modal-title').html('Add a New Tenant');
@@ -1031,6 +997,7 @@
                 $('#tenant_last_name').val('');
                 $('#tenant_email').val('');
                 $('#tenant_phone_number').val('');
+                $('#tenant_id').val();
               });
           });
 
