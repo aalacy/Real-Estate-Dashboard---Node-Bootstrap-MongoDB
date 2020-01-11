@@ -95,7 +95,7 @@ exports.my = async function(req, res, next) {
 };
 
 exports.overview = async function(req, res) {
-  const { params: { id } } = req;
+  const { params: { id, unit_id } } = req;
   if (id == '...') {
     return res.json({})
   }
@@ -145,7 +145,8 @@ exports.overview = async function(req, res) {
     chart_data,
     documents,
     vacant_units,
-    occupied_units
+    occupied_units,
+    unit_id
   });
 };
 

@@ -57,6 +57,7 @@ router.get('/', auth.checkToken, dashboard.index);
  */
 
 router.get('/property/my', auth.checkToken, property.my);
+router.get('/property/overview/:id/unit/:unit_id', auth.checkToken, property.overview);
 router.get('/property/overview/:id', auth.checkToken, property.overview);
 router.get('/property/detail/:id', auth.checkToken, property.detail);
 router.use('/property/new', auth.checkToken, property.new);
