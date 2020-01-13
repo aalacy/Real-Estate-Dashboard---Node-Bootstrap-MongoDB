@@ -6,7 +6,7 @@
   <body>
     <% include ../partials/topnav %>
 
-     <div class="modal  fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
+     <div class="modal  fade" id="modalAddNewUnitWithProperty" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="add-unit-form" method="post" action="/property/unit/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
@@ -19,7 +19,21 @@
               </button>
             </div>
             <div class="modal-body">
-    
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label>
+                      Rent Frequency
+                    </label>
+                    <select class="form-control" id="property_id" name="property[id]" data-toggle="select" data-options='{"placeholder": "Select a property"}' required>
+                      <option></option>
+                      <% properties.forEach(property => {%>
+                        <option value="<%=property.id%>"><%=property.address%>, <%=property.city%></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                </div>
+              </div>
               <div class="row">
                 <div class="col-12 col-md-6">
                   
@@ -155,7 +169,7 @@
 
                   </div>
                   <div class="col-auto">
-                    <a href="#" class="btn lift btn-primary">
+                    <a href="#" data-toggle="modal"  data-target="#modalAddNewUnitWithProperty" class="btn lift btn-primary">
                       Add tenancy
                     </a>
                   </div>

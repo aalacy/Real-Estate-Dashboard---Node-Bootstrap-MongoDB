@@ -531,12 +531,8 @@ exports.new_unit = async function(req, res) {
     };
   }
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
-    const units_link = req.headers.referer.split('units');
-    if (units_link.length == 2) {
-      res.redirect(`/property/overview/${property.id}/units${units_link[1]}`);
-    } else {
-      res.redirect(`/property/overview/${property.id}`);
-    }
+    const link = req.headers.referer.split(req.headers.host);
+    res.redirect(link[1]);
   });
 };
 
