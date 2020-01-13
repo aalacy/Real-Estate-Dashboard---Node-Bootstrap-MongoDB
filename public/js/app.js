@@ -452,35 +452,38 @@ const drawMap = function(options) {
 };
 
 // Chart
- function chartInit(chart, data, percentage=false) {
+ function chartInit(chart, data, percentage=false, need_legend = true) {
+    const options = {
+      responsive: true,
+      animation: {
+          animateScale: true,
+          animateRotate: true
+      },
+      tooltips: {
+          callbacks: {
+      // this callback is used to create the tooltip label
+              label: function(tooltipItem, data) {
+                // get the data label and data value to display
+                // convert the data value to local string so it uses a comma seperated number
+                var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
+                // return the text to display on the tooltip
+                if (percentage) {
+                  value += '%';
+                }
+                return value;
+              }
+            }
+      }
+    };
+    if (need_legend) {
+      options.legend = {
+          position: 'bottom',
+          display: true
+      }
+    }
     new Chart(chart, {
         type: 'doughnut',
-        options: {
-            responsive: true,
-            legend: {
-                position: 'bottom',
-                display: true
-            },
-            animation: {
-                animateScale: true,
-                animateRotate: true
-            },
-            tooltips: {
-                callbacks: {
-            // this callback is used to create the tooltip label
-                    label: function(tooltipItem, data) {
-                      // get the data label and data value to display
-                      // convert the data value to local string so it uses a comma seperated number
-                      var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
-                      // return the text to display on the tooltip
-                      if (percentage) {
-                        value += '%';
-                      }
-                      return value;
-                    }
-                  }
-            }
-        },
+        options: options,
         data: data
     });
   }
@@ -755,7 +758,7 @@ $(function() {
         $('#unit_rent_frequency').val(unit.rent_frequency);
         $('#unit_rent_frequency').trigger('change');
         $('#unit_rent_price').val(unit.rent_price);
-        $('#unit_deposit').val(unit.unit_deposit);
+        $('#unit_deposit').val(unit.deposit);
         $('input[name="unit[id]"]').val(unit.id);
         if ($('.unit-item').length > 1) {
             $(".action-unit").removeClass('d-none').removeClass('btn-unit-clear').addClass('btn-unit-delete').text('Delete this unit');
@@ -968,7 +971,7 @@ $(function() {
               ]
             }]
           }
-        chartInit(document.getElementById('tenancyChart').getContext('2d'), data, true);
+        chartInit(document.getElementById('tenancyChart').getContext('2d'), data, true, false);
       }
 
     // thousands separator on input
@@ -1283,6 +1286,9 @@ $(function() {
         if (res.status == 422) {
         } else if (res.status == 200) {
           addTenant(res.tenant, data.unit);
+          if (res.cnt > 0) {
+            $('.no-tenants').remove();
+          }
         }
       })
       .catch(error => {

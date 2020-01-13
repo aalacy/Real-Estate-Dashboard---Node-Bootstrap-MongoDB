@@ -330,22 +330,22 @@
                 <!-- Nav -->
                 <ul class="nav nav-tabs nav-overflow header-tabs">
                   <li class="nav-item">
-                    <a href="#overview" data-toggle="tab" role="tab" class="nav-link active">
+                    <a href="javascript:void(0)" data-href="#overview" class="nav-link overview-tab">
                       Overview
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#units" data-toggle="tab" role="tab" class="nav-link">
+                    <a href="javascript:void(0)" data-href="#units" class="nav-link overview-tab">
                       Units <span class="badge badge-pill badge-soft-secondary"><%=property.tenancies.length%></span>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#income_expenses" data-toggle="tab" role="tab" class="nav-link">
+                    <a href="javascript:void(0)" data-href="#income_expenses" data-toggle="tab" role="tab" class="nav-link overview-tab">
                       Income & Expenses
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#documents" data-toggle="tab" role="tab" class="nav-link">
+                    <a href="javascript:void(0)" data-href="#documents" data-toggle="tab" role="tab" class="nav-link overview-tab">
                       Documents <span class="badge badge-pill badge-soft-secondary doc_cnt"><%=documents.length%></span>
                     </a>
                   </li>
@@ -362,7 +362,7 @@
       <!-- CONTENT -->
       <div class="container">
         <div class="tab-content">
-          <div class="tab-pane fade active show" id="overview" role="tabpanel">
+          <div class="tab-pane fade" id="overview" role="tabpanel">
          <!-- Alert -->
            <!--  <div class="alert alert-warning" role="alert">
               This property profile is only <%=empty_cnt%>% complete. <a href="/property/detail/<%=property.id%>" class="alert-link">Add more details here</a>
@@ -786,7 +786,7 @@
                 <% })%>
               </div>
               <div class="unit-detail-section d-none">
-                <button class="btn btn-primary back-to-units-list mb-3">
+                <button class="btn btn-primary back-to-units-list lift mb-3">
                   Back to units
                 </button>
 
@@ -816,8 +816,8 @@
                   <div class="card-body row">
                     <div class="col-12 col-md-6">
                       <ul class="row">
-                        <li class="col-6">£<span class="unit-rent"></span> <span class="unit-frequency"></span> Rent</li>
-                        <li class="col-6">£<span class="unit-deposit"></span> Deposit</li>
+                        <li class="col-6 unit-rent-section"></li>
+                        <li class="col-6 unit-deposit-section"></li>
                       </ul>
                       <ul class="row">
                         <li class="col-6">1 Tenant</li>
@@ -915,6 +915,10 @@
     <% include ../partials/scripts %>
 
     <script type="text/javascript">
+      const _unit_id = '<%=unit_id%>';
+      let _tabs = '<%=tabs%>';
+      const _property_id = '<%=property_id%>';
+      
       let documents = [];
       let units = [];
       try {
@@ -923,14 +927,33 @@
         items = documents;
       } catch(e){}
 
-      $(function() {
+      const gotoTab = (tabs) => {
+        $('.tab-pane').removeClass('active show');
+        $('.overview-tab').removeClass('active');
+        $('#'+tabs).addClass('active show');
+        $(`a[data-href="#${tabs}"]`).addClass('active');
+      }
 
+      $(function() {
+        $('.overview-tab').click(function(e){
+          e.preventDefault();
+          const new_tabs =  $(this).attr('data-href').replace('#', '');
+          if (!_tabs || _tabs != new_tabs) {
+            location.href = '/property/overview/' + _property_id  + '/' + new_tabs;
+          }
+        });
+
+        
         $('.detail-unit').click(function(e) {
           e.preventDefault();
+          const unit = $(this).data('unit');
+          if (!_unit_id) {
+            location.href = `/property/overview/${_property_id}/units/${unit.id}`;
+            return;
+          }
           $('.unit-detail-section').removeClass('d-none');
           $('.units-list').addClass('d-none');
 
-          const unit = $(this).data('unit');
           $('.update-detail').attr('data-unit', JSON.stringify(unit));
           $('.modal-unit').attr('data-unit', JSON.stringify(unit));
           const unit_documents = documents.filter(document => document.unit_id == unit.id);
@@ -939,9 +962,17 @@
           tenants_cnt = tenants_cnt == 1 ?  tenants_cnt + ' Tenant' : tenants_cnt + ' Tenants';
 
           $('.unit-name').text(unit.description);
-          $('.unit-deposit').text(toComma(unit.deposit));
-          $('.unit-rent').text(toComma(unit.rent_price));
-          $('.unit-frequency').text(unit.rent_frequency);
+          if (unit.deposit) {
+            $('.unit-deposit-section').html(`£<span class="unit-deposit">${toComma(unit.deposit)}</span> Deposit`);
+          } else {
+            $('.unit-deposit-section').text('No deposit')
+          }
+          if (unit.rent_price) {
+            $('.unit-rent-section').html(`£<span class="unit-rent">${toComma(unit.rent_price)}</span> <span class="unit-frequency">${unit.rent_frequency}</span> Rent`);
+          } else {
+            $('.unit-rent-section').text('No rent price ');
+          }
+
           $('.unit-tenants').text(tenants_cnt);
           $('.unit-start_date').text(unit.start_date);
           $('.unit-end_date').text(unit.end_date);
@@ -953,17 +984,25 @@
             addTenant(tenant, unit);
           });
 
-          $('.delete-tenant').click(function() {
-            const _csrf = $('input[name="_csrf"]').val();
-            const property_id = $('input[name="property[id]"]').val();
-            const unit_id = $('input[name="unit[id]"]').val();
-            const tenant_id = $(this).data('id');
-            var parent = $(this).parents('.tenant-item');
-            fetch(new Request('/property/unit/tenant/delete', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, tenant_id, _csrf})}))
-            .then(function() {
-                parent.remove();
-            }).catch(function(text) {
-                console.log(text);
+          $(document).on('click', '.delete-tenant', function() {
+            confirmDialog("Are you sure?", (ans) => {
+              if (ans) {
+                const _csrf = $('input[name="_csrf"]').val();
+                const property_id = $('input[name="property[id]"]').val();
+                const unit_id = $('input[name="unit[id]"]').val();
+                const tenant_id = $(this).data('id');
+                var parent = $(this).parents('.tenant-item');
+                fetch(new Request('/property/unit/tenant/delete', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, tenant_id, _csrf})}))
+                .then(response => response.json())
+                .then(function(res) {
+                  parent.remove();
+                  if (res.cnt == 0) {
+                    $('.tenant-list').append(`<div class="col-auto no-tenants"><p>There is no tenants yet</p></div>`);
+                  }
+                }).catch(function(text) {
+                    console.log(text);
+                });
+              }
             });
           });
 
@@ -975,7 +1014,7 @@
               });
           })
 
-          $('.edit-tenant').click(function() {
+          $(document).on('click', '.edit-tenant', function() {
             const tenant_id = $(this).data('id');
             $('input[name="unit[id]"]').val($(this).data('unit'));
             $('input[name="tenant[id]"]').val(tenant_id);
@@ -1002,8 +1041,7 @@
           });
 
           if (unit.tenants.length == 0) {
-            $('.tenant-list').append(`<div class="row align-items-center">
-              <div class="col-auto"><p>There is no tenants yet</p></div></div>`)
+            $('.tenant-list').append(`<div class="col-auto no-tenants"><p>There is no tenants yet</p></div>`);
           }
 
           // display documents section
@@ -1065,18 +1103,38 @@
           });
 
           if (unit_documents.length == 0) {
-            $('.tenant-list').append(`<div class="row align-items-center">
-              <div class="col-auto"><p>There is no documents yet</p></div></div>`)
+            $('.unit-document-list').append(`<div class="col-auto no-documents"><p>There is no documents yet</p></div>`)
           }
 
           $('.modal-upload').attr('data-property', $('#hidden_property').val());
         });
 
+        // if this page is called from tenancies, then go to unit detail
+        if (_unit_id) {
+          $('a[href="#units"]').click();
+          var target;
+          $('.detail-unit').map( (i, e) => {
+            if (JSON.stringify($(e).data('unit')).includes(_unit_id)) {
+              target = $(e);
+            }
+          })
+          if (target) {
+            target.click();
+          }
+        }
+
+        if (_tabs) {
+         gotoTab(_tabs);
+        }
+
+        if (!_tabs) {
+          gotoTab('overview');
+        }
+
         // Overview
         $('.back-to-units-list').click(function(e) {
           e.preventDefault();
-          $('.unit-detail-section').addClass('d-none');
-          $('.units-list').removeClass('d-none');
+          location.href = '/property/overview/' + _property_id  + '/units';
         });
 
         // Display documents section

@@ -95,8 +95,8 @@ exports.my = async function(req, res, next) {
 };
 
 exports.overview = async function(req, res) {
-  const { params: { id, unit_id } } = req;
-  if (id == '...') {
+  const { params: { id, unit_id, tabs } } = req;
+  if (id == '...' || tabs == '...') {
     return res.json({})
   }
   const { user } = req.session;
@@ -146,7 +146,9 @@ exports.overview = async function(req, res) {
     documents,
     vacant_units,
     occupied_units,
-    unit_id
+    unit_id,
+    tabs,
+    property_id: property.id
   });
 };
 
@@ -448,7 +450,8 @@ exports.new_tenant = async function(req, res) {
     res.json({
       status: 200,
       tenant: new_tenant,
-      message: "Sucessfully added."
+      message: "Sucessfully added.",
+      cnt: tenancies.length
     })
   });
 }
@@ -458,10 +461,11 @@ exports.delete_tenant = async function(req, res) {
 
   const myproperty = await Properties.findOne({ id: property_id });
   let tenancies = [];
+  let tenants = []
   const myunit = myproperty.tenancies.map(_unit => {
-    let tenants = []
     if (_unit.id == unit_id) {
       _unit.tenants = _unit.tenants.filter(_tenant => _tenant.id != tenant_id);
+      tenants = _unit.tenants;
     }
     tenancies.push(_unit);
   });
@@ -473,7 +477,8 @@ exports.delete_tenant = async function(req, res) {
   return Properties.updateOne({ id: property_id }, new_values).then(() => {
     res.json({
       status: 200,
-      message: 'Success'
+      message: 'Success',
+      cnt: tenants.length
     })
   }).catch(e => {
     res.json({
@@ -526,7 +531,12 @@ exports.new_unit = async function(req, res) {
     };
   }
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
-    res.redirect('/property/overview/' + property.id);
+    const units_link = req.headers.referer.split('units');
+    if (units_link.length == 2) {
+      res.redirect(`/property/overview/${property.id}/units${units_link[1]}`);
+    } else {
+      res.redirect(`/property/overview/${property.id}`);
+    }
   });
 };
 
