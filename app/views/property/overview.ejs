@@ -470,14 +470,14 @@
       		
                   <div class="card-body">
                     <div class="row align-items-center justify-content-center">
+                      <div class="col-4 text-center border-right">
                         <!-- Heading -->
                         <!-- <div class="chart chart-appended">
                           <canvas id="tenancyChart" class="chart-canvas" data-labels="<%=chart_labels%>" data-dataset="[<%=chart_data%>]"></canvas>
                         </div> -->
-                        <div id="container" style="width:500px; height:200px;"></div>
-                    </div>
-                    <div class="row align-items-center">
-                      <div class="col-6 text-center border-right">
+                        <div id="container" style="width:250px; height:200px;"></div>
+                      </div>
+                      <div class="col-4 text-center border-right">
                         <!-- Heading -->
                         <h6 class="card-title text-muted text-uppercase mt-2">
                           Units in total
@@ -486,7 +486,7 @@
                           <%=total_units%>
                         </span>
                       </div>
-                      <div class="col-6 text-center">
+                      <div class="col-4 text-center">
                         <!-- Heading -->
                         <h6 class="card-title text-uppercase text-muted mt-2">
                           Vacant
@@ -739,7 +739,7 @@
 
           <div class="tab-pane fade" id="units" role="tabpanel">
             <div class="col-12">
-              <button class="btn btn-primary lift mb-3" data-toggle="modal" data-target="#modalAddNewUnit">
+              <button class="btn btn-primary lift mb-3 btn-add-unit" data-toggle="modal" data-target="#modalAddNewUnit">
                 Add a unit
               </button>
               <div class="units-list">
@@ -951,7 +951,7 @@
             plotOptions: {
               series: {
                   dataLabels: {
-                      enabled: true,
+                      enabled: false,
                       format: '{point.name}: {point.y:.1f}%'
                   }
               }
@@ -999,6 +999,7 @@
           }
           $('.unit-detail-section').removeClass('d-none');
           $('.units-list').addClass('d-none');
+          $('.btn-add-unit').addClass('d-none');
 
           $('.update-detail').attr('data-unit', JSON.stringify(unit));
           $('.modal-unit').attr('data-unit', JSON.stringify(unit));
