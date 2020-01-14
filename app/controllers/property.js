@@ -122,7 +122,7 @@ exports.overview = async function(req, res) {
   property.off_street_parking = OFF_STREET_PARKING[property.off_street_parking];
   const total_units = property.tenancies.length;
   let vacant_cnt = 0;
-  const chart_labels = JSON.stringify(['Tenancy', 'Vacant']);
+  const chart_labels = JSON.stringify(['Vacant', 'Tenancy']);
   let vacant_units = [];
   let occupied_units = [];
   property.tenancies.map(tenancy => {
@@ -133,7 +133,9 @@ exports.overview = async function(req, res) {
       occupied_units.push(tenancy);
     }
   });
-  const chart_data = [((total_units-vacant_cnt)/total_units*100).toFixed(0), (vacant_cnt/total_units*100).toFixed(0)];
+  const vacant_value = (vacant_cnt/total_units*100).toFixed(0);
+  const tenancy_value =  ((total_units-vacant_cnt)/total_units*100).toFixed(0);
+  const chart_data = [vacant_value, tenancy_value];
   res.render('property/overview', {
     title: 'Avenue - Overview',
     token: req.csrfToken(),
@@ -143,6 +145,8 @@ exports.overview = async function(req, res) {
     vacant_cnt,
     chart_labels,
     chart_data,
+    vacant_value,
+    tenancy_value,
     documents,
     vacant_units,
     occupied_units,

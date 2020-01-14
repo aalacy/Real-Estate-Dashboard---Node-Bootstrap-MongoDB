@@ -469,14 +469,15 @@
                   </div>
       		
                   <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-4 text-center border-right" style="padding: 0 2rem;">
+                    <div class="row align-items-center justify-content-center">
                         <!-- Heading -->
-                        <div class="chart chart-appended">
+                        <!-- <div class="chart chart-appended">
                           <canvas id="tenancyChart" class="chart-canvas" data-labels="<%=chart_labels%>" data-dataset="[<%=chart_data%>]"></canvas>
-                        </div>
-                      </div>
-                      <div class="col-4 text-center border-right">
+                        </div> -->
+                        <div id="container" style="width:500px; height:200px;"></div>
+                    </div>
+                    <div class="row align-items-center">
+                      <div class="col-6 text-center border-right">
                         <!-- Heading -->
                         <h6 class="card-title text-muted text-uppercase mt-2">
                           Units in total
@@ -485,7 +486,7 @@
                           <%=total_units%>
                         </span>
                       </div>
-                      <div class="col-4 text-center">
+                      <div class="col-6 text-center">
                         <!-- Heading -->
                         <h6 class="card-title text-uppercase text-muted mt-2">
                           Vacant
@@ -938,6 +939,48 @@
       }
 
       $(function() {
+        // Create the chart
+        var colors = Highcharts.getOptions().colors;
+        Highcharts.chart('container', {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: ''
+            },
+            plotOptions: {
+              series: {
+                  dataLabels: {
+                      enabled: true,
+                      format: '{point.name}: {point.y:.1f}%'
+                  }
+              }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+            },
+            series: [{
+              name: "Occupied",
+              size: '100%',
+              innerSize: '60%',
+              colorByPoint: true,
+              data: [
+                  {
+                      name: "Vacant",
+                      color: colors[1],
+                      y: <%=vacant_value%>,
+                      drilldown: "Vacant"
+                  },
+                  {
+                      name: "Tenancy",
+                      color: colors[4],
+                      y: <%=tenancy_value%>,
+                      drilldown: "Tenancy"
+              }]
+            }]
+        });
+
         $('.overview-tab').click(function(e){
           e.preventDefault();
           const new_tabs =  $(this).attr('data-href').replace('#', '');
