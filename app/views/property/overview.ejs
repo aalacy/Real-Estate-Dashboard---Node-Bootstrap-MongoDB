@@ -824,7 +824,7 @@
                         <li class="col-6 unit-deposit-section"></li>
                       </ul>
                       <ul class="row">
-                        <li class="col-6">1 Tenant</li>
+                        <li class="col-6"><span class="unit-tenants"></span></li>
                         <li class="col-6"><span class="unit-start_date"></span> <i style="font-weight: bold;">~</i> <span class="unit-end_date"></span></li>
                       </ul>
                     </div>
@@ -1020,7 +1020,11 @@
             $('.unit-rent-section').text('No rent price ');
           }
 
-          $('.unit-tenants').text(tenants_cnt);
+          if (unit.tenants.length) {
+            $('.unit-tenants').text(tenants_cnt);
+          } else {
+            $('.unit-tenants').text('No Tenant');
+          }
           $('.unit-start_date').text(unit.start_date);
           $('.unit-end_date').text(unit.end_date);
           $('input[name="unit[id]"]').val(unit.id);
@@ -1045,6 +1049,13 @@
                   parent.remove();
                   if (res.cnt == 0) {
                     $('.tenant-list').append(`<div class="col-auto no-tenants"><p>There is no tenants yet</p></div>`);
+                  }
+                  let tenants_cnt = res.cnt == 1 ?  res.cnt + ' Tenant' : res.cnt + ' Tenants';
+                  if (res.cnt) {
+                    $('.no-tenants').remove();
+                    $('.unit-tenants').text(tenants_cnt);
+                  } else {
+                    $('.unit-tenants').text('No Tenant');
                   }
                 }).catch(function(text) {
                     console.log(text);

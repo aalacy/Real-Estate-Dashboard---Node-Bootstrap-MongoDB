@@ -121,7 +121,12 @@
                           <span class="h2 mr-2 mb-0">
                             <%=occupancy%>%
                           </span>
-                          
+                          <!-- Badge -->
+                          <% if (vacant_cnt) { %>
+                          <span class="badge badge-soft-danger mt-n1">
+                            <%=vacant_cnt%> Units Vacant
+                          </span>
+                          <% } %>
                         </div>
                         
                       </div> <!-- / .row -->

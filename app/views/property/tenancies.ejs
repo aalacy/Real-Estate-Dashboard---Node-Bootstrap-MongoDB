@@ -186,7 +186,7 @@
                       </li>
                       <li class="nav-item">
                         <a href="#occupied" data-toggle="tab" role="tab" class="nav-link">
-                          Occupied <span class="badge badge-pill badge-soft-secondary"><%=occupied_tenancies%></span>
+                          Active <span class="badge badge-pill badge-soft-secondary"><%=occupied_tenancies%></span>
                         </a>
                       </li>
                       <li class="nav-item">
@@ -211,9 +211,9 @@
                         <div class="col">
 
                           <!-- Search -->
-                          <button class="btn btn-link text-body m-0" data-toggle="collapse" data-target="#occupiedCollapse<%=i%>" aria-expanded="true" aria-controls="occupiedCollapse<%=i%>">
+                          <a href="/property/overview/<%=property.id%>" class=" btn btn-link text-decoration-underline text-body m-0" >
                             <h2 class="m-0"><%=property.address%>, <%=property.city%></h2>
-                          </button>
+                          </a>
                           
                         </div>
                         <div class="col-auto">
@@ -221,8 +221,8 @@
                           <!-- Button -->
 
                           <div class="dropdown">
-                            <a href="/property/overview/<%=property.id%>" class="btn btn-sm btn-light lift" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Go to property
+                            <a type="button" class="btn btn-link btn-sm btn-light <%= i != 0 ? 'collapsed' : '' %>" data-toggle="collapse" data-target="#occupiedCollapse<%=i%>" aria-expanded="<%= i == 0 ? 'true' : 'false' %>" aria-controls="occupiedCollapse<%=i%>">
+                              <i class="fe" aria-hidden="true"></i>
                             </a>
                           </div>
 
@@ -230,7 +230,7 @@
                       </div> <!-- / .row -->
                     </div>
 
-                    <div id="occupiedCollapse<%=i%>" class="collapse show" aria-labelledby="headingOccupied<%=i%>" data-parent="#accordion<%=i%>">
+                    <div id="occupiedCollapse<%=i%>" class="collapse <%= i == 0 ? 'show' : '' %>" aria-labelledby="headingOccupied<%=i%>" data-parent="#accordion<%=i%>">
                       <div class="card-body">
                           <% property.tenancies.forEach( function(unit){ %>
                           <div class="card">

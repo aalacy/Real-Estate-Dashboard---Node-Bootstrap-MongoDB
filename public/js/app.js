@@ -19,6 +19,16 @@ const toComma = function(val) {
     }
 };
 
+const toLoadingBtn = function(el) {
+  $(el).attr('disabled', true);
+  $(el).find('span.loading').removeClass('d-none');
+}
+
+const toNormalBtn = function(el) {
+  $(el).attr('disabled', false);
+  $(el).find('span.loading').addClass('d-none');
+}
+
 const addTenant = function(tenant, unit) {
   $('.tenant-list').append(`<div class="col-4 tenant-item"><div class="card">
     <div class="card-body">
@@ -504,6 +514,9 @@ $(function() {
             email: $('#email').val(),
             password: $('#password').val()
         };
+        
+        toLoadingBtn(".btn-signin")
+
         const token = $('meta[name="csrf"]').attr('content');
         fetch('/signin', {
             credentials: 'same-origin', // <-- includes cookies in the request
@@ -518,19 +531,20 @@ $(function() {
         })
         .then(response => response.json())
         .then(function(res) {
-            if (res.status == 200) {
-                makeToast({message: res.message, showLogo: false, title: `Welcome back ${res.user.username}`}).on('hidden.bs.toast', function () {
-                    window.location.href = '/';
-                });
-            } else if (res.status == 422 || res.status == 400){
-                $('.signin.alert').removeClass('d-none');
-                const message = Object.values(res.errors).join('<br>');
-                $('.signin .message').text(message);
-            }
-            console.log(res);
+          toNormalBtn(".btn-signin")
+          if (res.status == 200) {
+              makeToast({message: res.message, showLogo: false, title: `Welcome back ${res.user.username}`}).on('hidden.bs.toast', function () {
+                  window.location.href = '/';
+              });
+          } else if (res.status == 422 || res.status == 400){
+              $('.signin.alert').removeClass('d-none');
+              const message = Object.values(res.errors).join('<br>');
+              $('.signin .message').text(message);
+          }
         })
         .catch(error => {
             console.log(error);
+          toNormalBtn(".btn-signin")
         });
     });
 
@@ -543,6 +557,7 @@ $(function() {
             password: $('#password').val()
         };
         const token = $('meta[name="csrf"]').attr('content');
+        toLoadingBtn(".btn-signin");
         fetch('/signup', {
             credentials: 'same-origin', // <-- includes cookies in the request
             headers: {
@@ -556,6 +571,7 @@ $(function() {
         })
         .then(response => response.json())
         .then(function(res) {
+            toNormalBtn(".btn-signup")
             if (res.status == 200) {
                 makeToast({message: res.message}).on('hidden.bs.toast', function () {
                     window.location.href = '/';
@@ -568,7 +584,8 @@ $(function() {
             console.log(res);
         })
         .catch(error => {
-            console.log(error);
+          toNormalBtn(".btn-signup")
+          console.log(error);
         });
     });
 
@@ -578,6 +595,7 @@ $(function() {
             email: $('#email').val()
         };
         const token = $('meta[name="csrf"]').attr('content');
+        toLoadingBtn(".btn-reset-password");
         fetch('/password_reset_generate', {
             credentials: 'same-origin', // <-- includes cookies in the request
             headers: {
@@ -589,6 +607,7 @@ $(function() {
         })
         .then(response => response.json())
         .then(function(res) {
+          toNormalBtn(".btn-reset-password");
             if (res.status == 200) {
                 makeToast({message: res.message}).on('hidden.bs.toast', function () {
                     window.location.href = '/signin';
@@ -601,7 +620,8 @@ $(function() {
             console.log(res);
         })
         .catch(error => {
-            console.log(error);
+          toNormalBtn(".btn-reset-password");
+          console.log(error);
         });
     });
 
@@ -1294,8 +1314,12 @@ $(function() {
         if (res.status == 422) {
         } else if (res.status == 200) {
           addTenant(res.tenant, data.unit);
-          if (res.cnt > 0) {
+          let tenants_cnt = res.cnt == 1 ?  res.cnt + ' Tenant' : res.cnt + ' Tenants';
+          if (res.cnt) {
             $('.no-tenants').remove();
+            $('.unit-tenants').text(tenants_cnt);
+          } else {
+            $('.unit-tenants').text('No');
           }
         }
       })

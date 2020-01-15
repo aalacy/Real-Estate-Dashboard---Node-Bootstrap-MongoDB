@@ -436,12 +436,14 @@ exports.new_tenant = async function(req, res) {
 
   const myproperty = await Properties.findOne({ id: property.id });
   let tenancies = [];
+  tenants_cnt = 0;
   myproperty.tenancies.map(_unit => {
     if (!_unit.tenants) {
       _unit.tenants = [];
     } 
     if (_unit.id == unit.id) {
       _unit.tenants.push(new_tenant);
+      tenants_cnt = _unit.tenants.length;
     }
     tenancies.push(_unit);
   });
@@ -455,7 +457,7 @@ exports.new_tenant = async function(req, res) {
       status: 200,
       tenant: new_tenant,
       message: "Sucessfully added.",
-      cnt: tenancies.length
+      cnt: tenants_cnt
     })
   });
 }

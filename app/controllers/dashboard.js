@@ -17,9 +17,15 @@ exports.index = async function(req, res) {
   let markers = [];
   let market_data = [];
   let income_data = [];
-  let labels = []
+  let labels = [];
+  let vacant_cnt = 0;
   properties.map(property => {
-  	portfolio_value += property.current_value;
+    if (property.current_value < property.purchase_price) {
+  	 portfolio_value -= property.current_value;
+    } else {
+      portfolio_value += property.current_value;
+    }
+
     total_purchase_price += property.purchase_price;
   	rental_income += property.rental_income;
   	all_units += property.units;
@@ -30,6 +36,12 @@ exports.index = async function(req, res) {
     market_data.push(property.current_value);
     income_data.push(property.rental_income);
     labels.push(property.address.toString());
+
+    property.tenancies.map(unit => {
+      if (unit.rent_frequency == 'Vacant') {
+        vacant_cnt++;
+      }
+    });
   })
 
   if (portfolio_value && total_purchase_price ) {
@@ -37,7 +49,6 @@ exports.index = async function(req, res) {
   } 
 
   const occupancy = all_units == 0 ? 0.0 : (occupied * 100 / all_units).toFixed(2);
-  console.log(labels)
   res.render('dashboard/index', {
     token: req.csrfToken(),
     title: 'Avenue - Dashboard',
@@ -51,6 +62,7 @@ exports.index = async function(req, res) {
     market_data,
     income_data,
     labels,
-    badge_value
+    badge_value,
+    vacant_cnt
   });
 };

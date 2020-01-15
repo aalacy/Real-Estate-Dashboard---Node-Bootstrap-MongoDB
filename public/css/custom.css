@@ -57,11 +57,14 @@
     background-position-y: -25px;
 }
 
-.i-accordion .panel-heading,
-.d-accordion .panel-heading,
-.accordion .panel-heading { cursor: pointer; }
-.d-accordion .panel-heading.collapsed .fa-chevron-up:before { content: '\f078'; }
-
 .highcharts-credits {
     display: none;
+}
+
+[data-toggle="collapse"] .fe:before {   
+  content: "\e996";
+}
+
+[data-toggle="collapse"].collapsed .fe:before {
+  content: "\e9b1";
 }
