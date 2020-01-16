@@ -574,16 +574,20 @@ exports.delete_unit = async function(req, res) {
   const myproperty = await Properties.findOne({ id: property_id });
   let tenancies = [];
   let rental_income = 0;
+  let status = "Occupied";
   myproperty.tenancies.map(element => {
     if (element.id != unit_id) {
       tenancies.push(element);
       rental_income += freq[element.rent_frequency] * parseFloat(element.rent_price);
-    }
+      if (element.rent_frequency == "Vacant") {
+        status = "Vacant";
+      }
+    } 
   });
   let rental_yield = myproperty.purchase_price == 0 ? 0 : rental_income * 0.01 / parseFloat(myproperty.purchase_price);
   const units = myproperty.units - 1;
   new_values = {
-    $set: { rental_income, rental_yield, units, tenancies }
+    $set: { rental_income, rental_yield, units, tenancies, status }
   };
   return Properties.updateOne({ id: property_id }, new_values).then(() => {
     res.redirect('/property/overview/' + property_id);

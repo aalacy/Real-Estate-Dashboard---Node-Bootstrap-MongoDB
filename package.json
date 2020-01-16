@@ -15,7 +15,7 @@
     "test": "cross-env NODE_ENV=test babel-tape-runner test/test-*.js",
     "pretest": "eslint .",
     "prod": "pm2-runtime start ecosystem.config.js --env production",
-    "pm2": "pm2 start server.js -i 0",
+    "pm2": "pm2 start server.js -i max",
     "deploy": "",
     "debug": "node --inspect server.js"
   },

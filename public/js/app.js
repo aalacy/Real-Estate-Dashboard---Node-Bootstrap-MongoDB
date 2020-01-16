@@ -533,9 +533,9 @@ $(function() {
         .then(function(res) {
           toNormalBtn(".btn-signin")
           if (res.status == 200) {
-              makeToast({message: res.message, showLogo: false, title: `Welcome back ${res.user.username}`}).on('hidden.bs.toast', function () {
-                  window.location.href = '/';
-              });
+              // makeToast({message: res.message, showLogo: false, title: `Welcome back ${res.user.username}`}).on('hidden.bs.toast', function () {
+              //     window.location.href = '/';
+              // });
           } else if (res.status == 422 || res.status == 400){
               $('.signin.alert').removeClass('d-none');
               const message = Object.values(res.errors).join('<br>');
@@ -573,9 +573,9 @@ $(function() {
         .then(function(res) {
             toNormalBtn(".btn-signup")
             if (res.status == 200) {
-                makeToast({message: res.message}).on('hidden.bs.toast', function () {
-                    window.location.href = '/';
-                });
+                // makeToast({message: res.message}).on('hidden.bs.toast', function () {
+                //     window.location.href = '/';
+                // });
             } else if (res.status == 422){
                 $('.signup.alert').removeClass('d-none');
                 const message = Object.values(res.errors).join('<br>');
@@ -609,9 +609,9 @@ $(function() {
         .then(function(res) {
           toNormalBtn(".btn-reset-password");
             if (res.status == 200) {
-                makeToast({message: res.message}).on('hidden.bs.toast', function () {
-                    window.location.href = '/signin';
-                });
+                // makeToast({message: res.message}).on('hidden.bs.toast', function () {
+                //     window.location.href = '/signin';
+                // });
             } else if (res.status == 422 || res.status == 400){
                 $('.signin.alert').removeClass('d-none');
                 const message = Object.values(res.errors).join('<br>');
@@ -643,9 +643,9 @@ $(function() {
         .then(response => response.json())
         .then(function(res) {
             if (res.status == 200) {
-                makeToast({message: res.message}).on('hidden.bs.toast', function () {
-                    window.location.href = '/signin';
-                });
+                // makeToast({message: res.message}).on('hidden.bs.toast', function () {
+                //     window.location.href = '/signin';
+                // });
             } else if (res.status == 422 || res.status == 400){
                 $('.signin.alert').removeClass('d-none');
                 const message = Object.values(res.errors).join('<br>');
@@ -910,19 +910,27 @@ $(function() {
             if ($('.unit-item').length == 1) {
                 return makeToast({message: 'Each property has at least one unit.'});
             }
-            fetch(new Request('/property/unit/delete', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, _csrf})}))
-            .then(function() {
-                location.reload();
-            }).catch(function(text) {
-                console.log(text);
+            confirmDialog("Are you sure?", (ans) => {
+              if (ans) {
+                fetch(new Request('/property/unit/delete', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, _csrf})}))
+                .then(function() {
+                    location.reload();
+                }).catch(function(text) {
+                    console.log(text);
+                });
+              }
             });
         } else {
-            fetch(new Request('/property/unit/clear', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, _csrf})}))
-            .then(function() {
-                location.reload();
-            }).catch(function(text) {
-                console.log(text);
-            });
+          confirmDialog("Are you sure?", (ans) => {
+            if (ans) {
+              fetch(new Request('/property/unit/clear', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({unit_id, property_id, _csrf})}))
+              .then(function() {
+                  location.reload();
+              }).catch(function(text) {
+                  console.log(text);
+              });
+            }
+          });
         }
     });
 

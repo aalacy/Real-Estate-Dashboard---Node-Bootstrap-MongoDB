@@ -21,7 +21,7 @@ exports.index = async function(req, res) {
   let vacant_cnt = 0;
   properties.map(property => {
     if (property.current_value < property.purchase_price) {
-  	 portfolio_value -= property.current_value;
+	   portfolio_value -= property.current_value;
     } else {
       portfolio_value += property.current_value;
     }
