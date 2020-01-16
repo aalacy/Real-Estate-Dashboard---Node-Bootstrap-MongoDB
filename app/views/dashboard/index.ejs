@@ -64,7 +64,7 @@
                       </span>
   
                       <!-- Badge -->
-                      <% if (badge_value) { %>
+                      <% if (badge_value != 0) { %>
                       <span class="badge badge-soft-<%=badge_value < 0 ? 'danger' : 'success'%> mt-n1">
                         £<%=badge_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                       </span>

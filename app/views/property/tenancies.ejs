@@ -6,7 +6,131 @@
   <body>
     <% include ../partials/topnav %>
 
-     <div class="modal  fade" id="modalAddNewUnitWithProperty" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal  fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <form id="add-unit-form" method="post" action="/property/unit/new/">
+          <input type="hidden" name="_csrf" value="<%= token %>">
+          <input type="hidden" id="property_id" name="property[id]" value="">
+          <input type="hidden" name="unit[id]" value="">
+          <input type="hidden" name="unit[tenants]" id="unit_tenants" value="">
+          <div class="modal-content bg-lighter">
+            <div class="modal-header">
+                <!-- Header -->
+              <h3 class="modal-title" id="unit-modal-title">Add a New Unit</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+    
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      Unit Description
+                    </label>
+                    <input type="text" id="unit_description" name="unit[description]" class="form-control" placeholder="Description" value="" required>
+                  </div>
+    
+                </div>
+                <div class="col-12 col-md-6">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      Deposit
+                    </label>
+                    <div class="input-group input-group-merge mb-3">
+                      <input type="text" id="unit_deposit" onkeypress="return isNumberKey(event)"  name="unit[deposit]" class="form-control form-control-prepended number">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          <span>£</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+    
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      Start Date
+                    </label>
+                    <input type="text" id="unit_start_date" name="unit[start_date]" class="form-control" value=""  data-toggle="flatpickr" required>
+                  </div>
+    
+                </div>
+                <div class="col-12 col-md-6">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      End Date (Optional)
+                    </label>
+                    <input type="text" id="unit_end_date" name="unit[end_date]" class="form-control" value=""  data-toggle="flatpickr">
+                  </div>
+    
+                </div>
+              </div> <!-- / .row -->
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      Rent Price
+                    </label>
+                    <div class="input-group input-group-merge mb-3">
+                      <input type="text" id="unit_rent_price" onkeypress="return isNumberKey(event)"  name="unit[rent_price]" class="form-control form-control-prepended number">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          <span>£</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+    
+                </div>
+                <div class="col-12 col-md-6">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      Rent Frequency
+                    </label>
+                    <select class="form-control" id="unit_rent_frequency" name="unit[rent_frequency]" data-toggle="select" data-options='{"placeholder": "Select a frequency"}' required>
+                      <option></option>
+                      <option value="Daily">Daily</option>
+                      <option value="Weekly">Weekly</option>
+                      <option value="Fortnightly">Fortnightly</option>
+                      <option value="Monthly">Monthly</option>
+                    </select>
+                  </div>
+    
+                </div>
+              </div> <!-- / .row -->
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <button type="submit" class="btn btn-outline-danger d-none btn-unit-delete action-unit">Delete this unit</button>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary" id="addUnitBtn">Add</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal  fade" id="modalAddNewUnitWithProperty" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="add-unit-form" method="post" action="/property/unit/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
@@ -232,7 +356,70 @@
 
                     <div id="occupiedCollapse<%=i%>" class="collapse <%= i == 0 ? 'show' : '' %>" aria-labelledby="headingOccupied<%=i%>" data-parent="#accordion<%=i%>">
                       <div class="card-body">
-                          <% property.tenancies.forEach( function(unit){ %>
+                        <% property.tenancies.forEach( function(unit){ %>
+                          <% if (unit.rent_frequency == 'Vacant') {%>
+                            <div class="card">
+                              <div class="card-body">
+                                <div class="row align-items-center unit-item">
+                                  <div class="col-auto">
+                                
+                                    <!-- Avatar -->
+                                    <h1 class="mb-0 avatar avatar-md">
+                                      <img src="/img/icons/unit.png" class="avatar-img">
+                                    </h1>
+                
+                                  </div>
+                                  <div class="col-4">
+                
+                                    <!-- Title -->
+                                    <h4 class="card-title mb-1">
+                                      <a href="/property/overview/<%=property.id%>/units/<%=unit.id%>" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
+                                    </h4>
+                
+                                    <!-- Time -->
+                                    <p class="card-text small text-muted">
+                                      Vacant &nbsp;&nbsp;●&nbsp; &nbsp; <a href="#" class="edit-unit" data-unit="<%= JSON.stringify(unit)%>" >Add a tenancy</a>
+                                    </p>
+                                  </div>
+                                  <div class="col-4">
+                                    <!-- Title -->
+                                    <h4 class="card-title text-lowercase mb-1">
+                                      Not collecting rent
+                                    </h4>
+                                    
+                                  </div>
+                                  <div class="col-2">
+                                    <% if (unit.tenants.length == 0) { %>
+                                      No Tenants
+                                    <% } %>
+                                    <% if (unit.tenants.length == 1) { %> 
+                                      1 Tenant
+                                    <% } %>
+                                    <% if (unit.tenants.length > 1) { %> 
+                                      <%=unit.tenants%> Tenants
+                                    <% } %>
+                                
+                                  </div>
+                                  <div class="col-auto ml-auto">
+                                    <div class="dropdown">
+                                      <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <i class="fe fe-more-vertical"></i>
+                                      </a>
+                                      <div class="dropdown-menu dropdown-menu-right">
+                                        <a href="#!" class="dropdown-item edit-unit" data-property="<%=property.id %>" data-unit="<%=JSON.stringify(unit)%>">
+                                          Edit
+                                        </a>
+                                        <a href="#!" class="dropdown-item delete-unit action-unit"  data-property="<%=property.id %>" data-block="occupiedCollapse<%=i%>" data-unit="<%=unit.id%>">
+                                          Remove
+                                        </a>
+                                      </div>
+                                  </div>
+                                  </div>
+                                </div> <!-- / .row -->
+                                  <!-- Divider -->
+                              </div>
+                            </div>
+                          <% } else {%>
                           <div class="card">
                             <div class="card-body">
                               <div class="row align-items-center unit-item">
@@ -244,38 +431,58 @@
                                   </h1>
               
                                 </div>
-                                <div class="col ml-n2 mr-auto">
+                                <div class="col-4">
               
                                   <!-- Title -->
                                   <h4 class="card-title mb-1">
-                                    <a href="/property/overview/<%=property.id%>/units/<%=unit.id%>"><%= unit.description%></a>
+                                    <a href="/property/overview/<%=property.id%>/units/<%=unit.id%>" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
                                   </h4>
               
                                   <!-- Time -->
                                   <p class="card-text small text-muted">
-                                    <%= unit.start_date%> <%= unit.end_date ? '-' : ''%> <%= unit.end_date%>
+                                    <span class="text-success mr-2">●</span> Active Tenancy
                                   </p>
                                 </div>
-                                <div class="col-auto text-right">
+                                <div class="col-4">
                                   <!-- Title -->
-                                  <h4 class="card-title mb-1">
+                                  <h4 class="card-title text-lowercase mb-1">
                                     <% if (parseInt(unit.rent_price) > 0) {%>£<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><%}%>
+                                    per <%= unit.rent_frequency%>
                                   </h4>
                                   
-                                  <!-- Time -->
-                                  <p class="card-text small text-muted">
-                                    <%= unit.rent_frequency%>
-                                  </p>
                                 </div>
-                                <div class="col-auto">
-                                  <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>" title="Edit">
-                                    <i class="fe fe-chevron-right"></i>
-                                  </a>
+                                <div class="col-2">
+                                  <% if (unit.tenants.length == 0) { %>
+                                    No Tenants
+                                  <% } %>
+                                  <% if (unit.tenants.length == 1) { %> 
+                                    1 Tenant
+                                  <% } %>
+                                  <% if (unit.tenants.length > 1) { %> 
+                                    <%=unit.tenants%> Tenants
+                                  <% } %>
+
+                                </div>
+                                <div class="col-auto ml-auto">
+                                  <div class="dropdown">
+                                    <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fe fe-more-vertical"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                      <a href="#!" class="dropdown-item edit-unit" data-property="<%=property.id %>" data-unit="<%=JSON.stringify(unit)%>">
+                                        Edit
+                                      </a>
+                                      <a href="#!" class="dropdown-item delete-unit action-unit" data-block="occupiedCollapse<%=i%>"  data-property="<%=property.id %>" data-unit="<%=unit.id%>">
+                                        Remove
+                                      </a>
+                                    </div>
+                                </div>
                                 </div>
                               </div> <!-- / .row -->
                                 <!-- Divider -->
                             </div>
                           </div>
+                          <% } %>
                         <% })%>
                         
                       </div>
@@ -327,33 +534,52 @@
                                   </h1>
               
                                 </div>
-                                <div class="col ml-n2 mr-auto">
+                                <div class="col-4">
               
                                   <!-- Title -->
                                   <h4 class="card-title mb-1">
-                                    <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
+                                    <a href="/property/overview/<%=property.id%>/units/<%=unit.id%>" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
                                   </h4>
               
                                   <!-- Time -->
                                   <p class="card-text small text-muted">
-                                    <%= unit.start_date%> <%= unit.end_date ? '-' : ''%> <%= unit.end_date%>
+                                    <span class="text-success mr-2">●</span> Active Tenancy
                                   </p>
                                 </div>
-                                <div class="col-auto text-right">
+                                <div class="col-4">
                                   <!-- Title -->
-                                  <h4 class="card-title mb-1">
+                                  <h4 class="card-title text-lowercase mb-1">
                                     <% if (parseInt(unit.rent_price) > 0) {%>£<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><%}%>
+                                    per <%= unit.rent_frequency%>
                                   </h4>
                                   
-                                  <!-- Time -->
-                                  <p class="card-text small text-muted">
-                                    <%= unit.rent_frequency%>
-                                  </p>
                                 </div>
-                                <div class="col-auto">
-                                  <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>" title="Edit">
-                                    <i class="fe fe-chevron-right"></i>
-                                  </a>
+                                <div class="col-2">
+                                  <% if (unit.tenants.length == 0) { %>
+                                    No Tenants
+                                  <% } %>
+                                  <% if (unit.tenants.length == 1) { %> 
+                                    1 Tenant
+                                  <% } %>
+                                  <% if (unit.tenants.length > 1) { %> 
+                                    <%=unit.tenants%> Tenants
+                                  <% } %>
+
+                                </div>
+                                <div class="col-auto ml-auto">
+                                  <div class="dropdown">
+                                    <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fe fe-more-vertical"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                      <a href="#!" class="dropdown-item edit-unit" data-property="<%=property.id %>" data-unit="<%=JSON.stringify(unit)%>">
+                                        Edit
+                                      </a>
+                                      <a href="#!" class="dropdown-item delete-unit action-unit" data-block="occupied2Collapse<%=i%>"  data-property="<%=property.id %>" data-unit="<%=unit.id%>">
+                                        Remove
+                                      </a>
+                                    </div>
+                                </div>
                                 </div>
                               </div> <!-- / .row -->
                                 <!-- Divider -->
@@ -416,33 +642,51 @@
                                   </h1>
               
                                 </div>
-                                <div class="col ml-n2 mr-auto">
+                                <div class="col-4">
               
                                   <!-- Title -->
                                   <h4 class="card-title mb-1">
-                                    <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
+                                    <a href="/property/overview/<%=property.id%>/units/<%=unit.id%>" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
                                   </h4>
               
                                   <!-- Time -->
                                   <p class="card-text small text-muted">
-                                    <%= unit.start_date%> <%= unit.end_date ? '-' : ''%> <%= unit.end_date%>
+                                    Vacant &nbsp;&nbsp;●&nbsp; &nbsp; <a href="#" class="edit-unit" data-unit="<%= JSON.stringify(unit)%>" >Add a tenancy</a>
                                   </p>
                                 </div>
-                                <div class="col-auto text-right">
+                                <div class="col-4">
                                   <!-- Title -->
-                                  <h4 class="card-title mb-1">
-                                    <% if (parseInt(unit.rent_price) > 0) {%>£<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><%}%>
+                                  <h4 class="card-title text-lowercase mb-1">
+                                    Not collecting rent
                                   </h4>
                                   
-                                  <!-- Time -->
-                                  <p class="card-text small text-muted">
-                                    <%= unit.rent_frequency%>
-                                  </p>
                                 </div>
-                                <div class="col-auto">
-                                  <a href="#" class="edit-unit" data-unit="<%=JSON.stringify(unit)%>" title="Edit">
-                                    <i class="fe fe-chevron-right"></i>
-                                  </a>
+                                <div class="col-2">
+                                  <% if (unit.tenants.length == 0) { %>
+                                    No Tenants
+                                  <% } %>
+                                  <% if (unit.tenants.length == 1) { %> 
+                                    1 Tenant
+                                  <% } %>
+                                  <% if (unit.tenants.length > 1) { %> 
+                                    <%=unit.tenants%> Tenants
+                                  <% } %>
+                              
+                                </div>
+                                <div class="col-auto ml-auto">
+                                  <div class="dropdown">
+                                    <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fe fe-more-vertical"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                      <a href="#!" class="dropdown-item edit-unit" data-property="<%=property.id %>" data-unit="<%=JSON.stringify(unit)%>">
+                                        Edit
+                                      </a>
+                                      <a href="#!" class="dropdown-item delete-unit action-unit" data-block="occupied3Collapse<%=i%>" data-property="<%=property.id %>" data-unit="<%=unit.id%>">
+                                        Remove
+                                      </a>
+                                    </div>
+                                </div>
                                 </div>
                               </div> <!-- / .row -->
                                 <!-- Divider -->

@@ -792,6 +792,10 @@ $(function() {
     // Adjust tenancey
     $('.edit-unit').click(function(e){
         e.preventDefault();
+        const property_id = $(this).data('property');
+        if (property_id) {
+          $('#property_id').val(property_id);
+        }
         const unit = $(this).data('unit');
         $('#unit_description').val(unit.description);
         $('#unit_start_date').val(unit.start_date);
@@ -800,6 +804,7 @@ $(function() {
         $('#unit_rent_frequency').trigger('change');
         $('#unit_rent_price').val(unit.rent_price);
         $('#unit_deposit').val(unit.deposit);
+        $('#unit_tenants').val(JSON.stringify(unit.tenants));
         $('input[name="unit[id]"]').val(unit.id);
         if ($('.unit-item').length > 1) {
             $(".action-unit").removeClass('d-none').removeClass('btn-unit-clear').addClass('btn-unit-delete').text('Delete this unit');
@@ -816,41 +821,6 @@ $(function() {
             $('#unit-modal-title').text('Create a New Unit');
         });
     });
-
-    $('.del-unit').click(function(e){
-        e.preventDefault();
-        const unit = $(this).data('unit');
-        Swal.fire({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-          if (result.value) {
-            const _csrf = $('input[name="_csrf"]').val();
-            fetch(new Request('/property/unit/del', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({id:unit.id, _csrf})}))
-                .then(response => response.json())
-                .then(function(res) {
-                    self.find('span').addClass('d-none');
-                    if (res.status == 200) {
-                        Swal.fire(
-                          'Deleted!',
-                          'One tenancy has been deleted.',
-                          'success'
-                        )
-                    } 
-
-                    return makeToast({ message: res.message});
-                }).catch(function(text) {
-                    self.find('span').addClass('d-none');
-                    console.log(text);
-                });
-          }
-        })
-    })
 
     // Use property value from api in adjust summary popup
     $('#estimatePropertyBtn').click(function(e){
@@ -924,14 +894,18 @@ $(function() {
     $(".action-unit").click(function(e){
         e.preventDefault();
         const _csrf = $('input[name="_csrf"]').val();
-        const property_id = $('input[name="property[id]"]').val();
+        let property_id = $('input[name="property[id]"]').val();
+        if ($(this).data('property')) {
+          property_id = $(this).data('property');
+        }
         let unit_id = $('input[name="unit[id]"]').val();
         if ($(this).data('unit')) {
           unit_id = $(this).data('unit');
         }
         if ($(this).hasClass('btn-unit-delete') || $(this).hasClass('delete-unit')) {
-            if ($('.unit-item').length == 1) {
-                return makeToast({message: 'Each property has at least one unit.'});
+            const block_id = $(this).data('block');
+            if ($(`#${block_id} .unit-item`).length == 1) {
+                return makeToast({message: 'Each property should have at least one unit.'});
             }
             confirmDialog("Are you sure?", (ans) => {
               if (ans) {

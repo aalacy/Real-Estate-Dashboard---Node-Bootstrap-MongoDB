@@ -503,6 +503,9 @@ exports.new_unit = async function(req, res) {
   }
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
   unit.rent_price = unit.rent_price.replace(/,/g, '') ? parseFloat(unit.rent_price.replace(/,/g, '')) : 0;
+  try {
+    unit.tenants = JSON.parse(unit.tenants);
+  } catch(e) {}
   status = 'Occupied';
   let rental_income = myproperty.rental_income;
   let rental_yield = myproperty.rental_yield;

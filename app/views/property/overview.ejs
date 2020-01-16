@@ -10,9 +10,9 @@
       <div class="modal-dialog" role="document">
         <form id="add-unit-form" method="post" action="/property/unit/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
-          <input type="hidden" name="property[id]" value="<%= property.id%>">
+          <input type="hidden" id="property_id" name="property[id]" value="<%= property.id%>">
           <input type="hidden" name="unit[id]" value="">
-          <input type="hidden" id="tenant_id" value="">
+          <input type="hidden" name="unit[tenants]" id="unit_tenants" value="">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
                 <!-- Header -->
@@ -137,7 +137,7 @@
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" name="property[id]" value="<%= property.id%>">
           <input type="hidden" name="unit[id]" value="">
-          <input type="hidden" name="tenant[id]" value="">
+          <input type="hidden" id="tenant_id" name="tenant[id]" value="">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
                 <!-- Header -->
@@ -336,7 +336,7 @@
                   </li>
                   <li class="nav-item">
                     <a href="javascript:void(0)" data-href="#units" class="nav-link unit-tab"  <% if (total_units == 1) { %> data-unit="<%=property.tenancies[0].id%>" <% }%>>
-                      <% if (total_units > 1) { %> Units <% }%> <% if (total_units == 1) { %> Tenancy <% }%> <span class="badge badge-pill badge-soft-secondary"><%=property.tenancies.length%></span>
+                      <% if (total_units > 1) { %> Units <% }%> <% if (total_units == 1) { %> Tenancy <% }%> <% if (property.tenancies.length > 1) {%><span class="badge badge-pill badge-soft-secondary"><%=property.tenancies.length%></span><% }%>
                     </a>
                   </li>
                   <li class="nav-item">
@@ -765,7 +765,7 @@
         
                             <!-- Time -->
                             <p class="card-text small text-muted">
-                              Vacant &nbsp;&nbsp;●&nbsp; &nbsp; <a href="#" data-toggle="modal" data-target="#modalAddNewUnit">Add a tenancy</a>
+                              Vacant &nbsp;&nbsp;●&nbsp; &nbsp; <a href="#" class="edit-unit" data-unit="<%= JSON.stringify(unit)%>" >Add a tenancy</a>
                             </p>
                           </div>
                           <div class="col-4">
@@ -785,6 +785,7 @@
                             <% if (unit.tenants.length > 1) { %> 
                               <%=unit.tenants%> Tenants
                             <% } %>
+                        
                           </div>
                           <div class="col-auto ml-auto">
                             <div class="dropdown">
@@ -795,7 +796,7 @@
                                 <a href="#!" class="dropdown-item edit-unit" data-unit="<%=JSON.stringify(unit)%>">
                                   Edit
                                 </a>
-                                <a href="#!" class="dropdown-item delete-unit action-unit" data-unit="<%=unit.id%>">
+                                <a href="#!" class="dropdown-item delete-unit action-unit" data-block="units" data-unit="<%=unit.id%>">
                                   Remove
                                 </a>
                               </div>
@@ -847,6 +848,7 @@
                           <% if (unit.tenants.length > 1) { %> 
                             <%=unit.tenants%> Tenants
                           <% } %>
+
                         </div>
                         <div class="col-auto ml-auto">
                           <div class="dropdown">
@@ -857,7 +859,7 @@
                               <a href="#!" class="dropdown-item edit-unit" data-unit="<%=JSON.stringify(unit)%>">
                                 Edit
                               </a>
-                              <a href="#!" class="dropdown-item delete-unit action-unit" data-unit="<%=unit.id%>">
+                              <a href="#!" class="dropdown-item delete-unit action-unit"  data-block="units" data-unit="<%=unit.id%>">
                                 Remove
                               </a>
                             </div>
@@ -968,7 +970,7 @@
 
                 <div class="card">
                   <div class="card-body">
-                    <a href="#" class="btn btn-danger lift action-unit btn-unit-delete">
+                    <a href="#" class="btn btn-danger lift action-unit btn-unit-delete" data-block="units">
                       Delete Unit
                     </a>
                   </div>
