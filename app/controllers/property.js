@@ -231,7 +231,8 @@ exports.create = async function(req, res) {
         id: uuidv4(),
         description: 'Unit ' + i,
         rent_price: 0,
-        rent_frequency: 'Vacant'
+        rent_frequency: 'Vacant',
+        tenants: []
       }
       myproperty.tenancies.push(unit)
     }

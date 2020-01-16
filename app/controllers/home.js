@@ -17,7 +17,7 @@ exports.signin = function(req, res) {
   });
 };
 
-exports.signin_post = function(req, res, next) {
+exports.signin_post = async function(req, res, next) {
   // eslint-disable-next-line prettier/prettier
   const { body: { user } } = req;
 
@@ -41,34 +41,53 @@ exports.signin_post = function(req, res, next) {
     });
   }
 
-  return passport.authenticate(
-    'local',
-    { session: false },
-    (err, passportUser, info) => {
-      if (err) {
-        console.log('passport auth err', err);
-        return next(err);
-      }
+  const find_user = await Users.findOne({ email: user.email });
+  if (find_user && find_user.validatePassword(user.password)) {
+    const user = find_user;
+    user.token = find_user.generateJWT();
 
-      if (passportUser) {
-        const user = passportUser;
-        user.token = passportUser.generateJWT();
+    req.session.user = user;
 
-        req.session.user = user;
+    return res.json({
+      status: 200,
+      message: 'Successfully Signed In',
+      user: user.toAuthJSON()
+    });
+  } else {
+    return res.status(200).json({
+      status: 400,
+      errors: { message: 'Email or Password is incorrect.' }
+    });
+  }
 
-        return res.json({
-          status: 200,
-          message: 'Successfully Signed In',
-          user: user.toAuthJSON()
-        });
-      }
+  // return passport.authenticate(
+  //   'local',
+  //   { session: false },
+  //   (err, passportUser, info) => {
+  //     if (err) {
+  //       console.log('passport auth err', err);
+  //       return next(err);
+  //     }
 
-      return res.status(200).json({
-        status: 400,
-        errors: { message: 'Email or Password is incorrect.' }
-      });
-    }
-  )(req, res, next);
+  //     if (passportUser) {
+  //       const user = passportUser;
+  //       user.token = passportUser.generateJWT();
+
+  //       req.session.user = user;
+
+  //       return res.json({
+  //         status: 200,
+  //         message: 'Successfully Signed In',
+  //         user: user.toAuthJSON()
+  //       });
+  //     }
+
+  //     return res.status(200).json({
+  //       status: 400,
+  //       errors: { message: 'Email or Password is incorrect.' }
+  //     });
+  //   }
+  // )(req, res, next);
 };
 
 exports.signup = function(req, res) {

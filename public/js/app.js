@@ -536,6 +536,7 @@ $(function() {
               // makeToast({message: res.message, showLogo: false, title: `Welcome back ${res.user.username}`}).on('hidden.bs.toast', function () {
               //     window.location.href = '/';
               // });
+              window.location.href = '/';
           } else if (res.status == 422 || res.status == 400){
               $('.signin.alert').removeClass('d-none');
               const message = Object.values(res.errors).join('<br>');
@@ -769,6 +770,25 @@ $(function() {
         $('#property_fulladdress').val(`${$('#propertyAutocomplete').val()}, ${$('#property_city').val()}, UK`);
     });
 
+    // Remove Property
+    $(".delete-property").click(function(e) {
+      e.preventDefault();
+      const _csrf = $('input[name="_csrf"]').val();
+      const property = {
+        id: $(this).data('id')
+      }
+      confirmDialog("Are you sure?", (ans) => {
+        if (ans) {
+          fetch(new Request('/property/remove/', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({ property, _csrf})}))
+          .then(function() {
+              location.reload();
+          }).catch(function(text) {
+              console.log(text);
+          });
+        }
+      });
+    })
+
     // Adjust tenancey
     $('.edit-unit').click(function(e){
         e.preventDefault();
@@ -905,8 +925,11 @@ $(function() {
         e.preventDefault();
         const _csrf = $('input[name="_csrf"]').val();
         const property_id = $('input[name="property[id]"]').val();
-        const unit_id = $('input[name="unit[id]"]').val();
-        if ($(this).hasClass('btn-unit-delete')) {
+        let unit_id = $('input[name="unit[id]"]').val();
+        if ($(this).data('unit')) {
+          unit_id = $(this).data('unit');
+        }
+        if ($(this).hasClass('btn-unit-delete') || $(this).hasClass('delete-unit')) {
             if ($('.unit-item').length == 1) {
                 return makeToast({message: 'Each property has at least one unit.'});
             }
