@@ -60,13 +60,13 @@
                       
                       <!-- Heading -->
                       <span class="h2 mb-0">
-                        £<%=portfolio_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                        <%=portfolio_value < 0 ? '-' : '+'%>£<%=Math.abs(portfolio_value).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                       </span>
   
                       <!-- Badge -->
                       <% if (badge_value != 0) { %>
                       <span class="badge badge-soft-<%=badge_value < 0 ? 'danger' : 'success'%> mt-n1">
-                        £<%=badge_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                        <%=badge_value < 0 ? '-' : '+'%>£<%=Math.abs(badge_value).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                       </span>
                       <% } %>
                     </div>
