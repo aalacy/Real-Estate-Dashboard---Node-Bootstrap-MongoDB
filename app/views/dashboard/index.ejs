@@ -263,19 +263,19 @@
                       
                         <!-- Title -->
                         <h4 class="card-header-title">
-                          Top performing properties
+                          Cash Flow
                         </h4>
   
                       </div>
                       <div class="col-auto">
                       
                         <!-- Link -->
-                        <a href="/property/my" class="small">View all</a>
+                        <input type="text" id="cashflowCalendar" class="form-control text-right" placeholder="" data-toggle="flatpickr" data-options='{"mode": "range"}' style="width: 300px;">
   
                       </div>
                     </div> <!-- / .row -->
                   </div>
-                  <div class="table-responsive mb-0" data-toggle="lists" data-options='{"valueNames": ["tables-address", "tables-type", "tables-status", "tables-purchase-price", "tables-current-value", "tables-rental-income", "tables-rental-yield"]}'>
+                 <!--  <div class="table-responsive mb-0" data-toggle="lists" data-options='{"valueNames": ["tables-address", "tables-type", "tables-status", "tables-purchase-price", "tables-current-value", "tables-rental-income", "tables-rental-yield"]}'>
                     <table class="table table-sm table-nowrap card-table">
                       <thead>
                         <tr>
@@ -334,6 +334,8 @@
                         <% })%>
                       </tbody>
                     </table>
+                  </div> -->
+                  <div id="cashflowChart" style="width:100%; height:400px;">
                   </div>
                 </div>
     
@@ -354,5 +356,41 @@
 
 
     <% include ../partials/scripts %>
+
+  <script type="text/javascript">
+    const drawCashFlowChart = (data) => {
+      Highcharts.chart('cashflowChart', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        credits: {
+            enabled: false
+        },
+        series: [{
+          showInLegend: false,  
+          name: '',
+          data: data
+        }]
+      });
+    }
+    $(function(){
+      fetch('/dashboard/cash_flow', {method: 'GET'})
+        .then(res => res.json())
+        .then(res => {
+            if (res.status == 200) {
+              drawCashFlowChart(res.data)
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    })
+  </script>
 </body>
 </html>

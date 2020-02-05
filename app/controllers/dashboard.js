@@ -4,6 +4,8 @@
 
 const mongoose = require('mongoose');
 const Properties = mongoose.model('Properties');
+const Transactions = mongoose.model('Transactions');
+var moment = require('moment');
 
 exports.index = async function(req, res) {
   const { user } = req.session;
@@ -66,3 +68,71 @@ exports.index = async function(req, res) {
     vacant_cnt
   });
 };
+
+exports.get_cash_flow = async function(req, res) {
+  const { user } = req.session;
+
+  const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
+  const transactions = await Transactions.find({ user_id: user.id }, { _id: 0 });
+  let Jan = 0, 
+    Feb = 0, 
+    Mar = 0, 
+    Apr = 0, 
+    May = 0, 
+    Jun = 0, 
+    Jul = 0, 
+    Aug = 0, 
+    Sep = 0, 
+    Oct = 0, 
+    Nov = 0, 
+    Dec = 0;
+
+  transactions.map(transaction => {
+    const date = moment(transaction.created_at).format('MMM');
+    const amount = parseFloat(transaction.amount.replace(',', ''));
+    console.log(data, ' ', amount);
+    switch (date) {
+      case 'Jan':
+        Jan += amount;
+        break;
+      case 'Feb':
+        Feb += amount;
+        break;
+      case 'Mar':
+        Mar += amount;
+        break;
+      case 'Apr':
+        Apr += amount;
+        break;
+      case 'May':
+        May += amount;
+        break;
+      case 'Jun':
+        Jun += amount;
+        break;
+      case 'Jul':
+        Jul += amount;
+        break;
+      case 'Aug':
+        Aug += amount;
+        break;
+      case 'Sep':
+        Sep += amount;
+        break;
+      case 'Oct':
+        Oct += amount;
+        break;
+      case 'Nov':
+        Nov += amount;
+        break;
+      case 'Dec':
+        Dec += amount;
+        break;
+    }
+  })
+
+  return res.json({
+    status: 200,
+    data: [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+  })
+}

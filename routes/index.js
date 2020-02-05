@@ -21,6 +21,7 @@ const auth = require('./auth');
 const dashboard = require('../app/controllers/dashboard');
 const home = require('../app/controllers/home');
 const property = require('../app/controllers/property');
+const transaction = require('../app/controllers/transaction');
 
 //POST new user route (optional, everyone has access)
 router.post('/signup', auth.optional, home.signup_post);
@@ -51,6 +52,7 @@ router.use('/current', auth.required, home.current);
  */
 
 router.get('/', auth.checkToken, dashboard.index);
+router.get('/dashboard/cash_flow', auth.checkToken, dashboard.get_cash_flow);
 
 /**
  * Property
@@ -86,5 +88,11 @@ router.post('/property/documents/upload', upload.single( 'file' ), property.docu
 router.post('/property/documents/delete', auth.checkToken, property.documents_delete);
 router.use('/property/documents/upload_all', auth.checkToken, property.upload_doc_to_property);
 
+// transactions
+router.get('/transaction/all', auth.checkToken, transaction.all);
+router.get('/transaction/all/get', auth.checkToken, transaction.all_get);
+router.post('/transaction/create', auth.checkToken, transaction.create);
+router.post('/transaction/edit', auth.checkToken, transaction.edit);
+router.post('/transaction/delete', auth.checkToken, transaction.delete);
 
 module.exports = router;

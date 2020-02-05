@@ -69,5 +69,6 @@
   content: "\e9b1";
 }
 
-
-
+text.highcharts-axis-title {
+    display: none;
+}

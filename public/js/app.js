@@ -322,7 +322,7 @@ const makeToast = function({title='Avenue', message='', showLogo=true}) {
 
 const isNumberKey = function(evt){
     var charCode = (evt.which) ? evt.which : event.keyCode
-    if (charCode > 31 && (charCode < 48 || charCode > 57))
+    if (charCode != 45 && charCode > 31 && (charCode < 48 || charCode > 57))
         return false;
     return true;
 }
@@ -1007,6 +1007,22 @@ $(function() {
         chartInit(document.getElementById('tenancyChart').getContext('2d'), data, true, false);
       }
 
+    $('#cashflowCalendar').flatpickr({
+        mode: "range",
+        onChange: function(selectedDates, dateStr, instance) {
+           
+            if (selectedDates.length == 2) {
+                if (!dateStr.includes('to')) {
+                    startDate = endDate = dateStr;
+                } else {
+                    startDate = dateStr.split('to')[0].trim();
+                    endDate = dateStr.split('to')[1].trim();
+                }
+                // loadLogs(startDate, endDate);
+            }
+        }
+    });
+
     // thousands separator on input
     $('input.number').keyup(function(event) {
       // skip for arrow keys
@@ -1014,10 +1030,18 @@ $(function() {
 
       // format number
       $(this).val(function(index, value) {
-        return value
+        if (value == '-') {
+          return value;
+        }
+        const sign = parseFloat(value) < 0;
+        let newValue = value
         .replace(/\D/g, "")
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        ;
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        if (sign) {
+          newValue = '-' + newValue;
+        } 
+
+        return newValue;
       });
     });
 
@@ -1071,6 +1095,43 @@ $(function() {
         }
     });
 
+    $(document).on('click', '.delete-transaction', function(e) {
+      e.preventDefault();
+      const parent = $(this).parents('.transaction-row');
+      var data = {
+        transaction: {
+          id: $(this).data('id')
+        }
+      };
+      var self = $(this);
+      confirmDialog("Are you sure?", (ans) => {
+        if (ans) {
+          const token = $('input[name="_csrf"]').val();
+          fetch('/transaction/delete', {
+              credentials: 'same-origin', // <-- includes cookies in the request
+              headers: {
+                  'CSRF-Token': token, 
+                  'Content-Type': 'application/json'
+              },
+              method: 'POST',
+              body: JSON.stringify(data)
+          })
+          .then(response => response.json())
+          .then(function(res) {
+            makeToast({message: res.message});
+
+            if (res.status == 200) {
+              parent.fadeOut( 1000, function() {
+                parent.remove();
+              });
+            }
+          })
+          .catch(error => {
+              console.log(error);
+          });
+        }
+      });
+    })
     /*
     *   Documents
     */
