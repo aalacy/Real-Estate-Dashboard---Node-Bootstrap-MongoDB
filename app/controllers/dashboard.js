@@ -90,7 +90,6 @@ exports.get_cash_flow = async function(req, res) {
   transactions.map(transaction => {
     const date = moment(transaction.created_at).format('MMM');
     const amount = parseFloat(transaction.amount.replace(',', ''));
-    console.log(data, ' ', amount);
     switch (date) {
       case 'Jan':
         Jan += amount;
