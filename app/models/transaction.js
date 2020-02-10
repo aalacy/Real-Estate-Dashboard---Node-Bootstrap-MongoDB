@@ -16,10 +16,13 @@ const TransactionsSchema = new Schema({
   id: { type: String, default: ''},
   property_id: { type: String, default: '' },
   user_id: { type: String, default: '' },
+  document_id: { type: String, default: '' },
   user: { type: String, default: '' },
   category: { type: String, default: '' },
   account: { type: String, default: '' },
   amount: { type: String, default: '' },
+  note: { type: String, default: '' },
+  type: { type: String, default: ''},
   created_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
   updated_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') }
 });

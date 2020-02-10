@@ -72,3 +72,76 @@
 text.highcharts-axis-title {
     display: none;
 }
+
+.btn-custom {
+    color: black;
+    background-color: white;
+    box-shadow: 0 0 1px 1px black;
+}
+
+.dataTables_length {
+    display: inline;
+    margin-right: 13.5rem !important;
+}
+
+div.dataTables_wrapper div.dataTables_length select, div.dataTables_wrapper div.dataTables_filter input {
+    width: 100%;
+    height: calc(1.5em + 1rem + 2px);
+    padding: .5rem .75rem;
+    font-size: .9375rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #12263f;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d2ddec;
+    border-radius: .375rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.dataTables_filter {
+    display: inline;
+}
+
+table.dataTable.table-sm .sorting:before, table.dataTable.table-sm .sorting_asc:before, table.dataTable.table-sm .sorting_desc:before {
+    top: 11px;
+}
+
+table.dataTable.table-sm .sorting:after, table.dataTable.table-sm .sorting_asc:after, table.dataTable.table-sm .sorting_desc:after {
+    top: 11px;
+}
+
+.dataTables_paginate a {
+    border: 1px solid gray;
+    padding: 0.25rem .75rem;
+    cursor: pointer;
+}
+
+.dataTables_paginate a.disabled {
+    opacity: 0.7;
+    color: gray;
+    cursor: default;
+}
+
+.dataTables_paginate a.previous {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.dataTables_paginate a.next {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.dataTables_paginate a.paginate_button.current {
+    background: #2c7be5;
+    color: white;
+    border-right: none;
+    border-left: none;
+}
+
+.dataTables_paginate span a.paginate_button {
+    border-left: none;
+    border-right: none;
+}
+

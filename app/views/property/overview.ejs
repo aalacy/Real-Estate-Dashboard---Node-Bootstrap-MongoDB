@@ -130,7 +130,7 @@
       </div>
     </div>
 
-    <!-- Modal Add New Tenant -->
+      <!-- Modal Add New Tenant -->
     <div class="modal  fade" id="modalAddNewTenant" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="add-tenant-form" method="post" action="/property/unit/tenant/new/">
@@ -202,7 +202,7 @@
       </div>
     </div>
 
-    <!-- Modal Adjust Summary -->
+      <!-- Modal Adjust Summary -->
     <div class="modal fade" id="modalAdjustSummary" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="search-address-form" method="post" action="/property/ajust_summary/">
@@ -244,10 +244,9 @@
                   </button>
                 </div>
               </div>
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col-12 col-md-6">
                   
-                  <!-- Start date -->
                   <div class="form-group">
                     <label>
                       Annual Income
@@ -267,7 +266,6 @@
               </div>
               <div class="row">
                 <div class="col-12 col-md-6">
-                  <!-- Start date -->
                   <div class="form-group">
                     <label>
                       Rental Yield % 
@@ -277,7 +275,7 @@
                   </div>
     
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -388,9 +386,9 @@
                       <div class="col-auto">
 
                         <!-- Button -->
-                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAdjustSummary">
+                        <a href="/property/detail/<%= property.id%>" class="btn btn-sm btn-white">
                           Adjust
-                        </button>
+                        </a>
                     
                       </div>
                      
@@ -398,49 +396,23 @@
                   </div>
   				
                   <div class="card-body">
-                    <div class="row align-items-center no-gutters">
-                      <div class="col-4 text-center border-right">
-                        <!-- Title -->
-                        <h6 class="card-title text-uppercase text-muted mb-2">
-                          Est Market Value
-                        </h6>
-                
-                        <!-- Heading -->
-                        <span class="h2 mb-0">
-                          £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                        </span>
-                      
+                    <div class="row col-12 align-items-center no-gutters">
+                      <ul class="col-8 mb-0 border-right">
+                        <li>
+                          <div class="row">
+                            <div class="col">Property Type</div>
+                            <div class="col"><%=property.type%></div>
+                          </div>
+                        </li>
+                      </ul>
+                      <div class="col-4 d-flex justify-content-center align-items-center">
+                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAdjustSummary">
+                          +&nbsp; Add Value/Price
+                        </button>
                       </div>
-                      <div class="col-4 text-center border-right">
-                          <!-- Title -->
-                        <h6 class="card-title text-uppercase text-muted mb-2">
-                          Annual Income
-                        </h6>
-                
-                        <!-- Heading -->
-                        <span class="h2 mb-0">
-                          £<%=property.rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                        </span>
-                      
-                      </div>
-
-                      <div class="col-4 text-center">
-                          <!-- Title -->
-                        <h6 class="card-title text-uppercase text-muted mb-2">
-                            Rental Yield
-                        </h6>
-                
-                        <!-- Heading -->
-                        <span class="h2 mb-0">
-                          <%=property.rental_yield.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>%
-                        </span>
-                      
-                      </div>
-
-                    </div> <!-- / .row -->
-                  
-                    </div> 
+                  </div> 
       		      </div>
+              </div>
   			  
               <!-- Card -->
                 <div class="card">

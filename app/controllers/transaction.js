@@ -41,26 +41,33 @@ exports.all_get = async function(req, res) {
   		user: transaction.user,
   		category: transaction.category,
   		account: transaction.account,
-  		amount: transaction.amount
- 	};
+  		amount: transaction.amount,
+      type: transaction.type
+ 	  };
   })
 
+  const incomeTransactions = newTransactions.filter(transaction => transaction.type == "In");
+  const expensesTransactions = newTransactions.filter(transaction => transaction.type == "Out");
+
   res.json({
-    transactions: newTransactions
+    transactions: newTransactions,
+    incomeTransactions,
+    expensesTransactions
   });
 }
 
 exports.create = async function(req, res) {
-  const { body: { transaction } } = req;
+  const { body: { transaction, document } } = req;
 
   const { user } = req.session;
 
   const newTransaction  = new Transactions(transaction);
   newTransaction.id = uuidv4();
   newTransaction.user_id = user.id;
+  newTransaction.document_id = document.id;
 
   newTransaction.save().then( () => {
- 	res.redirect('/transaction/all');
+ 	  res.redirect('/transaction/all');
   })
 }
 
