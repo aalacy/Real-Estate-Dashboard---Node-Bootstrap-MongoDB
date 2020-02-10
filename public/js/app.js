@@ -1007,20 +1007,10 @@ $(function() {
         chartInit(document.getElementById('tenancyChart').getContext('2d'), data, true, false);
       }
 
-    $('#cashflowCalendar').flatpickr({
-        mode: "range",
-        onChange: function(selectedDates, dateStr, instance) {
-           
-            if (selectedDates.length == 2) {
-                if (!dateStr.includes('to')) {
-                    startDate = endDate = dateStr;
-                } else {
-                    startDate = dateStr.split('to')[0].trim();
-                    endDate = dateStr.split('to')[1].trim();
-                }
-                // loadLogs(startDate, endDate);
-            }
-        }
+    $('#cashflowCalendar').daterangepicker({
+      opens: 'left'
+    }, function(start, end, label) {
+      console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
     });
 
     // thousands separator on input

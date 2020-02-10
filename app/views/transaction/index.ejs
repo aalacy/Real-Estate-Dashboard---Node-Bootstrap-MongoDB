@@ -21,9 +21,13 @@
             <div class="modal-header">
                 <!-- Header -->
               <h3 class="modal-title" id="unit-modal-title">Add a New Transaction</h3>
-              <div class="btn-group btn-group-sm close" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-custom">Create Income</button>
-                <button type="button" class="btn btn-custom" disabled>Create Expense</button>
+              <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                <label class="btn btn-outline-dark active">
+                  <input type="radio" name="transaction[type]" value="In" id="option1" autocomplete="off" checked> Create Income
+                </label>
+                <label class="btn btn-outline-dark">
+                  <input type="radio" name="transaction[type]" value="Out" id="option2" autocomplete="off"> Create Expense
+                </label>
               </div>
             </div>
             <div class="modal-body">
@@ -49,20 +53,6 @@
                     <label class="mr-5">
                       Amount
                     </label>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="transaction[type]" value="In" checked>
-                      <label class="form-check-label" for="exampleRadios1">
-                        Money In
-                      </label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="transaction[type]" value="Out">
-                      <label class="form-check-label" for="exampleRadios2">
-                        Money Out
-                      </label>
-                    </div>
-
                     <div class="input-group input-group-merge mb-3">
                       <input type="text" id="transaction_amount" onkeypress="return isNumberKey(event)"  name="transaction[amount]" class="form-control form-control-prepended number">
                       <div class="input-group-prepend">
@@ -135,7 +125,6 @@
                             <p class="small text-muted mb-0" data-dz-size>...</p>
                           </div>
                           <div class="col-auto">
-                            
                             <div class="dropdown">
                               <a href="#" class="dropdown-item" title="Remove file" data-dz-remove>
                                 <i class="fe fe-trash"></i>
