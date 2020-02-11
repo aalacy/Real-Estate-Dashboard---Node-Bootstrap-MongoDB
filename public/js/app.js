@@ -322,7 +322,7 @@ const makeToast = function({title='Avenue', message='', showLogo=true}) {
 
 const isNumberKey = function(evt){
     var charCode = (evt.which) ? evt.which : event.keyCode
-    if (charCode != 45 && charCode > 31 && (charCode < 48 || charCode > 57))
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
         return false;
     return true;
 }
@@ -1007,11 +1007,12 @@ $(function() {
         chartInit(document.getElementById('tenancyChart').getContext('2d'), data, true, false);
       }
 
-    $('#cashflowCalendar').daterangepicker({
-      opens: 'left'
-    }, function(start, end, label) {
-      console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-    });
+      const cashflowStartDate = flatpickr("#cashflowStartDate", {
+        onChange: function(selectedDates, dateStr, instance) {
+          
+        },
+      });
+      const cashflowEndDate = flatpickr("#cashflowEndDate", {});
 
     // thousands separator on input
     $('input.number').keyup(function(event) {
@@ -1027,9 +1028,9 @@ $(function() {
         let newValue = value
         .replace(/\D/g, "")
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        if (sign) {
-          newValue = '-' + newValue;
-        } 
+        // if (sign) {
+        //   newValue = '-' + newValue;
+        // } 
 
         return newValue;
       });

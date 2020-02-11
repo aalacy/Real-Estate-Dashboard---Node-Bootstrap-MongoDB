@@ -65,6 +65,9 @@ exports.create = async function(req, res) {
   newTransaction.id = uuidv4();
   newTransaction.user_id = user.id;
   newTransaction.document_id = document.id;
+  if (transaction.type == "Out") {
+    newTransaction.amount = '-' + transaction.amount;
+  }
 
   newTransaction.save().then( () => {
  	  res.redirect('/transaction/all');

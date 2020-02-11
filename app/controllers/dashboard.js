@@ -50,6 +50,8 @@ exports.index = async function(req, res) {
     badge_value = portfolio_value - total_purchase_price;
   } 
 
+  console.log(user);
+
   const occupancy = all_units == 0 ? 0.0 : (occupied * 100 / all_units).toFixed(2);
   res.render('dashboard/index', {
     token: req.csrfToken(),
