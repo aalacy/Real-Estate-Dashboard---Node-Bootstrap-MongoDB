@@ -211,7 +211,7 @@
           <div class="modal-content bg-lighter">
             <div class="modal-header">
                 <!-- Header -->
-              <h3 class="modal-title">Adjust Summary</h3>
+              <h3 class="modal-title">Add Property Value</h3>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -367,86 +367,111 @@
             </div> -->
             
             <div class="row">
-              <div class="col-12 col-xl-8">
-              
-                <!-- Card -->
-                <div class="card">
-  				  
+              <div class="col-12">
+                 <div class="card">
                   <div class="card-header">
                     <div class="row align-items-center">
                       <div class="col">
-
-                        <!-- Title -->
                         <h4 class="card-header-title">
                           Summary
                         </h4>
-
                       </div>
-  					
                       <div class="col-auto">
-
-                        <!-- Button -->
                         <a href="/property/detail/<%= property.id%>" class="btn btn-sm btn-white">
                           Adjust
                         </a>
-                    
                       </div>
-                     
                     </div> <!-- / .row -->
                   </div>
-  				
-                  <div class="card-body">
-                    <div class="row col-12 align-items-center no-gutters">
-                      <ul class="col-8 mb-0 border-right">
-                        <li>
-                          <div class="row">
-                            <div class="col">Property Type</div>
-                            <div class="col"><%=property.type%></div>
+                  <div class="row col-12 no-gutters position-relative">
+                    <div class="col-sm-12 col-lg-8 mb-0 border-right p-4 text-muted">
+                      <div class="d-flex flex-wrap text-x">
+                        <div class="flex-1 text-grey-dark">
+                          <div class="pb-4 d-flex align-items-center">
+                            <div class="pr-4">
+                              <div class="d-flex align-items-center text-teal">
+                                <div class="w-2 h-2 bg-grey">
+                                  
+                                </div>
+                              </div>
+                            </div>
+                            <%=property.type%>
                           </div>
-                        </li>
-                      </ul>
-                      <div class="col-4 d-flex justify-content-center align-items-center">
-                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAdjustSummary">
-                          +&nbsp; Add Value/Price
-                        </button>
+                          <div class="pb-4 d-flex align-items-center">
+                            <div class="pr-4">
+                              <div class="d-flex align-items-center text-teal">
+                                <div class="w-2 h-2 bg-grey"></div>
+                              </div>
+                            </div>
+                            <span class="text-grey"> <%=property.tenancies.length%> current tenancies </span>
+                          </div><!---->
+                          <div class="pb-4 d-flex align-items-center">
+                            <div class="pr-4">
+                              <div class="d-flex align-items-center text-teal">
+                                <div class="w-2 h-2 bg-grey"></div>
+                              </div>
+                            </div> 
+                            Rent P.A: £<%=property.purchase_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                          </div>
+                        </div>
+                        <div class="flex-1 text-grey-dark">
+                          <div class="pb-4 d-flex align-items-center ng-star-inserted">
+                            <%=property.ownership%>
+                          </div>
+                          <div class="pb-4 d-flex align-items-center ng-star-inserted">
+                            <%=property.bedrooms%> bedrooms
+                          </div>
+                          <div class="pb-4 d-flex align-items-center ng-star-inserted">
+                            <%=property.bathrooms%> bathrooms
+                          </div>
+                        </div>
                       </div>
+                    </div>
+                    <div class="col-sm-12 col-lg-4">
+                      <div class="h-100 d-flex <%= property.current_value > 0 ? 'cursor-hand': '' %> property-value-block text-center justify-content-center align-items-center p-4">
+                        <% if (property.current_value == 0) { %>
+                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAdjustSummary">
+                          <i class="fe fe-plus font-weight-bold"></i> Add Value/Price
+                        </button>
+                        <% } else { %>
+                        <div>
+                          <span class="text-lg font-medium">£<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%></span>
+                          <div class="text-uppercase text-muted text-ss">Property Value</div>
+                        </div>
+                        <% } %>
+                      </div>
+                      <% if (property.current_value > 0) { %>
+                      <button class="btn summary-edit-btn lift" data-val="<%=property.current_value%>">
+                        <span class="fe fe-edit-3"></span>
+                      </button>
+                      <% } %>
+                    </div>
                   </div> 
-      		      </div>
+                </div>
               </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-xl-8">
+               
   			  
-              <!-- Card -->
                 <div class="card">
-      		  
                   <div class="card-header">
                     <div class="row align-items-center">
                       <div class="col">
-
-                        <!-- Title -->
                         <h4 class="card-header-title">
                           Occupancy
                         </h4>
-
                       </div>
-      			
                       <div class="col-auto">
-
-                        <!-- Button -->
                         <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAddNewUnit">
                           Manage
                         </button>
-                    
                       </div>
-                     
                     </div> <!-- / .row -->
                   </div>
-      		
                   <div class="card-body">
                     <div class="row align-items-center justify-content-center">
                       <div class="col-4 text-center border-right">
-                        <!-- Heading -->
-                        <!-- <div class="chart chart-appended">
-                          <canvas id="tenancyChart" class="chart-canvas" data-labels="<%=chart_labels%>" data-dataset="[<%=chart_data%>]"></canvas>
-                        </div> -->
                         <div id="container" style="width:250px; height:200px;"></div>
                       </div>
                       <div class="col-4 text-center border-right">
@@ -470,35 +495,24 @@
                     </div>
                   </div>
                 </div>
-
                 <div class="card">
-            
                   <div class="card-header">
                     <div class="row align-items-center">
                       <div class="col">
-
-                        <!-- Title -->
                         <h4 class="card-header-title">
                           Income & Expenses
                         </h4>
-
                       </div>
-            
                       <div class="col-auto">
-
-                        <!-- Button -->
                         <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAddNewUnit">
                           Manage
                         </button>
-                    
                       </div>
-                     
                     </div> <!-- / .row -->
                   </div>
                   <div class="card-body">
                   </div>
                 </div>
-      			  
               </div>
     			
               <div class="col-12 col-xl-4">

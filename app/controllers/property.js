@@ -602,7 +602,6 @@ exports.adjust_summary = async function(req, res) {
   const { body: { property: { current_value, id } } } = req;
 
   const _current_value = current_value.replace(/,/g, '');
-  console.log(_current_value);
   const myproperty = await Properties.findOne({ id: id }, { _id: 0 });
   let rental_yield = calcRentalYield(myproperty.purchase_price, myproperty.rental_income);
   const new_values = { $set: { current_value: _current_value, rental_yield } };

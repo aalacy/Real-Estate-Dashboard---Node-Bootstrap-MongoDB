@@ -170,3 +170,33 @@ table.dataTable.table-sm .sorting:after, table.dataTable.table-sm .sorting_asc:a
         margin-left: 12px !important;
     }
 }
+
+.bg-grey {
+    background-color: #9babb4;
+}
+
+.h-2 {
+    height: .5rem;
+}
+
+.w-2 {
+    width: .5rem;
+}
+
+.text-lg {
+    font-size: 1.125rem;
+}
+
+.text-ss {
+    font-size: .65rem;
+}
+
+.summary-edit-btn {
+    position: absolute;
+    top: 10px;
+    right: 0;
+}
+
+.property-value-block:hover {
+    background-color: #f0f3f8;
+}

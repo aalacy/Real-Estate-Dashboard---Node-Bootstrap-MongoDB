@@ -823,6 +823,15 @@ $(function() {
     });
 
     // Use property value from api in adjust summary popup
+    $('.property-value-block').click(function(e) {
+      $('#property_current_value').val($('.summary-edit-btn').data('val'));
+      $('#modalAdjustSummary .modal-title').html('Update Property Value');
+      $('#modalAdjustSummary').modal()
+        .on('hidden.bs.modal', function() {
+          $('#modalAdjustSummary .modal-title').html('Add Property Value');
+        });
+    });
+
     $('#estimatePropertyBtn').click(function(e){
         const property = $(this).data('property');
         let missing_value = '';
