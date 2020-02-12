@@ -411,7 +411,7 @@
                                 <div class="w-2 h-2 bg-grey"></div>
                               </div>
                             </div> 
-                            Rent P.A: £<%=property.purchase_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                            Rent P.A: £<%=property.rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                           </div>
                         </div>
                         <div class="flex-1 text-grey-dark">
@@ -431,6 +431,7 @@
                             </div> 
                             <%=property.bathrooms%> bathrooms
                           </div>
+                          <% if (property.ownership) {%>
                           <div class="pb-4 d-flex align-items-center ng-star-inserted">
                             <div class="pr-4">
                               <div class="d-flex align-items-center text-teal">
@@ -439,6 +440,7 @@
                             </div> 
                             <%=property.ownership%>
                           </div>
+                          <% } %>
                         </div>
                       </div>
                     </div>
