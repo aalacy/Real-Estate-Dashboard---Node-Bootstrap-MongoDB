@@ -200,3 +200,13 @@ table.dataTable.table-sm .sorting:after, table.dataTable.table-sm .sorting_asc:a
 .property-value-block:hover {
     background-color: #f0f3f8;
 }
+
+.table-responsive .bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dataTables_filter {
+    display: none;
+}
