@@ -1016,12 +1016,26 @@ $(function() {
         chartInit(document.getElementById('tenancyChart').getContext('2d'), data, true, false);
       }
 
-      const cashflowStartDate = flatpickr("#cashflowStartDate", {
-        onChange: function(selectedDates, dateStr, instance) {
+      // const cashflowStartDate = flatpickr("#cashflowStartDate", {
+      //   onChange: function(selectedDates, dateStr, instance) {
           
-        },
-      });
-      const cashflowEndDate = flatpickr("#cashflowEndDate", {});
+      //   },
+      // });
+      // const cashflowEndDate = flatpickr("#cashflowEndDate", {});
+      // $('#cashflowStartDate').flatpickr({
+      //   mode: "range",
+      //   onChange: function(selectedDates, dateStr, instance) {
+      //     if (selectedDates.length == 2) {
+      //         if (!dateStr.includes('to')) {
+      //             startDate = endDate = dateStr;
+      //         } else {
+      //             startDate = dateStr.split('to')[0].trim();
+      //             endDate = dateStr.split('to')[1].trim();
+      //         }
+      //     }
+      //   }
+      // });
+      
 
     // thousands separator on input
     $('input.number').keyup(function(event) {

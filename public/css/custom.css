@@ -104,11 +104,11 @@ div.dataTables_wrapper div.dataTables_length select, div.dataTables_wrapper div.
 }
 
 table.dataTable.table-sm .sorting:before, table.dataTable.table-sm .sorting_asc:before, table.dataTable.table-sm .sorting_desc:before {
-    top: 11px;
+    top: 14px;
 }
 
 table.dataTable.table-sm .sorting:after, table.dataTable.table-sm .sorting_asc:after, table.dataTable.table-sm .sorting_desc:after {
-    top: 11px;
+    top: 14px;
 }
 
 .dataTables_paginate a {
@@ -224,4 +224,16 @@ div.dataTables_wrapper div.dataTables_paginate {
 
 table.dataTable {
     margin: 0 auto 2rem auto !important;
+}
+
+table.dataTable.table-sm .sorting.checkbox:after, table.dataTable.table-sm .sorting_asc.checkbox:after, table.dataTable.table-sm .sorting_desc.checkbox:after {
+    display: none;
+}
+
+table.dataTable.table-sm .sorting.checkbox:before, table.dataTable.table-sm .sorting_asc.checkbox:before, table.dataTable.table-sm .sorting_desc.checkbox:before {
+    display: none;
+}
+
+table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-child:after {
+    display: none;
 }

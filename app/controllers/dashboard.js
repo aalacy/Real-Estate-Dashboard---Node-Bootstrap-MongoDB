@@ -74,8 +74,11 @@ exports.index = async function(req, res) {
 exports.get_cash_flow = async function(req, res) {
   const { user } = req.session;
 
+  const { body: { startDate, endDate } }  = req;
+
+  console.log(new Date(startDate), new Date(endDate))
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
-  const transactions = await Transactions.find({ user_id: user.id }, { _id: 0 });
+  const transactions = await Transactions.find({$and:[{created_at:{$gte:new Date(startDate)}},{created_at:{$lte:new Date(endDate)}}, {user_id: user.id}]}, { _id: 0 });
   let Jan = 0, 
     Feb = 0, 
     Mar = 0, 

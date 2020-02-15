@@ -52,7 +52,7 @@ router.use('/current', auth.required, home.current);
  */
 
 router.get('/', auth.checkToken, dashboard.index);
-router.get('/dashboard/cash_flow', auth.checkToken, dashboard.get_cash_flow);
+router.post('/dashboard/cash_flow', auth.checkToken, dashboard.get_cash_flow);
 
 /**
  * Property
