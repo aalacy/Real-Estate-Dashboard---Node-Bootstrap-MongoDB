@@ -423,10 +423,14 @@
       let startDate = localStorage.getItem('startDate') || '';
       if (!startDate) {
         startDate = moment(thisYear + '-01-01');
+      } else {
+        startDate = moment(startDate);
       }
       let endDate = localStorage.getItem('endDate') || "";
       if (!endDate) {
         endDate = moment();
+      } else {
+        endDate = moment(endDate);
       }
       $('#cashflowStartDate').daterangepicker({
         startDate,
