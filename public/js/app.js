@@ -1095,12 +1095,50 @@ $(function() {
         }
     });
 
+    $(document).on('click', '.bulk-delete-transaction', function(e) {
+      e.preventDefault();
+      let ids = []
+      $(this).parents('.tab-pane').find('tbody').find('input.checkbox:checked').map( (i, e) => {
+        ids.push($(e).data('id'));
+      })
+      var data = {
+        transaction: {
+          ids: ids
+        }
+      };
+      confirmDialog("Are you sure?", (ans) => {
+        if (ans) {
+          const token = $('input[name="_csrf"]').val();
+          fetch('/transaction/delete', {
+              credentials: 'same-origin', // <-- includes cookies in the request
+              headers: {
+                  'CSRF-Token': token, 
+                  'Content-Type': 'application/json'
+              },
+              method: 'POST',
+              body: JSON.stringify(data)
+          })
+          .then(response => response.json())
+          .then(function(res) {
+            makeToast({message: res.message});
+
+            if (res.status == 200) {
+              location.href = '/transaction/all';
+            }
+          })
+          .catch(error => {
+              console.log(error);
+          });
+        }
+      });
+    });
+
     $(document).on('click', '.delete-transaction', function(e) {
       e.preventDefault();
       const parent = $(this).parents('.transaction-row');
       var data = {
         transaction: {
-          id: $(this).data('id')
+          ids: [$(this).data('id')]
         }
       };
       var self = $(this);

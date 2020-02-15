@@ -86,9 +86,7 @@ exports.delete = async function(req, res) {
 
   const { user } = req.session;
 
-  console.log(transaction);
-
-  Transactions.deleteOne({id: transaction.id}).then( (err) => {
+  Transactions.deleteMany({id: {'$in': transaction.ids}}).then( (err) => {
   	console.log(err)
   	res.json({
   		status:  200,

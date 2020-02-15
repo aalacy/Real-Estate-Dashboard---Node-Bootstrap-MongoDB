@@ -210,3 +210,18 @@ table.dataTable.table-sm .sorting:after, table.dataTable.table-sm .sorting_asc:a
 .dataTables_filter {
     display: none;
 }
+
+div.dataTables_wrapper div.dataTables_info {
+    display: inline;
+    margin-left: 1rem;
+}
+
+div.dataTables_wrapper div.dataTables_paginate {
+    display: inline;
+    float: right;
+    margin-right: 1rem;
+}
+
+table.dataTable {
+    margin: 0 auto 2rem auto !important;
+}
