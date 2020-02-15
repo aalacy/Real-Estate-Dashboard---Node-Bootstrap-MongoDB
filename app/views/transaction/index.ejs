@@ -7,7 +7,7 @@
   <body>
   <% include ../partials/topnav %>
 
-    <div class="modal  fade" id="modalAddNewTransaction" tabindex="-1" data-backdrop="false" role="dialog" aria-hidden="true">
+    <div class="modal  fade" id="modalAddNewTransaction" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="transaction">
         <form id="add-unit-form" class="form-inline" method="post" action="/transaction/create">
           <input type="hidden" name="_csrf" value="<%= token %>">
@@ -251,7 +251,7 @@
                   </div >
                 </div>
               </div>
-              <div class="table-responsive pb-4">
+              <div class="table-responsive">
                 <table class="table table-sm w-100 card-table" id="allTable">
                   <thead>
                     <tr>

@@ -214,16 +214,29 @@ table.dataTable.table-sm .sorting:after, table.dataTable.table-sm .sorting_asc:a
 div.dataTables_wrapper div.dataTables_info {
     display: inline;
     margin-left: 1rem;
+    position: absolute;
+    bottom: -60px;
+    margin-bottom: 1rem;
 }
 
 div.dataTables_wrapper div.dataTables_paginate {
     display: inline;
     float: right;
     margin-right: 1rem;
+    position: absolute;
+    bottom: -60px;
+    right: 0;
+    margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 320px) {
+    div.dataTables_wrapper div.dataTables_paginate {
+        bottom: -100px;
+    }
 }
 
 table.dataTable {
-    margin: 0 auto 2rem auto !important;
+    margin: 0 auto .5rem auto !important;
 }
 
 table.dataTable.table-sm .sorting.checkbox:after, table.dataTable.table-sm .sorting_asc.checkbox:after, table.dataTable.table-sm .sorting_desc.checkbox:after {
