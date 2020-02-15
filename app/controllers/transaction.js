@@ -38,6 +38,7 @@ exports.all_get = async function(req, res) {
   		id: transaction.id,
   		created_at: moment(transaction.created_at).format('YYYY-MM-DD'), 
   		propertyName,
+      property_id: transaction.property_id,
   		user: transaction.user,
   		category: transaction.category,
   		account: transaction.account,
@@ -78,7 +79,12 @@ exports.edit = async function(req, res) {
   const { body: { transaction } } = req;
 
   const { user } = req.session;
+  transaction.update_at = moment().format('YYYY-MM-DD HH:mm:ss');
+  const new_values = { $set: transaction };
 
+  return Transactions.updateOne({ id: transaction.id }, new_values).then(() => {
+    res.redirect('/transaction/all');
+  });
 }
 
 exports.delete = async function(req, res) {

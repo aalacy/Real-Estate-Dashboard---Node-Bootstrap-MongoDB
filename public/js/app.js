@@ -1183,7 +1183,38 @@ $(function() {
           });
         }
       });
+    });
+
+    $(document).on('click', '.view-transaction', function(e) {
+      e.preventDefault();
+      $('#addTransactionBtn').text('Update');
+      $('#transaction-modal-title').text('Update Transaction');
+      const transaction = $(this).data('val');
+      const amount = Number(transaction.amount.replace(',', ''));
+      if (amount > 0) {
+        $('#modalAddNewTransaction #income_option').click();
+      } else {
+        $('#modalAddNewTransaction #expenses_option').click();
+      }
+      $('#modalAddNewTransaction').find('form').attr('action', '/transaction/edit');
+      $('#transaction_id').val(transaction.id);
+      $('#transaction_user').val(transaction.user);
+      $('#transaction_created_at').val(transaction.created_at);
+      $('#transaction_amount').val(amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+      $('#transaction_property').val(transaction.property_id);
+      $('#transaction_property').trigger('change');
+      $('#transaction_category').val(transaction.category);
+      $('#transaction_category').val(transaction.category);
+      $('#transaction_account').val(transaction.account);
+      $('#transaction_note').val(transaction.note);
+      $('#modalAddNewTransaction').modal()
+        .on('hidden.bs.modal', function() {
+          $('#addTransactionBtn').text('Add');
+          $('#transaction-modal-title').text('Add a New Transaction');
+          $('#modalAddNewTransaction').find('form').attr('action', '/transaction/create');
+        });
     })
+
     /*
     *   Documents
     */

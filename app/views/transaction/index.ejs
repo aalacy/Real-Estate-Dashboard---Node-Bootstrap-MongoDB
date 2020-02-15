@@ -7,10 +7,11 @@
   <body>
   <% include ../partials/topnav %>
 
-    <div class="modal  fade" id="modalAddNewTransaction" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog" role="transaction">
+    <div class="modal  fade" id="modalAddNewTransaction" tabindex="-1" data-backdrop="false" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="transaction">
         <form id="add-unit-form" class="form-inline" method="post" action="/transaction/create">
           <input type="hidden" name="_csrf" value="<%= token %>">
+          <input type="hidden" id="transaction_id" name="transaction[id]" value="">
           <input type="hidden" id="status" name="document[status]" value="upload">
           <input type="hidden" id="document_id" name="document[id]" value="">
           <input type="hidden" id="document_size" name="document[size]" value="">
@@ -20,13 +21,13 @@
           <div class="modal-content bg-lighter">
             <div class="modal-header">
                 <!-- Header -->
-              <h3 class="modal-title" id="unit-modal-title">Add a New Transaction</h3>
+              <h3 class="modal-title" id="transaction-modal-title">Add a New Transaction</h3>
               <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
                 <label class="btn btn-outline-dark active">
-                  <input type="radio" name="transaction[type]" value="In" id="option1" autocomplete="off" checked> Create Income
+                  <input type="radio" name="transaction[type]" value="In" id="income_option" autocomplete="off" checked> Create Income
                 </label>
                 <label class="btn btn-outline-dark">
-                  <input type="radio" name="transaction[type]" value="Out" id="option2" autocomplete="off"> Create Expense
+                  <input type="radio" name="transaction[type]" value="Out" id="expenses_option" autocomplete="off"> Create Expense
                 </label>
               </div>
             </div>
@@ -156,7 +157,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary" id="addUnitBtn">Add</button>
+              <button type="submit" class="btn btn-primary" id="addTransactionBtn">Add</button>
             </div>
           </div>
         </form>
@@ -440,6 +441,7 @@
             	if (sign) {
             		amount = '-' + amount;
             	}
+              const val = JSON.stringify(transaction);
           		$('.transaction-list').append(`
           			<tr class="transaction-row">
                     <td>
@@ -469,7 +471,7 @@
 	                        <i class="fe fe-more-vertical"></i>
 	                      </a>
 	                      <div class="dropdown-menu dropdown-menu-right">
-	                        <a href="#" data-id="${transaction.id}" class="dropdown-item view-transaction">
+	                        <a href="#" data-val='${val}' class="dropdown-item view-transaction">
 	                          View
 	                        </a>
 	                        <a href="#" data-id="${transaction.id}"  class="dropdown-item delete-transaction">

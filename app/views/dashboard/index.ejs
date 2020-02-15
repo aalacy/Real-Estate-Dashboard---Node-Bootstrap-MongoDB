@@ -366,7 +366,7 @@
   <% include ../partials/scripts %>
 
   <script type="text/javascript">
-    const drawCashFlowChart = (data) => {
+    const drawCashFlowChart = (res) => {
       Highcharts.chart('cashflowChart', {
         chart: {
             type: 'column'
@@ -383,7 +383,13 @@
         series: [{
           showInLegend: false,  
           name: '',
-          data: data
+          data: res.data,
+          color: '#cdf7e5'
+        },{
+          showInLegend: false,  
+          name: '',
+          data: res.data1,
+          color: '#f9d7dd'
         }]
       });
     }
@@ -405,7 +411,7 @@
       .then(res => res.json())
       .then(res => {
           if (res.status == 200) {
-            drawCashFlowChart(res.data)
+            drawCashFlowChart(res)
           }
       })
       .catch(err => {
@@ -413,13 +419,22 @@
       });
     }
     $(function(){
-      const startDate = moment();
-      const endDate = moment().startOf('day').add(132, 'day');
+      const thisYear = moment().format('YYYY');
+      let startDate = localStorage.getItem('startDate') || '';
+      if (!startDate) {
+        startDate = moment(thisYear + '-01-01');
+      }
+      let endDate = localStorage.getItem('endDate') || "";
+      if (!endDate) {
+        endDate = moment();
+      }
       $('#cashflowStartDate').daterangepicker({
         startDate,
         endDate,
       }, function(start, end, label) {
-        redrawChart(start.format('YYYY-MM-DD'),  end.format('YYYY-MM-DD'))
+        redrawChart(start.format('YYYY-MM-DD'),  end.format('YYYY-MM-DD'));
+        localStorage.setItem('startDate', start);
+        localStorage.setItem('endDate', end);
       });
       
       redrawChart(startDate, endDate)

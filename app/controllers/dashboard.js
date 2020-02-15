@@ -91,52 +91,113 @@ exports.get_cash_flow = async function(req, res) {
     Oct = 0, 
     Nov = 0, 
     Dec = 0;
+  let Jan1 = 0, 
+    Feb1 = 0, 
+    Mar1 = 0, 
+    Apr1 = 0, 
+    May1 = 0, 
+    Jun1 = 0, 
+    Jul1 = 0, 
+    Aug1 = 0, 
+    Sep1 = 0, 
+    Oct1 = 0, 
+    Nov1 = 0, 
+    Dec1 = 0;
 
   transactions.map(transaction => {
     const date = moment(transaction.created_at).format('MMM');
     const amount = parseFloat(transaction.amount.replace(',', ''));
     switch (date) {
       case 'Jan':
-        Jan += amount;
+        if (amount > 0) {
+          Jan += amount;
+        } else {
+          Jan1 += amount;
+        }
         break;
       case 'Feb':
-        Feb += amount;
+        if (amount > 0) {
+          Feb += amount;
+        } else {
+          Feb1 += amount;
+        }
         break;
       case 'Mar':
-        Mar += amount;
+        if (amount > 0) {
+          Mar += amount;
+        } else {
+          Mar1 += amount;
+        }
         break;
       case 'Apr':
-        Apr += amount;
+        if (amount > 0) {
+          Apr += amount;
+        } else {
+          Apr1 += amount;
+        }
         break;
       case 'May':
-        May += amount;
+        if (amount > 0) {
+          May += amount;
+        } else {
+          May1 += amount;
+        }
         break;
       case 'Jun':
-        Jun += amount;
+        if (amount > 0) {
+          Jun += amount;
+        } else {
+          Jun1 += amount;
+        }
         break;
       case 'Jul':
-        Jul += amount;
+        if (amount > 0) {
+          Jul += amount;
+        } else {
+          Jul1 += amount;
+        }
         break;
       case 'Aug':
-        Aug += amount;
+        if (amount > 0) {
+          Aug += amount;
+        } else {
+          Aug1 += amount;
+        }
         break;
       case 'Sep':
-        Sep += amount;
+        if (amount > 0) {
+          Sep += amount;
+        } else {
+          Sep1 += amount;
+        }
         break;
       case 'Oct':
-        Oct += amount;
+        if (amount > 0) {
+          Oct += amount;
+        } else {
+          Oct1 += amount;
+        }
         break;
       case 'Nov':
-        Nov += amount;
+        if (amount > 0) {
+          Nov += amount;
+        } else {
+          Nov1 += amount;
+        }
         break;
       case 'Dec':
-        Dec += amount;
+        if (amount > 0) {
+          Dec += amount;
+        } else {
+          Dec1 += amount;
+        }
         break;
     }
   })
 
   return res.json({
     status: 200,
-    data: [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    data: [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec],
+    data1: [Jan1, Feb1, Mar1, Apr1, May1, Jun1, Jul1, Aug1, Sep1, Oct1, Nov1, Dec1]
   })
 }
