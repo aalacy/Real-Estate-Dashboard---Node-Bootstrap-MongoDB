@@ -280,3 +280,14 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 .dz-message .small-title {
     font-size: 13px;
 }
+
+.cover-image {
+    height: 250px;
+    object-fit: cover;
+}
+
+.thumb-image {
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
