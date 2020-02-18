@@ -101,7 +101,7 @@ exports.overview = async function(req, res) {
   }
   const { user } = req.session;
   const property = await Properties.findOne({ id: id }, { _id: 0 });
-  const documents = await Documents.find({ user_id: user.id, property_id: id, status: 'alive' }, { _id: 0 });
+  const documents = await Documents.find({ user_id: user.id, property_id: id, status: 'alive' }, { _id: 0 }).limit(3);
   let empty_cnt = 0;
   if (property.ownership == "") empty_cnt++;
   if (property.purchase_price == 0) empty_cnt++;

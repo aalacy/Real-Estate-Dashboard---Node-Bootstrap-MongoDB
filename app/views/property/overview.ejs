@@ -700,15 +700,15 @@
                     </div> <!-- / .row -->
                   </div>
                   <div class="card-body">
-                    <% for (var i = 0; i < documents.length; i++) { %>
-                      <% var date = new Date(documents[i].created_at); var uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();%>
+                    <% documents.forEach( document => { %>
+                      <% var date = new Date(document.created_at); var uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();%>
                       <div class="row align-items-center">
                         <div class="col-auto">
                         
                           <!-- Avatar -->
                           <a href="#!" class="avatar">
                             <div class="avatar-title rounded bg-white text-secondary">
-                              <span class="fe fe-file"></span>
+                              <span class="fe fe-file" style="font-size: 3rem;"></span>
                             </div>
                           </a>
 
@@ -717,21 +717,37 @@
 
                           <!-- Title -->
                           <h4 class="card-title mb-1">
-                            <a href="/<%=documents[i].path%>" target="_blank"><%=documents[i].filename %></a>
+                            <a href="/<%=document.path%>" target="_blank"><%=document.filename %></a>
                           </h4>
 
                           <!-- Time -->
                           <p class="card-text small text-muted">
-                            <%=documents[i].tag%> &bull; <%=uploaded_at %>
+                            <i class="fe fe-clock"></i>&nbsp;<%=uploaded_at %>
                           </p>
                         
                         </div>
+
+                        <div class="col-auto">
+
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                          <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#!" class="dropdown-item">
+                              Delete
+                            </a>
+                          </div>
+                        </div>
+
+                      </div>
                         
                       </div> <!-- / .row -->
 
                       <!-- Divider -->
                       <hr>
-                    <% } %>
+                    <% }) %>
                   </div> <!-- / .card-body -->
                 </div> <!-- / .card -->
 
