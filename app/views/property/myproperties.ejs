@@ -82,7 +82,8 @@
                         </div>
                       </div> <!-- / .row -->
                         <a href="/property/overview/<%=property.id%>/overview">
-                        <img src="/img/avatars/projects/project-1.jpg" alt="..." class="card-img-top">
+
+                          <img src="<%=property.image ? '/' + property.image : '/img/avatars/projects/project-1.jpg'%>" alt="..." class="card-img-top">
                         </a>
                         <div class="card-body">
                         <div class="row align-items-center">

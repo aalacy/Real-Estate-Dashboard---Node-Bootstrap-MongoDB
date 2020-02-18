@@ -15,6 +15,7 @@ var moment = require('moment');
 const PropertiesSchema = new Schema({
     id: {type: String, default: ''},
     user_id: {type: String, default: ''},
+    image: { type: String, default: '' },
     address: { type: String, default: '' },
     address2: { type: String, default: '' },
     city: { type: String, default: '' },

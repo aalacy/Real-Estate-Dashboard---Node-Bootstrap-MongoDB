@@ -9,41 +9,81 @@
     <div class="main-content">
   
       <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-12 col-lg-10 col-xl-8">
-                  <!-- HEADER -->
-            <div class="header">
-              <div class="container">
-      
-                <!-- Body -->
-                <div class="header-body">
-                  <div class="row align-items-end">
-                    <div class="col">
-      
-                      <!-- Title -->
-                      <h1 class="header-title">
-                        Create A New Property 
-                      </h1>
-      
+        <div class="header">
+          <div class="container">
+  
+            <!-- Body -->
+            <div class="header-body">
+              <div class="row align-items-end">
+                <div class="col">
+  
+                  <!-- Title -->
+                  <h1 class="header-title">
+                    Create A New Property 
+                  </h1>
+  
+                </div>
+                <div class="col-auto">
+                  
+                  <!-- Button -->
+                  <a href="/" class="btn btn-outline-primary mb-2">
+                    Cancel
+                  </a>
+
+                </div>
+              </div> <!-- / .row -->
+            </div> <!-- / .header-body -->
+  
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 mb-4">
+            <div class="col-10  justify-content-center">
+              <div class="dropzone dropzone-multiple">
+                <div class="fallback">
+                  <input type="file" class="custom-file-input" id="customFileUploadMultiple">
+                </div>
+
+                <div class="dz-message" data-dz-message>
+                  <img src="/img/avatars/projects/project-1.jpg" alt="property image" class="card-img-top mb-4">
+                  <div class="big-title h3">Upload a Cover Image</div>
+                  <div class="small-title text-muted">Max file size is 30MB per image, JPG, PNG, or GIF formats only.</div>
+                </div>
+
+                <!-- Preview -->
+                <ul class="dz-preview dz-preview-multiple list-group list-group-lg list-group-flush">
+                  <li class="list-group-item px-0">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <div class="avatar">
+                          <img class="avatar-img rounded" src="..." alt="..." data-dz-thumbnail>
+                        </div>
+                      </div>
+                      <div class="col ml-n3">
+                        <h4 class="mb-1" data-dz-name>...</h4>
+                        <p class="small text-muted mb-0" data-dz-size>...</p>
+                      </div>
+                      <div class="col-auto">
+                        
+                        <div class="dropdown">
+                          <a href="#" class="dropdown-item" title="Remove file" data-dz-remove>
+                            <i class="fe fe-trash"></i>
+                          </a>
+                        </div>
+
+                      </div>
                     </div>
-                    <div class="col-auto">
-                      
-                      <!-- Button -->
-                      <a href="/" class="btn btn-outline-primary mb-2">
-                        Cancel
-                      </a>
-    
-                    </div>
-                  </div> <!-- / .row -->
-                </div> <!-- / .header-body -->
-      
+                  </li>
+                </ul>
               </div>
-      </div> <!-- / .header -->
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6">
             <div class="row">
               <div class="col-12 col-md-6">
-                <div class="card bg-light border lift cursor-hand property-unit" style="height: 90%;" data-name="1">
+                <div class="card bg-light border cursor-hand property-unit active" data-name="1">
                   <div class="card-body text-center">
-                    <h1 class="mb-4"><i class="fe fe-home"></i> <i class="fe fe-check-circle text-success float-right unit-check"></i></h1>
+                    <h1 class="mb-4"><i class="fe fe-home"></i> <i class="fe fe-check-circle text-success float-right"></i></h1>
                     <h3 class="mb-2">
                       Single-unit property
                     </h3>
@@ -57,9 +97,9 @@
               <div class="col-12 col-md-6">
 
                 <!-- Warning -->
-                <div class="card bg-light border lift cursor-hand property-unit multi-unit" data-name="2">
+                <div class="card bg-light border cursor-hand property-unit multi-unit" data-name="2">
                   <div class="card-body text-center">
-                    <h1 class="mb-4"><i class="fe fe-layers"></i> <i class="fe fe-check-circle text-success float-right unit-check d-c-none"></i></h1>
+                    <h1 class="mb-4"><i class="fe fe-layers"></i> <i class="fe fe-check-circle text-success float-right"></i></h1>
                     <h3 class="mb-2">
                         Multi-unit property
                     </h3>
@@ -79,6 +119,12 @@
               <input type="hidden" name="_csrf" value="<%= token %>">
               <input type="hidden" id="property_fulladdress" name="property[fulladdress]" value="">
               <input type="hidden" id="property_region" name="property[region]" value="">
+              <input type="hidden" id="status" name="document[status]" value="upload">
+              <input type="hidden" id="document_id" name="document[id]" value="">
+              <input type="hidden" id="document_size" name="document[size]" value="">
+              <input type="hidden" id="document_mimetype" name="document[mimetype]" value="">
+              <input type="hidden" id="document_filename" name="document[filename]" value="">
+              <input type="hidden" id="document_path" name="document[path]" value="">
               <!-- Project name -->
               <div class="row">
                 <div class="col-12 col-md-6">
@@ -184,7 +230,6 @@
               </button>
 
             </form>
-
           </div>
         </div> <!-- / .row -->
       </div> 
@@ -193,6 +238,14 @@
     <!-- JAVASCRIPT
   ================================================== -->
     <% include ../partials/scripts %>
+
+    <script type="text/javascript">
+      $(function() {
+        if (document.querySelector('.dropzone')) {
+          Dropzone_init( document.querySelector('.dropzone'));
+        }
+      })
+    </script>
 
     </body>
 </html>

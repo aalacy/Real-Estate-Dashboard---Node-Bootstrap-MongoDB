@@ -3,12 +3,14 @@
  */
 
 const mongoose = require('mongoose');
+const Users = mongoose.model('Users');
 const Properties = mongoose.model('Properties');
 const Transactions = mongoose.model('Transactions');
 var moment = require('moment');
 
 exports.index = async function(req, res) {
   const { user } = req.session;
+  const current_user = await Users.findOne({id: user.id}, {_id: 0});
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 }).sort('-rental_yield');
   let portfolio_value = 0;
   let total_purchase_price = 0;
@@ -50,13 +52,11 @@ exports.index = async function(req, res) {
     badge_value = portfolio_value - total_purchase_price;
   } 
 
-  console.log(user);
-
   const occupancy = all_units == 0 ? 0.0 : (occupied * 100 / all_units).toFixed(2);
   res.render('dashboard/index', {
     token: req.csrfToken(),
     title: 'Avenue - Dashboard',
-    username: user.first_name,
+    username: current_user.first_name,
     properties: properties,
     portfolio_value,
     rental_income,

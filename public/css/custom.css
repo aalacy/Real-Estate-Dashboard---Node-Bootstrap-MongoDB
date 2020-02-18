@@ -250,3 +250,33 @@ table.dataTable.table-sm .sorting.checkbox:before, table.dataTable.table-sm .sor
 table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-child:after {
     display: none;
 }
+
+/* add new property */
+.property-unit {
+    transition: all .35s ease;
+}
+
+.property-unit.active, .property-unit:focus, .property-unit:hover {
+    box-shadow: 0 .215rem .15rem #22D880,0 .25rem .25rem -.5rem #22D880;
+}
+
+.property-unit .fe-check-circle {
+    display: none;
+    color: #22D880 !important;
+}
+
+.property-unit.active .fe-check-circle {
+    display: inherit;
+}
+
+.dz-message {
+    padding: 0 0 2rem 0 !important;
+}
+
+.dz-message .big-title {
+    color: #22D880;
+}
+
+.dz-message .small-title {
+    font-size: 13px;
+}

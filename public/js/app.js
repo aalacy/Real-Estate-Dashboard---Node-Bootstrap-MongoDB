@@ -13,9 +13,9 @@ const PROPERTY_TYPE = {
 
 const toComma = function(val) {
     if (val) {
-        return val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+      return val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     } else {
-        return "0";
+      return "0";
     }
 };
 
@@ -213,6 +213,7 @@ function doPopulate() {
             var mydoc = JSON.parse(res.xhr.response);
             if ($('#status').val() == 'upload') {
               $('#document_id').val(mydoc.id);
+              $('#document_path').val(mydoc.path);
             } else {
               $('#document_size').val(mydoc.size);
               $('#document_mimetype').val( mydoc.mimetype);
@@ -749,8 +750,7 @@ $(function() {
 
     //  Create new property
     $('.property-unit').click(function(){
-        $('.property-unit').find('.unit-check').addClass('d-c-none');
-        $(this).find('.unit-check').removeClass('d-c-none');
+        $('.property-unit').toggleClass('active');
         $('#property_units').val($(this).data('name'));
         if ($(this).hasClass('multi-unit')) {
             $('#property_units').prop('readonly', false);

@@ -201,7 +201,7 @@ exports.search = async function(req, res) {
 };
 
 exports.create = async function(req, res) {
-  const { body: { property } } = req;
+  const { body: { property, document } } = req;
 
   const { user } = req.session;
   property.user_id = user.id;
@@ -226,6 +226,7 @@ exports.create = async function(req, res) {
     const myproperty = new Properties(property);
     myproperty.status = 'Vacant';
     myproperty.id = uuidv4();
+    myproperty.image = document.path;
     for (let i = 1; i <= parseInt(property.units); i++) {
       const unit = {
         id: uuidv4(),
