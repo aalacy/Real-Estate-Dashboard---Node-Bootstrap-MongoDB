@@ -264,10 +264,17 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 .property-unit .fe-check-circle {
     display: none;
     color: #22D880 !important;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
 }
 
 .property-unit.active .fe-check-circle {
     display: inherit;
+}
+
+.property-unit div.text-center {
+    padding: 1rem;
 }
 
 .dz-message {
@@ -292,3 +299,4 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     object-fit: cover;
     border-radius: 5px;
 }
+
