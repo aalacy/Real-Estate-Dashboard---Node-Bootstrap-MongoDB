@@ -335,7 +335,7 @@
                         <div class="col">
 
                           <!-- Search -->
-                          <a href="/property/overview/<%=property.id%>" class=" btn btn-link text-decoration-underline text-body m-0" >
+                          <a href="/property/overview/<%=property.id%>" class=" btn btn-link text-body m-0" >
                             <h2 class="m-0"><%=property.address%>, <%=property.city%></h2>
                           </a>
                           
@@ -359,7 +359,7 @@
                         <% property.tenancies.forEach( function(unit){ %>
                           <% if (unit.rent_frequency == 'Vacant') {%>
                             <div class="card">
-                              <div class="card-body">
+                              <div class="p-3">
                                 <div class="row align-items-center unit-item">
                                   <div class="col-auto">
                                 
@@ -384,16 +384,16 @@
                                   <div class="col-4">
                                     <!-- Title -->
                                     <h4 class="card-title mb-1">
-                                      Not Collecting Rent
+                                      ●&nbsp;Not Collecting Rent
                                     </h4>
                                     
                                   </div>
                                   <div class="col-2">
                                     <% if (unit.tenants.length == 0) { %>
-                                      No Tenants
+                                      ●&nbsp;No Tenants
                                     <% } %>
                                     <% if (unit.tenants.length == 1) { %> 
-                                      1 Tenant
+                                      ●&nbsp;1 Tenant
                                     <% } %>
                                     <% if (unit.tenants.length > 1) { %> 
                                       <%=unit.tenants%> Tenants
