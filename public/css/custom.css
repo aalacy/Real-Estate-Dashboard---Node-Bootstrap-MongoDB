@@ -257,7 +257,8 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 }
 
 .property-unit.active, .property-unit:focus, .property-unit:hover {
-    box-shadow: 0 .215rem .15rem #22D880,0 .25rem .25rem -.5rem #22D880;
+    /*box-shadow: 0 .215rem .15rem #22D880,0 .25rem .25rem -.5rem #22D880;*/
+    border: 1px solid #22D880;
 }
 
 .property-unit .fe-check-circle {
@@ -290,4 +291,9 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     height: 100%;
     object-fit: cover;
     border-radius: 5px;
+}
+
+.new-top-image {
+    object-fit: cover;
+    max-height: 200px;
 }

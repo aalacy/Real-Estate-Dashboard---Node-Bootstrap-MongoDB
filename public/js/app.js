@@ -211,6 +211,7 @@ function doPopulate() {
         if (res.status == "success") {
           try {
             var mydoc = JSON.parse(res.xhr.response);
+            $('.dropzone-image').attr('src', res.dataURL);
             if ($('#status').val() == 'upload') {
               $('#document_id').val(mydoc.id);
               $('#document_path').val(mydoc.path);
