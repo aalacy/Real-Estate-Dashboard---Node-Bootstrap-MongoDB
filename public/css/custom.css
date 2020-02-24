@@ -283,7 +283,7 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 }
 
 .cover-image {
-    height: 250px;
+    height: 200px;
     object-fit: cover;
 }
 
@@ -291,9 +291,4 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     height: 100%;
     object-fit: cover;
     border-radius: 5px;
-}
-
-.new-top-image {
-    object-fit: cover;
-    max-height: 200px;
 }
