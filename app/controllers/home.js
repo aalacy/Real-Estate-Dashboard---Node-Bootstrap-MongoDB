@@ -278,11 +278,15 @@ exports.update_settings = async function(req, res) {
       message: 'User with this email does not exist'
     });
   }
-  if (user.password && !myuser.validatePassword(user.old_password)) {
-    return res.status(200).json({
-      status: 422,
-      message: 'Old password is not correct!'
-    });
+  if (user.password) {
+    if (!myuser.validatePassword(user.old_password)) {
+      return res.status(200).json({
+        status: 422,
+        message: 'Old password is not correct!'
+      });
+    } else {
+      myuser.setPassword(user.password);
+    }
   }
   myuser.first_name = user.first_name;
   myuser.last_name = user.last_name;

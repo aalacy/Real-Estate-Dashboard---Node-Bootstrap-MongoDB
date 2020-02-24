@@ -670,6 +670,8 @@ $(function() {
                 id: $('#user_id').val(),
                 first_name: $('#first_name').val(),
                 last_name: $('#last_name').val(),
+                password: $('#password1').val(),
+                old_password: $('#password').val()
             }
         }
         const token = $('meta[name="csrf"]').attr('content');
