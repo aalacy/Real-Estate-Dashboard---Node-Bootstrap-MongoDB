@@ -215,6 +215,7 @@ function doPopulate() {
             if ($('#status').val() == 'upload') {
               $('#document_id').val(mydoc.id);
               $('#document_path').val(mydoc.path);
+              $('.big-title').text('Upload a New Image')
             } else {
               $('#document_size').val(mydoc.size);
               $('#document_mimetype').val( mydoc.mimetype);

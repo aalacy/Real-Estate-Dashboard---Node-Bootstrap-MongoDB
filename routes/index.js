@@ -59,6 +59,7 @@ router.post('/dashboard/cash_flow', auth.checkToken, dashboard.get_cash_flow);
  */
 
 router.get('/property/my', auth.checkToken, property.my);
+router.get('/property/all', auth.checkToken, property.all);
 router.get('/property/overview/:id/:tabs', auth.checkToken, property.overview);
 router.get('/property/overview/:id/:tabs/:unit_id', auth.checkToken, property.overview);
 router.get('/property/overview/:id', auth.checkToken, property.overview);

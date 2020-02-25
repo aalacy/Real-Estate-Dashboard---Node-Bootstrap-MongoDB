@@ -251,6 +251,11 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     display: none;
 }
 
+/* my property */
+.property-block {
+    transition: all 1.35s ease;
+}
+
 /* add new property */
 .property-unit {
     transition: all .35s ease;
