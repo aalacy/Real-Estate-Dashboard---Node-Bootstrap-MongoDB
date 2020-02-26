@@ -708,7 +708,7 @@
                           <!-- Avatar -->
                           <a href="/<%=document.path%>" class="avatar">
                             <div class="avatar-title rounded bg-white text-secondary">
-                              <span class="fe fe-file" style="font-size: 3rem;"></span>
+                              <span class="fe fe-folder" style="font-size: 2rem;"></span>
                             </div>
                           </a>
 
@@ -716,8 +716,10 @@
                         <div class="col ml-n2">
 
                           <!-- Title -->
-                          <h4 class="card-title mb-1">
-                            <a href="/<%=document.path%>" target="_blank"><%=document.filename %></a>
+                          <h4 class="card-title mb-1 document-name">
+                            <a href="/<%=document.path%>" target="_blank">
+                              <%=document.filename %>
+                            </a>
                           </h4>
 
                           <!-- Time -->

@@ -305,3 +305,9 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     border-radius: 5px;
 }
 
+.document-name {
+    white-space: nowrap; 
+    max-width: 180px; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
