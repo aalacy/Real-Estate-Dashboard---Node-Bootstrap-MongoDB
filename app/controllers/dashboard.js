@@ -8,6 +8,60 @@ const Properties = mongoose.model('Properties');
 const Transactions = mongoose.model('Transactions');
 var moment = require('moment');
 
+Colors = {};
+Colors.names = {
+    aqua: "#00ffff",
+    azure: "#f0ffff",
+    beige: "#f5f5dc",
+    blue: "#0000ff",
+    brown: "#a52a2a",
+    cyan: "#00ffff",
+    darkblue: "#00008b",
+    darkcyan: "#008b8b",
+    darkgrey: "#a9a9a9",
+    darkgreen: "#006400",
+    darkkhaki: "#bdb76b",
+    darkmagenta: "#8b008b",
+    darkolivegreen: "#556b2f",
+    darkorange: "#ff8c00",
+    darkorchid: "#9932cc",
+    darkred: "#8b0000",
+    darksalmon: "#e9967a",
+    darkviolet: "#9400d3",
+    fuchsia: "#ff00ff",
+    gold: "#ffd700",
+    green: "#008000",
+    indigo: "#4b0082",
+    khaki: "#f0e68c",
+    lightblue: "#add8e6",
+    lightcyan: "#e0ffff",
+    lightgreen: "#90ee90",
+    lightgrey: "#d3d3d3",
+    lightpink: "#ffb6c1",
+    lightyellow: "#ffffe0",
+    lime: "#00ff00",
+    magenta: "#ff00ff",
+    maroon: "#800000",
+    navy: "#000080",
+    olive: "#808000",
+    orange: "#ffa500",
+    pink: "#ffc0cb",
+    purple: "#800080",
+    violet: "#800080",
+    red: "#ff0000",
+    silver: "#c0c0c0",
+    yellow: "#ffff00"
+};
+
+Colors.random = function() {
+    var result;
+    var count = 0;
+    for (var prop in this.names)
+        if (Math.random() < 1/++count)
+           result = prop;
+    return Colors.names[result];
+};
+
 exports.index = async function(req, res) {
   const { user } = req.session;
   const current_user = await Users.findOne({id: user.id}, {_id: 0});
@@ -79,125 +133,67 @@ exports.get_cash_flow = async function(req, res) {
   console.log(new Date(startDate), new Date(endDate))
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
   const transactions = await Transactions.find({$and:[{created_at:{$gte:new Date(startDate)}},{created_at:{$lte:new Date(endDate)}}, {user_id: user.id}]}, { _id: 0 });
-  let Jan = 0, 
-    Feb = 0, 
-    Mar = 0, 
-    Apr = 0, 
-    May = 0, 
-    Jun = 0, 
-    Jul = 0, 
-    Aug = 0, 
-    Sep = 0, 
-    Oct = 0, 
-    Nov = 0, 
-    Dec = 0;
-  let Jan1 = 0, 
-    Feb1 = 0, 
-    Mar1 = 0, 
-    Apr1 = 0, 
-    May1 = 0, 
-    Jun1 = 0, 
-    Jul1 = 0, 
-    Aug1 = 0, 
-    Sep1 = 0, 
-    Oct1 = 0, 
-    Nov1 = 0, 
-    Dec1 = 0;
+
+  let data = {}
+  for (let i = 0; i < 12; i++) {
+    properties.forEach(property => {
+      data[property.id] = {
+          showInLegend: false,  
+          name: property.address + ',' + property.city,
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          color: Colors.random()
+        }
+    })
+  }
 
   transactions.map(transaction => {
     const date = moment(transaction.created_at).format('MMM');
-    const amount = parseFloat(transaction.amount.replace(',', ''));
+    let amount = 0;
+    if (transaction.amount) {
+      amount = parseFloat(transaction.amount.replace(',', ''));
+    }
     switch (date) {
       case 'Jan':
-        if (amount > 0) {
-          Jan += amount;
-        } else {
-          Jan1 += amount;
-        }
+        data[transaction.property_id]['data'][0] += amount;
         break;
       case 'Feb':
-        if (amount > 0) {
-          Feb += amount;
-        } else {
-          Feb1 += amount;
-        }
+        data[transaction.property_id]['data'][1] += amount;
         break;
       case 'Mar':
-        if (amount > 0) {
-          Mar += amount;
-        } else {
-          Mar1 += amount;
-        }
+        data[transaction.property_id]['data'][2] += amount;
         break;
       case 'Apr':
-        if (amount > 0) {
-          Apr += amount;
-        } else {
-          Apr1 += amount;
-        }
+        data[transaction.property_id]['data'][3] += amount;
         break;
       case 'May':
-        if (amount > 0) {
-          May += amount;
-        } else {
-          May1 += amount;
-        }
+        data[transaction.property_id]['data'][4] += amount;
         break;
       case 'Jun':
-        if (amount > 0) {
-          Jun += amount;
-        } else {
-          Jun1 += amount;
-        }
+        data[transaction.property_id]['data'][5] += amount;
         break;
       case 'Jul':
-        if (amount > 0) {
-          Jul += amount;
-        } else {
-          Jul1 += amount;
-        }
+        data[transaction.property_id]['data'][6] += amount;
         break;
       case 'Aug':
-        if (amount > 0) {
-          Aug += amount;
-        } else {
-          Aug1 += amount;
-        }
+        data[transaction.property_id]['data'][7] += amount;
         break;
       case 'Sep':
-        if (amount > 0) {
-          Sep += amount;
-        } else {
-          Sep1 += amount;
-        }
+        data[transaction.property_id]['data'][8] += amount;
         break;
       case 'Oct':
-        if (amount > 0) {
-          Oct += amount;
-        } else {
-          Oct1 += amount;
-        }
+        data[transaction.property_id]['data'][9] += amount;
         break;
       case 'Nov':
-        if (amount > 0) {
-          Nov += amount;
-        } else {
-          Nov1 += amount;
-        }
+        data[transaction.property_id]['data'][10] += amount;
         break;
       case 'Dec':
-        if (amount > 0) {
-          Dec += amount;
-        } else {
-          Dec1 += amount;
-        }
+        data[transaction.property_id]['data'][11] += amount;
         break;
     }
   })
 
   return res.json({
     status: 200,
-    data: [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec],
-    data1: [Jan1, Feb1, Mar1, Apr1, May1, Jun1, Jul1, Aug1, Sep1, Oct1, Nov1, Dec1]
+    data: data,
   })
 }

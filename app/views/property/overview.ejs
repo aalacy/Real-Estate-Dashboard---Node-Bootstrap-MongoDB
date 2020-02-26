@@ -452,7 +452,7 @@
                         </button>
                         <% } else { %>
                         <div>
-                          <span class="text-lg font-medium">£<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%></span>
+                          <span class="h2 font-medium">£<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%></span>
                           <div class="text-uppercase text-muted text-ss">Property Value</div>
                         </div>
                         <% } %>
@@ -706,7 +706,7 @@
                         <div class="col-auto">
                         
                           <!-- Avatar -->
-                          <a href="#!" class="avatar">
+                          <a href="/<%=document.path%>" class="avatar">
                             <div class="avatar-title rounded bg-white text-secondary">
                               <span class="fe fe-file" style="font-size: 3rem;"></span>
                             </div>
@@ -904,8 +904,8 @@
                       <div class="col">
 
                         <!-- Title -->
-                        <h4 class="card-header-title unit-name">
-                          Single Unit
+                        <h4 class="card-header-title">
+                          <span class="unit-name">Single Unit</span> <span class="unit-badge"></span>
                         </h4>
 
                       </div>
@@ -1166,8 +1166,10 @@
           }
           if (unit.rent_price) {
             $('.unit-rent-section').html(`£<span class="unit-rent">${toComma(unit.rent_price)}</span> <span class="unit-frequency">${unit.rent_frequency}</span> Rent`);
+            $('.unit-badge').html('<span class="badge badge-success p-2 ml-2">Active</span>');
           } else {
             $('.unit-rent-section').text('No rent price ');
+            $('.unit-badge').html('<span class="badge badge-danger p-2 ml-2">Inactive</span>');
           }
 
           if (unit.tenants.length) {

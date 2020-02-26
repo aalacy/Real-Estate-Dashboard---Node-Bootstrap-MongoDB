@@ -265,7 +265,7 @@
                         </h4>
   
                       </div>
-                      <div class="col-auto mt-4 d-flex flex-wrap">
+                      <div class="col-auto d-flex flex-wrap">
                       
                         <!-- Link -->
                         <!-- <input type="text" id="cashflowStartDate" class="form-control text-right mb-2 mr-5" style="width: 300px;">
@@ -366,7 +366,17 @@
   <% include ../partials/scripts %>
 
   <script type="text/javascript">
+    const thisYear = moment().format('YYYY');
     const drawCashFlowChart = (res) => {
+      const _categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      let categories = []
+      _categories.forEach(category => {
+        categories.push(category + '-' + thisYear.substr(2, 2))
+      });
+      let series = [];
+      Object.keys(res.data).map(key => {
+        series.push(res.data[key]);
+      });
       Highcharts.chart('cashflowChart', {
         chart: {
             type: 'column'
@@ -375,22 +385,29 @@
             text: ''
         },
         xAxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+          categories: categories
+        },
+        yAxis: {
+          labels: {
+            formatter: function(e) {
+              const sign = parseFloat(e.value) < 0 ? '-' : '';
+              return sign + '£' + Math.abs(e.value)
+              // return sign + '£' + numeral(Math.abs(e.value)).format('0.0a')
+            }
+          }
         },
         credits: {
             enabled: false
         },
-        series: [{
-          showInLegend: false,  
-          name: '',
-          data: res.data,
-          color: '#22D880'
-        },{
-          showInLegend: false,  
-          name: '',
-          data: res.data1,
-          color: '#E43A5A'
-        }]
+        series,
+        plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
       });
     }
     const redrawChart = function(startDate='', endDate) {
@@ -419,7 +436,7 @@
       });
     }
     $(function(){
-      const thisYear = moment().format('YYYY');
+      
       let startDate = localStorage.getItem('startDate') || '';
       if (!startDate) {
         startDate = moment(thisYear + '-01-01');
