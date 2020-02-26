@@ -83,15 +83,17 @@ function doPopulate() {
             <div class="col-auto">
               
               <!-- Avatar -->
-              <h1 class="mb-0 avatar avatar-md">
-                <img src="/img/icons/unit.png" class="avatar-img">
-              </h1>
+              <a href="/${doc.path}" class="avatar">
+                <div class="avatar-title rounded bg-white text-secondary">
+                  <span class="fe fe-folder" style="font-size: 2rem;"></span>
+                </div>
+              </a>
 
             </div>
             <div class="col ml-n2">
 
               <!-- Title -->
-              <h4 class="card-title mb-1 name">
+              <h4 class="card-title mb-1 name document-name document-lg-name">
                 <a target="_blank" href="/${doc.path}">${doc.filename}</a>
               </h4>
 
@@ -207,6 +209,9 @@ function doPopulate() {
           }
         });
       },
+      processing: function(res) {
+        $('.upload-img-btn').attr('disabled', true)
+      },
       success: function(res) {
         if (res.status == "success") {
           try {
@@ -226,6 +231,9 @@ function doPopulate() {
         } else {
           makeToast({message: "Sorry, Something wrong happened on the server while uploading your document"});
         }
+      },
+      complete: function(res) {
+        $('.upload-img-btn').attr('disabled', false)
       }
     }
     var options = Object.assign(elementOptions, defaultOptions);
@@ -309,7 +317,7 @@ function confirmDialog(message, handler){
   * Making toast
   */
 
-const makeToast = function({title='Avenue', message='', showLogo=true}) {
+const makeToast = function({title='Avenue', message='', showLogo=false}) {
     $('.toast .toast-body').html(message);
     $('.toast .toast-title').html(title);
     if (!showLogo) {
@@ -1347,6 +1355,11 @@ $(function() {
       }
 
       $('#modalUpload').modal();
+    });
+
+    $('#cancelDocumentBtn').click(function(e){
+      $('#trashImage').click();
+      $('#modalUpload').modal('hide');
     });
 
     $('#uploadDocumentBtn').click(function(e) {
