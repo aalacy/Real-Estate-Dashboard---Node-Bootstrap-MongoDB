@@ -81,9 +81,21 @@
         properties.map( (property, i) => {
           if (isPropertyFiltered(property, search)) {
             let status = ''
+            let badge = '';
             if (property.status) { 
-              const badge = property.status == 'Vacant' && property.units == 1 ? 'danger' : '';
-              status = `<h2><span class="badge badge-soft-${badge} ml-1 mt-n1 text-capitalize">${property.status}</span><h2>`
+              if (property.units == 1) {
+                badge = property.status == 'Vacant' ? 'danger' : '';
+                status = `<h2><span class="badge badge-soft-${badge} ml-1 mt-n1 text-capitalize">${property.status}</span><h2>`;
+              } else {
+                let cnt_vacant = 0;
+                property.tenancies.forEach(unit => {
+                  if (unit.rent_frequency == 'Vacant') {
+                    cnt_vacant++;
+                  }
+                });
+                badge = cnt_vacant > 0 ? 'success' : '';
+                status = `<h2><span class="badge badge-${badge} ml-1 mt-n1 text-capitalize">${cnt_vacant} Vacants</span><h2>`;
+              }
             }
 
             const image = property.image ? '/' + property.image : '/img/avatars/projects/project-1.jpg';
@@ -95,7 +107,7 @@
                     <div class="col">
                       <div class="row align-items-center no-gutters">
                           <div class="col-auto">
-                            ${status}
+                            ${ badge ? status : ''}
                           </div>
                       </div>
                     </div>

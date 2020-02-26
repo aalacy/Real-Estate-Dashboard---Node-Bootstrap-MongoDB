@@ -1166,10 +1166,10 @@
           }
           if (unit.rent_price) {
             $('.unit-rent-section').html(`£<span class="unit-rent">${toComma(unit.rent_price)}</span> <span class="unit-frequency">${unit.rent_frequency}</span> Rent`);
-            $('.unit-badge').html('<span class="badge badge-success p-2 ml-2">Active</span>');
+            $('.unit-badge').html('<span class="badge badge-primary font-weight-bolder p-2 ml-2">Active</span>');
           } else {
             $('.unit-rent-section').text('No rent price ');
-            $('.unit-badge').html('<span class="badge badge-danger p-2 ml-2">Inactive</span>');
+            $('.unit-badge').html('<span class="badge badge-danger font-weight-bolder p-2 ml-2">Inactive</span>');
           }
 
           if (unit.tenants.length) {
