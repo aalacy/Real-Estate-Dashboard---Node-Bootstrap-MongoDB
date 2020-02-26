@@ -146,54 +146,122 @@ exports.get_cash_flow = async function(req, res) {
     })
   }
 
+  let income_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  let expenses_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
   transactions.map(transaction => {
     const date = moment(transaction.created_at).format('MMM');
     let amount = 0;
     if (transaction.amount) {
       amount = parseFloat(transaction.amount.replace(',', ''));
     }
+    console.log('', date, amount);
     switch (date) {
       case 'Jan':
-        data[transaction.property_id]['data'][0] += amount;
+        if (amount >= 0) {
+          income_data[0] += amount;
+        } else {
+          expenses_data[0] += amount
+        }
         break;
       case 'Feb':
-        data[transaction.property_id]['data'][1] += amount;
+        if (amount > 0) {
+          income_data[1] += amount;
+        } else {
+          expenses_data[1] += amount
+        }
         break;
       case 'Mar':
-        data[transaction.property_id]['data'][2] += amount;
+        if (amount > 0) {
+          income_data[2] += amount;
+        } else {
+          expenses_data[2] += amount
+        }
         break;
       case 'Apr':
-        data[transaction.property_id]['data'][3] += amount;
+        if (amount > 0) {
+          income_data[3] += amount;
+        } else {
+          expenses_data[3] += amount
+        }
         break;
       case 'May':
-        data[transaction.property_id]['data'][4] += amount;
+        if (amount > 0) {
+          income_data[4] += amount;
+        } else {
+          expenses_data[4] += amount
+        }
         break;
       case 'Jun':
-        data[transaction.property_id]['data'][5] += amount;
+        if (amount > 0) {
+          income_data[5] += amount;
+        } else {
+          expenses_data[5] += amount
+        }
         break;
       case 'Jul':
-        data[transaction.property_id]['data'][6] += amount;
+        if (amount > 0) {
+          income_data[6] += amount;
+        } else {
+          expenses_data[6] += amount
+        }
         break;
       case 'Aug':
-        data[transaction.property_id]['data'][7] += amount;
+        if (amount > 0) {
+          income_data[7] += amount;
+        } else {
+          expenses_data[7] += amount
+        }
         break;
       case 'Sep':
-        data[transaction.property_id]['data'][8] += amount;
+        if (amount > 0) {
+          income_data[8] += amount;
+        } else {
+          expenses_data[8] += amount
+        }
         break;
       case 'Oct':
-        data[transaction.property_id]['data'][9] += amount;
+        if (amount > 0) {
+          income_data[9] += amount;
+        } else {
+          expenses_data[9] += amount
+        }
         break;
       case 'Nov':
-        data[transaction.property_id]['data'][10] += amount;
+        if (amount > 0) {
+          income_data[10] += amount;
+        } else {
+          expenses_data[10] += amount
+        }
         break;
       case 'Dec':
-        data[transaction.property_id]['data'][11] += amount;
+        if (amount > 0) {
+          income_data[11] += amount;
+        } else {
+          expenses_data[11] += amount
+        }
         break;
     }
   })
 
+  console.log(income_data)
+  console.log(expenses_data)
+
   return res.json({
     status: 200,
-    data: data,
+    data: [
+      {
+        showInLegend: false,  
+        name: 'Income',
+        data: income_data,
+        color: '#22D880'
+      },
+      {
+        showInLegend: false,  
+        name: 'Expensed',
+        data: expenses_data,
+        color: '#E43A5A'
+      }
+    ],
   })
 }
