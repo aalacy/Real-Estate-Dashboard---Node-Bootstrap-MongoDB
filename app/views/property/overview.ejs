@@ -694,7 +694,7 @@
                       <div class="col-auto">
 
                         <!-- Link -->
-                        <a href="#!" class="small">View all</a>
+                        <a href="/property/documents" class="small">View all</a>
                       
                       </div>
                     </div> <!-- / .row -->
@@ -702,7 +702,7 @@
                   <div class="card-body">
                     <% documents.forEach( document => { %>
                       <% var date = new Date(document.created_at); var uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();%>
-                      <div class="row align-items-center">
+                      <div class="row align-items-center document-item">
                         <div class="col-auto">
                         
                           <!-- Avatar -->
@@ -730,25 +730,20 @@
                         </div>
 
                         <div class="col-auto">
-
-                        <!-- Dropdown -->
-                        <div class="dropdown">
-                          <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#!" class="dropdown-item">
-                              Delete
+                          <div class="dropdown">
+                            <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fe fe-more-vertical"></i>
                             </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                              <a href="#!" class="dropdown-item delete-document" data-id="<%=document.id %>">
+                                Delete
+                              </a>
+                            </div>
                           </div>
                         </div>
-
-                      </div>
-                        
+                      <hr>
                       </div> <!-- / .row -->
 
-                      <!-- Divider -->
-                      <hr>
                     <% }) %>
                   </div> <!-- / .card-body -->
                 </div> <!-- / .card -->

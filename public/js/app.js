@@ -78,7 +78,7 @@ function doPopulate() {
       }
       const date = new Date(doc.created_at);
       const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
-      $('.documentList').append(`<li class="list-group-item px-0 page${page}">
+      $('.documentList').append(`<li class="list-group-item document-item px-0 page${page}">
           <div class="row align-items-center">
             <div class="col-auto">
               
@@ -1400,7 +1400,7 @@ $(function() {
       confirmDialog("Are you sure?", (ans) => {
         if (ans) {
           const id = self.data('id');
-          const parent = self.parents('.list-group-item');
+          const parent = self.parents('.document-item');
           const token = $('meta[name="csrf"]').attr('content');
           const data = {
               document: {
