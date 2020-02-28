@@ -45,25 +45,16 @@
             <div class="col">
               
               <!-- Title -->
-              <h4 class="card-header-title">
+              <h4 class="card-header-title mb-2">
                 Files
               </h4>
 
             </div>
-            <div class="col-auto d-none filter-by-property">
+            <div class="col-sm-12 col-md-4 filter-by-property">
               
-              <!-- Dropdown -->
-              <div class="dropdown">
-
-                <!-- Toggle -->
-             
-                <select class="form-control" id="filterByProperty" data-toggle="select"  data-options='{"placeholder": "All Properties"}' required>
+                <select class="form-control" style="min-width: 250px;" id="filterByProperty" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
                     <option></option>
-                    
-                  </select>  
-
-              </div>
-
+                </select>  
             </div>
           
           </div> <!-- / .row -->
@@ -95,10 +86,11 @@
               <p class="text-center p-3">There is no any documents yet.</p>
             <% } %>
           </ul>
-          <ul id="documentPagination" class="pagination-md mt-5"></ul>
+          
         </div>
       </div>
 
+      <ul id="documentPagination" class="pagination-md mt-5"></ul>
     </div>
   </div> <!-- / .row -->
 </div>

@@ -66,6 +66,7 @@ exports.index = async function(req, res) {
   const { user } = req.session;
   const current_user = await Users.findOne({id: user.id}, {_id: 0});
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 }).sort('-rental_yield');
+  const transactions = await Transactions.find({ user_id: user.id }, { _id: 0 });
   let portfolio_value = 0;
   let total_purchase_price = 0;
   let badge_value = 0;
@@ -102,6 +103,18 @@ exports.index = async function(req, res) {
     });
   })
 
+  // total income and expenses
+  let total_income = 0;
+  let total_expenses = 0;
+  transactions.forEach(transaction => {
+    if (transaction.amount >= 0) {
+      total_income += parseFloat(transaction.amount)
+    } else {
+      total_expenses += parseFloat(transaction.amount)
+    }
+  })
+  let net_profit = total_income + total_expenses;
+
   if (portfolio_value && total_purchase_price ) {
     badge_value = portfolio_value - total_purchase_price;
   } 
@@ -121,7 +134,10 @@ exports.index = async function(req, res) {
     income_data,
     labels,
     badge_value,
-    vacant_cnt
+    vacant_cnt,
+    total_income,
+    total_expenses,
+    net_profit
   });
 };
 
@@ -130,7 +146,6 @@ exports.get_cash_flow = async function(req, res) {
 
   const { body: { startDate, endDate } }  = req;
 
-  console.log(new Date(startDate), new Date(endDate))
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
   const transactions = await Transactions.find({$and:[{created_at:{$gte:new Date(startDate)}},{created_at:{$lte:new Date(endDate)}}, {user_id: user.id}]}, { _id: 0 });
 
@@ -155,7 +170,6 @@ exports.get_cash_flow = async function(req, res) {
     if (transaction.amount) {
       amount = parseFloat(transaction.amount.replace(',', ''));
     }
-    console.log('', date, amount);
     switch (date) {
       case 'Jan':
         if (amount >= 0) {

@@ -11,8 +11,6 @@
     <!-- MAIN CONTENT
     ================================================== -->
     <div class="main-content">
-
-        <!-- HEADER -->
         <div class="header">
           <div class="container">
   
@@ -42,7 +40,6 @@
           </div>
         </div> <!-- / .header -->
         
-        <!-- CARDS -->
         <div class="container">
           <div class="row">
             <div class="col-12 col-lg-6 col-xl">
@@ -196,7 +193,6 @@
             </div>
             <div class="col-12 col-xl-5">
   
-              <!-- Devices -->
               <div class="card">
                 <div class="card-header">
                   <div class="row align-items-center">
@@ -243,124 +239,133 @@
                       </div>
                     </div>
                   </div>
-    
                 </div>
               </div>
-              
             </div>
-          </div> <!-- / .row -->
+          </div> 
       
-            <div class="row">
-              <div class="col-12">
-              
-                <!-- Goals -->
-                <div class="card">
-                  <div class="card-header">
-                    <div class="row align-items-center">
-                      <div class="col mt-2 mb-2">
-                      
-                        <!-- Title -->
-                        <h4 class="card-header-title">
-                          Cash Flow
-                        </h4>
-  
-                      </div>
-                      <div class="col-auto d-flex flex-wrap">
-                      
-                        <!-- Link -->
-                        <!-- <input type="text" id="cashflowStartDate" class="form-control text-right mb-2 mr-5" style="width: 300px;">
-                        <input type="text" id="cashflowEndDate" class="form-control mb02 text-right mr-5" style="width: 300px;"> -->
-                        <div class="input-group input-group-merge">
-                          <input type="text" id="cashflowStartDate" class="form-control form-control-prepended " placeholder="">
-                          <div class="input-group-prepend">
-                            <div class="input-group-text">
-                              <span class="fe fe-calendar"></span>
-                            </div>
+          <div class="row">
+            <div class="col-12">
+            
+              <div class="card">
+                <div class="card-header">
+                  <div class="row align-items-center">
+                    <div class="col mt-2 mb-2">
+                      <h4 class="card-header-title">
+                        Cash Flow
+                      </h4>
+                    </div>
+                    <div class="col-auto d-flex flex-wrap">
+                    
+                      <div class="input-group input-group-merge">
+                        <input type="text" id="cashflowStartDate" class="form-control form-control-prepended " placeholder="">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">
+                            <span class="fe fe-calendar"></span>
                           </div>
                         </div>
                       </div>
-                    </div> <!-- / .row -->
+                    </div>
+                  </div> 
+                </div>
+                <div class="card-body">
+                  <div id="cashflowChart" style="width:100%; height:400px;">
                   </div>
-                 <!--  <div class="table-responsive mb-0" data-toggle="lists" data-options='{"valueNames": ["tables-address", "tables-type", "tables-status", "tables-purchase-price", "tables-current-value", "tables-rental-income", "tables-rental-yield"]}'>
-                    <table class="table table-sm table-nowrap card-table">
-                      <thead>
-                        <tr>
-                          <th scope="col">
-                            <a href="#" class="text-muted sort" data-sort="tables-address">Address</a>
-                          </th>
-                          <th scope="col">
-                            <a href="#" class="text-muted sort" data-sort="tables-type">Type</a>
-                          </th>
-                          <th scope="col">
-                            <a href="#" class="text-muted sort" data-sort="tables-status">Status</a>
-                          </th>
-                          <th scope="col">
-                            <a href="#" class="text-muted sort" data-sort="tables-purchase-price">Purchase Price</a>
-                          </th>
-                          <th scope="col">
-                            <a href="#" class="text-muted sort" data-sort="tables-current-value">Current Value</a>    
-                          <th scope="col">
-                            <a href="#" class="text-muted sort" data-sort="tables-rental-income">Rental Income</a>    
-                          </th>
-                          <th scope="col">
-                              <a href="#" class="text-muted sort" data-sort="tables-rental-yield">Rental Yield</a>  
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody class="list">
-                        <% properties.forEach(function(property){%>
-                        <tr>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                          <th scope="row" class="tables-address">
-                            <a href="/property/overview/<%=property.id%>">
-                              <%=property.address%>, <%=property.city%>
-                            </a>
-                          </th>
-                          <td class="tables-type">
-                            <%=property.units == 1 ? 'Single Unit' : 'Multi Unit'%>
-                          </td>
-                          <td class="tables-status">
-                            <span class="text-<%=property.status == 'Occupied' ? 'success' : 'danger'%> ">●</span> <%=property.status%>
-                          </td>
-                          <td class="tables-purchase-price">
-                            <%=property.purchase_price ? '£'+property.purchase_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : ''%>
-                          </td>
-                          <td class="tables-current-value">
-                            <%=property.current_value ? '£'+property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : ''%>
-                          </td>
-                          <td class="tables-rental-income">
-                            <%=property.rental_income ? '£'+(property.rental_income / 12).toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+'pcm' : ''%>
-                          </td>
-                          <td class="tables-rental-yield">
-                            <h4>
-                              <span class="badge badge-soft-<%=parseFloat(property.rental_yield) > 0 ? 'success' : 'danger'%>"><%=property.rental_yield.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>%</span>
-                            </h4>
-                          </td>
-                        </tr>
-                        <% })%>
-                      </tbody>
-                    </table>
-                  </div> -->
-                  <div class="card-body">
-                    <div id="cashflowChart" style="width:100%; height:400px;">
+          <div class="row">
+            <div class="col-12">
+            
+              <div class="card">
+                <div class="card-header">
+                  <div class="row align-items-center">
+                    <div class="col mt-2 mb-2">
+                      <h4 class="card-header-title">
+                        Yield & Cashflow
+                      </h4>
                     </div>
                   </div>
                 </div>
-    
-          </div>
-  
-                </div> <!-- / .card-body -->
-              </div> <!-- / .card -->           
-          </div>
-        
-              </div> <!-- / .row -->
+                <div class="card-body my-4">
+                  <div class="row align-items-center justify-content-center mb-6">
+                    <div class="col-4 text-center border-right">
+                      <!-- Heading -->
+                      <div class="h1 font-weight-bold mb-3">
+                       % 0 <small class="font-weight-bold">YTD</small>
+                      </div>
+                      <div class="h5">
+                       (- £ 234.5)
+                      </div>
+                      <h6 class="card-title text-muted text-uppercase mt-2">
+                        Current Net Yield
+                      </h6>
+                    </div>
+                    <div class="col-4 text-center border-right">
+                      <!-- Heading -->
+                      <div class="h1 font-weight-bold mb-4">
+                       % 0
+                      </div>
+                      <div class="h5">
+                       (- £ 234.5)
+                      </div>
+                      <h6 class="card-title text-muted text-uppercase mt-2">
+                        PROJECTED GROSS YIELD
+                      </h6>
+                    </div>
+                    <div class="col-4 text-center">
+                      <!-- Heading -->
+                      <div class="h1 font-weight-bold mb-3">
+                       % -0.08
+                      </div>
+                      <div class="h5">
+                       (- £ 234.5)
+                      </div>
+                      <h6 class="card-title text-muted text-uppercase mt-2">
+                        PROJECTED NET YIELD
+                      </h6>
+                    </div>
+                  </div>
 
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> <!-- / .main-content -->
+                   <div class="row align-items-center justify-content-center">
+                    <div class="col-4 text-center border-right">
+                      <!-- Heading -->
+                      <div class="h1 font-weight-bold mb-2">
+                        <span class="text-success h2">+£</span> <%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                      </div>
+                      <h6 class="card-title text-muted text-uppercase mt-2">
+                        TOTAL PROFIT
+                      </h6>
+                    </div>
+                    <div class="col-4 text-center border-right">
+                      <!-- Heading -->
+                      <div class="h1 font-weight-bold mb-2">
+                       <span class="text-danger h2">-£</span> <%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                      </div>
+                      <h6 class="card-title text-muted text-uppercase mt-2">
+                        TOTAL EXPENSES
+                      </h6>
+                    </div>
+                    <div class="col-4 text-center">
+                      <!-- Heading -->
+                      <div class="h1 font-weight-bold mb-2">
+                       <% if (net_profit > 0) {%>
+                          <span class="text-success h2">+£</span> <%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
+                        <% } else {%>
+                          <span class="text-danger h2">-£</span> <%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
+                        <% } %>
+                      </div>
+                      <h6 class="card-title text-muted text-uppercase mt-2">
+                        NET PROFIT
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div> 
+    </div> 
 
 
   <% include ../partials/scripts %>

@@ -78,14 +78,19 @@ function doPopulate() {
       }
       const date = new Date(doc.created_at);
       const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
+      let avatar = '<span class="fe fe-folder" style="font-size: 2rem;"></span>';
+      if (doc.mimetype.includes('image')) {
+        avatar = `<img src="/${doc.path}" alt="document image preview" class="avatar"/>`;
+      }
+
       $('.documentList').append(`<li class="list-group-item document-item px-0 page${page}">
           <div class="row align-items-center">
             <div class="col-auto">
               
               <!-- Avatar -->
-              <a href="/${doc.path}" class="avatar">
+              <a href="/${doc.path}" class="avatar" target="_blank">
                 <div class="avatar-title rounded bg-white text-secondary">
-                  <span class="fe fe-folder" style="font-size: 2rem;"></span>
+                  ${avatar}
                 </div>
               </a>
 
@@ -130,6 +135,9 @@ function doPopulate() {
                   <button class="dropdown-item delete-document" data-id="${doc.id}">
                     Delete
                   </button>
+                  <a class="dropdown-item download-document" href="/${doc.path}" download>
+                    Download
+                  </a>
                 </div>
               </div>
             </div>
