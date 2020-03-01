@@ -282,6 +282,21 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     padding: 1rem;
 }
 
+.ownership-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    min-height: 270px;
+    align-items: center;
+    position: relative;
+}
+
+.ownership-block .addloan-btn {
+    position: absolute;
+    bottom: 30px;
+}
+
 .dz-message {
     padding: 0 0 2rem 0 !important;
 }

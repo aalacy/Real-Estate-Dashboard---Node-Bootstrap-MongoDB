@@ -78,7 +78,7 @@ function doPopulate() {
       }
       const date = new Date(doc.created_at);
       const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
-      let avatar = '<span class="fe fe-folder" style="font-size: 2rem;"></span>';
+      let avatar = '<span class="fe fe-file" style="font-size: 2rem;"></span>';
       if (doc.mimetype.includes('image')) {
         avatar = `<img src="/${doc.path}" alt="document image preview" class="avatar"/>`;
       }
@@ -225,6 +225,7 @@ function doPopulate() {
           try {
             var mydoc = JSON.parse(res.xhr.response);
             $('.dropzone-image').attr('src', res.dataURL);
+            $('.dropzone-image').addClass('active');
             if ($('#status').val() == 'upload') {
               $('#document_id').val(mydoc.id);
               $('#document_path').val(mydoc.path);
@@ -775,9 +776,15 @@ $(function() {
         if ($(this).hasClass('multi-unit')) {
             $('#property_units').prop('readonly', false);
             $('#property_units').attr('min', '2');
+            if (!$('.dropzone-image').hasClass('active')) {
+              $('.dropzone-image').attr('src', '/img/avatars/projects/multiple.png');
+            }
         } else {
             $('#property_units').prop('readonly', true);
             $('#property_units').attr('min', '1');
+            if (!$('.dropzone-image').hasClass('active')) {
+              $('.dropzone-image').attr('src', '/img/avatars/projects/single.png');
+            }
         }
     });
 

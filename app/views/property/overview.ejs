@@ -15,12 +15,45 @@
   </head>
   <body>
 
+    <div class="modal  fade" id="modalAddNewLoan" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <form id="add-unit-form" method="post" action="/property/loan/new/">
+          <input type="hidden" name="_csrf" value="<%= token %>">
+          <input type="hidden" name="property[id]" value="<%= property.id%>">
+          <div class="modal-content bg-lighter">
+            <div class="modal-header">
+                <!-- Header -->
+              <h3 class="modal-title" id="unit-modal-title">Add a Loan Value</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+    
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  
+                  <!-- Start date -->
+                  <div class="form-group">
+                    <label>
+                      Loan
+                    </label>
+                    <input type="text" id="unit_description" name="unit[description]" class="form-control" placeholder="Description" value="" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- Modal Add New Unit -->
     <div class="modal  fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="add-unit-form" method="post" action="/property/unit/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
-          <input type="hidden" id="property_id" name="property[id]" value="<%= property.id%>">
+          <input type="hidden" name="property[id]" value="<%= property.id%>">
           <input type="hidden" name="unit[id]" value="">
           <input type="hidden" name="unit[tenants]" id="unit_tenants" value="">
           <div class="modal-content bg-lighter">
@@ -600,14 +633,14 @@
                       <div class="row align-items-center">
                         <div class="col">
                           <h4 class="card-header-title">
-                            Property Details
+                            Ownership Summary
                           </h4>
 
                         </div>
                         <div class="col-auto">
 
                           <!-- Button -->
-                          <a href="/property/detail/<%= property.id%>" class="btn btn-sm btn-white">
+                          <a href="#" class="btn btn-sm btn-white ownership-summary-edit" data-toggle="modal" data-target="#modalAddNewLoan">
                             Edit
                           </a>
                       
@@ -615,106 +648,10 @@
                       </div> <!-- / .row -->
                     </div>
   				  
-                  <div class="card-body">
+                  <div class="card-body ownership-block">
+  				          <div>No loan information provided</div>
 
-                    <div class="row align-items-center">
-                      <div class="col">
-                      
-                        <!-- Title -->
-                        <h5 class="mb-0">
-                          Property Type
-                        </h5>
-
-                      </div>
-                      <div class="col-auto">
-                      
-                        <small class="small text-muted text-capitalize"> 
-                          <%=property.type%>
-                        </small>
-
-                      </div>
-                    </div> <!-- / .row -->
-                     <!-- Divider -->
-                     <hr>
-                    <div class="row align-items-center">
-                      <div class="col">
-                      
-                        <!-- Title -->
-                        <h5 class="mb-0">
-                          Ownership
-                        </h5>
-
-                      </div>
-                      <div class="col-auto">
-                      
-                        <small class="small text-muted text-capitalize"> 
-                          <%= property.ownership%>
-                        </small>
-
-                      </div>
-                    </div> <!-- / .row -->
-                     <!-- Divider -->
-                     <hr>
-                    <div class="row align-items-center">
-                      <div class="col">
-                      
-                        <!-- Title -->
-                        <h5 class="mb-0">
-                          Date of acquisition
-                        </h5>
-
-                      </div>
-                      <div class="col-auto">
-                      
-                        <time class="small text-muted" datetime="1988-24-10">
-                          <%= property.purchase_date%>
-                        </time>
-
-                      </div>
-                    </div> <!-- / .row -->
-
-                    <!-- Divider -->
-                    <hr>
-
-                    <div class="row align-items-center">
-                      <div class="col">
-                      
-                        <!-- Title -->
-                        <h5 class="mb-0">
-                          Acquired for
-                        </h5>
-
-                      </div>
-                      <div class="col-auto">
-                      
-                        <small class="text-muted text-capitalize">
-                          <%= property.purchase_price%>
-                        </small>
-
-                      </div>
-                    </div> <!-- / .row -->
-
-                    <!-- Divider -->
-                    <hr>
-
-                    <div class="row align-items-center">
-                      <div class="col">
-                      
-                        <!-- Title -->
-                        <h5 class="mb-0">
-                          Property size
-                        </h5>
-
-                      </div>
-                      <div class="col-auto">
-                      
-                        <small class="text-muted">
-                            <%= property.square_feet.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " sq ft"%>
-                        </small>
-
-                      </div>
-                    </div> <!-- / .row -->
-  				  
+                    <button class="addloan-btn btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#modalAddNewLoan">Add a loan</button>
                   </div>
                 </div>
 
