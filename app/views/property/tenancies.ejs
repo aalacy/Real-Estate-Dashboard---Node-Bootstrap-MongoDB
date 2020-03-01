@@ -132,7 +132,7 @@
 
     <div class="modal  fade" id="modalAddNewUnitWithProperty" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
-        <form id="add-unit-form" method="post" action="/property/unit/new/">
+        <form id="add-unit-with-property-form" method="post" action="/property/unit/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
@@ -304,17 +304,17 @@
                     <!-- Nav -->
                     <ul class="nav nav-tabs nav-overflow header-tabs">
                       <li class="nav-item">
-                        <a href="#all" data-toggle="tab" role="tab" class="nav-link active">
+                        <a href="#all" data-toggle="tab" role="tab" class="nav-link tenancy-tab active">
                           All <span class="badge badge-pill badge-soft-secondary"><%=all_tenancies%></span>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="#occupied" data-toggle="tab" role="tab" class="nav-link">
+                        <a href="#occupied" data-toggle="tab" role="tab" class="nav-link tenancy-tab">
                           Active <span class="badge badge-pill badge-soft-secondary"><%=occupied_tenancies%></span>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="#vacant" data-toggle="tab" role="tab" class="nav-link">
+                        <a href="#vacant" data-toggle="tab" role="tab" class="nav-link tenancy-tab">
                           Vacant <span class="badge badge-pill badge-soft-secondary"><%=vacant_tenancies%></span>
                         </a>
                       </li>
@@ -325,387 +325,51 @@
               </div>
             </div>
 
+            <input type="hidden" id="hidden_properties" value="<%= JSON.stringify(properties) %>">
+            <input type="hidden" id="hidden_occupiedproperties" value="<%= JSON.stringify(occupied_properties) %>">
+            <input type="hidden" id="hidden_vacantproperties" value="<%= JSON.stringify(vacant_properties) %>">
+
             <div class="tab-content">
               <div class="tab-pane fade active show" id="all" role="tabpanel">
-                <% properties.map((property, i) => {%>
-                <div id="accordion<%=i%>">
-                  <div class="card">
-                    <div class="card-header bg-light" id="headingOccupied<%=i%>">
-                      <div class="row align-items-center">
-                        <div class="col">
-
-                          <!-- Search -->
-                          <a href="/property/overview/<%=property.id%>" class=" btn btn-link text-body m-0" >
-                            <h2 class="m-0"><%=property.address%>, <%=property.city%></h2>
-                          </a>
-                          
-                        </div>
-                        <div class="col-auto">
-                          
-                          <!-- Button -->
-
-                          <div class="dropdown">
-                            <a type="button" class="btn btn-link btn-sm btn-light <%= i != 0 ? 'collapsed' : '' %>" data-toggle="collapse" data-target="#occupiedCollapse<%=i%>" aria-expanded="<%= i == 0 ? 'true' : 'false' %>" aria-controls="occupiedCollapse<%=i%>">
-                              <i class="fe" aria-hidden="true"></i>
-                            </a>
-                          </div>
-
-                        </div>
-                      </div> <!-- / .row -->
-                    </div>
-
-                    <div id="occupiedCollapse<%=i%>" class="collapse <%= i == 0 ? 'show' : '' %>" aria-labelledby="headingOccupied<%=i%>" data-parent="#accordion<%=i%>">
-                      <div class="card-body">
-                        <% property.tenancies.forEach( function(unit){ %>
-                          <% if (unit.rent_frequency == 'Vacant') {%>
-                            <div class="card">
-                              <div class="p-3">
-                                <div class="row align-items-center unit-item">
-                                  <div class="col-auto">
-                                
-                                    <!-- Avatar -->
-                                    <h1 class="mb-0 avatar avatar-lg">
-                                      <img src="/img/icons/unit.png" class="avatar-img">
-                                    </h1>
-                
-                                  </div>
-                                  <div class="col-4">
-                
-                                    <!-- Title -->
-                                    <h4 class="card-title mb-1">
-                                      <a href="/property/overview/<%=property.id%>/units/<%=unit.id%>" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
-                                    </h4>
-                
-                                    <!-- Time -->
-                                    <p class="card-text small text-muted">
-                                      Vacant &nbsp;●&nbsp; <a href="#" class="edit-unit" data-unit="<%= JSON.stringify(unit)%>" >Add a tenancy</a>
-                                    </p>
-                                  </div>
-                                  <div class="col-4">
-                                    <!-- Title -->
-                                    <h4 class="card-title text-muted mb-1">
-                                      ●&nbsp;Not Collecting Rent
-                                    </h4>
-                                    
-                                  </div>
-                                  <div class="col-2 text-muted">
-                                    <% if (unit.tenants.length == 0) { %>
-                                      ●&nbsp;No Tenants
-                                    <% } %>
-                                    <% if (unit.tenants.length == 1) { %> 
-                                      ●&nbsp;1 Tenant
-                                    <% } %>
-                                    <% if (unit.tenants.length > 1) { %> 
-                                      <%=unit.tenants%> Tenants
-                                    <% } %>
-                                
-                                  </div>
-                                  <div class="col-auto ml-auto">
-                                    <div class="dropdown">
-                                      <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      <i class="fe fe-more-vertical"></i>
-                                      </a>
-                                      <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="#!" class="dropdown-item edit-unit" data-property="<%=property.id %>" data-unit="<%=JSON.stringify(unit)%>">
-                                          Edit
-                                        </a>
-                                        <a href="#!" class="dropdown-item delete-unit action-unit"  data-property="<%=property.id %>" data-block="occupiedCollapse<%=i%>" data-unit="<%=unit.id%>">
-                                          Remove
-                                        </a>
-                                      </div>
-                                  </div>
-                                  </div>
-                                </div> <!-- / .row -->
-                                  <!-- Divider -->
-                              </div>
-                            </div>
-                          <% } else {%>
-                          <div class="card">
-                            <div class="card-body">
-                              <div class="row align-items-center unit-item">
-                                <div class="col-auto">
-                              
-                                  <!-- Avatar -->
-                                  <h1 class="mb-0 avatar avatar-md">
-                                    <img src="/img/icons/unit.png" class="avatar-img">
-                                  </h1>
-              
-                                </div>
-                                <div class="col-4">
-              
-                                  <!-- Title -->
-                                  <h4 class="card-title mb-1">
-                                    <a href="/property/overview/<%=property.id%>/units/<%=unit.id%>" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
-                                  </h4>
-              
-                                  <!-- Time -->
-                                  <p class="card-text small text-muted">
-                                    <span class="text-success mr-2">●</span> Active Tenancy
-                                  </p>
-                                </div>
-                                <div class="col-4">
-                                  <!-- Title -->
-                                  <h4 class="card-title mb-1">
-                                    <% if (parseInt(unit.rent_price) > 0) {%>£<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><%}%>
-                                    Per <%= unit.rent_frequency%>
-                                  </h4>
-                                  
-                                </div>
-                                <div class="col-2">
-                                  <% if (unit.tenants.length == 0) { %>
-                                    No Tenants
-                                  <% } %>
-                                  <% if (unit.tenants.length == 1) { %> 
-                                    1 Tenant
-                                  <% } %>
-                                  <% if (unit.tenants.length > 1) { %> 
-                                    <%=unit.tenants%> Tenants
-                                  <% } %>
-
-                                </div>
-                                <div class="col-auto ml-auto">
-                                  <div class="dropdown">
-                                    <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fe fe-more-vertical"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                      <a href="#!" class="dropdown-item edit-unit" data-property="<%=property.id %>" data-unit="<%=JSON.stringify(unit)%>">
-                                        Edit
-                                      </a>
-                                      <a href="#!" class="dropdown-item delete-unit action-unit" data-block="occupiedCollapse<%=i%>"  data-property="<%=property.id %>" data-unit="<%=unit.id%>">
-                                        Remove
-                                      </a>
-                                    </div>
-                                </div>
-                                </div>
-                              </div> <!-- / .row -->
-                                <!-- Divider -->
-                            </div>
-                          </div>
-                          <% } %>
-                        <% })%>
-                        
-                      </div>
+                <div class="card p-3">
+                  <div class="row ml-3 my-3">
+                    <div class="col-12 col-md-4">
+                      <select class="form-control my-3 propertyFilter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
+                          <option></option>
+                      </select>
                     </div>
                   </div>
+                  <div class="px-4 all-tenancies">
+                  </div>
                 </div>
-                <%})%>
               </div>
 
               <div class="tab-pane fade" id="occupied" role="tabpanel">
-                <% occupied_properties.map((property, i) => {%>
-                <div id="accordion_occupied<%=i%>">
-                  <div class="card">
-                    <div class="card-header bg-light" id="heading2Occupied<%=i%>">
-                      <div class="row align-items-center">
-                        <div class="col">
-
-                          <!-- Search -->
-                          <button class="btn btn-link text-body m-0" data-toggle="collapse" data-target="#occupied2Collapse<%=i%>" aria-expanded="true" aria-controls="occupied2Collapse<%=i%>">
-                            <h2 class="m-0"><%=property.address%>, <%=property.city%></h2>
-                          </button>
-                          
-                        </div>
-                        <div class="col-auto">
-                          
-                          <!-- Button -->
-
-                          <div class="dropdown">
-                            <button class="btn btn-sm btn-white" type="button" id="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Add Unit
-                            </button>
-                          </div>
-
-                        </div>
-                      </div> <!-- / .row -->
-                    </div>
-
-                    <div id="occupied2Collapse<%=i%>" class="collapse show" aria-labelledby="heading2Occupied<%=i%>" data-parent="#accordion_occupied<%=i%>">
-                      <div class="card-body">
-                        <% property.tenancies.forEach( function(unit){ %>
-                          <div class="card">
-                            <div class="card-body">
-                              <div class="row align-items-center unit-item">
-                                <div class="col-auto">
-                              
-                                  <!-- Avatar -->
-                                  <h1 class="mb-0 avatar avatar-md">
-                                    <img src="/img/icons/unit.png" class="avatar-img">
-                                  </h1>
-              
-                                </div>
-                                <div class="col-4">
-              
-                                  <!-- Title -->
-                                  <h4 class="card-title mb-1">
-                                    <a href="/property/overview/<%=property.id%>/units/<%=unit.id%>" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
-                                  </h4>
-              
-                                  <!-- Time -->
-                                  <p class="card-text small text-muted">
-                                    <span class="text-success mr-2">●</span> Active Tenancy
-                                  </p>
-                                </div>
-                                <div class="col-4">
-                                  <!-- Title -->
-                                  <h4 class="card-title mb-1">
-                                    <% if (parseInt(unit.rent_price) > 0) {%>£<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><%}%>
-                                    Per <%= unit.rent_frequency%>
-                                  </h4>
-                                  
-                                </div>
-                                <div class="col-2">
-                                  <% if (unit.tenants.length == 0) { %>
-                                    No Tenants
-                                  <% } %>
-                                  <% if (unit.tenants.length == 1) { %> 
-                                    1 Tenant
-                                  <% } %>
-                                  <% if (unit.tenants.length > 1) { %> 
-                                    <%=unit.tenants%> Tenants
-                                  <% } %>
-
-                                </div>
-                                <div class="col-auto ml-auto">
-                                  <div class="dropdown">
-                                    <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fe fe-more-vertical"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                      <a href="#!" class="dropdown-item edit-unit" data-property="<%=property.id %>" data-unit="<%=JSON.stringify(unit)%>">
-                                        Edit
-                                      </a>
-                                      <a href="#!" class="dropdown-item delete-unit action-unit" data-block="occupied2Collapse<%=i%>"  data-property="<%=property.id %>" data-unit="<%=unit.id%>">
-                                        Remove
-                                      </a>
-                                    </div>
-                                </div>
-                                </div>
-                              </div> <!-- / .row -->
-                                <!-- Divider -->
-                            </div>
-                          </div>
-                        <% })%>
-                        <% if (property.tenancies.length == 0) { %>
-                          <div class="row">
-                            <p class="col-12">
-                              There is no occupied units for this property.
-                            </p>
-                          </div>
-                        <% }%>
-                      </div>
+                <div class="card p-3">
+                  <div class="row ml-3 my-3">
+                    <div class="col-12 col-md-4">
+                      <select class="form-control my-3 propertyFilter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
+                          <option></option>
+                      </select>
                     </div>
                   </div>
+                  <div class="px-4 occupied-tenancies">
+                  </div>
                 </div>
-                <%})%>
               </div>
 
               <div class="tab-pane fade" id="vacant" role="tabpanel">
-                <% vacant_properties.map((property, i) => {%>
-                <div id="accordion_vacant<%=i%>">
-                  <div class="card">
-                    <div class="card-header bg-light" id="heading3Occupied<%=i%>">
-                      <div class="row align-items-center">
-                        <div class="col">
-
-                          <!-- Search -->
-                          <button class="btn btn-link text-body m-0" data-toggle="collapse" data-target="#occupied3Collapse<%=i%>" aria-expanded="true" aria-controls="occupied3Collapse<%=i%>">
-                            <h2 class="m-0"><%=property.address%>, <%=property.city%></h2>
-                          </button>
-                          
-                        </div>
-                        <div class="col-auto">
-                          
-                          <!-- Button -->
-
-                          <div class="dropdown">
-                            <button class="btn btn-sm btn-white" type="button" id="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Add Unit
-                            </button>
-                          </div>
-
-                        </div>
-                      </div> <!-- / .row -->
-                    </div>
-
-                    <div id="occupied3Collapse<%=i%>" class="collapse show" aria-labelledby="heading3Occupied<%=i%>" data-parent="#accordion_vacant<%=i%>">
-                      <div class="card-body">
-                        <% property.tenancies.forEach( function(unit){ %>
-                          <div class="card">
-                            <div class="card-body">
-                              <div class="row align-items-center unit-item">
-                                <div class="col-auto">
-                              
-                                  <!-- Avatar -->
-                                  <h1 class="mb-0 avatar avatar-md">
-                                    <img src="/img/icons/unit.png" class="avatar-img">
-                                  </h1>
-              
-                                </div>
-                                <div class="col-4">
-              
-                                  <!-- Title -->
-                                  <h4 class="card-title mb-1">
-                                    <a href="/property/overview/<%=property.id%>/units/<%=unit.id%>" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
-                                  </h4>
-              
-                                  <!-- Time -->
-                                  <p class="card-text small text-muted">
-                                    Vacant &nbsp;&nbsp;●&nbsp; &nbsp; <a href="#" class="edit-unit" data-unit="<%= JSON.stringify(unit)%>" >Add a tenancy</a>
-                                  </p>
-                                </div>
-                                <div class="col-4">
-                                  <!-- Title -->
-                                  <h4 class="card-title mb-1">
-                                    Not Collecting Rent
-                                  </h4>
-                                  
-                                </div>
-                                <div class="col-2">
-                                  <% if (unit.tenants.length == 0) { %>
-                                    No Tenants
-                                  <% } %>
-                                  <% if (unit.tenants.length == 1) { %> 
-                                    1 Tenant
-                                  <% } %>
-                                  <% if (unit.tenants.length > 1) { %> 
-                                    <%=unit.tenants%> Tenants
-                                  <% } %>
-                              
-                                </div>
-                                <div class="col-auto ml-auto">
-                                  <div class="dropdown">
-                                    <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fe fe-more-vertical"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                      <a href="#!" class="dropdown-item edit-unit" data-property="<%=property.id %>" data-unit="<%=JSON.stringify(unit)%>">
-                                        Edit
-                                      </a>
-                                      <a href="#!" class="dropdown-item delete-unit action-unit" data-block="occupied3Collapse<%=i%>" data-property="<%=property.id %>" data-unit="<%=unit.id%>">
-                                        Remove
-                                      </a>
-                                    </div>
-                                </div>
-                                </div>
-                              </div> <!-- / .row -->
-                                <!-- Divider -->
-                            </div>
-                          </div>
-                        <% })%>
-
-                        <% if (property.tenancies.length == 0) { %>
-                          <div class="row">
-                            <p class="col-12">
-                              There is no vacant units for this property.
-                            </p>
-                          </div>
-                        <% }%>
-                      </div>
+                <div class="card p-3">
+                  <div class="row ml-3 my-3">
+                    <div class="col-12 col-md-4">
+                      <select class="form-control my-3 propertyFilter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
+                          <option></option>
+                      </select>
                     </div>
                   </div>
+                  <div class="px-4 vacant-tenancies">
+                  </div>
                 </div>
-                <%})%>
               </div>
             </div>
           </div>
@@ -723,6 +387,174 @@
     <!-- JAVASCRIPT
     ================================================== -->
     <% include ../partials/scripts %>
+
+    <script type="text/javascript">
+      let properties = $('#hidden_properties').val();
+      let occupiedProperties = $('#hidden_occupiedproperties').val();
+      let vacantProperties = $('#hidden_vacantproperties').val();
+      try {
+        properties = JSON.parse(properties);
+      } catch(e) { properties = [];}
+      try {
+        occupiedProperties = JSON.parse(occupiedProperties);
+      } catch(e) { occupiedProperties = [];}
+      try {
+        vacantProperties = JSON.parse(vacantProperties);
+      } catch(e) { vacantProperties = [];}
+
+      let items = properties;
+      let allProperties = properties;
+      let current_list = '.all-tenancies';
+      const displayAllTenancies = () => {
+        $(current_list).empty();
+        items.forEach( function(property) {
+          property.tenancies.forEach( function(unit){
+            let tenants = ''
+            if (unit.tenants.length == 0) {
+              tenants = '●&nbsp;No Tenants';
+            } 
+            if (unit.tenants.length == 1) {
+             tenants = '●&nbsp;1 Tenant';
+            } 
+            if (unit.tenants.length > 1) { 
+              tenants = `${unit.tenants}Tenants`
+            }
+            if (unit.rent_frequency == 'Vacant') {
+              $(current_list).append(`
+                <div class="card mb-3">
+                  <div class="p-3">
+                    <div class="row align-items-center unit-item">
+                      <div class="col-auto">
+                        <h1 class="mb-0 avatar avatar-lg">
+                          <img src="/img/icons/unit.png" class="avatar-img">
+                        </h1>
+                      </div>
+                      <div class="col-4">
+                        <h4 class="card-title mb-1">
+                          <a href="/property/overview/${property.id}/units/${unit.id}" class="detail-unit" data-unit="${JSON.stringify(unit)}">${unit.description}</a>
+                        </h4>
+                        <p class="card-text small text-muted">
+                          Vacant &nbsp;●&nbsp; <a href="#" class="edit-unit" data-unit="${JSON.stringify(unit)}" >Add a tenancy</a>
+                        </p>
+                      </div>
+                      <div class="col-4">
+                        <h4 class="card-title text-muted mb-1">
+                          ●&nbsp;Not Collecting Rent
+                        </h4>
+                      </div>
+                      <div class="col-2 text-muted">
+                        ${tenants}
+                      </div>
+                      <div class="col-auto ml-auto">
+                        <div class="dropdown">
+                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#!" class="dropdown-item edit-unit" data-property="${property.id}" data-unit="${JSON.stringify(unit)}">
+                              Edit
+                            </a>
+                            <a href="#!" class="dropdown-item delete-unit action-unit"  data-property="${property.id }" data-unit="${unit.id}">
+                              Remove
+                            </a>
+                          </div>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>`);
+              } else {
+                let rent_price_freq = parseInt(unit.rent_price) > 0 ? `£${unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`: '';
+                rent_price_freq = `Per ${unit.rent_frequency}`;
+                $(current_list).append(`
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="row align-items-center unit-item">
+                        <div class="col-auto">
+                          <h1 class="mb-0 avatar avatar-md">
+                            <img src="/img/icons/unit.png" class="avatar-img">
+                          </h1>
+                        </div>
+                        <div class="col-4">
+                          <h4 class="card-title mb-1">
+                            <a href="/property/overview/${property.id}/units/${unit.id}" class="detail-unit" data-unit="${JSON.stringify(unit)}">${unit.description}</a>
+                          </h4>
+                          <p class="card-text small text-muted">
+                            <span class="text-success mr-2">●</span> Active Tenancy
+                          </p>
+                        </div>
+                        <div class="col-4">
+                          <h4 class="card-title mb-1">
+                            ${rent_price_freq}
+                          </h4>
+                        </div>
+                        <div class="col-2">
+                          ${tenants}
+                        </div>
+                        <div class="col-auto ml-auto">
+                          <div class="dropdown">
+                            <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fe fe-more-vertical"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                              <a href="#!" class="dropdown-item edit-unit" data-property="${property.id}" data-unit="${JSON.stringify(unit)}">
+                                Edit
+                              </a>
+                              <a href="#!" class="dropdown-item delete-unit action-unit"   data-property="${property.id}" data-unit="${unit.id}">
+                                Remove
+                              </a>
+                            </div>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>`)
+            }
+          });
+        });
+      }
+      $(function(){
+        // display property filter
+        var option = new Option('All', 'all', true, true);
+        $('.propertyFilter').append(option);
+        allProperties.map(property => {
+          var property_name = property.address + ', ' + property.city;
+          option = new Option(property_name, property.id, true, true);
+          $('.propertyFilter').append(option);
+        });
+        $('.propertyFilter').val('all').trigger('change');
+
+        // Initialize
+        displayAllTenancies();
+
+        $('.propertyFilter').on('select2:select', function (e) {
+          if (e.params.data.id == 'all') {
+            items = properties;
+          } else {
+            items = properties.filter(item => item.id == e.params.data.id);
+          }
+          displayAllTenancies();
+        });
+
+        $('.tenancy-tab').click(function(e){
+          e.preventDefault();
+          const tab = $(this).attr('href').replace('#', '');
+          current_list = `.${tab}-tenancies`;
+          if (tab == 'all') {
+            items = properties;
+            allProperties = properties;
+          } else if (tab == 'occupied') {
+            items = occupiedProperties;
+            allProperties = occupiedProperties;
+          } else {
+            items = vacantProperties;
+            allProperties = vacantProperties;
+          }
+          displayAllTenancies();
+        });
+      })
+    </script>
 
   </body>
 </html>

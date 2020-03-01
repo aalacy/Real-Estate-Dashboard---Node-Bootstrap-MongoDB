@@ -103,18 +103,6 @@ exports.index = async function(req, res) {
     });
   })
 
-  // total income and expenses
-  let total_income = 0;
-  let total_expenses = 0;
-  transactions.forEach(transaction => {
-    if (transaction.amount >= 0) {
-      total_income += parseFloat(transaction.amount)
-    } else {
-      total_expenses += parseFloat(transaction.amount)
-    }
-  })
-  let net_profit = total_income + total_expenses;
-
   if (portfolio_value && total_purchase_price ) {
     badge_value = portfolio_value - total_purchase_price;
   } 
@@ -135,9 +123,6 @@ exports.index = async function(req, res) {
     labels,
     badge_value,
     vacant_cnt,
-    total_income,
-    total_expenses,
-    net_profit
   });
 };
 

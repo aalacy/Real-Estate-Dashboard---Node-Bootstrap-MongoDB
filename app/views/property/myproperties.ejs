@@ -82,10 +82,14 @@
           if (isPropertyFiltered(property, search)) {
             let status = ''
             let badge = '';
+            let image = property.image;
             if (property.status) { 
               if (property.units == 1) {
                 badge = property.status == 'Vacant' ? 'danger' : '';
                 status = `<h2><span class="badge badge-soft-${badge} ml-1 mt-n1 text-capitalize">${property.status}</span><h2>`;
+                if (!image) {
+                  image = '/img/avatars/projects/single.png';
+                }
               } else {
                 let cnt_vacant = 0;
                 property.tenancies.forEach(unit => {
@@ -95,10 +99,12 @@
                 });
                 badge = cnt_vacant > 0 ? 'danger' : '';
                 status = `<h2><span class="badge badge-soft-${badge} ml-1 mt-n1 text-capitalize">${cnt_vacant} Vacant Units</span><h2>`;
+                if (!image) {
+                  image = '/img/avatars/projects/multiple.png';
+                }
               }
             }
-
-            const image = property.image ? '/' + property.image : '/img/avatars/projects/project-1.jpg';
+            
             const current_value = property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
             const rental_field = property.rental_yield.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
             $('.property-list').append(`<div class="col-12 col-md-6 col-xl-4 property-block">

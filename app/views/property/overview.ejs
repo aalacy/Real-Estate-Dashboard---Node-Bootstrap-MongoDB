@@ -2,6 +2,16 @@
 <html lang="en">
   <head>
       <% include ../partials/head %>
+
+      <style type="text/css">
+        .filter-by-property {
+          display: none;
+        }
+
+        #documents .header .header-body {
+          padding-top: 0;
+        }
+      </style>
   </head>
   <body>
 
@@ -361,11 +371,7 @@
       <div class="container">
         <div class="tab-content">
           <div class="tab-pane fade" id="overview" role="tabpanel">
-         <!-- Alert -->
-           <!--  <div class="alert alert-warning" role="alert">
-              This property profile is only <%=empty_cnt%>% complete. <a href="/property/detail/<%=property.id%>" class="alert-link">Add more details here</a>
-            </div> -->
-            
+                  
             <div class="row">
               <div class="col-12">
                  <div class="card">
@@ -469,8 +475,6 @@
             </div>
             <div class="row">
               <div class="col-12 col-xl-8">
-               
-  			  
                 <div class="card">
                   <div class="card-header">
                     <div class="row align-items-center">
@@ -489,7 +493,7 @@
                   <div class="card-body">
                     <div class="row align-items-center justify-content-center">
                       <div class="col-4 text-center border-right">
-                        <div id="container" style="width:250px; height:200px;"></div>
+                        <div id="occupancyChart" style="width:250px; height:200px;"></div>
                       </div>
                       <div class="col-4 text-center border-right">
                         <!-- Heading -->
@@ -512,35 +516,89 @@
                     </div>
                   </div>
                 </div>
-                <div class="card">
+                 <div class="card">
                   <div class="card-header">
                     <div class="row align-items-center">
-                      <div class="col">
+                      <div class="col mt-2 mb-2">
                         <h4 class="card-header-title">
-                          Income & Expenses
+                          Yield & Cashflow
                         </h4>
                       </div>
-                      <div class="col-auto">
-                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAddNewUnit">
-                          Manage
-                        </button>
-                      </div>
-                    </div> <!-- / .row -->
+                    </div>
                   </div>
-                  <div class="card-body">
+                  <div class="card-body my-4">
+                    <div class="row align-items-center justify-content-center mb-6">
+                      <div class="col-4 text-center border-right">
+                        <!-- Heading -->
+                        <div class="h1 font-weight-bold mb-3">
+                         % 0 <small class="font-weight-bold">YTD</small>
+                        </div>
+                        <h6 class="card-title text-muted text-uppercase mt-2">
+                          Current Net Yield
+                        </h6>
+                      </div>
+                      <div class="col-4 text-center border-right">
+                        <!-- Heading -->
+                        <div class="h1 font-weight-bold mb-4">
+                         % 0
+                        </div>
+                        <h6 class="card-title text-muted text-uppercase mt-2">
+                          PROJECTED GROSS YIELD
+                        </h6>
+                      </div>
+                      <div class="col-4 text-center">
+                        <!-- Heading -->
+                        <div class="h1 font-weight-bold mb-3">
+                         % -0.08
+                        </div>
+                        <h6 class="card-title text-muted text-uppercase mt-2">
+                          PROJECTED NET YIELD
+                        </h6>
+                      </div>
+                    </div>
+
+                     <div class="row align-items-center justify-content-center">
+                      <div class="col-4 text-center border-right">
+                        <!-- Heading -->
+                        <div class="h1 font-weight-bold mb-2">
+                          <span class="text-success h2">+£</span> <%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                        </div>
+                        <h6 class="card-title text-muted text-uppercase mt-2">
+                          TOTAL PROFIT
+                        </h6>
+                      </div>
+                      <div class="col-4 text-center border-right">
+                        <!-- Heading -->
+                        <div class="h1 font-weight-bold mb-2">
+                         <span class="text-danger h2">-£</span> <%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                        </div>
+                        <h6 class="card-title text-muted text-uppercase mt-2">
+                          TOTAL EXPENSES
+                        </h6>
+                      </div>
+                      <div class="col-4 text-center">
+                        <!-- Heading -->
+                        <div class="h1 font-weight-bold mb-2">
+                         <% if (net_profit > 0) {%>
+                            <span class="text-success h2">+£</span> <%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
+                          <% } else {%>
+                            <span class="text-danger h2">-£</span> <%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
+                          <% } %>
+                        </div>
+                        <h6 class="card-title text-muted text-uppercase mt-2">
+                          NET PROFIT
+                        </h6>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
     			
               <div class="col-12 col-xl-4">
-              
-                <!-- Card -->
                 <div class="card">
                     <div class="card-header">
                       <div class="row align-items-center">
                         <div class="col">
-
-                          <!-- Title -->
                           <h4 class="card-header-title">
                             Property Details
                           </h4>
@@ -747,10 +805,8 @@
                     <% }) %>
                   </div> <!-- / .card-body -->
                 </div> <!-- / .card -->
-
               </div>
-            
-            </div> <!-- / .row -->
+            </div>
           </div>
 
           <div class="tab-pane fade" id="units" role="tabpanel">
@@ -1036,8 +1092,102 @@
           </div>
 
           <div class="tab-pane fade" id="income_expenses" role="tabpanel">
-            <div class="row">
-              <div class="col-12 col-xl-8">
+            <div class="card">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <h4 class="card-header-title">
+                      Income & Expenses
+                    </h4>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row align-items-center justify-content-center">
+                  <div class="col-4 text-center border-right">
+                    <div id="incomeExpensesChart" style="width:250px; height:200px;"></div>
+                  </div>
+                  <div class="col-8">
+                    <div class="row">
+                      <div class="col-6 text-center border-right">
+                        <!-- Heading -->
+                        <div class="h1 font-weight-bold mb-2">
+                          <span class="text-success h2">+£</span> <%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                        </div>
+                        <h6 class="card-title text-muted text-uppercase mt-2">
+                          Total Income
+                        </h6>
+                      </div>
+                      <div class="col-6 text-center">
+                        <!-- Heading -->
+                        <div class="h1 font-weight-bold mb-2">
+                          <span class="text-danger h2">-£</span> <%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                        </div>
+                        <h6 class="card-title text-uppercase text-muted mt-2">
+                          Total Expenses
+                        </h6>
+                      </div>
+                    </div>
+
+                    <div class="row mt-4">
+                      <div class="col-6 text-center border-right">
+                        <!-- Heading -->
+                        <div class="h1 font-weight-bold mb-2">
+                          <span class="text-success h2">%</span> 
+                        </div>
+                        <h6 class="card-title text-muted text-uppercase mt-2">
+                          Operating Expenses Ratio
+                        </h6>
+                      </div>
+                      <div class="col-6 text-center">
+                        <!-- Heading -->
+                        <div class="h1 font-weight-bold mb-2">
+                          <span class="text-success h2">+£</span> 300,00
+                        </div>
+                        <h6 class="card-title text-uppercase text-muted mt-2">
+                          Net Operating Income
+                        </h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+             <div class="card">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <h4 class="card-header-title">
+                      Expenses Breakdown
+                    </h4>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row align-items-center justify-content-center">
+                  <div class="col-4 text-center border-right">
+                    <div id="expensesBreakdownChart" style="width:250px; height:200px;"></div>
+                  </div>
+                  <div class="col-8">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <h4 class="card-header-title">
+                      Recent Transactions
+                    </h4>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row align-items-center justify-content-center">
+                </div>
               </div>
             </div>
           </div>
@@ -1081,7 +1231,48 @@
       $(function() {
         // Create the chart
         var colors = Highcharts.getOptions().colors;
-        Highcharts.chart('container', {
+        Highcharts.chart('occupancyChart', {
+          chart: {
+              type: 'pie'
+          },
+          title: {
+              text: ''
+          },
+          plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: false,
+                    format: '{point.name}: {point.y:.1f}%'
+                }
+            }
+          },
+          tooltip: {
+              headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+              pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+          },
+          series: [{
+            name: "",
+            size: '100%',
+            innerSize: '60%',
+            colorByPoint: true,
+            data: [
+                {
+                    name: "Vacant",
+                    color: colors[1],
+                    y: <%=vacant_value%>,
+                    drilldown: "Vacant"
+                },
+                {
+                    name: "Tenancy",
+                    color: colors[4],
+                    y: <%=tenancy_value%>,
+                    drilldown: "Tenancy"
+                }]
+              }]
+          });
+
+          // Income Expenses Chart
+          Highcharts.chart('incomeExpensesChart', {
             chart: {
                 type: 'pie'
             },
@@ -1101,24 +1292,65 @@
                 pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
             },
             series: [{
-              name: "Occupied",
+              name: "",
               size: '100%',
               innerSize: '60%',
               colorByPoint: true,
               data: [
                   {
-                      name: "Vacant",
+                      name: "Income",
                       color: colors[1],
-                      y: <%=vacant_value%>,
-                      drilldown: "Vacant"
+                      y: <%=income_percent%>,
+                      drilldown: "Income"
                   },
                   {
-                      name: "Tenancy",
+                      name: "Expenses",
                       color: colors[4],
-                      y: <%=tenancy_value%>,
-                      drilldown: "Tenancy"
+                      y: <%=expenses_percent%>,
+                      drilldown: "Expenses"
               }]
             }]
+        });
+
+        // Expenses Breakdown Chart
+        Highcharts.chart('expensesBreakdownChart', {
+          chart: {
+              type: 'pie'
+          },
+          title: {
+              text: ''
+          },
+          plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: false,
+                    format: '{point.name}: {point.y:.1f}%'
+                }
+            }
+          },
+          tooltip: {
+              headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+              pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+          },
+          series: [{
+            name: "",
+            size: '100%',
+            innerSize: '60%',
+            colorByPoint: true,
+            data: [
+                {
+                    name: "Income",
+                    color: colors[1],
+                    y: <%=income_percent%>,
+                    drilldown: "Income"
+                },
+                {
+                    name: "Expenses",
+                    color: colors[4],
+                    y: <%=expenses_percent%>,
+                    drilldown: "Expenses"
+            }]
+          }]
         });
 
         $('.overview-tab').click(function(e){

@@ -7,6 +7,7 @@ const request = require('request-promise');
 const mongoose = require('mongoose');
 const Properties = mongoose.model('Properties');
 const Documents = mongoose.model('Documents');
+const Transactions = mongoose.model('Transactions');
 const Tenants = mongoose.model('Tenants');
 var moment = require('moment');
 const uuidv4 = require('uuid/v4');
@@ -109,6 +110,8 @@ exports.overview = async function(req, res) {
   const { user } = req.session;
   const property = await Properties.findOne({ id: id }, { _id: 0 });
   const documents = await Documents.find({ user_id: user.id, property_id: id, status: 'alive' }, { _id: 0 }).limit(3);
+  const transactions = await Transactions.find({ user_id: user.id, property_id: id }, { _id: 0 }).sort('-created_at');
+
   let empty_cnt = 0;
   if (property.ownership == "") empty_cnt++;
   if (property.purchase_price == 0) empty_cnt++;
@@ -143,6 +146,25 @@ exports.overview = async function(req, res) {
   const vacant_value = (vacant_cnt/total_units*100).toFixed(0);
   const tenancy_value =  ((total_units-vacant_cnt)/total_units*100).toFixed(0);
   const chart_data = [vacant_value, tenancy_value];
+
+  // total income and expenses
+  let total_income = 0;
+  let total_expenses = 0;
+  transactions.forEach(transaction => {
+    if (transaction.amount >= 0) {
+      total_income += parseFloat(transaction.amount)
+    } else {
+      total_expenses += parseFloat(transaction.amount)
+    }
+  })
+
+  let net_profit = total_income + total_expenses;
+  const total_cost = total_income + Math.abs(total_expenses);
+  const income_percent = (total_income/total_cost*100).toFixed(0);
+  const expenses_percent = (Math.abs(total_expenses)/total_cost*100).toFixed(0);
+
+  const recentTrans = transactions.slice(4)
+
   res.render('property/overview', {
     title: 'Avenue - Overview',
     token: req.csrfToken(),
@@ -159,7 +181,14 @@ exports.overview = async function(req, res) {
     occupied_units,
     unit_id,
     tabs,
-    property_id: property.id
+    property_id: property.id,
+    total_income,
+    total_expenses,
+    income_percent,
+    expenses_percent,
+    total_income,
+    total_expenses,
+    net_profit
   });
 };
 
@@ -384,9 +413,9 @@ exports.tenancies = async function(req, res) {
   let vacant_tenancies = 0;
   properties.map(property => {
     all_tenancies += property.tenancies.length;
-    var occupied_property = JSON.parse(JSON.stringify(property));
+    var occupied_property = Object.assign({}, JSON.parse(JSON.stringify(property)));
     occupied_property.tenancies = [];
-    var vacant_property = JSON.parse(JSON.stringify(property));
+    var vacant_property = Object.assign({}, JSON.parse(JSON.stringify(property)));
     vacant_property.tenancies = [];
     property.tenancies.map(unit => {
       if (unit.rent_frequency == 'Vacant') {
