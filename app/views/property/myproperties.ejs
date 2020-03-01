@@ -82,7 +82,7 @@
           if (isPropertyFiltered(property, search)) {
             let status = ''
             let badge = '';
-            let image = property.image ? '/' + property.images : '';
+            let image = property.image ? '/' + property.image : '';
             if (property.status) { 
               if (property.units == 1) {
                 badge = property.status == 'Vacant' ? 'danger' : '';
