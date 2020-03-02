@@ -452,7 +452,6 @@
                             <div class="pr-4">
                               <div class="d-flex align-items-center text-teal">
                                 <div class="w-2 h-2 bg-grey">
-                                  
                                 </div>
                               </div>
                             </div>
@@ -675,11 +674,11 @@
                       <div id="loanContainer" class="border-bottom" style="max-width: 310px; height: 150px; margin: 0 auto"></div>
                       <div class="row">
                         <div class="col text-center border-right mt-4 px-3">
-                          <div class="mb-2 h4"><span class="text-success">●</span>&nbsp;Equity</div>
+                          <div class="mb-2"><span class="text-success">●</span>&nbsp;Equity</div>
                           <div class="h2 mb-0">£<span class="property_equity"></span></div>
                         </div>
                         <div class="col text-center mt-4 px-3">
-                          <div class="mb-2 h4"><span class="text-danger">●</span>&nbsp;Debt</div>
+                          <div class="mb-2"><span class="text-danger">●</span>&nbsp;Debt</div>
                           <div class="h2 mb-0">£<span class="property_debt"></span></div>
                         </div>
                       </div>
@@ -1077,10 +1076,10 @@
               </div>
               <div class="card-body">
                 <div class="row align-items-center justify-content-center">
-                  <div class="col-4 text-center border-right">
-                    <div id="incomeExpensesChart" style="width:250px; height:200px;"></div>
+                  <div class="col-12 col-md-4 text-center border-right">
+                    <div id="incomeExpensesChart" style="width:250px; height:200px;" data-value="<%=expenses_chart_data%>"></div>
                   </div>
-                  <div class="col-8">
+                  <div class="col-12 col-md-8">
                     <div class="row">
                       <div class="col-6 text-center border-right">
                         <!-- Heading -->
@@ -1139,10 +1138,37 @@
               </div>
               <div class="card-body">
                 <div class="row align-items-center justify-content-center">
-                  <div class="col-4 text-center border-right">
+                  <div class="col-12 col-md-4 text-center border-right">
                     <div id="expensesBreakdownChart" style="width:250px; height:200px;"></div>
                   </div>
-                  <div class="col-8">
+                  <div class="col-12 col-md-8 pl-4 mb-3">
+                    <% Object.keys(expenses_breakdown).forEach( function(key, i) { %>
+                      <div class="row">
+                        <div class="col-4 mr-auto">
+                          <div class="pb-2 d-flex align-items-center">
+                            <div class="pr-3">
+                              <div class="d-flex align-items-center text-teal">
+                                <div class="w-2 h-2" style="background: <%=colors[i]%>">
+                                </div>
+                              </div>
+                            </div>
+                            <%=key%>
+                          </div>
+                        </div>
+                        <div class="col-auto">
+                          (<%=breakdown_percent[key] || 0 %>%)&nbsp;
+                          £<%=expenses_breakdown[key].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                        </div>
+                      </div>
+                    <% }) %>
+                    <div class="row border-top pt-2">
+                      <div class="col-4 mr-auto">
+                        Total Expenses
+                      </div>
+                      <div class="col-auto">
+                        £<%=Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1242,8 +1268,8 @@
             name: '',
             innerSize: '50%',
             data: [
-                ['Equity', data.equity],
-                ['Debt', data.debt],
+                { name: '', y: data.equity, color: '#41d3bd'},
+                { name: '', y: data.debt, color: '#ef476f' },
             ]
           }]
         }, function(){
@@ -1317,18 +1343,18 @@
             series: [{
               name: "",
               size: '100%',
-              innerSize: '60%',
+              innerSize: '0%',
               colorByPoint: true,
               data: [
                   {
                       name: "Income",
-                      color: colors[1],
+                      color: '#41d3bd',
                       y: <%=income_percent%>,
                       drilldown: "Income"
                   },
                   {
                       name: "Expenses",
-                      color: colors[4],
+                      color: '#ef476f',
                       y: <%=expenses_percent%>,
                       drilldown: "Expenses"
               }]
@@ -1336,6 +1362,7 @@
         });
 
         // Expenses Breakdown Chart
+        const expenses_chart_data = $('#incomeExpensesChart').data('value');
         Highcharts.chart('expensesBreakdownChart', {
           chart: {
               type: 'pie'
@@ -1358,21 +1385,9 @@
           series: [{
             name: "",
             size: '100%',
-            innerSize: '60%',
+            innerSize: '0%',
             colorByPoint: true,
-            data: [
-                {
-                    name: "Income",
-                    color: colors[1],
-                    y: <%=income_percent%>,
-                    drilldown: "Income"
-                },
-                {
-                    name: "Expenses",
-                    color: colors[4],
-                    y: <%=expenses_percent%>,
-                    drilldown: "Expenses"
-            }]
+            data: expenses_chart_data
           }]
         });
 
@@ -1628,8 +1643,8 @@
         $('.ownership-summary-edit').click(function(e){
           $('#loan-modal-title').html('Update a Loan Value');
           $('#addLoanBtn').html('Update');
-          $('.property_debt').val(debt);
-          $('.property_equity').val(equity);
+          $('.property_debt').val(debt.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+          $('.property_equity').val(equity.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
           $('#modalAddNewLoan').modal();
         });
 
@@ -1661,8 +1676,8 @@
               equity = res.data.equity;
               debt = res.data.debt;
               drawLoanChart(res.data)
-              $('.property_debt').html(res.data.debt);
-              $('.property_equity').html(res.data.equity);
+              $('.property_debt').html(res.data.debt.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+              $('.property_equity').html(res.data.equity.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
               $('.ownership-content-block').show();
               $('.ownership-empty-block').hide();
             } else {
@@ -1694,10 +1709,10 @@
           if (res.status == 'ok' && res.data.debt != 0 && res.data.equity != 0 ) {
             debt = res.data.debt;
             equity = res.data.equity;
-            $('.property_debt').val(res.data.debt);
-            $('.property_equity').val(res.data.equity);
-            $('.property_debt').html(res.data.debt);
-            $('.property_equity').html(res.data.equity);
+            $('.property_debt').val(res.data.debt.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+            $('.property_equity').val(res.data.equity.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+            $('.property_debt').html(res.data.debt.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+            $('.property_equity').html(res.data.equity.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
             drawLoanChart(res.data)
             $('.ownership-empty-block').hide();
           } else {

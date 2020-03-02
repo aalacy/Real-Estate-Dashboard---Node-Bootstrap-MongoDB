@@ -150,12 +150,36 @@ exports.overview = async function(req, res) {
   // total income and expenses
   let total_income = 0;
   let total_expenses = 0;
+  // expenses breakdown
+  let expenses_breakdown = {};
+  let breakdown_percent = {};
+  const expenses_categories = ['Insurance', 'Repairs & Maintenance', 'Management Fees', 'Utilities', 'Tax', 'Legal', 'Mortgage or Loans', 'Uncategorised'];
+  expenses_categories.map((item) => {
+    expenses_breakdown[item] = 0;
+  })
+
   transactions.forEach(transaction => {
-    if (transaction.amount >= 0) {
-      total_income += parseFloat(transaction.amount)
+    const amount = parseFloat(transaction.amount) || 0;
+    if ( amount >= 0) {
+      total_income += amount
     } else {
-      total_expenses += parseFloat(transaction.amount)
+      total_expenses += Math.abs(amount)
+      expenses_breakdown[transaction.category] += Math.abs(amount)
     }
+  })
+
+  transactions.forEach(transaction => {
+    breakdown_percent[transaction.category] = (expenses_breakdown[transaction.category]/total_expenses * 100)
+  })
+
+  expenses_chart_data = []
+  const colors = ['#DEEFB7', '#FFAF87', '#C9CAD9', '#051a35', '#0e67dc', '#ef476f', '#41d3bd', '#555f7f'];
+  expenses_categories.map((item, i) => {
+    expenses_chart_data.push({
+      name: item,
+      color: colors[i],
+      y: expenses_breakdown[item],
+    })
   })
 
   let net_profit = total_income + total_expenses;
@@ -163,6 +187,7 @@ exports.overview = async function(req, res) {
   const income_percent = (total_income/total_cost*100).toFixed(0);
   const expenses_percent = (Math.abs(total_expenses)/total_cost*100).toFixed(0);
 
+  // recent 5 transactions
   const recentTrans = transactions.slice(4)
 
   res.render('property/overview', {
@@ -189,6 +214,11 @@ exports.overview = async function(req, res) {
     total_income,
     total_expenses,
     net_profit,
+    expenses_breakdown,
+    breakdown_percent,
+    expenses_chart_data: JSON.stringify(expenses_chart_data),
+    colors,
+    recentTrans
   });
 };
 
@@ -197,9 +227,9 @@ exports.detail = async function(req, res) {
   const property = await Properties.findOne({ id: id }, { _id: 0 });
 
   res.render('property/detail', {
-    title: 'Avenue - Overview',
+    title: 'Avenue - Detail',
     token: req.csrfToken(),
-    property: property
+    property
   });
 };
 
@@ -641,7 +671,8 @@ exports.adjust_summary = async function(req, res) {
   const _current_value = current_value.replace(/,/g, '');
   const myproperty = await Properties.findOne({ id: id }, { _id: 0 });
   let rental_yield = calcRentalYield(myproperty.purchase_price, myproperty.rental_income);
-  const new_values = { $set: { current_value: _current_value, rental_yield } };
+  const equity = parseFloat(_current_value) - parseFloat(myproperty.debt || 0); 
+  const new_values = { $set: { current_value: _current_value, rental_yield, equity } };
   return Properties.updateOne({ id }, new_values).then(() => {
     res.redirect('/property/overview/' + id);
   });
