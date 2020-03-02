@@ -684,7 +684,10 @@
                         </div>
                       </div>
                     </div>
-                    <div class="ownership-empty-block"></div>
+                    <div class="ownership-empty-block">
+                      <div>No loan information provided</div>
+                      <button class="btn btn-sm btn-outline-dark addloan-btn">Add a loan</button>
+                    </div>
                   </div>
                 </div>
 
@@ -1654,13 +1657,15 @@
           .then(response => response.json())
           .then(function(res) {
             $('#modalAddNewLoan').modal('hide');
-            if (res.status == 'ok') {
+            if (res.status == 'ok' && res.data.debt != 0 && res.data.equity != 0) {
               equity = res.data.equity;
               debt = res.data.debt;
               drawLoanChart(res.data)
               $('.property_debt').html(res.data.debt);
               $('.property_equity').html(res.data.equity);
-            } else if (res.status == 422 || res.status == 400){
+              $('.ownership-content-block').hide();
+              $('.ownership-empty-block').show();
+            } else {
               
             }
           })
@@ -1686,7 +1691,7 @@
         })
         .then(response => response.json())
         .then(function(res) {
-          if (res.status == 'ok' && res.data.debt != 0) {
+          if (res.status == 'ok' && res.data.debt != 0 && res.data.equity != 0 ) {
             debt = res.data.debt;
             equity = res.data.equity;
             $('.property_debt').val(res.data.debt);
@@ -1696,6 +1701,7 @@
             drawLoanChart(res.data)
             $('.ownership-empty-block').hide();
           } else {
+            $('.ownership-content-block').hide();
             $('.ownership-empty-block').show();
           }
         })

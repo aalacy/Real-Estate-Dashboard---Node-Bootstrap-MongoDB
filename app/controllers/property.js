@@ -687,7 +687,8 @@ exports.get_equity_debt = async function(req, res) {
     data: {
       debt,
       equity,
-      percent
+      percent,
+      current_value
     }
   })
 }
@@ -710,7 +711,8 @@ exports.new_loan = async function(req, res) {
       data: {
         debt: parseFloat(property.debt),
         equity: parseFloat(property.equity),
-        percent
+        percent,
+        current_value
       }
     })
   })
