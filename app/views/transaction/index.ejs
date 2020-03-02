@@ -22,7 +22,7 @@
             <div class="modal-header">
                 <!-- Header -->
               <h3 class="modal-title" id="transaction-modal-title">Add a New Transaction</h3>
-              <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+              <div class="transaction-type btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
                 <label class="btn btn-outline-dark active">
                   <input type="radio" name="transaction[type]" value="In" id="income_option" autocomplete="off" checked> Create Income
                 </label>
@@ -90,7 +90,9 @@
                       Category
                     </label>
                     <div class="col-lg-9 col-sm-12">
-                      <input type="text" id="transaction_category" name="transaction[category]" class="form-control w-100">
+                      <select class="form-control" style="min-width: 250px;" name="transaction[category]" id="transaction_category" data-toggle="select" data-options='{"placeholder": "All Categories", "width": "element"}' required>
+                        <option></option>
+                      </select>  
                     </div>
                   </div>
 
@@ -430,6 +432,19 @@
     <% include ../partials/scripts %>
 
     <script type="text/javascript">
+      const income_categories = ['Rental Income', 'Uncategorised'];
+      const expenses_categories = ['Insurance', 'Repairs & Maintenance', 'Management Fees', 'Utilities', 'Tax', 'Legal', 'Mortgage or Loans', 'Uncategorised'];
+      const changeCategorySelection = (list) => {
+        $('#transaction_category').empty();
+        list.forEach(item => {
+            option = new Option(item, item, true, true);
+            $('#transaction_category').append(option);
+        })
+      };
+
+      // initialize the category with income
+      changeCategorySelection(income_categories);
+
     	$(function() {
     		fetch('/transaction/all/get', {method: 'GET'})
           .then(res => res.json())
@@ -634,6 +649,15 @@
 
         $('.transaction-expenses-search').keyup(function(event) {
           tables.table('#expensesTable').search( $(this).val() ).draw();
+        });
+
+        // Transaction type toggle
+        $('input[name="transaction[type]"]').on('change', function(e){
+          if ($(this).val() == 'In') {
+            changeCategorySelection(income_categories);
+          } else {
+            changeCategorySelection(expenses_categories);
+          }
         });
       });
     </script>

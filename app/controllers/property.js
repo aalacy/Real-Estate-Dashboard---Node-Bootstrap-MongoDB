@@ -188,7 +188,7 @@ exports.overview = async function(req, res) {
     expenses_percent,
     total_income,
     total_expenses,
-    net_profit
+    net_profit,
   });
 };
 
@@ -668,3 +668,56 @@ exports.estimated_sale = async function(req, res) {
   }
 }
 
+// Loan-to-value
+exports.get_equity_debt = async function(req, res) {
+  const { body: { property } } = req;
+  const id = property.id;
+  const myproperty = await Properties.findOne({ id }, { _id: 0 });
+  const debt = parseFloat(myproperty.debt || 0)
+  const equity = parseFloat(myproperty.equity || 0);
+  const current_value = parseFloat(myproperty.current_value || 0);
+  let percent = 0;
+  if (current_value) {
+    percent = Math.max(debt/current_value*100, equity/current_value*100)
+  }
+  percent = percent.toFixed(0)
+  
+  return res.json({
+    status: 'ok',
+    data: {
+      debt,
+      equity,
+      percent
+    }
+  })
+}
+
+exports.new_loan = async function(req, res) {
+  const { body: { property } } = req;
+
+  const id = property.id;
+  const myproperty = await Properties.findOne({ id }, { _id: 0 });
+  const current_value = parseFloat(myproperty.current_value || 0);
+  let percent = 0;
+  if (current_value) {
+    percent = Math.max(property.debt/current_value*100, property.equity/current_value*100)
+  }
+  percent = percent.toFixed(0)
+  const new_values = { $set: { equity: property.equity, debt: property.debt } };
+  return Properties.updateOne({ id }, new_values).then((dd) => {
+    res.json({
+      status: 'ok',
+      data: {
+        debt: parseFloat(property.debt),
+        equity: parseFloat(property.equity),
+        percent
+      }
+    })
+  })
+  .catch(e => {
+    res.json({
+      status: 'failure',
+      err: e
+    })
+  });
+};

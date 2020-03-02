@@ -282,17 +282,17 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     padding: 1rem;
 }
 
-.ownership-block {
+.ownership-empty-block {
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    min-height: 270px;
+    min-height: 250px;
     align-items: center;
     position: relative;
 }
 
-.ownership-block .addloan-btn {
+.ownership-empty-block .addloan-btn {
     position: absolute;
     bottom: 30px;
 }

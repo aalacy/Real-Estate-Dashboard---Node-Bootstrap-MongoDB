@@ -16,32 +16,54 @@
   <body>
 
     <div class="modal  fade" id="modalAddNewLoan" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <form id="add-unit-form" method="post" action="/property/loan/new/">
+      <div class="modal-dialog modal-sm" role="document">
+        <form id="add-loan-form" method="post" action="/property/loan/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" name="property[id]" value="<%= property.id%>">
+          <input type="hidden" id="current_value" value="<%= property.current_value%>">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
                 <!-- Header -->
-              <h3 class="modal-title" id="unit-modal-title">Add a Loan Value</h3>
+              <h3 class="modal-title" id="loan-modal-title">Add a Loan Value</h3>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-    
               <div class="row">
-                <div class="col-12 col-md-6">
-                  
-                  <!-- Start date -->
-                  <div class="form-group">
-                    <label>
+                <div class="col-12">
+                  <div class="form-group d-flex align-items-center">
+                    <label class="mr-2">
                       Loan
                     </label>
-                    <input type="text" id="unit_description" name="unit[description]" class="form-control" placeholder="Description" value="" required>
+                    <div class="input-group input-group-merge mb-3">
+                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[loan]" class="form-control form-control-prepended number property_debt">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          <span>£</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group d-flex align-items-center mb-0">
+                    <label class="mr-2">
+                      Equity
+                    </label>
+                    <div class="input-group input-group-merge">
+                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[loan]" class="form-control form-control-prepended number property_equity" readonly>
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          <span>£</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary" id="addLoanBtn">Add</button>
             </div>
           </div>
         </form>
@@ -248,7 +270,7 @@
       <!-- Modal Adjust Summary -->
     <div class="modal fade" id="modalAdjustSummary" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
-        <form id="search-address-form" method="post" action="/property/ajust_summary/">
+        <form id="search-address-form" method="post" action="/property/adjust_summary/">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" name="property[id]" value="<%= property.id%>">
           <div class="modal-content bg-lighter">
@@ -640,7 +662,7 @@
                         <div class="col-auto">
 
                           <!-- Button -->
-                          <a href="#" class="btn btn-sm btn-white ownership-summary-edit" data-toggle="modal" data-target="#modalAddNewLoan">
+                          <a href="#" class="btn btn-sm btn-white ownership-summary-edit">
                             Edit
                           </a>
                       
@@ -649,9 +671,20 @@
                     </div>
   				  
                   <div class="card-body ownership-block">
-  				          <div>No loan information provided</div>
-
-                    <button class="addloan-btn btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#modalAddNewLoan">Add a loan</button>
+                    <div class="ownership-content-block">
+                      <div id="loanContainer" class="border-bottom" style="max-width: 310px; height: 150px; margin: 0 auto"></div>
+                      <div class="row">
+                        <div class="col text-center border-right mt-4 px-3">
+                          <div class="mb-2 h4"><span class="text-success">●</span>&nbsp;Equity</div>
+                          <div class="h2 mb-0">£<span class="property_equity"></span></div>
+                        </div>
+                        <div class="col text-center mt-4 px-3">
+                          <div class="mb-2 h4"><span class="text-danger">●</span>&nbsp;Debt</div>
+                          <div class="h2 mb-0">£<span class="property_debt"></span></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="ownership-empty-block"></div>
                   </div>
                 </div>
 
@@ -1149,6 +1182,10 @@
       const _unit_id = '<%=unit_id%>';
       let _tabs = '<%=tabs%>';
       const _property_id = '<%=property_id%>';
+
+      // loan
+      let debt = 0;
+      let equity = 0;
       
       let documents = [];
       let units = [];
@@ -1163,6 +1200,52 @@
         $('.overview-tab').removeClass('active');
         $('#'+tabs).addClass('active show');
         $(`a[data-href="#${tabs}"]`).addClass('active');
+      }
+
+      const drawLoanChart = (data) => {
+        Highcharts.chart('loanContainer', {
+          chart: {
+              plotBackgroundColor: null,
+              plotBorderWidth: 0,
+              plotShadow: false
+          },
+          title: {
+              text: `${data.percent}%`,
+              align: 'center',
+              verticalAlign: 'middle',
+              y: 30
+          },
+          tooltip: {
+              pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          },
+          plotOptions: {
+              pie: {
+                  dataLabels: {
+                      enabled: false,
+                      distance: -30,
+                      style: {
+                          fontWeight: 'bold',
+                          color: 'white'
+                      }
+                  },
+                  startAngle: -90,
+                  endAngle: 90,
+                  center: ['50%', '75%'],
+                  size: '180%'
+              }
+          },
+          series: [{
+            type: 'pie',
+            name: '',
+            innerSize: '50%',
+            data: [
+                ['Equity', data.equity],
+                ['Debt', data.debt],
+            ]
+          }]
+        }, function(){
+          this.setSize(this.plotSizeX, this.plotSizeX - 100)
+        });
       }
 
       $(function() {
@@ -1522,6 +1605,103 @@
         if (document.querySelector('.dropzone')) {
           Dropzone_init( document.querySelector('.dropzone'));
         }
+
+        // Update loan
+        $('input.property_debt').keyup(function(e){
+          const loan = parseFloat($(this).val().replace(',', '') || 0);
+          const current_value = parseFloat($('#current_value').val());
+          const debt = current_value - loan;
+          $('.property_equity').val(debt);
+        });
+
+        $(document).on('click', '.addloan-btn', function(e){
+          $('#loan-modal-title').html('Add a Loan Value');
+          $('#addLoanBtn').html('Add');
+          $('.property_debt').val('');
+          $('.property_equity').val('');
+          $('#modalAddNewLoan').modal();
+        });
+
+        $('.ownership-summary-edit').click(function(e){
+          $('#loan-modal-title').html('Update a Loan Value');
+          $('#addLoanBtn').html('Update');
+          $('.property_debt').val(debt);
+          $('.property_equity').val(equity);
+          $('#modalAddNewLoan').modal();
+        });
+
+        // update the loan value
+        $('#addLoanBtn').click(function(e){
+          e.preventDefault();
+          const data = {
+            id: $('input[name="property[id]"]').val(),
+            equity: $('.property_debt').val().replace(',', ''),
+            debt: $('.property_equity').val()
+          };
+
+          const token = $('meta[name="csrf"]').attr('content');
+          fetch('/property/loan/new', {
+              credentials: 'same-origin', // <-- includes cookies in the request
+              headers: {
+                'CSRF-Token': token, // <-- is the csrf token as a header
+                'Content-Type': 'application/json'
+              },
+              method: 'POST',
+              body: JSON.stringify({
+                  property: data
+              })
+          })
+          .then(response => response.json())
+          .then(function(res) {
+            $('#modalAddNewLoan').modal('hide');
+            if (res.status == 'ok') {
+              equity = res.data.equity;
+              debt = res.data.debt;
+              drawLoanChart(res.data)
+              $('.property_debt').html(res.data.debt);
+              $('.property_equity').html(res.data.equity);
+            } else if (res.status == 422 || res.status == 400){
+              
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        })
+
+        // fetch loan value
+        const token = $('meta[name="csrf"]').attr('content');
+        fetch('/property/loan/all', {
+            credentials: 'same-origin', // <-- includes cookies in the request
+            headers: {
+              'CSRF-Token': token, // <-- is the csrf token as a header
+              'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                property: {
+                  id: $('input[name="property[id]"]').val()
+                }
+            })
+        })
+        .then(response => response.json())
+        .then(function(res) {
+          if (res.status == 'ok' && res.data.debt != 0) {
+            debt = res.data.debt;
+            equity = res.data.equity;
+            $('.property_debt').val(res.data.debt);
+            $('.property_equity').val(res.data.equity);
+            $('.property_debt').html(res.data.debt);
+            $('.property_equity').html(res.data.equity);
+            drawLoanChart(res.data)
+            $('.ownership-empty-block').hide();
+          } else {
+            $('.ownership-empty-block').show();
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
       });
     </script>
   </body>

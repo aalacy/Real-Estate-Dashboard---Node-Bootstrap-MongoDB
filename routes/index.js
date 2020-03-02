@@ -77,7 +77,7 @@ router.use('/property/unit/all', auth.checkToken, property.all_units);
 router.use('/property/unit/new', auth.checkToken, property.new_unit);
 router.use('/property/unit/delete', auth.checkToken, property.delete_unit);
 router.use('/property/unit/clear', auth.checkToken, property.clear_unit);
-router.use('/property/ajust_summary', auth.checkToken, property.adjust_summary);
+router.use('/property/adjust_summary', auth.checkToken, property.adjust_summary);
 router.use('/property/estimated_sale', auth.checkToken, property.estimated_sale);
 
 router.use('/property/unit/tenant/new', auth.checkToken, property.new_tenant);
@@ -87,7 +87,11 @@ router.use('/property/unit/tenant/delete', auth.checkToken, property.delete_tena
 router.get('/property/documents', auth.checkToken, property.documents);
 router.post('/property/documents/upload', upload.single( 'file' ), property.documents_upload);
 router.post('/property/documents/delete', auth.checkToken, property.documents_delete);
-router.use('/property/documents/upload_all', auth.checkToken, property.upload_doc_to_property);
+router.post('/property/documents/upload_all', auth.checkToken, property.upload_doc_to_property);
+
+// loan
+router.post('/property/loan/all', auth.checkToken, property.get_equity_debt);
+router.post('/property/loan/new', auth.checkToken, property.new_loan);
 
 // transactions
 router.get('/transaction/all', auth.checkToken, transaction.all);

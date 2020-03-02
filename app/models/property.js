@@ -43,6 +43,8 @@ const PropertiesSchema = new Schema({
     off_street_parking: { type: String, default: '' }, // 0 ~ 3 Spaces
     is_new: { type: Boolean, default: true }, // used to display alert on top of the overview page
     status: { type: String, default: 'Vacant' }, // Vacant or Occupied
+    debt: { type: Number, default: 0.0 }, // Vacant or Occupied
+    equity: { type: Number, default: 0.0 }, // Vacant or Occupied
     tenancies: { type: Array, default: [] }, // Tenancies
     created_at: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') },
     updated_at: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') }
