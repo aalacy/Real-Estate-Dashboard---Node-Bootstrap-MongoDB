@@ -169,17 +169,27 @@ exports.overview = async function(req, res) {
   })
 
   transactions.forEach(transaction => {
-    breakdown_percent[transaction.category] = (expenses_breakdown[transaction.category]/total_expenses * 100)
+    breakdown_percent[transaction.category] = (expenses_breakdown[transaction.category]/total_expenses * 100).toFixed(1)
   })
 
+  // sort
+  sortedBreakdownKey = Object.keys(expenses_breakdown).sort(function(a, b){return expenses_breakdown[b]-expenses_breakdown[a]})
+  sortedBreakdown = {}
+  sortedBreakdownKey.map(key => {
+    sortedBreakdown[key] = expenses_breakdown[key];
+  })
+
+  console.log(sortedBreakdown)
   expenses_chart_data = []
   const colors = ['#DEEFB7', '#FFAF87', '#C9CAD9', '#051a35', '#0e67dc', '#ef476f', '#41d3bd', '#555f7f'];
-  expenses_categories.map((item, i) => {
-    expenses_chart_data.push({
-      name: item,
-      color: colors[i],
-      y: expenses_breakdown[item],
-    })
+  Object.keys(sortedBreakdown).map((item, i) => {
+    if (sortedBreakdown[item] > 0) {
+      expenses_chart_data.push({
+        name: item,
+        color: colors[i],
+        y: sortedBreakdown[item],
+      })
+    }
   })
 
   let net_profit = total_income + total_expenses;
@@ -214,7 +224,7 @@ exports.overview = async function(req, res) {
     total_income,
     total_expenses,
     net_profit,
-    expenses_breakdown,
+    expenses_breakdown: sortedBreakdown,
     breakdown_percent,
     expenses_chart_data: JSON.stringify(expenses_chart_data),
     colors,

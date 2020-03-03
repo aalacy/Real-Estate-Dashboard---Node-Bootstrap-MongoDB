@@ -1143,23 +1143,25 @@
                   </div>
                   <div class="col-12 col-md-8 pl-4 mb-3">
                     <% Object.keys(expenses_breakdown).forEach( function(key, i) { %>
-                      <div class="row">
-                        <div class="col-4 mr-auto">
-                          <div class="pb-2 d-flex align-items-center">
-                            <div class="pr-3">
-                              <div class="d-flex align-items-center text-teal">
-                                <div class="w-2 h-2" style="background: <%=colors[i]%>">
+                      <% if (expenses_breakdown[key] > 0) { %>
+                        <div class="row">
+                          <div class="col-4 mr-auto">
+                            <div class="pb-2 d-flex align-items-center">
+                              <div class="pr-3">
+                                <div class="d-flex align-items-center text-teal">
+                                  <div class="w-2 h-2" style="background: <%=colors[i]%>">
+                                  </div>
                                 </div>
                               </div>
+                              <%=key%>
                             </div>
-                            <%=key%>
+                          </div>
+                          <div class="col-auto">
+                            (<%=breakdown_percent[key] || 0 %>%)&nbsp;
+                            £<%=expenses_breakdown[key].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                           </div>
                         </div>
-                        <div class="col-auto">
-                          (<%=breakdown_percent[key] || 0 %>%)&nbsp;
-                          £<%=expenses_breakdown[key].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                        </div>
-                      </div>
+                      <% } %>
                     <% }) %>
                     <div class="row border-top pt-2">
                       <div class="col-4 mr-auto">
@@ -1380,7 +1382,7 @@
           },
           tooltip: {
               headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-              pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+              pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>£{point.y:.0f}</b> of total<br/>'
           },
           series: [{
             name: "",
