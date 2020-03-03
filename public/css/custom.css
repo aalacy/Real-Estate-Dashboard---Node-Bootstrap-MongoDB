@@ -336,3 +336,18 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
         max-width: 180px; 
     }
 }
+
+/* transaction */
+.transaction-item {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1.2rem 0;
+}
+
+.transaction-item.list-group-item {
+    border: none;
+}
+
+.transaction-item:not(:last-child) {
+    border-bottom: 1px solid #edf2f9;
+}

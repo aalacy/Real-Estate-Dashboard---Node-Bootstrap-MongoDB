@@ -163,13 +163,13 @@ exports.overview = async function(req, res) {
     if ( amount >= 0) {
       total_income += amount
     } else {
-      total_expenses += Math.abs(amount)
+      total_expenses += (amount)
       expenses_breakdown[transaction.category] += Math.abs(amount)
     }
   })
 
   transactions.forEach(transaction => {
-    breakdown_percent[transaction.category] = (expenses_breakdown[transaction.category]/total_expenses * 100).toFixed(1)
+    breakdown_percent[transaction.category] = (expenses_breakdown[transaction.category]/Math.abs(total_expenses) * 100).toFixed(1)
   })
 
   // sort
@@ -192,10 +192,16 @@ exports.overview = async function(req, res) {
     }
   })
 
-  let net_profit = total_income + total_expenses;
+  let net_profit = total_income - total_expenses;
   const total_cost = total_income + Math.abs(total_expenses);
-  const income_percent = (total_income/total_cost*100).toFixed(0);
-  const expenses_percent = (Math.abs(total_expenses)/total_cost*100).toFixed(0);
+  const income_percent = (total_income/total_cost*100).toFixed(2);
+  const expenses_percent = (Math.abs(total_expenses)/total_cost*100).toFixed(2);
+  const operating_expense_ratio = expenses_percent;
+  const gross_yield = (total_income/parseFloat(property.current_value)*100).toFixed(2);
+  const net_yield = 0;
+  if (property.purchase_price > 0) {
+    (net_profit/parseFloat(property.purchase_price)*100).toFixed(2);
+  }
 
   // recent 5 transactions
   const recentTrans = transactions.slice(4)
@@ -222,13 +228,15 @@ exports.overview = async function(req, res) {
     income_percent,
     expenses_percent,
     total_income,
-    total_expenses,
     net_profit,
     expenses_breakdown: sortedBreakdown,
     breakdown_percent,
     expenses_chart_data: JSON.stringify(expenses_chart_data),
     colors,
-    recentTrans
+    recentTrans,
+    operating_expense_ratio,
+    gross_yield,
+    net_yield
   });
 };
 

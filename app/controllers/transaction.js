@@ -28,12 +28,14 @@ exports.all_get = async function(req, res) {
   const { user } = req.session;
   let transactions = await Transactions.find({ user_id: user.id }, { _id: 0 });
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
+  const documents = await Documents.find({}, { _id: 0 });
   let newTransactions = transactions.map(function(transaction)  {
   	const property = properties.filter(property => property.id == transaction.property_id);
   	let propertyName = ''
   	if (property.length > 0) {
 	  	propertyName = property[0].address + ', ' + property[0].city;
   	}
+    const doc = documents.filter(document => document.id == transaction.document_id);
   	return { 
   		id: transaction.id,
   		created_at: moment(transaction.created_at).format('YYYY-MM-DD'), 
@@ -43,7 +45,9 @@ exports.all_get = async function(req, res) {
   		category: transaction.category,
   		account: transaction.account,
   		amount: transaction.amount,
-      type: transaction.type
+      type: transaction.type,
+      mimetype: doc.mimetype,
+      path: doc.path
  	  };
   })
 

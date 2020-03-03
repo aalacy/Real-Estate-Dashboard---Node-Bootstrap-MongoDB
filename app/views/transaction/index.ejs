@@ -101,7 +101,7 @@
                       Account
                     </label>
                     <div class="col-lg-9 col-sm-12">
-                      <input type="text" id="transaction_account" name="transaction[account]" class="form-control w-100" value="manual transaction" readonly>
+                      <input type="text" id="transaction_account" name="transaction[account]" class="form-control w-100" value="Manual Transaction" readonly>
                     </div>
                   </div>
 
@@ -192,31 +192,7 @@
 				
               </div>
             </div> <!-- / .row -->
-			
-            <div class="row align-items-center">
-              <div class="col">
-                <!-- Nav -->
-                <ul class="nav nav-tabs nav-overflow header-tabs">
-                  <li class="nav-item">
-                    <a href="#all" data-toggle="tab" role="tab" class="nav-link active">
-                      All transactions
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#income" data-toggle="tab" role="tab"  class="nav-link">
-                      Income
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#expenses" data-toggle="tab" role="tab" class="nav-link">
-                      Expenses
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
           </div> 
-
         </div>
       </div> <!-- / .header -->
 
@@ -239,7 +215,7 @@
                     </div>
                   
                   </div>
-                  <div class="col-auto">
+                  <!-- <div class="col-auto">
                   
                     <div class="dropdown">
                       <button class="btn btn-sm btn-white dropdown-toggle" type="button" id="bulkActionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -250,188 +226,53 @@
                       </div>
                     </div>
 
-                  </div >
+                  </div > -->
                 </div>
               </div>
-              <div class="table-responsive">
-                <table class="table table-sm w-100 card-table" id="allTable">
-                  <thead>
-                    <tr>
-                      <th>
-                        <div class="checkbox mass_select_all_wrap">
-                          <input type="checkbox" id="mass_select_all" data-to-table="tasks">
-                        </div>
-                      </th>
-                      <th>
-                        Date
-                      </th>
-                      <th>
-                        Property
-                      </th>
-                      <th>
-                        To/From
-                      </th>
-                      <th>
-                        Category
-                      </th>
-                      <th>
-                        Account
-                      </th>
-                      <th>
-                        Amount
-                      </th>
-                      <th>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="transaction-list">
-                  </tbody>
-                </table>
+              <div class="d-flex flex-wrap py-4 px-4 border-bottom">
+                <div class="col-auto d-flex align-items-center">
+                  <div class="custom-control custom-checkbox tranaction-checkbox my-1 mr-sm-2 d-none">
+                    <input type="checkbox" name="tranaction[id]" class="custom-control-input" id="customCheck${idx}" value="${transaction.id}">
+                    <label class="custom-control-label" for="customCheck${idx}"></label>
+                  </div>
+                  <button class="btn btn-outline-secondary transaction-multiple-finish-btn mr-sm-2  d-none">Finish</button>
+                  <button class="btn btn-outline-secondary transaction-multiple-del-btn d-none">Delete Selected</button>
+                  <button class="btn btn-outline-secondary transaction-multiple-btn">Select Multiple</button>
+                </div>
+                <div class="col-12 col-md-3">
+                  <select class="form-control" style="min-width: 350px;" id="propertyFilter" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
+                      <option></option>
+                  </select>  
+                </div>
+                <div class="col-12 col-md-3">
+                  <select class="form-control" style="min-width: 350px;" id="filterByCategory" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
+                      <option></option>
+                  </select> 
+                </div>
+              </div>
+              <div class="transaction-list pl-4 pr-5 pb-4">
               </div>
             </div>
-          </div>
-          <div class="tab-pane fade" id="income" role="tabpanel">
-            <div class="card" >
-              <div class="card-header">
-                 <div class="row align-items-center">
-                  <div class="col">
-
-                    <form class="row align-items-center">
-                      <div class="col-auto pr-0">
-                        <span class="fe fe-search text-muted"></span>
-                      </div>
-                      <div class="col">
-                          <input type="search" class="form-control form-control-flush search transaction-income-search" placeholder="Search">
-                      </div>
-                    </form>
-                  
-                  </div>
-                  <div class="col-auto">
-                  
-                    <div class="dropdown">
-                      <button class="btn btn-sm btn-white dropdown-toggle" type="button" id="bulkActionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Bulk action
-                      </button>
-                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bulkActionDropdown">
-                        <a class="dropdown-item bulk-delete-transaction" href="#!">Delete</a>
-                      </div>
-                    </div>
-
-                  </div>
-                </div> 
-              </div> 
-              <div class="table-responsive pb-4">
-                <table class="table table-sm w-100 card-table" id="incomeTable">
-                  <thead>
-                    <tr>
-                      <th>
-                        <div class="checkbox mass_select_all_wrap">
-                          <input type="checkbox" id="mass_select_all" data-to-table="tasks">
-                        </div>
-                      </th>
-                      <th>
-                        Date
-                      </th>
-                      <th>
-                        Property
-                      </th>
-                      <th>
-                        To/From
-                      </th>
-                      <th>
-                        Category
-                      </th>
-                      <th>
-                        Account
-                      </th>
-                      <th>
-                        Amount
-                      </th>
-                      <th>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="list income-list">
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane fade" id="expenses" role="tabpanel">
-            <div class="card" >
-              <div class="card-header">
-                 <div class="row align-items-center">
-                  <div class="col">
-
-                    <form class="row align-items-center">
-                      <div class="col-auto pr-0">
-                        <span class="fe fe-search text-muted"></span>
-                      </div>
-                      <div class="col">
-                          <input type="search" class="form-control form-control-flush search transaction-expenses-search" placeholder="Search">
-                      </div>
-                    </form>
-                  
-                  </div>
-                  <div class="col-auto">
-                  
-                    <div class="dropdown">
-                      <button class="btn btn-sm btn-white dropdown-toggle" type="button" id="bulkActionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Bulk action
-                      </button>
-                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bulkActionDropdown">
-                        <a class="dropdown-item bulk-delete-transaction"  href="#!">Delete</a>
-                      </div>
-                    </div>
-
-                  </div>
-                </div> 
-              </div>
-              <div class="table-responsive pb-4">
-                <table class="table table-sm w-100 card-table" id="expensesTable">
-                  <thead>
-                    <tr>
-                      <th>
-                        <div class="checkbox mass_select_all_wrap">
-                          <input type="checkbox" id="mass_select_all" data-to-table="tasks">
-                        </div>
-                      </th>
-                      <th>
-                        Date
-                      </th>
-                      <th>
-                        Property
-                      </th>
-                      <th>
-                        To/From
-                      </th>
-                      <th>
-                        Category
-                      </th>
-                      <th>
-                        Account
-                      </th>
-                      <th>
-                        Amount
-                      </th>
-                      <th>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="expenses-list">
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <ul class="transactionPagination pagination-md mt-5"></ul>
           </div>
         </div>
       </div>
     </div> <!-- / .row -->
     <!-- JAVASCRIPT
     ================================================== -->
+    <input type="hidden" id="hidden_properties" value="<%= JSON.stringify(properties) %>">
     <% include ../partials/scripts %>
 
     <script type="text/javascript">
+      let properties = $('#hidden_properties').val();
+      try {
+        properties = JSON.parse(properties);
+      } catch(e) { properties = [];}
+
+      let items = [];
+      let transactions = [];
+      const page_cnt = 5;
+
       const income_categories = ['Rental Income', 'Uncategorised'];
       const expenses_categories = ['Insurance', 'Repairs & Maintenance', 'Management Fees', 'Utilities', 'Tax', 'Legal', 'Mortgage or Loans', 'Uncategorised'];
       const changeCategorySelection = (list) => {
@@ -442,214 +283,138 @@
         })
       };
 
+      const setupPagination = () => {
+        // $('#documentPagination').empty();
+        try {
+          const pageCnt = Math.ceil(items.length / page_cnt);
+          var visiblePageCnt = Math.min(page_cnt, pageCnt);
+          $('.transactionPagination').twbsPagination('destroy');
+          $('.transactionPagination').twbsPagination({
+              totalPages: pageCnt,
+              // the current page that show on start
+              startPage: 1,
+              // maximum visible pages
+              visiblePages: visiblePageCnt,
+              initiateStartPageClick: true,
+              // template for pagination links
+              href: false,
+              // variable name in href template for page number
+              hrefVariable: '{{number}}',
+              // Text labels
+              first: '<<',
+              prev: 'Prev',
+              next: 'Next',
+              last: '>>',
+              // carousel-style pagination
+              loop: false,
+              // callback function
+              onPageClick: function (event, page) {
+                $('.transaction-list .list-group-item').addClass('d-none');
+                $('.page'+page).removeClass('d-none');
+              },
+              // pagination Classes
+              paginationClass: 'pagination',
+              nextClass: 'next',
+              prevClass: 'prev',
+              lastClass: 'last',
+              firstClass: 'first',
+              pageClass: 'page',
+              activeClass: 'active',
+              disabledClass: 'disabled'
+          });
+        } catch(e) {}
+      }
+
+      const displayTransactions = () => {
+        $('.transaction-list').empty();
+        items.map( (transaction, idx) => {
+          if (idx % page_cnt == 0) { 
+            page = (parseInt(idx/page_cnt) + 1)
+          } else {
+            page = (parseInt(idx/page_cnt) + 1) + ' d-none'
+          }
+          const sign = parseFloat(transaction.amount) < 0;
+          let amount = '£' + transaction.amount.replace('-', '');
+          if (sign) {
+            amount = '-' + amount;
+          }
+          let avatar = '<svg style="opacity: 0.7;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><g class="nc-icon-wrapper"><path d="M21,0H3C2.4,0,2,0.4,2,1v22c0,0.6,0.4,1,1,1h18c0.6,0,1-0.4,1-1V1C22,0.4,21.6,0,21,0z M11,9h5v2h-5V9z M9,19H6v-2h3V19z M9,15H6v-2h3V15z M9,11H6V9h3V11z M9,7H6V5h3V7z M15,19h-4v-2h4V19z M18,15h-7v-2h7V15z M18,7h-7V5h7V7z"></path></g></svg>';
+          if (transaction.mimetype && transaction.mimetype.includes('image')) {
+            avatar = `<img src="/${transaction.path}" alt="document image preview" class="avatar"/>`;
+          }
+          const val = JSON.stringify(transaction);
+          const contact = transaction.user ? transaction.user : 'No Contact';
+          $('.transaction-list').append(`
+            <div class="transaction-item list-group-item page${page}">
+              <div class="col-auto avatar d-flex align-items-center">
+                <div class="custom-control custom-checkbox tranaction-checkbox my-1 mr-sm-2 d-none">
+                  <input type="checkbox" name="tranaction[id]" class="custom-control-input" id="customCheck${idx}" value="${transaction.id}">
+                  <label class="custom-control-label" for="customCheck${idx}"></label>
+                </div>
+                <div class="avatar-title rounded bg-white text-secondary">
+                  ${avatar}
+                </div>  
+              </div>
+              <div class="col-md-3 col-sm-4 col-lg-2 ">
+                <div class="mb-1">${transaction.created_at}</div>
+                <div class="text-muted">Date</div>
+              </div>
+              <div class="col-md-3 col-sm-4 col-lg-2 ">
+                <div class="mb-1">${contact}</div>
+                <div class="text-muted">Rental Income</div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="mb-1">${transaction.propertyName}</div>
+                <div class="text-muted">Address</div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="mb-1">${transaction.account}</div>
+                <div class="text-muted">Account</div>
+              </div>
+              <div class="ml-auto col-auto">
+                <div class="mb-1">${amount}</div>
+                <div class="text-muted text-right">AMOUNT</div>
+              </div>
+            </div>          
+          `);
+        });
+      }
+
+      // fetch transaction data from server
+      const fetchTransactions = () => {
+        fetch('/transaction/all/get', {method: 'GET'})
+          .then(res => res.json())
+          .then(res => {
+            transactions = res.transactions;
+            items = transactions;
+            displayTransactions()
+            setupPagination();
+          })
+          .catch(err => {
+              console.log(err);
+          })
+      }
+
       // initialize the category with income
       changeCategorySelection(income_categories);
 
     	$(function() {
-    		fetch('/transaction/all/get', {method: 'GET'})
-          .then(res => res.json())
-          .then(res => {
-          	$('.transaction-list').empty();
-          	res.transactions.map( (transaction, i) => {
-            	const sign = parseFloat(transaction.amount) < 0;
-            	let amount = '£' + transaction.amount.replace('-', '');
-            	if (sign) {
-            		amount = '-' + amount;
-            	}
-              const val = JSON.stringify(transaction);
-          		$('.transaction-list').append(`
-          			<tr class="transaction-row">
-                    <td>
-                      <input data-id="${transaction.id}" class="checkbox" type="checkbox" data-to-table="tasks">
-                    </td>
-	                  <td>
-	                    <time datetime="${transaction.created_at}">${transaction.created_at}</time>
-	                  </td>
-	                  <td>
-	                    ${transaction.propertyName}
-	                  </td>
-	                  <td>
-	                    ${transaction.user}
-	                  </td>
-	                  <td>
-	                    ${transaction.category}
-	                  </td>
-	                  <td>
-	                    ${transaction.account}
-	                  </td>
-	                  <td>
-	                    ${amount}
-	                  </td>
-	                  <td class="text-right">
-	                    <div class="dropdown">
-	                      <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	                        <i class="fe fe-more-vertical"></i>
-	                      </a>
-	                      <div class="dropdown-menu dropdown-menu-right">
-	                        <a href="#" data-val='${val}' class="dropdown-item view-transaction">
-	                          View
-	                        </a>
-	                        <a href="#" data-id="${transaction.id}"  class="dropdown-item delete-transaction">
-	                          Delete
-	                        </a>
-	                      </div>
-	                    </div>
-	                  </td>
-	                </tr>
-          		`);
-          	});
-            $('#allTable').DataTable({ 
-              "dom": '<"toolbar">frtip',
-              "columnDefs": [{
-                "className": 'checkbox',
-                "targets": 0,
-                "orderable": false,
-              }] 
-            });
+    		fetchTransactions();
 
-            $('.income-list').empty();
-            res.incomeTransactions.map( (transaction, i) => {
-              const sign = parseFloat(transaction.amount) < 0;
-              let amount = '£' + transaction.amount.replace('-', '');
-              if (sign) {
-                amount = '-' + amount;
-              }
-              $('.income-list').append(`
-                <tr class="transaction-row">
-                    <td>
-                      <input data-id="${transaction.id}" class="checkbox" type="checkbox" data-to-table="tasks">
-                    </td>
-                    <td>
-                      <time datetime="${transaction.created_at}">${transaction.created_at}</time>
-                    </td>
-                    <td>
-                      ${transaction.propertyName}
-                    </td>
-                    <td>
-                      ${transaction.user}
-                    </td>
-                    <td>
-                      ${transaction.category}
-                    </td>
-                    <td>
-                      ${transaction.account}
-                    </td>
-                    <td>
-                      ${amount}
-                    </td>
-                    <td class="text-right">
-                      <div class="dropdown">
-                        <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fe fe-more-vertical"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a href="#" data-id="${transaction.id}" class="dropdown-item view-transaction">
-                            View
-                          </a>
-                          <a href="#" data-id="${transaction.id}"  class="dropdown-item delete-transaction">
-                            Delete
-                          </a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-              `);
-            });
-            $('#incomeTable').DataTable({
-              "dom": '<"toolbar">frtip',
-              "columnDefs": [{
-                "className": 'checkbox',
-                "targets": 0,
-                "orderable": false,
-              }] 
-            });
-
-            $('.expenses-list').empty();
-            res.expensesTransactions.map( (transaction, i) => {
-              const sign = parseFloat(transaction.amount) < 0;
-              let amount = '£' + transaction.amount.replace('-', '');
-              if (sign) {
-                amount = '-' + amount;
-              }
-              $('.expenses-list').append(`
-                <tr class="transaction-row">
-                    <td>
-                      <input data-id="${transaction.id}" class="checkbox" type="checkbox" data-to-table="tasks">
-                    </td>
-                    <td>
-                      <time datetime="${transaction.created_at}">${transaction.created_at}</time>
-                    </td>
-                    <td>
-                      ${transaction.propertyName}
-                    </td>
-                    <td>
-                      ${transaction.user}
-                    </td>
-                    <td>
-                      ${transaction.category}
-                    </td>
-                    <td>
-                      ${transaction.account}
-                    </td>
-                    <td>
-                      ${amount}
-                    </td>
-                    <td class="text-right">
-                      <div class="dropdown">
-                        <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fe fe-more-vertical"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a href="#" data-id="${transaction.id}" class="dropdown-item view-transaction">
-                            View
-                          </a>
-                          <a href="#" data-id="${transaction.id}"  class="dropdown-item delete-transaction">
-                            Delete
-                          </a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-              `);
-            });
-            $('#expensesTable').DataTable({ 
-              "dom": '<"toolbar">frtip',
-              "columnDefs": [{
-                "className": 'checkbox',
-                "targets": 0,
-                "orderable": false,
-              }] 
-            });
-	    		})
-          .catch(err => {
-              console.log(err);
-          })
-
+        // Manage massice selection
         $('body').on('change', '#mass_select_all', function() {
-         var rows, checked;
-         rows = $('#allTable').find('tbody tr');
-         checked = $(this).prop('checked');
-         $.each(rows, function() {
+          var rows, checked;
+          rows = $('#allTable').find('tbody tr');
+          checked = $(this).prop('checked');
+          $.each(rows, function() {
             var checkbox = $($(this).find('td').eq(0)).find('input').prop('checked', checked);
-         });
-       });
+          });
+        });
     	 
+        // dropzone image upload
         if (document.querySelector('.dropzone')) {
           Dropzone_init( document.querySelector('.dropzone'));
         }
-
-        var tables = $('.dataTable').DataTable();
-        $('.transaction-all-search').keyup(function(event) {
-          tables.table('#allTable').search( $(this).val() ).draw();
-        });
-
-        $('.transaction-income-search').keyup(function(event) {
-          tables.table('#incomeTable').search( $(this).val() ).draw();
-        });
-
-        $('.transaction-expenses-search').keyup(function(event) {
-          tables.table('#expensesTable').search( $(this).val() ).draw();
-        });
 
         // Transaction type toggle
         $('input[name="transaction[type]"]').on('change', function(e){
@@ -659,6 +424,43 @@
             changeCategorySelection(expenses_categories);
           }
         });
+
+        // setup properties filter
+        var option = new Option('All', 'all', true, true);
+        $('#propertyFilter').append(option);
+        properties.map(property => {
+          var property_name = property.address + ', ' + property.city;
+          option = new Option(property_name, property.id, true, true);
+          $('#propertyFilter').append(option);
+        });
+        $('#propertyFilter').val('all').trigger('change');
+
+        $('#propertyFilter').on('select2:select', function (e) {
+          if (e.params.data.id == 'all') {
+            items = transactions;
+          } else {
+            items = transactions.filter(item => item.property_id == e.params.data.id);
+          }
+          displayTransactions();
+          setupPagination();
+        });
+
+        // multiple selection
+        $('.transaction-multiple-btn').click(function() {
+          $('.tranaction-checkbox').removeClass('d-none');
+          $('.transaction-multiple-finish-btn').removeClass('d-none');
+          $('.transaction-multiple-del-btn').removeClass('d-none');
+          $(this).addClass('d-none');
+          $('.transaction-item .avatar-title').addClass('d-none');
+        })
+
+        $('.transaction-multiple-finish-btn').click(function(){
+          $('.transaction-multiple-btn').removeClass('d-none');
+          $('.transaction-item .avatar-title').removeClass('d-none');
+          $('.tranaction-checkbox').addClass('d-none');
+          $('.transaction-multiple-finish-btn').addClass('d-none');
+          $('.transaction-multiple-del-btn').addClass('d-none');
+        })
       });
     </script>
   </body>

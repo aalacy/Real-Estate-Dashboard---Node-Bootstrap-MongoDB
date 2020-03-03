@@ -17,6 +17,8 @@ const TransactionsSchema = new Schema({
   property_id: { type: String, default: '' },
   user_id: { type: String, default: '' },
   document_id: { type: String, default: '' },
+  document_mimetype: { type: String, default: '' },
+  document_path: { type: String, default: '' },
   user: { type: String, default: '' },
   category: { type: String, default: '' },
   account: { type: String, default: '' },
