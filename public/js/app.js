@@ -1136,11 +1136,11 @@ $(function() {
         }
     });
 
-    $(document).on('click', '.bulk-delete-transaction', function(e) {
+    $(document).on('click', '.transaction-multiple-del-btn', function(e) {
       e.preventDefault();
       let ids = []
-      $(this).parents('.tab-pane').find('tbody').find('input.checkbox:checked').map( (i, e) => {
-        ids.push($(e).data('id'));
+      $.find('.tranaction-checkbox:checked').map((e) =>{
+        ids.push($(e).val())
       })
       var data = {
         transaction: {
@@ -1212,7 +1212,7 @@ $(function() {
       });
     });
 
-    $(document).on('click', '.view-transaction', function(e) {
+    $(document).on('click', '.transaction-item', function(e) {
       e.preventDefault();
       $('#addTransactionBtn').text('Update');
       $('#transaction-modal-title').text('Update Transaction');

@@ -9,60 +9,87 @@
     <div class="main-content">
       
       <div class="container">
-        <div class="row justify-content-center mb-4">
-          <div class="col-12 col-lg-10 col-xl-8">
-            
-            <!-- Form -->
-            <form class="mb-4" method="POST" action="/property/update">
-            <!-- Header -->
-            <div class="header mt-md-5">
-              <div class="header-body">
-                <div class="row align-items-center">
-                  <div class="col">
+        <div class="header mt-md-5">
+          <div class="header-body">
+            <div class="row align-items-center">
+              <div class="col">
 
-                    <!-- Title -->
-                    <h1 class="header-title">
-                      Property Details
-                    </h1>
+                <!-- Title -->
+                <h1 class="header-title">
+                  Edit Property
+                </h1>
 
-                  </div>
-                <div class="col-auto">
-                
-                  <!-- Button -->
-                  <button type="button" onclick="history.back()" class="btn btn-block btn-primary mb-2">
-                    Back to Property
-                  </button>
-
-                </div>
-                </div> <!-- / .row -->
-                <div class="row align-items-center">
-                  <div class="col">
-                  
-                    <!-- Nav -->
-                    <ul class="nav nav-tabs nav-overflow header-tabs">
-                      <li class="nav-item">
-                        <a href="#addressDetails" data-toggle="tab" role="tab" class="nav-link active">
-                          Address Details
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#furtherDetails" data-toggle="tab" role="tab" class="nav-link">
-                          Further Details
-                        </a>
-                      </li>
-                    </ul>
-  
-                  </div>
-                </div>
               </div>
+            <div class="col-auto">
+            
+              <!-- Button -->
+              <button type="button" onclick="history.back()" class="btn btn-block btn-primary mb-2">
+                Back to Property
+              </button>
+
             </div>
+            </div> <!-- / .row -->
+          </div>
+        </div>
             
-            <input type="hidden" name="_csrf" value="<%= token %>">
-            <input type="hidden" name="property[id]" value="<%= property.id%>">
-            <input type="hidden" id="property_fulladdress" name="property[fulladdress]" value="<%= property.fulladdress%>">
+        <div class="row mb-4">
+          <div class="col-12 col-md-5">
+            <div class="col-10  justify-content-center">
+              <div class="dropzone dropzone-multiple">
+                <div class="fallback">
+                  <input type="file" class="custom-file-input" id="customFileUploadMultiple">
+                </div>
+
+                <div class="dz-message" data-dz-message>
+                  <img src="/img/avatars/projects/single.png" alt="property image" class="card-img-top cover-image dropzone-image mb-4">
+                  <div class="big-title h3">Upload a Cover Image</div>
+                  <div class="small-title text-muted">Max file size is 30MB per image, JPG, PNG, or GIF formats only.</div>
+                </div>
+
+                <ul class="dz-preview d-none dz-preview-multiple list-group list-group-lg list-group-flush">
+                  <li class="list-group-item px-0">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <div class="avatar">
+                          <img class="avatar-img rounded" src="..." alt="..." data-dz-thumbnail>
+                        </div>
+                      </div>
+                      <div class="col ml-n3">
+                        <h4 class="mb-1" data-dz-name>...</h4>
+                        <p class="small text-muted mb-0" data-dz-size>...</p>
+                      </div>
+                      <div class="col-auto">
+                        
+                        <div class="dropdown">
+                          <a href="#" class="dropdown-item" title="Remove file" data-dz-remove>
+                            <i class="fe fe-trash"></i>
+                          </a>
+                        </div>
+
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <form method="POST" action="/property/remove ">
+                <input type="hidden" name="_csrf" value="<%= token %>">
+                <input type="hidden" name="property[id]" value="<%= property.id%>">
+                <button type="submit" class="btn btn-block btn-danger">
+                  Delete property
+                </button>
+              </form>
+            </div>
+          </div>
+          <div class="col-12 col-md-7">
+            <form class="mb-4" method="POST" action="/property/update">
             
-            <div class="tab-content">
-              <div class="tab-pane fade active show" id="addressDetails" role="tabpanel">
+              <input type="hidden" name="_csrf" value="<%= token %>">
+              <input type="hidden" name="property[id]" value="<%= property.id%>">
+              <input type="hidden" id="property_fulladdress" name="property[fulladdress]" value="<%= property.fulladdress%>">
+              
+              <div class="card card-body">
+                <h3>Property Address</h3>
                 <div class="row">
             
                   <div class="col-12 col-md-6">
@@ -125,57 +152,10 @@
                   </div>
                 </div> <!-- / .row -->
               </div>
-              <div class="tab-pane fade" id="furtherDetails" role="tabpanel">
-          
-                <div class="row">
-            
-                  <div class="col-12 col-md-4">
-                    
-                  <div class="form-group">
-                    <label>
-                      Ownership
-                    </label>
-                    <select class="form-control" name="property[ownership]" data-toggle="select" value="<%= property.ownership%>" data-options='{"placeholder": "Freehold or Leasehold"}'>
-                      <option></option>
-                      <option value="freehold" <% if (property.ownership == 'freehold'){ %><%='selected'%><%}%>>Freehold</option>
-                      <option value="leasehold" <% if (property.ownership == 'leasehold'){ %><%='selected'%><%}%>>Leasehold</option>
-                    </select>
-                  </div>
-
-                  </div>
-          
-                  <div class="col-12 col-md-4">
-                    
-                    <!-- Start date -->
-                    <div class="form-group">
-                      <label>
-                        Purchase Price
-                      </label>
-                      <div class="input-group input-group-merge mb-3">
-                        <input type="text" min="0" onkeypress="return isNumberKey(event)"  name="property[purchase_price]" class="form-control form-control-prepended number" value="<%= property.purchase_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
-                        <div class="input-group-prepend">
-                          <div class="input-group-text">
-                            <span>£</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                    </div>
-
-                  </div>
-                  <div class="col-12 col-md-4">
-                    
-                    <!-- Start date -->
-                    <div class="form-group">
-                      <label>
-                        Purchase Date
-                      </label>
-                      <input type="text" name="property[purchase_date]" class="form-control" value="<%= property.purchase_date%>"  data-toggle="flatpickr">
-                    </div>
-
-                  </div>
-                </div> <!-- / .row -->
-          
+        
+              <h3>Property Details</h3>
+              <div class="card card-body">
+             
                 <div class="row">
                   <div class="col-12 col-md-6">
                     
@@ -215,7 +195,6 @@
 
                   </div>
                 </div> <!-- / .row -->
-          
           
                 <div class="row">
                   <div class="col-12 col-md-4">
@@ -266,8 +245,7 @@
                   </div>
 
                   </div>
-          
-                </div> <!-- / .row -->
+                </div> 
           
                 <div class="row">
                   <div class="col-12 col-md-4">
@@ -322,9 +300,60 @@
                     </div>
 
                   </div>
+                </div> 
+              </div>
+
+              <h3>Ownership</h3>
+              <div class="card card-body">
+                <div class="row">
+            
+                  <div class="col-12 col-md-4">
+                    
+                  <div class="form-group">
+                    <label>
+                      Ownership
+                    </label>
+                    <select class="form-control" name="property[ownership]" data-toggle="select" value="<%= property.ownership%>" data-options='{"placeholder": "Freehold or Leasehold"}'>
+                      <option></option>
+                      <option value="freehold" <% if (property.ownership == 'freehold'){ %><%='selected'%><%}%>>Freehold</option>
+                      <option value="leasehold" <% if (property.ownership == 'leasehold'){ %><%='selected'%><%}%>>Leasehold</option>
+                    </select>
+                  </div>
+
+                  </div>
+          
+                  <div class="col-12 col-md-4">
+                    
+                    <!-- Start date -->
+                    <div class="form-group">
+                      <label>
+                        Purchase Price
+                      </label>
+                      <div class="input-group input-group-merge mb-3">
+                        <input type="text" min="0" onkeypress="return isNumberKey(event)"  name="property[purchase_price]" class="form-control form-control-prepended number" value="<%= property.purchase_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">
+                            <span>£</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </div>
+
+                  </div>
+                  <div class="col-12 col-md-4">
+                    
+                    <!-- Start date -->
+                    <div class="form-group">
+                      <label>
+                        Purchase Date
+                      </label>
+                      <input type="text" name="property[purchase_date]" class="form-control" value="<%= property.purchase_date%>"  data-toggle="flatpickr">
+                    </div>
+
+                  </div>
                 </div> <!-- / .row -->
               </div>
-        
               <!-- Divider -->
               <hr class="mt-5 mb-5">
 
@@ -335,15 +364,7 @@
               <!-- Divider -->
               <hr class="mt-5 mb-5">
 
-              </form>
-              <!-- Buttons -->
-              <form method="POST" action="/property/remove ">
-                <input type="hidden" name="_csrf" value="<%= token %>">
-                <input type="hidden" name="property[id]" value="<%= property.id%>">
-                <button type="submit" class="btn btn-block btn-danger">
-                  Remove property
-                </button>
-              </form>
+            </form>
           </div>
         </div> <!-- / .row -->
       </div>
