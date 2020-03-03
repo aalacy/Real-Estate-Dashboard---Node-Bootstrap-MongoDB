@@ -1234,7 +1234,6 @@ $(function() {
       $('#transaction_property').val(transaction.property_id);
       $('#transaction_property').trigger('change');
       $('#transaction_category').val(transaction.category);
-      $('#transaction_category').val(transaction.category);
       $('#transaction_account').val(transaction.account);
       $('#transaction_note').val(transaction.note);
       $('#modalAddNewTransaction').modal()
@@ -1242,6 +1241,11 @@ $(function() {
           $('#addTransactionBtn').text('Add');
           $('#transaction-modal-title').text('Add a New Transaction');
           $('#modalAddNewTransaction').find('form').attr('action', '/transaction/create');
+          $('#transaction_user').val('');
+          $('#transaction_created_at').val('');
+          $('#transaction_account').val('');
+          $('#transaction_amount').val('');
+          $('#transaction_note').val('');
         });
     })
 

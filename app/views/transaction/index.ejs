@@ -379,7 +379,7 @@
               <div class="ml-auto col-auto d-flex align-items-center">
                 <span class="fe fe-chevron-right"></span>
               </div>
-            </div>          
+            </div>
           `);
         });
       }
@@ -405,16 +405,14 @@
     	$(function() {
     		fetchTransactions();
 
-        // Manage massice selection
-        $('body').on('change', '#mass_select_all', function() {
-          var rows, checked;
-          rows = $('#allTable').find('tbody tr');
-          checked = $(this).prop('checked');
-          $.each(rows, function() {
-            var checkbox = $($(this).find('td').eq(0)).find('input').prop('checked', checked);
-          });
+        $('input[name="transaction[type]"]').change(function(){
+          if ($(this).val() == "In") {
+            changeCategorySelection(income_categories);
+          } else {
+            changeCategorySelection(expenses_categories);
+          }
         });
-    	 
+
         // dropzone image upload
         if (document.querySelector('.dropzone')) {
           Dropzone_init( document.querySelector('.dropzone'));
