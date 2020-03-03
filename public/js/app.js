@@ -1213,7 +1213,10 @@ $(function() {
     });
 
     $(document).on('click', '.transaction-item', function(e) {
-      e.preventDefault();
+      if ($(e.target).hasClass('tranaction-checkbox') || $(e.target).hasClass('custom-control-label')) {
+        return;
+      }
+
       $('#addTransactionBtn').text('Update');
       $('#transaction-modal-title').text('Update Transaction');
       const transaction = $(this).data('val');
@@ -1227,7 +1230,7 @@ $(function() {
       $('#transaction_id').val(transaction.id);
       $('#transaction_user').val(transaction.user);
       $('#transaction_created_at').val(transaction.created_at);
-      $('#transaction_amount').val(amount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+      $('#transaction_amount').val(amount.toString().replace('-','').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
       $('#transaction_property').val(transaction.property_id);
       $('#transaction_property').trigger('change');
       $('#transaction_category').val(transaction.category);
