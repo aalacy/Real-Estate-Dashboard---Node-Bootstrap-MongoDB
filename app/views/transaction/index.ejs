@@ -456,7 +456,7 @@
         })
 
         $('.tranaction-checkbox-all').click(function(){
-          $('.tranaction-checkbox').click();
+          $('.tranaction-checkbox').prop('checked', !$('.tranaction-checkbox').prop('checked'));
         })
       });
     </script>
