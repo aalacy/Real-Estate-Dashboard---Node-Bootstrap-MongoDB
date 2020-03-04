@@ -794,7 +794,8 @@ $(function() {
     });
 
     $('#updatePropertyBtn').click(function(e){
-        $('#property_fulladdress').val(`${$('#propertyAutocomplete').val()}, ${$('#property_city').val()}, UK`);
+      $('#property_fulladdress').val(`${$('#propertyAutocomplete').val()}, ${$('#property_city').val()}, UK`);
+      $('#updatePropertyForm').submit();
     });
 
     // Remove Property

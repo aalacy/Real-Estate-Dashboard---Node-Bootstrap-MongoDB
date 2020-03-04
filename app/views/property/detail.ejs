@@ -23,8 +23,8 @@
             <div class="col-auto">
             
               <!-- Button -->
-              <button type="button" onclick="history.back()" class="btn btn-block btn-primary mb-2">
-                Back to Property
+              <button type="button" class="btn btn-block btn-primary mb-2" id="updatePropertyBtn">
+                Done
               </button>
 
             </div>
@@ -33,15 +33,15 @@
         </div>
             
         <div class="row mb-4">
-          <div class="col-12 col-md-5">
-            <div class="col-10  justify-content-center">
+          <div class="col-12 col-md-5 d-flex justify-content-center mb-3">
+            <div class="col-10">
               <div class="dropzone dropzone-multiple">
                 <div class="fallback">
                   <input type="file" class="custom-file-input" id="customFileUploadMultiple">
                 </div>
 
                 <div class="dz-message" data-dz-message>
-                  <img src="/img/avatars/projects/single.png" alt="property image" class="card-img-top cover-image dropzone-image mb-4">
+                  <img src="<%= property.image ? '/'+property.image : '/img/avatars/projects/single.png'%>" alt="property image" class="card-img-top cover-image dropzone-image mb-4">
                   <div class="big-title h3">Upload a Cover Image</div>
                   <div class="small-title text-muted">Max file size is 30MB per image, JPG, PNG, or GIF formats only.</div>
                 </div>
@@ -72,20 +72,14 @@
                 </ul>
               </div>
 
-              <form method="POST" action="/property/remove ">
-                <input type="hidden" name="_csrf" value="<%= token %>">
-                <input type="hidden" name="property[id]" value="<%= property.id%>">
-                <button type="submit" class="btn btn-block btn-danger">
-                  Delete property
-                </button>
-              </form>
             </div>
           </div>
           <div class="col-12 col-md-7">
-            <form class="mb-4" method="POST" action="/property/update">
+            <form class="mb-4" method="POST" id="updatePropertyForm" action="/property/update">
             
               <input type="hidden" name="_csrf" value="<%= token %>">
               <input type="hidden" name="property[id]" value="<%= property.id%>">
+              <input type="hidden" id="document_path" name="property[image]" value="<%= property.image%>">
               <input type="hidden" id="property_fulladdress" name="property[fulladdress]" value="<%= property.fulladdress%>">
               
               <div class="card card-body">
@@ -354,16 +348,15 @@
                   </div>
                 </div> <!-- / .row -->
               </div>
-              <!-- Divider -->
-              <hr class="mt-5 mb-5">
-
-              <button id="updatePropertyBtn" type="submit" class="btn btn-block btn-primary mb-2">
-                Update
+            </form>
+            <!-- Divider -->
+            <hr class="mt-5 mb-5">
+            <form method="POST" action="/property/remove" class="text-right">
+              <input type="hidden" name="_csrf" value="<%= token %>">
+              <input type="hidden" name="property[id]" value="<%= property.id%>">
+              <button type="submit" class="btn btn-danger">
+                Delete property
               </button>
-
-              <!-- Divider -->
-              <hr class="mt-5 mb-5">
-
             </form>
           </div>
         </div> <!-- / .row -->
@@ -388,6 +381,10 @@
         } catch (e){
         }
         localStorage.setItem('est_missing_ids', '');
+
+        if (document.querySelector('.dropzone')) {
+          Dropzone_init( document.querySelector('.dropzone'));
+        }
       });
     </script>
     

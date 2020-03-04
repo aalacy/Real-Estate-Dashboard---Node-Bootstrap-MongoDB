@@ -247,6 +247,21 @@
                 <div class="col-12 col-md-3">
                   <select class="form-control" style="min-width: 350px;" id="filterByCategory" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
                       <option></option>
+                      <option value="All">All Categories</option>
+                      <optgroup label="Income">
+                        <option value="Rental Income">Rental Income</option>
+                        <option value="Uncategorised">Uncategorised</option>
+                      </optgroup>
+                      <optgroup label="Expenses">
+                        <option value="Insurance">Insurance</option>
+                        <option value="Repairs & Maintenance">Repairs & Maintenance</option>
+                        <option value="Management Fees">Management Fees</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Tax">Tax</option>
+                        <option value="Legal">Legal</option>
+                        <option value="Mortgage or Loans">Mortgage or Loans</option>
+                        <option value="Uncategorised">Uncategorised</option>
+                      </optgroup>
                   </select> 
                 </div>
               </div>
@@ -419,20 +434,31 @@
         }
 
         // setup properties filter
-        var option = new Option('All', 'all', true, true);
+        var option = new Option('All Properties', 'All', true, true);
         $('#propertyFilter').append(option);
         properties.map(property => {
           var property_name = property.address + ', ' + property.city;
           option = new Option(property_name, property.id, true, true);
           $('#propertyFilter').append(option);
         });
-        $('#propertyFilter').val('all').trigger('change');
+        $('#propertyFilter').val('All').trigger('change');
 
         $('#propertyFilter').on('select2:select', function (e) {
-          if (e.params.data.id == 'all') {
+          if (e.params.data.id == 'All') {
             items = transactions;
           } else {
             items = transactions.filter(item => item.property_id == e.params.data.id);
+          }
+          displayTransactions();
+          setupPagination();
+        });
+
+        $('#filterByCategory').val('All').trigger('change');
+        $('#filterByCategory').on('select2:select', function (e) {
+          if (e.params.data.id == 'All') {
+            items = transactions;
+          } else {
+            items = transactions.filter(item => item.category == e.params.data.id);
           }
           displayTransactions();
           setupPagination();
