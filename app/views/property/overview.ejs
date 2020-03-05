@@ -1529,28 +1529,34 @@
             const property = JSON.parse($('#hidden_property').val());
             const date = new Date(doc.created_at);
             const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
+            let avatar = '<span class="fe fe-file" style="font-size: 2rem;"></span>';
+            if (doc.mimetype.includes('image')) {
+              avatar = `<img src="/${doc.path}" alt="document image preview" class="avatar"/>`;
+            }
             $('.unit-document-list').append(`<li class="list-group-item px-0">
               <div class="row align-items-center">
                 <div class="col-auto">
-                  
-                  <!-- Avatar -->
-                  <h1 class="mb-0 avatar avatar-md">
-                    <img src="/img/icons/unit.png" class="avatar-img">
-                  </h1>
-
+                  <a href="/${doc.path}" class="avatar" target="_blank">
+                    <div class="avatar-title rounded bg-white text-secondary">
+                      ${avatar}
+                    </div>
+                  </a>
                 </div>
                 <div class="col ml-n2">
 
-                  <!-- Title -->
-                  <h4 class="card-title mb-1 name">
+                  <h4 class="card-title mb-1 name document-name document-lg-name">
                     <a target="_blank" href="/${doc.path}">${doc.filename}</a>
                   </h4>
+
+                  <!-- Text -->
+                  <p class="card-text small text-muted mb-1">
+                    ${doc.display_name} &bull;${doc.tag}
+                  </p>
 
                   <!-- Time -->
                   <p class="card-text small text-muted">
                     Uploaded on <time datetime="${uploaded_at}">${uploaded_at}</time>
                   </p>
-                  
                 </div>
                 <div class="col-auto">
                   

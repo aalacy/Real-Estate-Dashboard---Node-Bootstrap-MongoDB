@@ -20,6 +20,7 @@ const DocumentsSchema = new Schema({
   property_name: { type: String, default: ''},
   unit_id: { type: String, default: ''},
   unit_name: { type: String, default: ''},
+  category: { type: String, default: ''},
   filename: { type: String, default: '' },
   display_name: { type: String, default: '' },
   size: { type: String, default: '' },

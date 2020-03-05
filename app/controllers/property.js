@@ -420,6 +420,7 @@ exports.upload_doc_to_property = async function(req, res) {
     display_name: property_name + ' - ' + unit_name,
     property_name,
     unit_name,
+    category: document.category,
     update_at: moment().format('YYYY-MM-DD HH:mm:ss'),
     status: 'alive',
     size: mydocument.size,

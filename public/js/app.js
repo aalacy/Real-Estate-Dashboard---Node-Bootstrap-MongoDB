@@ -818,7 +818,7 @@ $(function() {
     })
 
     // Adjust tenancey
-    $('.edit-unit').click(function(e){
+    $(document).on('click', '.edit-unit', function(e){
         e.preventDefault();
         const property_id = $(this).data('property');
         if (property_id) {
@@ -1213,6 +1213,17 @@ $(function() {
       });
     });
 
+    const clearTransactionModal = () => {
+      $('#addTransactionBtn').text('Add');
+      $('#transaction-modal-title').text('Add a New Transaction');
+      $('#modalAddNewTransaction').find('form').attr('action', '/transaction/create');
+      $('#transaction_user').val('');
+      $('#transaction_created_at').val('');
+      $('#transaction_account').val('');
+      $('#transaction_amount').val('');
+      $('#transaction_note').val('');
+    }
+
     $(document).on('click', '.transaction-item', function(e) {
       if ($(e.target).hasClass('tranaction-checkbox') || $(e.target).hasClass('custom-control-label')) {
         return;
@@ -1239,15 +1250,12 @@ $(function() {
       $('#transaction_note').val(transaction.note);
       $('#modalAddNewTransaction').modal()
         .on('hidden.bs.modal', function() {
-          $('#addTransactionBtn').text('Add');
-          $('#transaction-modal-title').text('Add a New Transaction');
-          $('#modalAddNewTransaction').find('form').attr('action', '/transaction/create');
-          $('#transaction_user').val('');
-          $('#transaction_created_at').val('');
-          $('#transaction_account').val('');
-          $('#transaction_amount').val('');
-          $('#transaction_note').val('');
+          clearTransactionModal();
         });
+    })
+
+    $('#modalAddNewTransaction').on('hidden.bs.modal', function (e) {
+      clearTransactionModal();
     })
 
     /*
@@ -1401,6 +1409,7 @@ $(function() {
           unit_id: $('#document_unit').val(),
           unit_name: $('#document_unit option:selected').text(),
           tag: $('#document_tag').val(),
+          category: $('#document_category').val(),
           status: $('#status').val(),
           size: $('#document_size').val(),
           path: $('#document_path').val(),

@@ -42,7 +42,7 @@
 
                 <div class="dz-message" data-dz-message>
                   <img src="<%= property.image ? '/'+property.image : '/img/avatars/projects/single.png'%>" alt="property image" class="card-img-top cover-image dropzone-image mb-4">
-                  <div class="big-title h3">Upload a Cover Image</div>
+                  <div class="big-title h3"><%= property.image ? 'Upload a New Image' : 'Upload a Cover Image' %></div>
                   <div class="small-title text-muted">Max file size is 30MB per image, JPG, PNG, or GIF formats only.</div>
                 </div>
 
@@ -83,7 +83,7 @@
               <input type="hidden" id="property_fulladdress" name="property[fulladdress]" value="<%= property.fulladdress%>">
               
               <div class="card card-body">
-                <h3>Property Address</h3>
+                <h3>Property Details</h3>
                 <div class="row">
             
                   <div class="col-12 col-md-6">

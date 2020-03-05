@@ -351,7 +351,7 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 .transaction-item:nth-child(2n+1) {
 }
 
-.list-group-item:hover {
+.transaction-item:hover {
     background: #edf2f9;
     opacity: 0.8;
 }
