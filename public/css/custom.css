@@ -359,3 +359,4 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 .transaction-item:not(:last-child) {
     border-bottom: 1px solid #edf2f9;
 }
+

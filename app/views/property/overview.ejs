@@ -584,64 +584,63 @@
                     <div class="row align-items-center justify-content-center mb-6">
                       <div class="col-4 text-center border-right">
                         <!-- Heading -->
-                        <div class="h1 font-weight-bold mb-3">
+                        <span class="h2 font-medium">
                          % <%=net_yield%><!--  <small class="font-weight-bold">YTD</small> -->
-                        </div>
-                        <h6 class="card-title text-muted text-uppercase mt-2">
-                          Current Net Yield
-                        </h6>
+                        </span>
+
+                        <div class="text-uppercase text-muted text-ss">CURRENT NET YIELD</div>
                       </div>
                       <div class="col-4 text-center border-right">
                         <!-- Heading -->
-                        <div class="h1 font-weight-bold mb-4">
+                        <span class="h2 font-medium">
                          % <%=gross_yield%>
-                        </div>
-                        <h6 class="card-title text-muted text-uppercase mt-2">
+                        </span>
+                        <div class="text-uppercase text-muted text-ss">
                           PROJECTED GROSS YIELD
-                        </h6>
+                        </div>
                       </div>
                       <div class="col-4 text-center">
                         <!-- Heading -->
-                        <div class="h1 font-weight-bold mb-3">
+                        <span class="h2 font-medium">
                          % -0.08
-                        </div>
-                        <h6 class="card-title text-muted text-uppercase mt-2">
+                        </span>
+                        <div class="text-uppercase text-muted text-ss">
                           PROJECTED NET YIELD
-                        </h6>
+                        </div>
                       </div>
                     </div>
 
                      <div class="row align-items-center justify-content-center">
                       <div class="col-4 text-center border-right">
                         <!-- Heading -->
-                        <div class="h1 font-weight-bold mb-2">
+                        <span class="h2 font-medium">
                           <span class="text-success h2">+£</span> <%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                        </div>
-                        <h6 class="card-title text-muted text-uppercase mt-2">
+                        </span>
+                        <div class="text-uppercase text-muted text-ss">
                           TOTAL PROFIT
-                        </h6>
+                        </div>
                       </div>
                       <div class="col-4 text-center border-right">
                         <!-- Heading -->
-                        <div class="h1 font-weight-bold mb-2">
+                        <span class="h2 font-medium">
                          <span class="text-danger h2">-£</span> <%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                        </div>
-                        <h6 class="card-title text-muted text-uppercase mt-2">
+                        </span>
+                        <div class="text-uppercase text-muted text-ss">
                           TOTAL EXPENSES
-                        </h6>
+                        </div>
                       </div>
                       <div class="col-4 text-center">
                         <!-- Heading -->
-                        <div class="h1 font-weight-bold mb-2">
+                        <span class="h2 font-medium">
                          <% if (net_profit > 0) {%>
                             <span class="text-success h2">+£</span> <%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
                           <% } else {%>
                             <span class="text-danger h2">-£</span> <%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
                           <% } %>
-                        </div>
-                        <h6 class="card-title text-muted text-uppercase mt-2">
+                        </span>
+                        <div class="text-uppercase text-muted text-ss">
                           NET PROFIT
-                        </h6>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -671,7 +670,9 @@
   				  
                   <div class="card-body ownership-block">
                     <div class="ownership-content-block">
-                      <div id="loanContainer" class="border-bottom" style="max-width: 310px; height: 150px; margin: 0 auto"></div>
+                      <div class="border-bottom">
+                        <div id="loanContainer" class="" style="max-width: 310px; height: 120px; margin: 0 auto;"></div>
+                      </div>
                       <div class="row">
                         <div class="col text-center border-right mt-4 px-3">
                           <div class="mb-2"><span class="text-success">●</span>&nbsp;Equity</div>
@@ -1083,39 +1084,39 @@
                     <div class="row">
                       <div class="col-6 text-center border-right">
                         <!-- Heading -->
-                        <div class="h1 font-weight-bold mb-2">
+                        <span class="h2 font-medium">
                           <span class="text-success h2">+£</span> <%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                        </div>
+                        </span>
                         <h6 class="card-title text-muted text-uppercase mt-2">
                           Total Income
                         </h6>
                       </div>
                       <div class="col-6 text-center">
                         <!-- Heading -->
-                        <div class="h1 font-weight-bold mb-2">
+                        <span class="h2 font-medium">
                           <span class="text-danger h2">-£</span> <%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                        </div>
+                        </span>
                         <h6 class="card-title text-uppercase text-muted mt-2">
                           Total Expenses
                         </h6>
                       </div>
                     </div>
 
-                    <div class="row mt-4">
+                    <div class="row mt-5">
                       <div class="col-6 text-center border-right">
                         <!-- Heading -->
-                        <div class="h1 font-weight-bold mb-2">
+                        <span class="h2 font-medium">
                           <%=operating_expense_ratio%><span class="text-success h2">%</span> 
-                        </div>
+                        </span>
                         <h6 class="card-title text-muted text-uppercase mt-2">
                           Operating Expenses Ratio
                         </h6>
                       </div>
                       <div class="col-6 text-center">
                         <!-- Heading -->
-                        <div class="h1 font-weight-bold mb-2">
+                        <span class="h2 font-medium">
                           <span class="text-success h2">+£</span> <%=net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                        </div>
+                        </span>
                         <h6 class="card-title text-uppercase text-muted mt-2">
                           Net Operating Income
                         </h6>
@@ -1238,13 +1239,17 @@
           chart: {
               plotBackgroundColor: null,
               plotBorderWidth: 0,
-              plotShadow: false
+              plotShadow: false,
+              marginTop: 0,
+              marginBottom: 0,
+              marginLeft: 0,
+              marginRight: 0
           },
           title: {
               text: `${data.percent}%`,
               align: 'center',
               verticalAlign: 'middle',
-              y: 30
+              y: 15
           },
           tooltip: {
               pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -1261,8 +1266,8 @@
                   },
                   startAngle: -90,
                   endAngle: 90,
-                  center: ['50%', '75%'],
-                  size: '180%'
+                  center: ['50%', '55%'],
+                  size: '120%'
               }
           },
           series: [{
@@ -1275,7 +1280,7 @@
             ]
           }]
         }, function(){
-          this.setSize(this.plotSizeX, this.plotSizeX - 100)
+          this.setSize(this.plotSizeX, this.plotSizeX-100)
         });
       }
 
