@@ -807,7 +807,15 @@ $(function() {
       }
       confirmDialog("Are you sure?", (ans) => {
         if (ans) {
-          fetch(new Request('/property/remove/', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({ property, _csrf})}))
+          fetch(new Request('/property/remove/', 
+            {
+              method: 'POST',
+              headers:{
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ property, _csrf})
+            }
+          ))
           .then(function() {
               location.reload();
           }).catch(function(text) {
