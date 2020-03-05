@@ -799,7 +799,7 @@ $(function() {
     });
 
     // Remove Property
-    $(document).on('click', ".delete-property", function(e) {
+    $(document).on('click', ".delete-property", f unction(e) {
       e.preventDefault();
       const _csrf = $('input[name="_csrf"]').val();
       const property = {
