@@ -420,7 +420,7 @@
             if (unit.tenants.length > 1) { 
               tenants = `${unit.tenants}Tenants`
             }
-            const name = `property.address, property.city: unit.description`;
+            const name = `${property.address}, ${property.city}: ${unit.description}`;
             if (unit.rent_frequency == 'Vacant') {
               $(current_list).append(`
                 <div class="card mb-3">
