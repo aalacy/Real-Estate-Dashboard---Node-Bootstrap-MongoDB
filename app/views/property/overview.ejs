@@ -8,6 +8,10 @@
           display: none;
         }
 
+        .upload-btn-wrapper {
+          display: block;
+        }
+
         #documents .header .header-body {
           padding-top: 0;
         }
@@ -585,27 +589,27 @@
                       <div class="col-4 text-center border-right">
                         <!-- Heading -->
                         <span class="h2 font-medium">
-                         % <%=net_yield%><!--  <small class="font-weight-bold">YTD</small> -->
+                        <%=gross_yield%> % 
                         </span>
-
-                        <div class="text-uppercase text-muted text-ss">CURRENT NET YIELD</div>
+                        <div class="text-uppercase text-muted text-ss">
+                          Gross Yield
+                        </div>
                       </div>
                       <div class="col-4 text-center border-right">
                         <!-- Heading -->
                         <span class="h2 font-medium">
-                         % <%=gross_yield%>
+                        <%=net_yield%> % <!--  <small class="font-weight-bold">YTD</small> -->
                         </span>
-                        <div class="text-uppercase text-muted text-ss">
-                          PROJECTED GROSS YIELD
-                        </div>
+
+                        <div class="text-uppercase text-muted text-ss">Net Yield</div>
                       </div>
                       <div class="col-4 text-center">
                         <!-- Heading -->
                         <span class="h2 font-medium">
-                         % -0.08
+                         <%=operating_expense_ratio%> %
                         </span>
                         <div class="text-uppercase text-muted text-ss">
-                          PROJECTED NET YIELD
+                          Operating Expense Ratio
                         </div>
                       </div>
                     </div>
@@ -617,7 +621,7 @@
                           <span class="text-success h2">+£</span> <%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                         </span>
                         <div class="text-uppercase text-muted text-ss">
-                          TOTAL PROFIT
+                          Total Income
                         </div>
                       </div>
                       <div class="col-4 text-center border-right">
@@ -626,7 +630,7 @@
                          <span class="text-danger h2">-£</span> <%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                         </span>
                         <div class="text-uppercase text-muted text-ss">
-                          TOTAL EXPENSES
+                          Total Expenses
                         </div>
                       </div>
                       <div class="col-4 text-center">
@@ -639,7 +643,7 @@
                           <% } %>
                         </span>
                         <div class="text-uppercase text-muted text-ss">
-                          NET PROFIT
+                          NET Income
                         </div>
                       </div>
                     </div>
@@ -796,7 +800,7 @@
                           <div class="col-auto">
                         
                             <!-- Avatar -->
-                            <h1 class="mb-0 avatar avatar-md">
+                            <h1 class="mb-0 avatar avatar-lg">
                               <img src="/img/icons/unit.png" class="avatar-img">
                             </h1>
         
@@ -805,7 +809,7 @@
         
                             <!-- Title -->
                             <h4 class="card-title mb-1">
-                              <a href="#" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
+                              <a href="#" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%=property.address%>, <%=property.city%>: <%= unit.description%></a>
                             </h4>
         
                             <!-- Time -->
@@ -815,12 +819,12 @@
                           </div>
                           <div class="col-4">
                             <!-- Title -->
-                            <h4 class="card-title mb-1">
+                            <h4 class="card-title text-muted mb-1">
                               Not Collecting Rent
                             </h4>
                             
                           </div>
-                          <div class="col-2">
+                          <div class="col-2 text-muted">
                             <% if (unit.tenants.length == 0) { %>
                               No Tenants
                             <% } %>
@@ -858,7 +862,7 @@
                         <div class="col-auto">
                       
                           <!-- Avatar -->
-                          <h1 class="mb-0 avatar avatar-md">
+                          <h1 class="mb-0 avatar avatar-lg">
                             <img src="/img/icons/unit.png" class="avatar-img">
                           </h1>
       
@@ -867,7 +871,7 @@
       
                           <!-- Title -->
                           <h4 class="card-title mb-1">
-                            <a href="#" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
+                            <a href="#" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%=property.address%>, <%=property.city%>:<%= unit.description%></a>
                           </h4>
       
                           <!-- Time -->
@@ -875,15 +879,22 @@
                             <span class="text-success mr-2">●</span> Active Tenancy
                           </p>
                         </div>
-                        <div class="col-4">
+                        <div class="col-4 text-muted">
                           <!-- Title -->
                           <h4 class="card-title mb-1">
-                            <% if (parseInt(unit.rent_price) > 0) {%>£<%= unit.rent_price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><%}%>
-                            Per <%= unit.rent_frequency%>
+                            <% const freq = {
+                                Daily: 365,
+                                Weekly: 52,
+                                Fortnightly: 26,
+                                Monthly: 12,
+                                Vacant: 0,
+                              }; 
+                              let price = (freq[unit.rent_frequency] * parseFloat(unit.rent_price) / 12).toFixed(2); let rent_price_freq = parseFloat(price) > 0 ? `£${price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} per month`: '';%> 
+                            <%= rent_price_freq%>
                           </h4>
                           
                         </div>
-                        <div class="col-2">
+                        <div class="col-2 text-muted">
                           <% if (unit.tenants.length == 0) { %>
                             No Tenants
                           <% } %>

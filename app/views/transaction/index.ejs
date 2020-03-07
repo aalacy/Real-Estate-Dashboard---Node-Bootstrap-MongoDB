@@ -245,7 +245,7 @@
                   </select>  
                 </div>
                 <div class="col-12 col-md-3">
-                  <select class="form-control" style="min-width: 350px;" id="filterByCategory" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
+                  <select class="form-control" style="min-width: 350px;" id="categoryFilter" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
                       <option></option>
                       <option value="All">All Categories</option>
                       <optgroup label="Income">
@@ -453,8 +453,8 @@
           setupPagination();
         });
 
-        $('#filterByCategory').val('All').trigger('change');
-        $('#filterByCategory').on('select2:select', function (e) {
+        $('#categoryFilter').val('All').trigger('change');
+        $('#categoryFilter').on('select2:select', function (e) {
           if (e.params.data.id == 'All') {
             items = transactions;
           } else {

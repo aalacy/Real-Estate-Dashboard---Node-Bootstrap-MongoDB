@@ -1230,6 +1230,10 @@ $(function() {
       $('#transaction_account').val('');
       $('#transaction_amount').val('');
       $('#transaction_note').val('');
+      $('#transaction_property').val('');
+      $('#transaction_property').trigger('change');
+      $('#transaction_category').val('');
+      $('#transaction_category').trigger('change');
     }
 
     $(document).on('click', '.transaction-item', function(e) {
@@ -1254,6 +1258,7 @@ $(function() {
       $('#transaction_property').val(transaction.property_id);
       $('#transaction_property').trigger('change');
       $('#transaction_category').val(transaction.category);
+      $('#transaction_category').trigger('change');
       $('#transaction_account').val(transaction.account);
       $('#transaction_note').val(transaction.note);
       $('#modalAddNewTransaction').modal()
@@ -1275,6 +1280,17 @@ $(function() {
         items = documents;
       } else {
         items = documents.filter(item => item.property_id == e.params.data.id);
+      }
+      doPopulate();
+      doPaginate();
+    });
+
+    $('#filterByCategory').val('All').trigger('change');
+    $('#filterByCategory').on('select2:select', function (e) {
+      if (e.params.data.id == 'All') {
+        items = documents;
+      } else {
+        items = documents.filter(item => item.category == e.params.data.id);
       }
       doPopulate();
       doPaginate();

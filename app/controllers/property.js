@@ -192,10 +192,10 @@ exports.overview = async function(req, res) {
     }
   })
 
-  let net_profit = total_income - total_expenses;
+  let net_profit = total_income - Math.abs(total_expenses);
   const total_cost = total_income + Math.abs(total_expenses);
   const income_percent = (total_income/total_cost*100).toFixed(2);
-  const expenses_percent = total_cost > 0 ? (Math.abs(total_expenses)/total_cost*100).toFixed(2) : 0;
+  const expenses_percent = total_cost > 0 ? (Math.abs(total_expenses)/total_income*100).toFixed(2) : 0;
   const operating_expense_ratio = expenses_percent;
   const gross_yield = (total_income/parseFloat(property.current_value)*100).toFixed(2);
   const net_yield = 0;

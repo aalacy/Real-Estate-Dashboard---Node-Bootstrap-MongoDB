@@ -14,6 +14,7 @@
       <input type="hidden" id="hidden_properties" value="<%= JSON.stringify(properties) %>">
       <% include ../partials/modals %>
 
+      <% include ./_document_header %>
       <% include ./_documents %>
     </div>
     <!-- JAVASCRIPT
@@ -38,7 +39,7 @@
         doPaginate();
 
         $('.filter-by-property').removeClass('d-none');
-        var option = new Option('All', 'all', true, true);
+        var option = new Option('All Properties', 'all', true, true);
         $('#filterByProperty').append(option);
         properties.map(property => {
           var property_name = property.address + ', ' + property.city;

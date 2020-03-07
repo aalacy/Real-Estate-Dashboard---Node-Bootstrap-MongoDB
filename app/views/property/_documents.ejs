@@ -1,37 +1,4 @@
 <input type="hidden" id="hidden_documents" value="<%= JSON.stringify(documents) %>">
-<!-- Modal Upload -->
-
-
-  <!-- HEADER -->
-<div class="header">
-  <div class="container">
-    
-    <!-- Body -->
-    <div class="header-body">
-      <div class="row align-items-center">
-        <div class="col ml-n3 ml-md-n2">
-
-          <!-- Title -->
-          <h1 class="header-title">
-            Documents
-          </h1>
-
-        </div>
-
-        <div class="col-auto">
-            
-            <!-- Button -->
-            <a href="#" class="btn lift btn-primary modal-upload">
-              Upload
-            </a>
-
-        </div>
-      </div> <!-- / .row -->
-    
-    </div>
-
-  </div>
-</div> <!-- / .header -->
 
 <!-- CONTENT -->
 <div class="container">
@@ -56,7 +23,32 @@
                     <option></option>
                 </select>  
             </div>
-          
+
+            <div class="col-12 col-md-4">
+              <select class="form-control" style="min-width: 350px;" id="filterByCategory" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
+                  <option></option>
+                  <option value="All">All Categories</option>
+                  <optgroup label="Income">
+                    <option value="Rental Income">Rental Income</option>
+                    <option value="Uncategorised">Uncategorised</option>
+                  </optgroup>
+                  <optgroup label="Expenses">
+                    <option value="Insurance">Insurance</option>
+                    <option value="Repairs & Maintenance">Repairs & Maintenance</option>
+                    <option value="Management Fees">Management Fees</option>
+                    <option value="Utilities">Utilities</option>
+                    <option value="Tax">Tax</option>
+                    <option value="Legal">Legal</option>
+                    <option value="Mortgage or Loans">Mortgage or Loans</option>
+                    <option value="Uncategorised">Uncategorised</option>
+                  </optgroup>
+              </select> 
+            </div>
+            <div class="col-auto upload-btn-wrapper">
+                <a href="#" class="btn lift btn-primary modal-upload">
+                  Upload
+                </a>
+            </div>
           </div> <!-- / .row -->
         </div>
         <div class="card-header">

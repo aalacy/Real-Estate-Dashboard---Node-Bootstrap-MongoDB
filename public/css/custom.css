@@ -360,3 +360,6 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     border-bottom: 1px solid #edf2f9;
 }
 
+.upload-btn-wrapper {
+    display: none;
+}
