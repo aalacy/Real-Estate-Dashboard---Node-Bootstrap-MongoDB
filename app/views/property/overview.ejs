@@ -814,7 +814,7 @@
         
                             <!-- Time -->
                             <p class="card-text small text-muted">
-                              Vacant &nbsp;&nbsp;●&nbsp; &nbsp; <a href="#" class="edit-unit" data-unit="<%= JSON.stringify(unit)%>" >Add a tenancy</a>
+                              Vacant &nbsp;&nbsp;●&nbsp; &nbsp; <a href="#" class="edit-unit" data-property="<%=property.id%>" data-unit='<%= JSON.stringify(unit)%>' >Add a tenancy</a>
                             </p>
                           </div>
                           <div class="col-4">
@@ -842,7 +842,7 @@
                               <i class="fe fe-more-vertical"></i>
                               </a>
                               <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#!" class="dropdown-item edit-unit" data-unit="<%=JSON.stringify(unit)%>">
+                                <a href="#!" class="dropdown-item edit-unit" data-unit='<%=JSON.stringify(unit)%>'>
                                   Edit
                                 </a>
                                 <a href="#!" class="dropdown-item delete-unit action-unit" data-block="units" data-unit="<%=unit.id%>">
@@ -912,7 +912,7 @@
                             <i class="fe fe-more-vertical"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                              <a href="#!" class="dropdown-item edit-unit" data-unit="<%=JSON.stringify(unit)%>">
+                              <a href="#!" class="dropdown-item edit-unit" data-unit='<%=JSON.stringify(unit)%>'>
                                 Edit
                               </a>
                               <a href="#!" class="dropdown-item delete-unit action-unit"  data-block="units" data-unit="<%=unit.id%>">
@@ -1149,7 +1149,7 @@
                 </div>
               </div>
               <div class="card-body">
-                <div class="row align-items-center justify-content-center">
+                <div class="row justify-content-center">
                   <div class="col-12 col-md-4 text-center border-right">
                     <div id="expensesBreakdownChart" style="width:250px; height:200px;"></div>
                   </div>
