@@ -63,6 +63,7 @@ router.get('/property/all', auth.checkToken, property.all);
 router.get('/property/overview/:id/:tabs', auth.checkToken, property.overview);
 router.get('/property/overview/:id/:tabs/:unit_id', auth.checkToken, property.overview);
 router.get('/property/overview/:id', auth.checkToken, property.overview);
+router.post('/property/overview/cashflow/date', auth.checkToken, property.cashflow_date);
 router.get('/property/detail/:id', auth.checkToken, property.detail);
 router.use('/property/new', auth.checkToken, property.new);
 router.use('/property/review', auth.checkToken, property.review);

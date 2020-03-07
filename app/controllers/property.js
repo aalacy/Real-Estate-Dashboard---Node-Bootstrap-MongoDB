@@ -147,9 +147,6 @@ exports.overview = async function(req, res) {
   const tenancy_value =  ((total_units-vacant_cnt)/total_units*100).toFixed(0);
   const chart_data = [vacant_value, tenancy_value];
 
-  // total income and expenses
-  let total_income = 0;
-  let total_expenses = 0;
   // expenses breakdown
   let expenses_breakdown = {};
   let breakdown_percent = {};
@@ -158,6 +155,9 @@ exports.overview = async function(req, res) {
     expenses_breakdown[item] = 0;
   })
 
+  // total income and expenses
+  let total_income = 0;
+  let total_expenses = 0;
   transactions.forEach(transaction => {
     const amount = parseFloat(transaction.amount) || 0;
     if ( amount >= 0) {
@@ -179,7 +179,6 @@ exports.overview = async function(req, res) {
     sortedBreakdown[key] = expenses_breakdown[key];
   })
 
-  console.log(sortedBreakdown)
   expenses_chart_data = []
   const colors = ['#DEEFB7', '#FFAF87', '#C9CAD9', '#051a35', '#0e67dc', '#ef476f', '#41d3bd', '#555f7f'];
   Object.keys(sortedBreakdown).map((item, i) => {
@@ -773,3 +772,70 @@ exports.new_loan = async function(req, res) {
     })
   });
 };
+
+exports.cashflow_date = async function(req, res) {
+  const { body: { property } } = req;
+  const { user } = req.session;
+
+  const id = property.id;
+  const date = property.date;
+  let startDate = '1900-01-01';
+  let endDate = '9999-01-01';
+  const thisYear = moment().format('YYYY');
+  switch (date) {
+    case 'Current Month':
+      startDate = moment().startOf('month').format('YYYY-MM-DD');
+      endDate   = moment().endOf('month').format('YYYY-MM-DD');
+      break;
+    case 'Previous Month':
+      startDate = moment().startOf('month').subtract(1, 'month').format('YYYY-MM-DD');
+      endDate   = moment().startOf('month').subtract(1, 'day').format('YYYY-MM-DD');
+      break;
+    case 'YTD':
+      startDate = thisYear + '-01-01'
+      endDate = moment().format('YYYY-MM-DD');
+      break;
+    case 'Last Full Year':
+      startDate = moment(thisYear + '-01-01').subtract(1, 'year').format('YYYY-MM-DD');
+      endDate = moment(thisYear + '-01-01').subtract(1, 'day').format('YYYY-MM-DD');
+      break;
+  }
+  console.log(startDate, ' ', endDate);
+  // const transactions = await Transactions.find({ user_id: user.id, property_id: id }, { _id: 0 }).sort('-created_at');
+  const transactions = await Transactions.find({$and:[{created_at:{$gte:new Date(startDate)}},{created_at:{$lte:new Date(endDate)}}, {user_id: user.id}]}, { _id: 0 });
+
+  const myproperty = await Properties.findOne({ id }, { _id: 0 });
+
+  // total income and expenses
+  let total_income = 0;
+  let total_expenses = 0;
+  transactions.forEach(transaction => {
+    const amount = parseFloat(transaction.amount) || 0;
+    if ( amount >= 0) {
+      total_income += amount
+    } else {
+      total_expenses += (amount)
+    }
+  })
+
+  let net_profit = total_income - Math.abs(total_income);
+  const total_cost = total_income + Math.abs(total_expenses);
+  const income_percent = (total_income/total_cost*100).toFixed(2);
+  const expenses_percent = total_cost > 0 ? (Math.abs(total_expenses)/total_income*100).toFixed(2) : 0;
+  const operating_expense_ratio = expenses_percent;
+  const gross_yield = (total_income/parseFloat(myproperty.current_value)*100).toFixed(2);
+  const net_yield = 0;
+  if (myproperty.purchase_price > 0) {
+    (net_profit/parseFloat(myproperty.purchase_price)*100).toFixed(2);
+  }
+
+  return res.json({
+    status: 'ok',
+    net_profit,
+    total_income,
+    total_expenses,
+    operating_expense_ratio,
+    gross_yield,
+    net_yield
+  })
+}
