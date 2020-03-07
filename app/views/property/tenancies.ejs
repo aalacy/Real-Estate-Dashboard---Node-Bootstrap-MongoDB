@@ -424,7 +424,7 @@
             if (unit.rent_frequency == 'Vacant') {
               $(current_list).append(`
                 <div class="card mb-3">
-                  <div class="p-3">
+                  <div class="card-body">
                     <div class="row align-items-center unit-item">
                       <div class="col-auto">
                         <h1 class="mb-0 avatar avatar-lg">
@@ -436,7 +436,7 @@
                           <a href="/property/overview/${property.id}/units/${unit.id}" class="detail-unit" data-unit="${JSON.stringify(unit)}">${name}</a>
                         </h4>
                         <p class="card-text small text-muted">
-                          Vacant &nbsp;●&nbsp; <a href="#" class="edit-unit" data-property="${property.id}" data-unit='${JSON.stringify(unit)}' >Add a tenancy</a>
+                          Vacant &nbsp;●&nbsp; <a href="#" class="edit-unit" data-property="${property.id}" data-unit='${JSON.stringify(unit)}'>Add a tenancy</a>
                         </p>
                       </div>
                       <div class="col-4">
@@ -482,7 +482,7 @@
                             <a href="/property/overview/${property.id}/units/${unit.id}" class="detail-unit" data-unit="${JSON.stringify(unit)}">${name}</a>
                           </h4>
                           <p class="card-text small text-muted">
-                            <span class="text-success mr-2">●</span> Active Tenancy
+                            <span class="text-success mr-2">●</span>Active Tenancy
                           </p>
                         </div>
                         <div class="col-4">
