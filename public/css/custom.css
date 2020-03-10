@@ -366,7 +366,7 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 }
 .col-item {
     display: table-cell;
-    padding: 16px;
+    padding: 0 12px;
 }
 
 @media only screen and (max-width: 600px) {
