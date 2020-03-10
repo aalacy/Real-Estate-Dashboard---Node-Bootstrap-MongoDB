@@ -22,6 +22,7 @@ const dashboard = require('../app/controllers/dashboard');
 const home = require('../app/controllers/home');
 const property = require('../app/controllers/property');
 const transaction = require('../app/controllers/transaction');
+const service = require('../app/controllers/service');
 
 //POST new user route (optional, everyone has access)
 router.post('/signup', auth.optional, home.signup_post);
@@ -100,5 +101,8 @@ router.get('/transaction/all/get', auth.checkToken, transaction.all_get);
 router.post('/transaction/create', auth.checkToken, transaction.create);
 router.post('/transaction/edit', auth.checkToken, transaction.edit);
 router.post('/transaction/delete', auth.checkToken, transaction.delete);
+
+// services
+router.get('/services', auth.checkToken, service.all);
 
 module.exports = router;

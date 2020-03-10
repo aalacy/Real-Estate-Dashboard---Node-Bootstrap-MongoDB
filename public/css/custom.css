@@ -360,6 +360,18 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     border-bottom: 1px solid #edf2f9;
 }
 
-.upload-btn-wrapper {
-    display: none;
+.col-container {
+    display: table;
+    width: 100%;
+}
+.col-item {
+    display: table-cell;
+    padding: 16px;
+}
+
+@media only screen and (max-width: 600px) {
+    .col-item { 
+        display: block;
+        width: 100%;
+    }
 }
