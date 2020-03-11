@@ -9,7 +9,7 @@
 
     <div class="modal  fade" id="modalAddNewTransaction" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="transaction">
-        <form id="add-unit-form" class="form-inline" method="post" action="/transaction/create">
+        <form id="add-transaction-form" class="form-inline" method="post" action="/transaction/create">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" id="transaction_id" name="transaction[id]" value="">
           <input type="hidden" id="status" name="document[status]" value="upload">
@@ -102,6 +102,19 @@
                     </label>
                     <div class="col-lg-9 col-sm-12">
                       <input type="text" id="transaction_account" name="transaction[account]" class="form-control w-100" value="Manual Transaction" readonly>
+                    </div>
+                  </div>
+
+                  <div class="form-wrapper">
+                    <label class="form-label">
+                      Status
+                    </label>
+                    <div class="col-lg-9 col-sm-12">
+                      <select class="form-control" style="min-width: 250px;" name="transaction[category]" id="transaction_status" data-toggle="select" data-options='{"placeholder": "Status", "width": "element"}' required>
+                        <option></option>
+                        <option value="Paid">Paid</option>
+                        <option value="Due">Due</option>
+                      </select>  
                     </div>
                   </div>
 
@@ -236,7 +249,11 @@
                     <label class="custom-control-label" for="customCheck${idx}"></label>
                   </div>
                   <button class="btn btn-outline-secondary transaction-multiple-finish-btn mr-sm-2  d-none">Finish</button>
-                  <button class="btn btn-outline-secondary transaction-multiple-del-btn d-none">Manage Selected | <span class="selectedItems">0</span></button>
+                  <button class="btn btn-outline-secondary d-none" id="manageTransactions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage transactions | <span class="selectedItems">0</span></button>
+                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <button class="dropdown-item">Mark as Paid</button>
+                    <button class="dropdown-item transaction-multiple-del-btn">Delete</button>
+                  </div>
                   <button class="btn btn-outline-secondary transaction-multiple-btn">Select Multiple</button>
                 </div>
                 <div class="col-12 col-md-3">
@@ -351,12 +368,9 @@
           }
           const sign = parseFloat(transaction.amount) < 0;
           let amount = '£' + transaction.amount.replace('-', '');
-          let status_color = 'text-success';
-          let status_text = 'Paid';
+         
           if (sign) {
             amount = '-' + amount;
-            status_color = 'text-danger';
-            status_text = 'Due';
           }
           let avatar = '<svg style="opacity: 0.7;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><g class="nc-icon-wrapper"><path d="M21,0H3C2.4,0,2,0.4,2,1v22c0,0.6,0.4,1,1,1h18c0.6,0,1-0.4,1-1V1C22,0.4,21.6,0,21,0z M11,9h5v2h-5V9z M9,19H6v-2h3V19z M9,15H6v-2h3V15z M9,11H6V9h3V11z M9,7H6V5h3V7z M15,19h-4v-2h4V19z M18,15h-7v-2h7V15z M18,7h-7V5h7V7z"></path></g></svg>';
           if (transaction.mimetype && transaction.mimetype.includes('image')) {
@@ -364,7 +378,11 @@
           }
           const val = JSON.stringify(transaction);
           const contact = transaction.user ? transaction.user : 'No Contact';
-          const status = `<span class="${status_color} font-weight-bold">${status_text}</span>`
+          let status_color = 'text-success';
+          if (transaction.status != 'Paid') {
+            status_color = 'text-danger';
+          }
+          const status = `<span class="${status_color} font-weight-bold">${transaction.status || 'Due'}</span>`
           $('.transaction-list').append(`
             <div class="transaction-item list-group-item cursor-hand px-4 page${page}" data-val='${val}''>
               <div class="col-auto avatar d-flex align-items-center">
@@ -473,7 +491,7 @@
         $('.transaction-multiple-btn').click(function() {
           $('.custom-checkbox').removeClass('d-none');
           $('.transaction-multiple-finish-btn').removeClass('d-none');
-          $('.transaction-multiple-del-btn').removeClass('d-none');
+          $('#manageTransactions').removeClass('d-none');
           $(this).addClass('d-none');
           $('.transaction-item .avatar-title').addClass('d-none');
         })
@@ -483,7 +501,7 @@
           $('.transaction-item .avatar-title').removeClass('d-none');
           $('.custom-checkbox').addClass('d-none');
           $('.transaction-multiple-finish-btn').addClass('d-none');
-          $('.transaction-multiple-del-btn').addClass('d-none');
+          $('#manageTransactions').addClass('d-none');
           $('.custom-control-input').prop('checked', false);
         })
 

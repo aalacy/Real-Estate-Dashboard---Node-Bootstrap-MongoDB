@@ -18,6 +18,7 @@
 
     <div class="modal  fade" id="modalAddNewLoan" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
+        <%=property.id%>
         <form id="add-loan-form" method="post" action="/property/loan/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" name="property[id]" value="<%= property.id%>">
@@ -106,7 +107,7 @@
                       </div>
                     </div>
                     <small id="loanHelperUpdatedAt" class="form-text text-muted">
-                      
+                      Last updated: <span class="update-at"></span>
                     </small>
                   </div>
                   <div class="form-group">
@@ -449,7 +450,9 @@
                 </h1>
 
               </div>
-
+              <a href="/property/detail/<%=property.id%>" class="btn btn-primary d-block d-md-inline-block lift">
+                Edit property
+              </a>
             </div> <!-- / .row -->
             <div class="row align-items-center">
               <div class="col">
@@ -1784,7 +1787,9 @@
           $('input[name="property[monthly_payment]"]').val(property.monthly_payment.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
           $('input[name="property[start_date]"]').val(property.start_date)
           $('input[name="property[maturity_date]"]').val(property.maturity_date)
-          $('#loanHelperUpdatedAt').text(moment(property.loan_updated_at).format('MM/DD/YYYY'))
+          if (property.loan_updated_at) {
+            $('#loanHelperUpdatedAt .update-at').text(moment(property.loan_updated_at).format('MM/DD/YYYY'))
+          }
           $('#modalAddNewLoan').modal();
         });
 

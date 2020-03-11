@@ -25,6 +25,7 @@ const TransactionsSchema = new Schema({
   amount: { type: String, default: '' },
   note: { type: String, default: '' },
   type: { type: String, default: ''},
+  status: { type: String, default: ''},
   created_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
   updated_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') }
 });

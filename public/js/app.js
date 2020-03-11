@@ -1096,10 +1096,15 @@ $(function() {
     });
 
     $('body').click(function(e){
-        $('#property-search-list').removeClass('show');
+      $('#property-search-list').removeClass('show');
     })
 
     $('#property-search').keyup(function(e){
+      if (!$(this).val()) {
+        $('#property-search-list').removeClass('show');
+        $('#property-search-list .card-body .list-group').html('');
+        return;
+      }
       e.preventDefault()
       fetch('/property/search/' + $(this).val(), {method: 'GET'})
       .then(res => res.json())
@@ -1113,45 +1118,62 @@ $(function() {
             $('#property-search-list .card-body .list-group').append(`<a href="/property/overview/${property.id}" class="list-group-item px-0">
                 <div class="row align-items-center">
                   <div class="col-auto">
-                    
-                    <!-- Avatar -->
                     <div class="avatar avatar-4by3">
                       <img src="${avatar}" alt="${property.address}" class="avatar-img rounded">
                     </div>
-
                   </div>
                   <div class="col ml-n2">
-
-                    <!-- Title -->
                     <h4 class="text-body mb-1 name">
                       ${property.address}, ${property.city}
                     </h4>
-
-                    <!-- Time -->
                     <p class="small text-muted mb-0">
                       <time datetime="2018-05-24">${PROPERTY_TYPE[property.type]}</time>
                     </p>
-                    
                   </div>
-                </div> <!-- / .row -->
+                </div>
               </a>`)
         });
         res.tenants.map(tenant => {
           const href = `/property/overview/${tenant.property_id}/units/${tenant.unit_id}`;
-          $('#property-search-list .card-body .list-group').append(`<a href="${href}">
+          $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item px-0">
             <div class="row align-items-center">
               <div class="col-auto">
-                <a href="${href}" class="avatar">
+                <div class="avatar">
                   <img src="/img/avatars/profiles/avatar-1.jpg" alt="avatar" class="avatar-img rounded-circle">
-                </a>
+                </div>
               </div>
               <div class="col ml-n2">
                 <h4 class="card-title mb-1 tenant-name">
-                  ksldf ipoi
+                  ${tenant.first_name} ${tenant.last_name}
                 </h4>
               </div>
             </div>
           </a>`)
+        });
+
+        res.units.map(unit => {
+          const href = `/property/overview/${unit.property_id}/units/${unit.id}`;
+          let small_desc = '<span class="text-success mr-2">●</span>Active Tenancy';
+          if (unit.rent_frequency == 'Vacant') {
+            small_desc = 'Vacant'
+          }
+          $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item px-0">
+            <div class="row align-items-center unit-item">
+              <div class="col-auto">
+                <h1 class="mb-0 avatar avatar-lg">
+                  <img src="/img/icons/unit.png" class="avatar-img">
+                </h1>
+              </div>
+              <div class="col">
+                <h4 class="card-title mb-1">
+                  ${unit.name}
+                </h4>
+                <p class="card-text small text-muted">
+                  ${small_desc}
+                </p>
+              </div>
+            </div>
+          </a>`);
         })
         if (res.properties) {
             $('#property-search-list').addClass('show');
@@ -1171,9 +1193,12 @@ $(function() {
       $.find('.tranaction-checkbox:checked').map((e) =>{
         ids.push($(e).val())
       })
+      if (ids < 1) {
+        return;
+      }
       var data = {
         transaction: {
-          ids: ids
+          ids
         }
       };
       confirmDialog("Are you sure?", (ans) => {
@@ -1206,9 +1231,13 @@ $(function() {
     $(document).on('click', '.delete-transaction', function(e) {
       e.preventDefault();
       const parent = $(this).parents('.transaction-row');
+      const ids= [$(this).data('id')];
+      if (ids.length < 1) {
+        return;
+      }
       var data = {
         transaction: {
-          ids: [$(this).data('id')]
+          ids
         }
       };
       var self = $(this);
@@ -1245,15 +1274,14 @@ $(function() {
       $('#addTransactionBtn').text('Add');
       $('#transaction-modal-title').text('Add a New Transaction');
       $('#modalAddNewTransaction').find('form').attr('action', '/transaction/create');
-      $('#transaction_user').val('');
-      $('#transaction_created_at').val('');
-      $('#transaction_account').val('');
-      $('#transaction_amount').val('');
-      $('#transaction_note').val('');
+      $('#modalAddNewTransaction input').val('');
+      $('#transaction_account').val('Manual Transaction');
       $('#transaction_property').val('');
       $('#transaction_property').trigger('change');
       $('#transaction_category').val('');
       $('#transaction_category').trigger('change');
+      $('#transaction_status').val('');
+      $('#transaction_status').trigger('change');
     }
 
     $(document).on('click', '.transaction-item', function(e) {
@@ -1279,6 +1307,8 @@ $(function() {
       $('#transaction_property').trigger('change');
       $('#transaction_category').val(transaction.category);
       $('#transaction_category').trigger('change');
+      $('#transaction_status').val(transaction.status);
+      $('#transaction_status').trigger('change');
       $('#transaction_account').val(transaction.account);
       $('#transaction_note').val(transaction.note);
       $('#modalAddNewTransaction').modal()

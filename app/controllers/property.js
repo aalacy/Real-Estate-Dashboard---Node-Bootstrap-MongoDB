@@ -208,7 +208,7 @@ exports.overview = async function(req, res) {
   res.render('property/overview', {
     title: 'Avenue - Overview',
     token: req.csrfToken(),
-    property: property,
+    property,
     empty_cnt,
     total_units,
     vacant_cnt,
@@ -290,6 +290,7 @@ exports.search = async function(req, res) {
       if (unit.description.toLowerCase().includes(_q)) {
         units.push({
           id: unit.id,
+          name: `${property.address}, ${property.city}: ${unit.description}`,
           property_id: property.id,
           description: unit.description,
           active: unit.rent_frequency == 'Vacant'
