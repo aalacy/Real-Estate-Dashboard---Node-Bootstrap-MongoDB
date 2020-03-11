@@ -1788,8 +1788,8 @@
         // update the loan value
         $('#add-loan-form').submit(function(e){
           e.preventDefault();
-          const has_loan = $('input[name="property[has_loan]"]:checked').val()
-          if (has_loan == "1") {
+          const has_loan = Number($('input[name="property[has_loan]"]:checked').val())
+          if (has_loan == 1) {
             debt = $('.property_debt').val().replace(',', '');
             equity = $('.property_equity').val();
           } else {
