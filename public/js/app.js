@@ -1100,49 +1100,69 @@ $(function() {
     })
 
     $('#property-search').keyup(function(e){
-        e.preventDefault()
-        if (e.keyCode == 13 || e.which == 13) {
-            fetch('/property/search/' + $(this).val(), {method: 'GET'})
-            .then(res => res.json())
-            .then(res => {
-                $('#property-search-list .card-body .list-group').html('');
-                res.properties.map(property => {
-                    $('#property-search-list .card-body .list-group').append(`<a href="/property/overview/${property.id}" class="list-group-item px-0">
-                        <div class="row align-items-center">
-                          <div class="col-auto">
-                            
-                            <!-- Avatar -->
-                            <div class="avatar avatar-4by3">
-                              <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
-                            </div>
+      e.preventDefault()
+      fetch('/property/search/' + $(this).val(), {method: 'GET'})
+      .then(res => res.json())
+      .then(res => {
+        $('#property-search-list .card-body .list-group').html('');
+        res.properties.map(property => {
+            let avatar = '/img/avatars/projects/project-1.jpg';
+            if (property.image) {
+              avatar = '/' + property.image;
+            }
+            $('#property-search-list .card-body .list-group').append(`<a href="/property/overview/${property.id}" class="list-group-item px-0">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    
+                    <!-- Avatar -->
+                    <div class="avatar avatar-4by3">
+                      <img src="${avatar}" alt="${property.address}" class="avatar-img rounded">
+                    </div>
 
-                          </div>
-                          <div class="col ml-n2">
+                  </div>
+                  <div class="col ml-n2">
 
-                            <!-- Title -->
-                            <h4 class="text-body mb-1 name">
-                              ${property.address}, ${property.city}
-                            </h4>
+                    <!-- Title -->
+                    <h4 class="text-body mb-1 name">
+                      ${property.address}, ${property.city}
+                    </h4>
 
-                            <!-- Time -->
-                            <p class="small text-muted mb-0">
-                              <time datetime="2018-05-24">${PROPERTY_TYPE[property.type]}</time>
-                            </p>
-                            
-                          </div>
-                        </div> <!-- / .row -->
-                      </a>`)
-                });
-                if (res.properties) {
-                    $('#property-search-list').addClass('show');
-                } else {
-                    $('#property-search-list').removeClass('show');
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            })
+                    <!-- Time -->
+                    <p class="small text-muted mb-0">
+                      <time datetime="2018-05-24">${PROPERTY_TYPE[property.type]}</time>
+                    </p>
+                    
+                  </div>
+                </div> <!-- / .row -->
+              </a>`)
+        });
+        res.tenants.map(tenant => {
+          const href = `/property/overview/${tenant.property_id}/units/${tenant.unit_id}`;
+          $('#property-search-list .card-body .list-group').append(`<a href="${href}">
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <a href="${href}" class="avatar">
+                  <img src="/img/avatars/profiles/avatar-1.jpg" alt="avatar" class="avatar-img rounded-circle">
+                </a>
+              </div>
+              <div class="col ml-n2">
+                <h4 class="card-title mb-1 tenant-name">
+                  ksldf ipoi
+                </h4>
+              </div>
+            </div>
+          </a>`)
+        })
+        if (res.properties) {
+            $('#property-search-list').addClass('show');
+        } else {
+            $('#property-search-list').removeClass('show');
         }
+      })
+      .catch(err => {
+          console.log(err);
+      })
+       
     });
 
     $(document).on('click', '.transaction-multiple-del-btn', function(e) {

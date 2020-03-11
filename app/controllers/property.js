@@ -276,10 +276,43 @@ exports.review = async function(req, res) {
 exports.search = async function(req, res) {
   const { params: { query } } = req;
   const { user } = req.session;
-  const properties = await Properties.find( {$or: [{ address: {$regex: query, $options: "i" }}]}, { _id: 0 }).limit(5);
+  const myproperties = await Properties.find( {user_id: user.id}, { _id: 0 });
+  const _q = query.toLowerCase()
+  units = [];
+  tenants = []
+  properties = []
+  myproperties.map(property => {
+    if (property.address.toLowerCase().includes(_q) || property.city.toLowerCase().includes(_q)) {
+      properties.push(property);
+    }
+
+    property.tenancies.map(unit => {
+      if (unit.description.toLowerCase().includes(_q)) {
+        units.push({
+          id: unit.id,
+          property_id: property.id,
+          description: unit.description,
+          active: unit.rent_frequency == 'Vacant'
+        })
+      }
+      unit.tenants.map(tenant => {
+        if ( tenant.first_name.toLowerCase().includes(_q) ||
+        tenant.last_name.toLowerCase().includes(_q)) {
+          tenants.push({
+            unit_id: unit.id,
+            property_id: property.id,
+            first_name: tenant.first_name,
+            last_name: tenant.last_name,
+          })
+        }
+      })
+    })
+  })
   return res.json({
     status: 200,
-    properties
+    properties: properties.slice(0, 5),
+    tenants: tenants.slice(0, 5),
+    units: units.slice(0, 5)
   })
 };
 

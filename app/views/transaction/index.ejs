@@ -232,11 +232,11 @@
               <div class="d-flex flex-wrap py-4 px-4 border-bottom">
                 <div class="col-auto d-flex align-items-center">
                   <div class="custom-control custom-checkbox my-1 mr-sm-2 d-none">
-                    <input type="checkbox" name="tranaction[id]" class="custom-control-input tranaction-checkbox-all" id="customCheck${idx}" value="${transaction.id}">
+                    <input type="checkbox" name="tranaction[id]" class="custom-control-input tranaction-checkbox-all" id="customCheck${idx}" >
                     <label class="custom-control-label" for="customCheck${idx}"></label>
                   </div>
                   <button class="btn btn-outline-secondary transaction-multiple-finish-btn mr-sm-2  d-none">Finish</button>
-                  <button class="btn btn-outline-secondary transaction-multiple-del-btn d-none">Delete Selected</button>
+                  <button class="btn btn-outline-secondary transaction-multiple-del-btn d-none">Manage Selected | <span class="selectedItems">0</span></button>
                   <button class="btn btn-outline-secondary transaction-multiple-btn">Select Multiple</button>
                 </div>
                 <div class="col-12 col-md-3">
@@ -487,8 +487,17 @@
           $('.custom-control-input').prop('checked', false);
         })
 
-        $('.tranaction-checkbox-all').click(function(){
-          $('.tranaction-checkbox').prop('checked', !$('.tranaction-checkbox').prop('checked'));
+        $('.tranaction-checkbox-all').click(function(e){
+          if ($('.tranaction-checkbox-all:checked').length) {
+            $('.tranaction-checkbox').prop('checked', true);
+          } else {
+            $('.tranaction-checkbox').prop('checked', false);
+          }
+          $(".selectedItems").html($('.tranaction-checkbox:checked').length);
+        });
+
+        $(document).on('click', '.tranaction-checkbox', function() {
+          $(".selectedItems").html($('.tranaction-checkbox:checked').length);
         })
       });
     </script>
