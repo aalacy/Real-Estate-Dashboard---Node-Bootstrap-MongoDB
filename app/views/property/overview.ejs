@@ -17,7 +17,7 @@
   <body>
 
     <div class="modal  fade" id="modalAddNewLoan" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-dialog" role="document">
         <form id="add-loan-form" method="post" action="/property/loan/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" name="property[id]" value="<%= property.id%>">
@@ -31,14 +31,33 @@
               </button>
             </div>
             <div class="modal-body">
+              <div class="d-flex mb-4">
+                <div class="mr-3">Does this property have loan?</div>
+                <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                  <label class="btn btn-outline-dark active">
+                    <input type="radio" name="property[has_loan]" value="1" id="income_option" autocomplete="off" checked> Yes
+                  </label>
+                  <label class="btn btn-outline-dark">
+                    <input type="radio" name="property[has_loan]" value="0" id="expenses_option" autocomplete="off"> No
+                  </label>
+                </div>
+              </div>
               <div class="row">
-                <div class="col-12">
-                  <div class="form-group d-flex align-items-center">
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
                     <label class="mr-2">
-                      Loan
+                      Lender
                     </label>
-                    <div class="input-group input-group-merge mb-3">
-                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[loan]" class="form-control form-control-prepended number property_debt">
+                    <div class="input-group">
+                      <input type="text" name="property[lender]" class="form-control form-control-prepended">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="mr-2">
+                      Amount borrowed
+                    </label>
+                    <div class="input-group input-group-merge">
+                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[amount_borrowed]" class="form-control form-control-prepended number">
                       <div class="input-group-prepend">
                         <div class="input-group-text">
                           <span>£</span>
@@ -46,12 +65,25 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group d-flex align-items-center mb-0">
+                  <div class="form-group">
                     <label class="mr-2">
-                      Equity
+                      Interest Rate
                     </label>
                     <div class="input-group input-group-merge">
-                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[loan]" class="form-control form-control-prepended number property_equity" readonly>
+                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[interest_rate]" class="form-control form-control-prepended number">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          <span>%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="mr-2">
+                      Monthly payment
+                    </label>
+                    <div class="input-group input-group-merge">
+                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[monthly_payment]" class="form-control form-control-prepended number">
                       <div class="input-group-prepend">
                         <div class="input-group-text">
                           <span>£</span>
@@ -60,11 +92,42 @@
                     </div>
                   </div>
                 </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mr-2">
+                      Current Loan Balance
+                    </label>
+                    <div class="input-group input-group-merge">
+                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[loan]" class="form-control form-control-prepended number property_debt" aria-describedby="loanHelperUpdatedAt" required>
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          <span>£</span>
+                        </div>
+                      </div>
+                    </div>
+                    <small id="loanHelperUpdatedAt" class="form-text text-muted">
+                      
+                    </small>
+                  </div>
+                  <div class="form-group">
+                    <label>
+                      Start Date
+                    </label>
+                    <input type="text" name="property[start_date]" class="form-control" value=""  data-toggle="flatpickr">
+                  </div>
+                  <div class="form-group">
+                    <label>
+                      Maturity Date
+                    </label>
+                    <input type="text" name="property[maturity_date]" class="form-control" value=""  data-toggle="flatpickr">
+                  </div>
+                  <input type="hidden" onkeypress="return isNumberKey(event)"  name="property[equity]" class="form-control form-control-prepended number property_equity" readonly>
+                </div>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary" id="addLoanBtn">Add</button>
+              <button type="submit" class="btn btn-primary" id="addLoanBtn">Save Changes</button>
             </div>
           </div>
         </form>
@@ -1230,6 +1293,7 @@
       const _unit_id = '<%=unit_id%>';
       let _tabs = '<%=tabs%>';
       const _property_id = '<%=property_id%>';
+      let property = JSON.parse($('#hidden_property').val());
 
       // loan
       let debt = 0;
@@ -1586,7 +1650,7 @@
           // display documents section
           $('.unit-document-list').empty();
           unit_documents.forEach(doc => {
-            const property = JSON.parse($('#hidden_property').val());
+            
             const date = new Date(doc.created_at);
             const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
             let avatar = '<span class="fe fe-file" style="font-size: 2rem;"></span>';
@@ -1694,35 +1758,51 @@
 
         // Update loan
         $('input.property_debt').keyup(function(e){
-          const loan = parseFloat($(this).val().replace(',', '') || 0);
-          const current_value = parseFloat($('#current_value').val());
-          const debt = current_value - loan;
-          $('.property_equity').val(debt);
+          if ($(this).val()) {
+            const loan = parseFloat($(this).val().replace(',', '') || 0);
+            const current_value = parseFloat($('#current_value').val());
+            $('.property_equity').val(current_value - loan);
+          }
         });
 
         $(document).on('click', '.addloan-btn', function(e){
           $('#loan-modal-title').html('Add a Loan Value');
           $('#addLoanBtn').html('Add');
-          $('.property_debt').val('');
-          $('.property_equity').val('');
+          $('#modalAddNewLoan input').val('');
           $('#modalAddNewLoan').modal();
         });
 
         $('.ownership-summary-edit').click(function(e){
-          $('#loan-modal-title').html('Update a Loan Value');
-          $('#addLoanBtn').html('Update');
+          $('#loan-modal-title').html('Edit Ownership details');
+          $('#addLoanBtn').html('Edit');
           $('.property_debt').val(debt.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
           $('.property_equity').val(equity.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+          $('input[name="property[has_loan]"]').val()
+          $('input[name="property[lender]"]').val(property.lender)
+          $('input[name="property[amount_borrowed]"]').val(property.amount_borrowed.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+          $('input[name="property[interest_rate]"]').val(property.interest_rate.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+          $('input[name="property[monthly_payment]"]').val(property.monthly_payment.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+          $('input[name="property[start_date]"]').val(property.start_date)
+          $('input[name="property[maturity_date]"]').val(property.maturity_date)
+          $('#loanHelperUpdatedAt').text(moment(property.loan_updated_at).format('MM/DD/YYYY'))
           $('#modalAddNewLoan').modal();
         });
 
         // update the loan value
-        $('#addLoanBtn').click(function(e){
+        $('#add-loan-form').submit(function(e){
           e.preventDefault();
           const data = {
             id: $('input[name="property[id]"]').val(),
-            equity: $('.property_debt').val().replace(',', ''),
-            debt: $('.property_equity').val()
+            debt: $('.property_debt').val().replace(',', ''),
+            equity: $('.property_equity').val(),
+            has_loan: $('input[name="property[has_loan]"]:checked').val(),
+            lender: $('input[name="property[lender]"]').val(),
+            amount_borrowed: $('input[name="property[amount_borrowed]"]').val().replace(',', ''),
+            monthly_payment: $('input[name="property[monthly_payment]"]').val().replace(',', ''),
+            interest_rate: $('input[name="property[interest_rate]"]').val().replace(',', ''),
+            start_date: $('input[name="property[start_date]"]').val(),
+            maturity_date: $('input[name="property[maturity_date]"]').val(),
+            loan_updated_at: moment().format('YYYY-MM-DD HH:mm:ss')
           };
 
           const token = $('meta[name="csrf"]').attr('content');
@@ -1744,6 +1824,7 @@
               equity = res.data.equity;
               debt = res.data.debt;
               drawLoanChart(res.data)
+              property = res.data.newproperty;
               $('.property_debt').html(res.data.debt.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
               $('.property_equity').html(res.data.equity.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
               $('.ownership-content-block').show();

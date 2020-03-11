@@ -43,8 +43,16 @@ const PropertiesSchema = new Schema({
     off_street_parking: { type: String, default: '' }, // 0 ~ 3 Spaces
     is_new: { type: Boolean, default: true }, // used to display alert on top of the overview page
     status: { type: String, default: 'Vacant' }, // Vacant or Occupied
-    debt: { type: Number, default: 0.0 }, // Vacant or Occupied
-    equity: { type: Number, default: 0.0 }, // Vacant or Occupied
+    has_loan: { type: Boolean, default: true }, // used to display alert on top of the overview page
+    debt: { type: Number, default: 0.0 }, // Loan
+    equity: { type: Number, default: 0.0 }, // Equity
+    lender: { type: String, default: '' }, // Lender
+    amount_borrowed: { type: Number, default: 0.0 }, // Amount borrowed
+    interest_rate: { type: Number, default: 0.0 }, // Interest Rate
+    monthly_payment: { type: Number, default: 0.0 }, // Monthly Payment
+    start_date: { type: String, default: '' }, // Start Date
+    maturity_date: { type: String, default: '' }, // Maturity Date
+    loan_updated_at: { type: String, default: '' },
     tenancies: { type: Array, default: [] }, // Tenancies
     created_at: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') },
     updated_at: { type: String, default: moment().format('YYYY-MM-DD HH:mm:ss') }

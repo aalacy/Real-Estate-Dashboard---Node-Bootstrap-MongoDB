@@ -753,15 +753,17 @@ exports.new_loan = async function(req, res) {
     percent = Math.max(property.debt/current_value*100, property.equity/current_value*100)
   }
   percent = percent.toFixed(0)
-  const new_values = { $set: { equity: property.equity, debt: property.debt } };
-  return Properties.updateOne({ id }, new_values).then((dd) => {
+  const new_values = { $set: property};
+  return Properties.updateOne({ id }, new_values).then(async (dd) => {
+    let newproperty = await Properties.findOne({ id }, { _id: 0 });
     res.json({
       status: 'ok',
       data: {
         debt: parseFloat(property.debt),
         equity: parseFloat(property.equity),
         percent,
-        current_value
+        current_value,
+        newproperty
       }
     })
   })
