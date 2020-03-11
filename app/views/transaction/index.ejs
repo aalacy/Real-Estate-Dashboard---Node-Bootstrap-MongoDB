@@ -351,8 +351,12 @@
           }
           const sign = parseFloat(transaction.amount) < 0;
           let amount = '£' + transaction.amount.replace('-', '');
+          let status_color = 'text-success';
+          let status_text = 'Paid';
           if (sign) {
             amount = '-' + amount;
+            status_color = 'text-danger';
+            status_text = 'Due';
           }
           let avatar = '<svg style="opacity: 0.7;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><g class="nc-icon-wrapper"><path d="M21,0H3C2.4,0,2,0.4,2,1v22c0,0.6,0.4,1,1,1h18c0.6,0,1-0.4,1-1V1C22,0.4,21.6,0,21,0z M11,9h5v2h-5V9z M9,19H6v-2h3V19z M9,15H6v-2h3V15z M9,11H6V9h3V11z M9,7H6V5h3V7z M15,19h-4v-2h4V19z M18,15h-7v-2h7V15z M18,7h-7V5h7V7z"></path></g></svg>';
           if (transaction.mimetype && transaction.mimetype.includes('image')) {
@@ -360,6 +364,7 @@
           }
           const val = JSON.stringify(transaction);
           const contact = transaction.user ? transaction.user : 'No Contact';
+          const status = `<span class="${status_color} font-weight-bold">${status_text}</span>`
           $('.transaction-list').append(`
             <div class="transaction-item list-group-item cursor-hand px-4 page${page}" data-val='${val}''>
               <div class="col-auto avatar d-flex align-items-center">
@@ -384,12 +389,12 @@
                 <div class="text-muted">Property</div>
               </div>
               <div class="col-lg-2 col-md-3 col-sm-6">
-                <div class="mb-1">${transaction.account}</div>
-                <div class="text-muted">Account</div>
+                <div class="mb-1">${amount}</div>
+                <div class="text-muted">Amount</div>
               </div>
               <div class="ml-auto col-auto">
-                <div class="mb-1">${amount}</div>
-                <div class="text-muted text-right">Amount</div>
+                <div class="mb-1">${status}</div>
+                <div class="text-muted text-right">Status</div>
               </div>
               <div class="ml-auto col-auto d-flex align-items-center">
                 <span class="fe fe-chevron-right"></span>
