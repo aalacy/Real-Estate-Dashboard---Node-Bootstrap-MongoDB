@@ -46,6 +46,7 @@ exports.all_get = async function(req, res) {
   		account: transaction.account,
   		amount: transaction.amount,
       type: transaction.type,
+      status: transaction.status,
       mimetype: doc.mimetype,
       path: doc.path
  	  };
@@ -97,12 +98,26 @@ exports.delete = async function(req, res) {
   const { user } = req.session;
 
   Transactions.deleteMany({id: {'$in': transaction.ids}}).then( (err) => {
-  	console.log(err)
   	res.json({
   		status:  200,
   		message: 'Successfully deleted'
   	})
   }).catch(err => {	
   	console.log(err);
+  })
+}
+
+exports.mark =  async function(req, res) {
+  const { body: { transaction } } = req;
+
+  const { user } = req.session;
+
+  Transactions.updateMany({id: {'$in': transaction.ids}}, { $set: {status: 'Paid'} }).then( (err) => {
+    res.json({
+      status:  200,
+      message: 'Successfully deleted'
+    })
+  }).catch(err => { 
+    console.log(err);
   })
 }

@@ -69,7 +69,7 @@ const calcRentalYield = function(purchase_price, rental_income) {
 exports.all = async function(req, res, next) {
   const { user } = req.session;
   
-  let all_properties = await Properties.find({user_id: user.id}, { _id: 0 });
+  let all_properties = await Properties.find({user_id: user.id}, { _id: 0 }).sort('-current_value');
   const new_all_properties = [];
   all_properties.map(property => {
     property.type = PROPERTY_TYPE[property.type];

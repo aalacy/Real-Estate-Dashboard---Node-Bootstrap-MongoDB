@@ -250,8 +250,8 @@
                   </div>
                   <button class="btn btn-outline-secondary transaction-multiple-finish-btn mr-sm-2  d-none">Finish</button>
                   <button class="btn btn-outline-secondary d-none" id="manageTransactions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage transactions | <span class="selectedItems">0</span></button>
-                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <button class="dropdown-item">Mark as Paid</button>
+                   <div class="dropdown-menu transaction-dropdown" aria-labelledby="dropdownMenuButton">
+                    <button class="dropdown-item transaction-multiple-paid-btn">Mark as Paid</button>
                     <button class="dropdown-item transaction-multiple-del-btn">Delete</button>
                   </div>
                   <button class="btn btn-outline-secondary transaction-multiple-btn">Select Multiple</button>
@@ -379,10 +379,12 @@
           const val = JSON.stringify(transaction);
           const contact = transaction.user ? transaction.user : 'No Contact';
           let status_color = 'text-success';
+          let status_text = 'Paid'
           if (transaction.status != 'Paid') {
             status_color = 'text-danger';
+            status_text = 'Due'
           }
-          const status = `<span class="${status_color} font-weight-bold">${transaction.status || 'Due'}</span>`
+          const status = `<span class="${status_color} font-weight-bold">${status_text}</span>`
           $('.transaction-list').append(`
             <div class="transaction-item list-group-item cursor-hand px-4 page${page}" data-val='${val}''>
               <div class="col-auto avatar d-flex align-items-center">

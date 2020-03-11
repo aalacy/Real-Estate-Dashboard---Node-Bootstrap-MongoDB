@@ -27,7 +27,7 @@
                 <a href="/property/new" class="btn btn-primary d-block d-md-inline-block lift">
                   Add a property
                 </a>
-                </div>
+              </div>
             </div> 
             </div>
         </div>
@@ -37,7 +37,7 @@
         <div class="container">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <div class="row align-items-center" style="margin-bottom: 2rem;">
-            <div class="col-12">
+            <div class="col">
               <div class="input-group input-group-merge">
                 <input type="text" class="form-control form-control-prepended property-search" placeholder="Search">
                 <div class="input-group-prepend">
@@ -45,6 +45,17 @@
                     <span class="fe fe-search"></span>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-outline-dark dropdown-toggle btn-property-order" type="button" aria-haspopup="true" aria-expanded="false">
+                Sort: <span class="sort-type font-weight-bold">Highest Value</span>
+              </button>
+              <div class="dropdown-menu property-order-menu">
+                <a class="dropdown-item" href="#" >Highest Value</a>
+                <a class="dropdown-item" href="#">Lowest Value</a>
+                <a class="dropdown-item" href="#">Highest Yield %</a>
+                <a class="dropdown-item" href="#">Lowest Yield %</a>
               </div>
             </div>
           </div>
@@ -55,8 +66,7 @@
           </div> <!-- / .row -->
         </div>
       
-       <!-- JAVASCRIPT
-  ================================================== -->
+    <!-- JAVASCRIPT  ================================================== -->
     <% include ../partials/scripts %>
 
     <script type="text/javascript">
@@ -203,6 +213,30 @@
         $('.property-search').keyup(function(event) {
           listProperties($(this).val().toLowerCase());
         });
+
+        $('.btn-property-order').click(function(e) {
+          // $(this).dropdown('toggle');
+          $('.property-order-menu').toggleClass('show')
+        })
+
+        $('.property-order-menu .dropdown-item').click(function(e){
+          e.preventDefault()
+          $('.btn-property-order .sort-type').html($(this).text())
+          $('.property-order-menu').toggleClass('show')
+          if ($(this).text() == 'Highest Value') {
+            properties.sort(function(a,b) {return (a.current_value > b.current_value) ? 1 : ((b.current_value > a.current_value) ? -1 : 0);} );
+            listProperties()
+          } else if ($(this).text() == 'Lowest Value') {
+            properties.sort(function(a,b) {return (a.current_value < b.current_value) ? 1 : ((b.current_value < a.current_value) ? -1 : 0);} );
+            listProperties()
+          } else if ($(this).text() == 'Highest Yield %') {
+            properties.sort(function(a,b) {return (a.current_value > b.current_value) ? 1 : ((b.current_value > a.current_value) ? -1 : 0);} );
+            listProperties()
+          } else if ($(this).text() == 'Lowest Value') {
+            properties.sort(function(a,b) {return (a.current_value < b.current_value) ? 1 : ((b.current_value < a.current_value) ? -1 : 0);} );
+            listProperties()
+          } 
+        })
       });
     </script>
     </body>

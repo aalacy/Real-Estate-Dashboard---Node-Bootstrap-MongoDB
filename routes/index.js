@@ -101,6 +101,7 @@ router.get('/transaction/all/get', auth.checkToken, transaction.all_get);
 router.post('/transaction/create', auth.checkToken, transaction.create);
 router.post('/transaction/edit', auth.checkToken, transaction.edit);
 router.post('/transaction/delete', auth.checkToken, transaction.delete);
+router.post('/transaction/mark/paid', auth.checkToken, transaction.mark);
 
 // services
 router.get('/services', auth.checkToken, service.all);

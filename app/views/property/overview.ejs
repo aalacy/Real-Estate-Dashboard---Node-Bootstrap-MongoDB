@@ -36,10 +36,10 @@
                 <div class="mr-3">Does this property have loan?</div>
                 <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
                   <label class="btn btn-outline-dark active">
-                    <input type="radio" name="property[has_loan]" value="1" id="income_option" autocomplete="off" checked> Yes
+                    <input type="radio" name="property[has_loan]" value="1" id="on_loan" autocomplete="off" checked> Yes
                   </label>
                   <label class="btn btn-outline-dark">
-                    <input type="radio" name="property[has_loan]" value="0" id="expenses_option" autocomplete="off"> No
+                    <input type="radio" name="property[has_loan]" value="0" id="off_loan" autocomplete="off"> No
                   </label>
                 </div>
               </div>
@@ -430,34 +430,24 @@
           <div class="header-body">
             <div class="row align-items-center">
               <div class="col-auto">
-
-                <!-- Avatar -->
                 <div class="avatar avatar-lg">
                   <img src="<%=property.image ? '/' + property.image : '/img/avatars/projects/project-1.jpg'%>" alt="..." class="card-img-top thumb-image">
                 </div>
-
               </div>
               <div class="col ml-n3 ml-md-n2">
-                
-                <!-- Pretitle -->
                 <h6 class="header-pretitle">
                   Property
                 </h6>
-
-                <!-- Title -->
                 <h1 class="header-title">
                   <%= property.address%>, <%= property.city%>
                 </h1>
-
               </div>
               <a href="/property/detail/<%=property.id%>" class="btn btn-primary d-block d-md-inline-block lift">
                 Edit property
               </a>
-            </div> <!-- / .row -->
+            </div> 
             <div class="row align-items-center">
               <div class="col">
-                
-                <!-- Nav -->
                 <ul class="nav nav-tabs nav-overflow header-tabs">
                   <li class="nav-item">
                     <a href="javascript:void(0)" data-href="#overview" class="nav-link overview-tab">
@@ -480,10 +470,8 @@
                     </a>
                   </li>
                 </ul>
-
               </div>
             </div>
-			
           </div>
 
         </div>
@@ -1780,7 +1768,11 @@
           $('#addLoanBtn').html('Edit');
           $('.property_debt').val(debt.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
           $('.property_equity').val(equity.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
-          $('input[name="property[has_loan]"]').val()
+          if (property.has_loan) {
+            $('#on_loan').prop('checked', true).trigger('click')
+          } else {
+            $('#off_loan').prop('checked', true).trigger('click')
+          }
           $('input[name="property[lender]"]').val(property.lender)
           $('input[name="property[amount_borrowed]"]').val(property.amount_borrowed.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
           $('input[name="property[interest_rate]"]').val(property.interest_rate.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
@@ -1796,11 +1788,19 @@
         // update the loan value
         $('#add-loan-form').submit(function(e){
           e.preventDefault();
+          const has_loan = $('input[name="property[has_loan]"]:checked').val()
+          if (has_loan == "1") {
+            debt = $('.property_debt').val().replace(',', '');
+            equity = $('.property_equity').val();
+          } else {
+            debt = 0;
+            equity = property.current_value
+          }
           const data = {
-            id: $('input[name="property[id]"]').val(),
-            debt: $('.property_debt').val().replace(',', ''),
-            equity: $('.property_equity').val(),
-            has_loan: $('input[name="property[has_loan]"]:checked').val(),
+            id: property.id,
+            debt,
+            equity,
+            has_loan,
             lender: $('input[name="property[lender]"]').val(),
             amount_borrowed: $('input[name="property[amount_borrowed]"]').val().replace(',', ''),
             monthly_payment: $('input[name="property[monthly_payment]"]').val().replace(',', ''),
@@ -1835,12 +1835,23 @@
               $('.ownership-content-block').show();
               $('.ownership-empty-block').hide();
             } else {
-              
+              $('.ownership-content-block').hide();
+              $('.ownership-empty-block').show();
             }
           })
           .catch(error => {
             console.log(error);
           });
+        })
+
+        // diable input when having no loan
+        $('input[name="property[has_loan]"]').change(function(){
+          if ($(this).val() == 1) {
+            $('#modalAddNewLoan input').prop('disabled', false)
+          } else {
+            $('#modalAddNewLoan input').prop('disabled', true)
+          }
+          $('#modalAddNewLoan input[name="property[has_loan]"]').prop('disabled', false)
         })
 
         // fetch loan value

@@ -1187,6 +1187,53 @@ $(function() {
        
     });
 
+    // Mark the seleted transactions into paid
+    $(document).on('click', '.transaction-multiple-paid-btn', function(e) {
+      e.preventDefault();
+      let ids = []
+      $.find('.tranaction-checkbox:checked').map((e) =>{
+        ids.push($(e).val())
+      })
+      if (ids < 1) {
+        $('.transaction-dropdown').toggleClass('show')
+        return;
+      }
+      var data = {
+        transaction: {
+          ids
+        }
+      };
+      confirmDialog("Are you sure?", (ans) => {
+        if (ans) {
+          const token = $('input[name="_csrf"]').val();
+          fetch('/transaction/mark/paid', {
+              credentials: 'same-origin', // <-- includes cookies in the request
+              headers: {
+                  'CSRF-Token': token, 
+                  'Content-Type': 'application/json'
+              },
+              method: 'POST',
+              body: JSON.stringify(data)
+          })
+          .then(response => response.json())
+          .then(function(res) {
+            makeToast({message: res.message});
+
+            if (res.status == 200) {
+              location.href = '/transaction/all';
+            }
+          })
+          .catch(error => {
+              console.log(error);
+          }).
+          finaly(() =>{
+            $('.transaction-dropdown').toggleClass('show')
+          });
+        }
+      });
+    });
+
+    // Delete selected transactions
     $(document).on('click', '.transaction-multiple-del-btn', function(e) {
       e.preventDefault();
       let ids = []
