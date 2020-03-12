@@ -48,7 +48,50 @@
               </div>
             </div>
             <div class="col-auto">
-              <button class="btn border lift dropdown-toggle btn-property-order" type="button" aria-haspopup="true" aria-expanded="false">
+              <button class="btn border" id="topnavDocumentation" data-toggle="dropdown" aria-haspopup="true" >
+                <span class="fe fe-settings"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="topnavDocumentation">
+                <li class="dropright">
+                  <a class="dropdown-item dropdown-toggle " href="#" id="changeMetric" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Change metric
+                  </a>
+                  <div class="dropdown-menu changeMetric" aria-labelledby="changeMetric">
+                    <a class="dropdown-item " href="#">
+                      Est Annual Yield (Default)
+                    </a>
+                    <a class="dropdown-item " href="#">
+                      Net Yield
+                    </a>
+                    <a class="dropdown-item " href="#">
+                      Gross Yield
+                    </a>
+                    <a class="dropdown-item " href="#">
+                      Income
+                    </a>
+                  </div>
+                </li>
+                <div class="dropdown-divider"></div>
+                <li class="dropright">
+                  <a class="dropdown-item dropdown-toggle " href="#" id="timePeriod" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Change time periods
+                  </a>
+                  <div class="dropdown-menu timePeriod" aria-labelledby="timePeriod">
+                    <a class="dropdown-item " href="#">
+                      YTD
+                    </a>
+                    <a class="dropdown-item " href="#">
+                      Last Full Year
+                    </a>
+                    <a class="dropdown-item " href="#">
+                      All Time
+                    </a>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="col-auto">
+              <button class="btn border dropdown-toggle btn-property-order" type="button" aria-haspopup="true" aria-expanded="false">
                 Sort: <span class="sort-type font-weight-bold">Highest Value</span>
               </button>
               <div class="dropdown-menu property-order-menu">
@@ -71,6 +114,9 @@
 
     <script type="text/javascript">
       let properties = [];
+      let oldProperties = [];
+      let period = 'All Time'; // all, Last Full Year, YTD
+      let metric = 'Rental Yield';
       const isPropertyFiltered = (property, search) => {
         if (property.city.toLowerCase().includes(search) || property.address.toLowerCase().includes(search)) {
           return true;
@@ -80,7 +126,27 @@
       };
 
       const listProperties = (search='') => {
+        // start and end date for period option
+        let startDate = '1900-01-01';
+        let endDate = '9999-01-01';
+        const thisYear = moment().format('YYYY');
+        switch (period) {
+          case 'All Time':
+            startDate = '1900-01-01';
+            endDate = '9999-01-01';
+            break;
+          case 'YTD':
+            startDate = thisYear + '-01-01'
+            endDate = moment().format('YYYY-MM-DD');
+            break;
+          case 'Last Full Year':
+            startDate = moment(thisYear + '-01-01').subtract(1, 'year').format('YYYY-MM-DD');
+            endDate = moment(thisYear + '-01-01').subtract(1, 'day').format('YYYY-MM-DD');
+            break;
+        }
+
         $('.property-list').empty();
+        properties = oldProperties.filter(property => moment(property.created_at).isBetween(startDate, endDate))
         properties.map( (property, i) => {
           if (isPropertyFiltered(property, search)) {
             let status = ''
@@ -109,7 +175,29 @@
             }
             
             const current_value = property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-            const rental_field = property.rental_yield.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+            const rental_yield = property.rental_yield.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + '%';
+            let right_label = 'Rental Yield';
+            let right_value = rental_yield;
+            // change metric
+            switch (metric) {
+              case 'Est Annual Yield (Default)':
+                right_label = 'Rental Yield';
+                right_value = rental_yield;
+                break;
+              case 'Net Yield':
+                right_label = 'Net Yield';
+                right_value = property.net_yield + '%';
+                break;
+              case 'Gross Yield':
+                right_label = 'Gross Yield';
+                right_value = property.gross_yield + '%';
+                break;
+              case 'Income':
+                right_label = 'Income';
+                right_value = '£' + property.total_income;
+                break;
+            }
+
             $('.property-list').append(`<div class="col-12 col-md-6 col-xl-4 property-block">
                 <div class="card p-relative">
                   <div class="row align-items-center badge-group">
@@ -179,11 +267,11 @@
                           </div>
                           <div class="col-6 text-center">
                             <h6 class="card-title text-uppercase text-muted mb-2">
-                                Rental Yield
+                                ${right_label} 
                             </h6>
                     
                             <span class="h2 mb-0">
-                              ${rental_field}%
+                              ${right_value}
                             </span>
                           </div>
                         </div>
@@ -195,12 +283,21 @@
             `)
           }
         })
+
+        // display empty
+        if (properties.length == 0) {
+          $('.property-list').append(`
+            <div class="text-uppercase text-center">There is no property</div>
+          `)
+        }
       }
       $(function(){
+        // display properties
         fetch('/property/all', {method: 'GET'})
           .then(res => res.json())
           .then(res => {
             properties = res.properties;
+            oldProperties = res.properties;
             listProperties()
           })
           .catch(err => {
@@ -210,12 +307,13 @@
 
           })
 
+        // search properties
         $('.property-search').keyup(function(event) {
           listProperties($(this).val().toLowerCase());
         });
 
+        // sort button
         $('.btn-property-order').click(function(e) {
-          // $(this).dropdown('toggle');
           $('.property-order-menu').toggleClass('show')
         })
 
@@ -232,6 +330,20 @@
           } else if ($(this).text() == 'Highest Yield %') {
             properties.sort(function(a,b) {return (a.rental_yield < b.rental_yield) ? 1 : ((b.rental_yield < a.rental_yield) ? -1 : 0);} );
           } 
+          listProperties()
+        })
+
+        // Change time period option
+        $(document).on('click', '.timePeriod a', function(e){
+          e.preventDefault();
+          period = $(this).text().trim()
+          listProperties()
+        })
+
+        // Change metric option
+        $(document).on('click', '.changeMetric a', function(e){
+          e.preventDefault();
+          metric = $(this).text().trim()
           listProperties()
         })
       });

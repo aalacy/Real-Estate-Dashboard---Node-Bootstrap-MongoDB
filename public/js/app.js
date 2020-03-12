@@ -1150,7 +1150,7 @@ $(function() {
                   ${tenant.first_name} ${tenant.last_name}
                 </h4>
                 <p class="card-text small text-muted">
-                  ${unit.description}: ${unit.property_name}
+                  ${tenant.unit_name}: ${tenant.property_name}
                 </p>
               </div>
             </div>

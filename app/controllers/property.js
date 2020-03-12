@@ -71,9 +71,46 @@ exports.all = async function(req, res, next) {
   
   let all_properties = await Properties.find({user_id: user.id}, { _id: 0 }).sort('-current_value');
   const new_all_properties = [];
-  all_properties.map(property => {
+  let transactions = await Transactions.find({ user_id: user.id }, { _id: 0 }).sort('-created_at');
+  all_properties.map((property) => {
+    transactions = transactions.filter(transaction => transaction.property_id == property.id);
+    let total_income = 0;
+    let total_expenses = 0;
+    transactions.forEach(transaction => {
+      const amount = parseFloat(transaction.amount) || 0;
+      if ( amount >= 0) {
+        total_income += amount
+      } else {
+        total_expenses += (amount)
+      }
+    })
     property.type = PROPERTY_TYPE[property.type];
-    new_all_properties.push(property);
+    let net_profit = total_income - Math.abs(total_expenses);
+    const total_cost = total_income + Math.abs(total_expenses);
+    const income_percent = (total_income/total_cost*100).toFixed(2);
+    const expenses_percent = total_cost > 0 ? (Math.abs(total_expenses)/total_income*100).toFixed(2) : 0;
+    const operating_expense_ratio = expenses_percent;
+    const gross_yield = (total_income/parseFloat(property.current_value)*100).toFixed(2);
+    const net_yield = 0;
+    if (property.purchase_price > 0) {
+      net_yield = (net_profit/parseFloat(property.purchase_price)*100).toFixed(2);
+    }
+    new_all_properties.push({
+      id: property.id,
+      status: property.status,
+      image: property.image,
+      units: property.units,
+      tenancies: property.tenancies,
+      current_value: property.current_value,
+      rental_yield: property.rental_yield,
+      address: property.address,
+      city: property.city,
+      type: property.type,
+      created_at: property.created_at,
+      net_yield,
+      gross_yield,
+      total_income,
+    });
   })
   // let occupied_properties = await Properties.find({ status: 'Occupied', user_id: user.id }, { _id: 0 });
   // let new_occupied_properties = [];
@@ -199,7 +236,7 @@ exports.overview = async function(req, res) {
   const gross_yield = (total_income/parseFloat(property.current_value)*100).toFixed(2);
   const net_yield = 0;
   if (property.purchase_price > 0) {
-    (net_profit/parseFloat(property.purchase_price)*100).toFixed(2);
+    net_yield = (net_profit/parseFloat(property.purchase_price)*100).toFixed(2);
   }
 
   // recent 5 transactions
@@ -290,7 +327,7 @@ exports.search = async function(req, res) {
       if (unit.description.toLowerCase().includes(_q)) {
         units.push({
           id: unit.id,
-          property_name: property.address,
+          property_name: `${property.address}, ${property.city}`,
           property_id: property.id,
           description: unit.description,
           active: unit.rent_frequency == 'Vacant'
@@ -302,7 +339,7 @@ exports.search = async function(req, res) {
           tenants.push({
             unit_id: unit.id,
             property_id: property.id,
-            property_name: property.address,
+            property_name: `${property.address}, ${property.city}`,
             unit_name: unit.description,
             first_name: tenant.first_name,
             last_name: tenant.last_name,
@@ -838,7 +875,6 @@ exports.cashflow_date = async function(req, res) {
       endDate = moment(thisYear + '-01-01').subtract(1, 'day').format('YYYY-MM-DD');
       break;
   }
-  console.log(startDate, ' ', endDate);
   // const transactions = await Transactions.find({ user_id: user.id, property_id: id }, { _id: 0 }).sort('-created_at');
   const transactions = await Transactions.find({$and:[{created_at:{$gte:new Date(startDate)}},{created_at:{$lte:new Date(endDate)}}, {user_id: user.id}]}, { _id: 0 });
 
