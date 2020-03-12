@@ -52,7 +52,7 @@
 
 .document-upload-image {
     height: 150px;
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position-y: -25px;
 }

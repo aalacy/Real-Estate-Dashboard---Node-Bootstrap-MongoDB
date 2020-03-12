@@ -16,6 +16,7 @@ const DocumentsSchema = new Schema({
   id: { type: String, default: ''},
   user_id: { type: String, default: ''},
   tag: { type: Array, default: []},
+  note: { type: String, default: ''},
   property_id: { type: String, default: ''},
   property_name: { type: String, default: ''},
   unit_id: { type: String, default: ''},

@@ -104,7 +104,7 @@ function doPopulate() {
 
               <!-- Text -->
               <p class="card-text small text-muted mb-1">
-                ${doc.display_name} &bull;${doc.tag}
+                ${doc.display_name} &bull;
               </p>
 
               <!-- Time -->
@@ -129,7 +129,7 @@ function doPopulate() {
                   <i class="fe fe-more-vertical"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-                  <button class="dropdown-item edit-document modal-upload" data-id="${doc.id}" data-property_id="${doc.property_id}" data-property_name="${doc.property_name}" data-unit_id="${doc.unit_id}" data-unit_name="${doc.unit_name}" data-tag="${doc.tag}" data-path="${doc.path}" data-size="${doc.size}" data-filename="${doc.filename}" data-mimetype="${doc.mimetype}">
+                  <button class="dropdown-item edit-document modal-upload" data-id="${doc.id}" data-property_id="${doc.property_id}" data-property_name="${doc.property_name}" data-unit_id="${doc.unit_id}" data-unit_name="${doc.unit_name}" data-tag="${doc.tag}" data-path="${doc.path}" data-size="${doc.size}" data-note="${doc.note}" data-filename="${doc.filename}" data-mimetype="${doc.mimetype}">
                     Edit
                   </button>
                   <button class="dropdown-item delete-document" data-id="${doc.id}">
@@ -1505,7 +1505,8 @@ $(function() {
         $('#document_path').val(image);
         $('#document_mimetype').val($(this).data('mimetype'));
         $('#document_filename').val($(this).data('filename'));
-        $('#documentUploadImage').removeClass('d-none').children('div').css('background-image', `url('/${image}')`);
+        $('#document_note').val($(this).data('note'));
+        $('.document-upload-image').removeClass('d-none').css('background-image', `url('/${image}')`);
         $('#modalUpload .modal-title').text('Edit Document');
         $('#modalUpload #status').val('edit');
       } else {
@@ -1515,7 +1516,7 @@ $(function() {
         $('#document_tag').empty();
         
         $('#document_id').val('');
-        $('#documentUploadImage').addClass('d-none');
+        $('.document-upload-image').addClass('d-none');
         $('#modalUpload .modal-title').text('Upload Document');
         $('#modalUpload #status').val('upload');
       }
@@ -1544,6 +1545,7 @@ $(function() {
           unit_id: $('#document_unit').val(),
           unit_name: $('#document_unit option:selected').text(),
           tag: $('#document_tag').val(),
+          note: $('#document_note').val(),
           category: $('#document_category').val(),
           status: $('#status').val(),
           size: $('#document_size').val(),

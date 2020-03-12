@@ -481,12 +481,13 @@ exports.documents_delete = async function(req, res) {
 }
 
 exports.upload_doc_to_property = async function(req, res) {
-  const { body: { document } } = req;
+  const { body: { document, document_note } } = req;
   const mydocument = await Documents.findOne({ id: document.id });
   const property_name = document.property_name;
   const unit_name = document.unit_name;
   const new_document = {
     tag: document.tag,
+    note: document.note,
     property_id: document.property_id,
     unit_id: document.unit_id,
     display_name: property_name + ' - ' + unit_name,
