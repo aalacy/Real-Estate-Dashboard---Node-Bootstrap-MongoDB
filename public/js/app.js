@@ -1111,16 +1111,19 @@ $(function() {
       .then(res => {
         $('#property-search-list .card-body .list-group').html('');
         // property list
+        if (res.properties.length) {
+          $('#property-search-list .card-body .list-group').append(`<b class="mb-2">Properties</b>`);
+        }
         res.properties.map(property => {
-            let avatar = '/img/avatars/projects/project-1.jpg';
+            let avatar = '/img/icons/single.svg';
             if (property.image) {
               avatar = '/' + property.image;
             }
-            $('#property-search-list .card-body .list-group').append(`<a href="/property/overview/${property.id}" class="list-group-item px-0">
+            $('#property-search-list .card-body .list-group').append(`<a href="/property/overview/${property.id}" class="list-group-item border-0 px-0">
                 <div class="row align-items-center">
                   <div class="col-auto">
-                    <div class="avatar avatar-4by3">
-                      <img src="${avatar}" alt="${property.address}" class="avatar-img rounded">
+                    <div class="avatar">
+                      <img src="${avatar}" alt=" .." class="avatar-img rounded">
                     </div>
                   </div>
                   <div class="col ml-n2">
@@ -1128,21 +1131,49 @@ $(function() {
                       ${property.address}, ${property.city}
                     </h4>
                     <p class="small text-muted mb-0">
-                      <time datetime="2018-05-24">${PROPERTY_TYPE[property.type]}</time>
+                      <time>${PROPERTY_TYPE[property.type]}</time>
                     </p>
                   </div>
                 </div>
               </a>`)
         });
 
+        if (res.units.length) {
+          $('#property-search-list .card-body .list-group').append(`<b class="mb-2">Units</b>`);
+        }
+        // unit list
+        res.units.map(unit => {
+          const href = `/property/overview/${unit.property_id}/units/${unit.id}`;
+          $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item border-0 px-0">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <div class="avatar">
+                      <img src="/img/icons/single.svg" alt=" .." class="avatar-img rounded">
+                    </div>
+                  </div>
+                  <div class="col ml-n2">
+                    <h4 class="text-body mb-1 name">
+                      ${unit.description}
+                    </h4>
+                    <p class="small text-muted mb-0">
+                      ${unit.property_name}
+                    </p>
+                  </div>
+                </div>
+              </a>`);
+        })
+
         // tenant list
+        if (res.tenants.length) {
+          $('#property-search-list .card-body .list-group').append(`<b class="mb-2">Tenants</b>`);
+        }
         res.tenants.map(tenant => {
           const href = `/property/overview/${tenant.property_id}/units/${tenant.unit_id}`;
-          $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item px-0">
+          $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item border-0 px-0">
             <div class="row align-items-center">
               <div class="col-auto">
                 <div class="avatar">
-                  <img src="/img/avatars/profiles/avatar-1.jpg" alt="avatar" class="avatar-img rounded-circle">
+                  <img src="/img/icons/single.svg" alt="avatar" class="avatar-img rounded">
                 </div>
               </div>
               <div class="col ml-n2">
@@ -1157,27 +1188,7 @@ $(function() {
           </a>`)
         });
 
-        // unit list
-        res.units.map(unit => {
-          const href = `/property/overview/${unit.property_id}/units/${unit.id}`;
-          $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item px-0">
-            <div class="row align-items-center unit-item">
-              <div class="col-auto">
-                <h1 class="mb-0 avatar avatar-lg">
-                  <img src="/img/icons/unit.png" class="avatar-img">
-                </h1>
-              </div>
-              <div class="col">
-                <h4 class="text-body mb-1">
-                  ${unit.description}
-                </h4>
-                <p class="card-text small text-muted">
-                  ${unit.property_name}
-                </p>
-              </div>
-            </div>
-          </a>`);
-        })
+        
         if (!res.properties && !res.units && !res.tenants) {
           $('#property-search-list').removeClass('show');
         } else {
