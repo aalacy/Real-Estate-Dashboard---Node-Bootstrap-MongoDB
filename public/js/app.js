@@ -1178,10 +1178,10 @@ $(function() {
             </div>
           </a>`);
         })
-        if (res.properties) {
-            $('#property-search-list').addClass('show');
+        if (!res.properties && !res.units && !res.tenants) {
+          $('#property-search-list').removeClass('show');
         } else {
-            $('#property-search-list').removeClass('show');
+          $('#property-search-list').addClass('show');
         }
       })
       .catch(err => {
