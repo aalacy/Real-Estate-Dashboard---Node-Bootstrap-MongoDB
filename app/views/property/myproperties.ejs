@@ -117,13 +117,6 @@
       let oldProperties = [];
       let period = 'All Time'; // all, Last Full Year, YTD
       let metric = 'Rental Yield';
-      const isPropertyFiltered = (property, search) => {
-        if (property.city.toLowerCase().includes(search) || property.address.toLowerCase().includes(search)) {
-          return true;
-        } else {
-          return false;
-        }
-      };
 
       const listProperties = (search='') => {
         // start and end date for period option
@@ -147,147 +140,146 @@
 
         $('.property-list').empty();
         properties = oldProperties.filter(property => moment(property.created_at).isBetween(startDate, endDate))
+        properties = properties.filter(property => property.city.toLowerCase().includes(search) || property.address.toLowerCase().includes(search))
         properties.map( (property, i) => {
-          if (isPropertyFiltered(property, search)) {
-            let status = ''
-            let badge = '';
-            let image = property.image ? '/' + property.image : '';
-            if (property.status) { 
-              if (property.units == 1) {
-                badge = property.status == 'Vacant' ? 'danger' : '';
-                status = `<h2><span class="badge badge-soft-${badge} ml-1 mt-n1 text-capitalize">${property.status}</span><h2>`;
-                if (!image) {
-                  image = '/img/avatars/projects/single.png';
+          let status = ''
+          let badge = '';
+          let image = property.image ? '/' + property.image : '';
+          if (property.status) { 
+            if (property.units == 1) {
+              badge = property.status == 'Vacant' ? 'danger' : '';
+              status = `<h2><span class="badge badge-soft-${badge} ml-1 mt-n1 text-capitalize">${property.status}</span><h2>`;
+              if (!image) {
+                image = '/img/avatars/projects/single.png';
+              }
+            } else {
+              let cnt_vacant = 0;
+              property.tenancies.forEach(unit => {
+                if (unit.rent_frequency == 'Vacant') {
+                  cnt_vacant++;
                 }
-              } else {
-                let cnt_vacant = 0;
-                property.tenancies.forEach(unit => {
-                  if (unit.rent_frequency == 'Vacant') {
-                    cnt_vacant++;
-                  }
-                });
-                badge = cnt_vacant > 0 ? 'danger' : '';
-                status = `<h2><span class="badge badge-soft-${badge} ml-1 mt-n1 text-capitalize">${cnt_vacant} Vacant Units</span><h2>`;
-                if (!image) {
-                  image = '/img/avatars/projects/multiple.png';
-                }
+              });
+              badge = cnt_vacant > 0 ? 'danger' : '';
+              status = `<h2><span class="badge badge-soft-${badge} ml-1 mt-n1 text-capitalize">${cnt_vacant} Vacant Units</span><h2>`;
+              if (!image) {
+                image = '/img/avatars/projects/multiple.png';
               }
             }
-            
-            const current_value = property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-            const rental_yield = property.rental_yield.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + '%';
-            let right_label = 'Rental Yield';
-            let right_value = rental_yield;
-            // change metric
-            switch (metric) {
-              case 'Est Annual Yield (Default)':
-                right_label = 'Rental Yield';
-                right_value = rental_yield;
-                break;
-              case 'Net Yield':
-                right_label = 'Net Yield';
-                right_value = property.net_yield + '%';
-                break;
-              case 'Gross Yield':
-                right_label = 'Gross Yield';
-                right_value = property.gross_yield + '%';
-                break;
-              case 'Income':
-                right_label = 'Income';
-                right_value = '£' + property.total_income;
-                break;
-            }
+          }
+          
+          const current_value = property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+          const rental_yield = property.rental_yield.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + '%';
+          let right_label = 'Rental Yield';
+          let right_value = rental_yield;
+          // change metric
+          switch (metric) {
+            case 'Est Annual Yield (Default)':
+              right_label = 'Rental Yield';
+              right_value = rental_yield;
+              break;
+            case 'Net Yield':
+              right_label = 'Net Yield';
+              right_value = property.net_yield + '%';
+              break;
+            case 'Gross Yield':
+              right_label = 'Gross Yield';
+              right_value = property.gross_yield + '%';
+              break;
+            case 'Income':
+              right_label = 'Income';
+              right_value = '£' + property.total_income;
+              break;
+          }
 
-            $('.property-list').append(`<div class="col-12 col-md-6 col-xl-4 property-block">
-                <div class="card p-relative">
-                  <div class="row align-items-center badge-group">
-                    <div class="col">
-                      <div class="row align-items-center no-gutters">
-                          <div class="col-auto">
-                            ${ badge ? status : ''}
-                          </div>
-                      </div>
+          $('.property-list').append(`<div class="col-12 col-md-6 col-xl-4 property-block">
+              <div class="card p-relative">
+                <div class="row align-items-center badge-group">
+                  <div class="col">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col-auto">
+                          ${ badge ? status : ''}
+                        </div>
                     </div>
                   </div>
-                    <a href="/property/overview/${property.id}/overview">
-                      <img src="${image}" alt="Property cover image" class="card-img-top cover-image">
-                    </a>
-                    <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col">
-                        <h3 class="card-title mb-2 name">
-                            <a href="/property/overview/${property.id}">
-                              <div class="text-ellipsis">
-                                ${property.address}, ${property.city}
-                              </div>
-                            </a>
-                        </h3>
-
-                        <!-- Subtitle -->
-                        <p class="card-text medium text-muted text-capitalize">
-                            ${property.type}
-                        </p>
-
-                        </div>
-                        <div class="col-auto">
-                        
-                        <!-- Dropdown -->
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <a href="/property/overview/${property.id}" class="dropdown-item">
-                              Edit
-                            </a>
-                            <a href="#" class="dropdown-item delete-property" data-id="${property.id}">
-                              Remove
-                            </a>
-                          </div>
-                        </div>
-
-                        </div>
-                    </div> <!-- / .row -->
-
-                    <!-- Divider -->
-                    <hr>
-
-                    <div class="row align-items-center">
+                </div>
+                  <a href="/property/overview/${property.id}/overview">
+                    <img src="${image}" alt="Property cover image" class="card-img-top cover-image">
+                  </a>
+                  <div class="card-body">
+                  <div class="row align-items-center">
                       <div class="col">
-                        <div class="row align-items-center no-gutters">
-                          <div class="col-6 text-center border-right">
-                            <h6 class="card-title text-uppercase text-muted mb-2">
-                                Property Value
-                            </h6>
-                    
-                            <span class="h2 mb-0">
-                                £${current_value}
-                            </span>
-                          
-                          </div>
-                          <div class="col-6 text-center">
-                            <h6 class="card-title text-uppercase text-muted mb-2">
-                                ${right_label} 
-                            </h6>
-                    
-                            <span class="h2 mb-0">
-                              ${right_value}
-                            </span>
-                          </div>
+                      <h3 class="card-title mb-2 name">
+                          <a href="/property/overview/${property.id}">
+                            <div class="text-ellipsis">
+                              ${property.address}, ${property.city}
+                            </div>
+                          </a>
+                      </h3>
+
+                      <!-- Subtitle -->
+                      <p class="card-text medium text-muted text-capitalize">
+                          ${property.type}
+                      </p>
+
+                      </div>
+                      <div class="col-auto">
+                      
+                      <!-- Dropdown -->
+                      <div class="dropdown">
+                        <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fe fe-more-vertical"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                          <a href="/property/overview/${property.id}" class="dropdown-item">
+                            Edit
+                          </a>
+                          <a href="#" class="dropdown-item delete-property" data-id="${property.id}">
+                            Remove
+                          </a>
                         </div>
                       </div>
-                    </div> 
+
+                      </div>
+                  </div> <!-- / .row -->
+
+                  <!-- Divider -->
+                  <hr>
+
+                  <div class="row align-items-center">
+                    <div class="col">
+                      <div class="row align-items-center no-gutters">
+                        <div class="col-6 text-center border-right">
+                          <h6 class="card-title text-uppercase text-muted mb-2">
+                              Property Value
+                          </h6>
+                  
+                          <span class="h2 mb-0">
+                              £${current_value}
+                          </span>
+                        
+                        </div>
+                        <div class="col-6 text-center">
+                          <h6 class="card-title text-uppercase text-muted mb-2">
+                              ${right_label} 
+                          </h6>
+                  
+                          <span class="h2 mb-0">
+                            ${right_value}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div> 
-                </div>
+                </div> 
               </div>
-            `)
-          }
+            </div>
+          `)
         })
 
         // display empty
         if (properties.length == 0) {
           $('.property-list').append(`
-            <div class="text-uppercase text-center">There is no property</div>
+            <div class="text-uppercase text-center w-100">There is no property</div>
           `)
         }
       }
