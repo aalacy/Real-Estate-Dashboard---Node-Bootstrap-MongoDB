@@ -567,8 +567,12 @@
                         </button>
                         <% } else { %>
                         <div>
-                          <span class="h2 font-medium">£<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%></span>
-                          <div class="text-uppercase text-muted text-ss">Property Value</div>
+                          <h6 class="card-title text-uppercase text-muted mt-2">
+                             Property Value
+                           </h6>
+                           <span class="h1">
+                             £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                           </span>
                         </div>
                         <% } %>
                       </div>
@@ -739,11 +743,11 @@
                       <div class="row">
                         <div class="col text-center border-right mt-4 px-3">
                           <div class="mb-2"><span class="text-success">●</span>&nbsp;Equity</div>
-                          <div class="h2 mb-0">£<span class="property_equity"></span></div>
+                          <div class="h3 mb-0">£<span class="property_equity"></span></div>
                         </div>
                         <div class="col text-center mt-4 px-3">
                           <div class="mb-2"><span class="text-danger">●</span>&nbsp;Debt</div>
-                          <div class="h2 mb-0">£<span class="property_debt"></span></div>
+                          <div class="h3 mb-0">£<span class="property_debt"></span></div>
                         </div>
                       </div>
                     </div>
