@@ -1118,6 +1118,8 @@ $(function() {
             let avatar = '/img/icons/single.svg';
             if (property.image) {
               avatar = '/' + property.image;
+            } else {
+              avatar = property.tenancies.length ? '/img/icons/multiple.svg' : '/img/icons/single.svg';
             }
             $('#property-search-list .card-body .list-group').append(`<a href="/property/overview/${property.id}" class="list-group-item border-0 px-0">
                 <div class="row align-items-center">
