@@ -90,8 +90,8 @@
                 </li>
               </ul>
             </div>
-            <div class="col-auto">
-              <button class="btn border bg-white dropdown-toggle btn-property-order" type="button" aria-haspopup="true" aria-expanded="false">
+            <div class="col-auto dropdown">
+              <button class="btn border bg-white dropdown-toggle btn-property-order" data-toggle="dropdown"  type="button" aria-haspopup="true" aria-expanded="false">
                 Sort: <span class="sort-type font-weight-bold">Highest Value</span>
               </button>
               <div class="dropdown-menu property-order-menu">
@@ -315,9 +315,6 @@
         });
 
         // sort button
-        $('.btn-property-order').click(function(e) {
-          $('.property-order-menu').toggleClass('show')
-        })
 
         $('.property-order-menu .dropdown-item').click(function(e){
           e.preventDefault()
