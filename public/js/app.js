@@ -1507,7 +1507,8 @@ $(function() {
         $('#document_path').val(image);
         $('#document_mimetype').val($(this).data('mimetype'));
         $('#document_filename').val($(this).data('filename'));
-        $('#document_note').val($(this).data('note'));
+        $('#document_note').val($(this).data('note') || '');
+        $('.dz-message-placeholder').html('Replace a New File');
         $('.document-upload-image').removeClass('d-none').css('background-image', `url('/${image}')`);
         $('#modalUpload .modal-title').text('Edit Document');
         $('#modalUpload #status').val('edit');
@@ -1519,6 +1520,7 @@ $(function() {
         
         $('#document_id').val('');
         $('.document-upload-image').addClass('d-none');
+        $('.dz-message-placeholder').html('Choose a file or drag it here');
         $('#modalUpload .modal-title').text('Upload Document');
         $('#modalUpload #status').val('upload');
       }
