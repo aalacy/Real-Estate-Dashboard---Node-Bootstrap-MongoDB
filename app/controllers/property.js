@@ -91,7 +91,7 @@ exports.all = async function(req, res, next) {
     const expenses_percent = total_cost > 0 ? (Math.abs(total_expenses)/total_income*100).toFixed(2) : 0;
     const operating_expense_ratio = expenses_percent;
     const gross_yield = (total_income/parseFloat(property.current_value)*100).toFixed(2);
-    const net_yield = 0;
+    let net_yield = 0;
     if (property.purchase_price > 0) {
       net_yield = (net_profit/parseFloat(property.purchase_price)*100).toFixed(2);
     }
