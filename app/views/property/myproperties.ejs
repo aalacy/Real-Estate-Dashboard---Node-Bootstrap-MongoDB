@@ -117,6 +117,7 @@
       let oldProperties = [];
       let period = 'All Time'; // all, Last Full Year, YTD
       let metric = 'Rental Yield';
+      let sort = 'Highest Value';
 
       const listProperties = (search='') => {
         // start and end date for period option
@@ -141,6 +142,15 @@
         $('.property-list').empty();
         properties = oldProperties.filter(property => moment(property.created_at).isBetween(startDate, endDate))
         properties = properties.filter(property => property.city.toLowerCase().includes(search) || property.address.toLowerCase().includes(search))
+        if (sort == 'Lowest Value') {
+            properties.sort(function(a,b) {return (a.current_value > b.current_value) ? 1 : ((b.current_value > a.current_value) ? -1 : 0);} );
+          } else if ($(this).text() == 'Highest Value') {
+            properties.sort(function(a,b) {return (a.current_value < b.current_value) ? 1 : ((b.current_value < a.current_value) ? -1 : 0);} );
+          } else if ($(this).text() == 'Lowest Yield %') {
+            properties.sort(function(a,b) {return (a.rental_yield > b.rental_yield) ? 1 : ((b.rental_yield > a.rental_yield) ? -1 : 0);} );
+          } else if ($(this).text() == 'Highest Yield %') {
+            properties.sort(function(a,b) {return (a.rental_yield < b.rental_yield) ? 1 : ((b.rental_yield < a.rental_yield) ? -1 : 0);} );
+          } 
         properties.map( (property, i) => {
           let status = ''
           let badge = '';
@@ -313,15 +323,7 @@
           e.preventDefault()
           $('.btn-property-order .sort-type').html($(this).text())
           $('.property-order-menu').toggleClass('show')
-          if ($(this).text() == 'Lowest Value') {
-            properties.sort(function(a,b) {return (a.current_value > b.current_value) ? 1 : ((b.current_value > a.current_value) ? -1 : 0);} );
-          } else if ($(this).text() == 'Highest Value') {
-            properties.sort(function(a,b) {return (a.current_value < b.current_value) ? 1 : ((b.current_value < a.current_value) ? -1 : 0);} );
-          } else if ($(this).text() == 'Lowest Yield %') {
-            properties.sort(function(a,b) {return (a.rental_yield > b.rental_yield) ? 1 : ((b.rental_yield > a.rental_yield) ? -1 : 0);} );
-          } else if ($(this).text() == 'Highest Yield %') {
-            properties.sort(function(a,b) {return (a.rental_yield < b.rental_yield) ? 1 : ((b.rental_yield < a.rental_yield) ? -1 : 0);} );
-          } 
+          sort = $(this).text().trim()
           listProperties()
         })
 

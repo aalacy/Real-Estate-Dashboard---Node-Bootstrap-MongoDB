@@ -656,6 +656,10 @@ exports.delete_tenant = async function(req, res) {
 exports.new_unit = async function(req, res) {
   const { body: { property, unit } } = req;
 
+  if (!unit) {
+    const link = req.headers.referer.split(req.headers.host);
+    return res.redirect(link[1]);
+  } 
   if (!unit.rent_price || unit.rent_price == 0) {
     unit.rent_frequency = 'Vacant';
   }
