@@ -1110,6 +1110,7 @@ $(function() {
       .then(res => res.json())
       .then(res => {
         $('#property-search-list .card-body .list-group').html('');
+        // property list
         res.properties.map(property => {
             let avatar = '/img/avatars/projects/project-1.jpg';
             if (property.image) {
@@ -1133,6 +1134,8 @@ $(function() {
                 </div>
               </a>`)
         });
+
+        // tenant list
         res.tenants.map(tenant => {
           const href = `/property/overview/${tenant.property_id}/units/${tenant.unit_id}`;
           $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item px-0">
@@ -1143,20 +1146,20 @@ $(function() {
                 </div>
               </div>
               <div class="col ml-n2">
-                <h4 class="card-title mb-1 tenant-name">
+                <h4 class="text-body mb-1 tenant-name">
                   ${tenant.first_name} ${tenant.last_name}
                 </h4>
+                <p class="card-text small text-muted">
+                  ${unit.description}: ${unit.property_name}
+                </p>
               </div>
             </div>
           </a>`)
         });
 
+        // unit list
         res.units.map(unit => {
           const href = `/property/overview/${unit.property_id}/units/${unit.id}`;
-          let small_desc = '<span class="text-success mr-2">●</span>Active Tenancy';
-          if (unit.rent_frequency == 'Vacant') {
-            small_desc = 'Vacant'
-          }
           $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item px-0">
             <div class="row align-items-center unit-item">
               <div class="col-auto">
@@ -1165,11 +1168,11 @@ $(function() {
                 </h1>
               </div>
               <div class="col">
-                <h4 class="card-title mb-1">
-                  ${unit.name}
+                <h4 class="text-body mb-1">
+                  ${unit.description}
                 </h4>
                 <p class="card-text small text-muted">
-                  ${small_desc}
+                  ${unit.property_name}
                 </p>
               </div>
             </div>

@@ -290,7 +290,7 @@ exports.search = async function(req, res) {
       if (unit.description.toLowerCase().includes(_q)) {
         units.push({
           id: unit.id,
-          name: `${property.address}, ${property.city}: ${unit.description}`,
+          property_name: property.address,
           property_id: property.id,
           description: unit.description,
           active: unit.rent_frequency == 'Vacant'
@@ -302,6 +302,8 @@ exports.search = async function(req, res) {
           tenants.push({
             unit_id: unit.id,
             property_id: property.id,
+            property_name: property.address,
+            unit_name: unit.description,
             first_name: tenant.first_name,
             last_name: tenant.last_name,
           })
