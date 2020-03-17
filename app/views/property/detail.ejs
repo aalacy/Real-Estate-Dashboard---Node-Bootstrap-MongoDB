@@ -6,6 +6,8 @@
 <body>
     <% include ../partials/topnav %>
 
+    <% include ../partials/loan_modal %>
+
     <div class="main-content">
       
       <div class="container">
@@ -329,25 +331,22 @@
                 </div>
                 <div class="card-body">
                   <div class="row">
-              
                     <div class="col-12 col-md-4">
-                      
-                    <div class="form-group">
-                      <label>
-                        Ownership
-                      </label>
-                      <select class="form-control" name="property[ownership]" data-toggle="select" value="<%= property.ownership%>" data-options='{"placeholder": "Freehold or Leasehold"}'>
-                        <option></option>
-                        <option value="freehold" <% if (property.ownership == 'freehold'){ %><%='selected'%><%}%>>Freehold</option>
-                        <option value="leasehold" <% if (property.ownership == 'leasehold'){ %><%='selected'%><%}%>>Leasehold</option>
-                      </select>
-                    </div>
+                      <div class="form-group">
+                        <label>
+                          Ownership
+                        </label>
+                        <select class="form-control" name="property[ownership]" data-toggle="select" value="<%= property.ownership%>" data-options='{"placeholder": "Freehold or Leasehold"}'>
+                          <option></option>
+                          <option value="freehold" <% if (property.ownership == 'freehold'){ %><%='selected'%><%}%>>Freehold</option>
+                          <option value="leasehold" <% if (property.ownership == 'leasehold'){ %><%='selected'%><%}%>>Leasehold</option>
+                        </select>
+                      </div>
 
                     </div>
             
                     <div class="col-12 col-md-4">
                       
-                      <!-- Start date -->
                       <div class="form-group">
                         <label>
                           Purchase Price
@@ -366,7 +365,6 @@
                     </div>
                     <div class="col-12 col-md-4">
                       
-                      <!-- Start date -->
                       <div class="form-group">
                         <label>
                           Purchase Date
@@ -375,7 +373,16 @@
                       </div>
 
                     </div>
-                  </div> <!-- / .row -->
+                  </div> 
+                  <div class="form-group">
+                    <% if (property.equity == 0) { %>
+                      <button class="btn btn-white addloan-btn">Add loan details</button>
+                    <% } else if (property.debt == 0) { %>
+                      <button class="btn btn-success">You own 100% of this property</button>
+                    <% } else { %>
+                      <button class="btn btn-danger">1 Loan attached to this property</button>
+                    <% } %>
+                  </div>
                 </div>
               </div>
             </form>

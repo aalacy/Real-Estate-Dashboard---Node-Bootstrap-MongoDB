@@ -15,6 +15,7 @@ const uuidv4 = require('uuid/v4');
 const TransactionsSchema = new Schema({
   id: { type: String, default: ''},
   property_id: { type: String, default: '' },
+  unit_id: { type: String, default: '' },
   user_id: { type: String, default: '' },
   document_id: { type: String, default: '' },
   document_mimetype: { type: String, default: '' },

@@ -98,7 +98,7 @@ router.post('/property/loan/new', auth.checkToken, property.new_loan);
 
 // transactions
 router.get('/transaction/all', auth.checkToken, transaction.all);
-router.get('/transaction/all/get', auth.checkToken, transaction.all_get);
+router.get('/transaction/all/get/:id/:cnt', auth.checkToken, transaction.all_get);
 router.post('/transaction/create', auth.checkToken, transaction.create);
 router.post('/transaction/edit', auth.checkToken, transaction.edit);
 router.post('/transaction/delete', auth.checkToken, transaction.delete);

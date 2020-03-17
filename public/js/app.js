@@ -11,6 +11,10 @@ const PROPERTY_TYPE = {
     flat: 'Flat'
 };
 
+const page_cnt = 5;
+let items = [];
+let transactions = [];
+
 const toComma = function(val) {
     if (val) {
       return val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -521,6 +525,129 @@ const drawMap = function(options) {
 
 const formatNumber = function(num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
+
+// Display transactions
+const displayTransactions = () => {
+  $('.transaction-list').empty();
+  items.map( (transaction, idx) => {
+    if (idx % page_cnt == 0) { 
+      page = (parseInt(idx/page_cnt) + 1)
+    } else {
+      page = (parseInt(idx/page_cnt) + 1) + ' d-none'
+    }
+    const sign = parseFloat(transaction.amount) < 0;
+    let amount = '£' + transaction.amount.replace('-', '');
+   
+    if (sign) {
+      amount = '-' + amount;
+    }
+    let avatar = '<svg style="opacity: 0.7;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><g class="nc-icon-wrapper"><path d="M21,0H3C2.4,0,2,0.4,2,1v22c0,0.6,0.4,1,1,1h18c0.6,0,1-0.4,1-1V1C22,0.4,21.6,0,21,0z M11,9h5v2h-5V9z M9,19H6v-2h3V19z M9,15H6v-2h3V15z M9,11H6V9h3V11z M9,7H6V5h3V7z M15,19h-4v-2h4V19z M18,15h-7v-2h7V15z M18,7h-7V5h7V7z"></path></g></svg>';
+    if (transaction.mimetype && transaction.mimetype.includes('image')) {
+      avatar = `<img src="/${transaction.path}" alt="document image preview" class="avatar"/>`;
+    }
+    const val = JSON.stringify(transaction);
+    const contact = transaction.user ? transaction.user : 'No Contact';
+    let status_color = 'text-success';
+    let status_text = 'Paid'
+    if (transaction.status != 'Paid') {
+      status_color = 'text-danger';
+      status_text = 'Due'
+    }
+    const status = `<span class="${status_color} font-weight-bold">${status_text}</span>`
+    $('.transaction-list').append(`
+      <div class="transaction-item list-group-item cursor-hand px-4 page${page}" data-val='${val}''>
+        <div class="col-auto avatar d-flex align-items-center">
+          <div class="custom-control custom-checkbox my-1 mr-sm-2 d-none">
+            <input type="checkbox" name="tranaction[id]" class="custom-control-input tranaction-checkbox" id="customCheck${idx}" value="${transaction.id}">
+            <label class="custom-control-label" for="customCheck${idx}"></label>
+          </div>
+          <div class="avatar-title rounded bg-white text-secondary">
+            ${avatar}
+          </div>  
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4">
+          <div class="mb-1">${transaction.created_at}</div>
+          <div class="text-muted">Date</div>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4">
+          <div class="mb-1">${contact}</div>
+          <div class="text-muted">Rental Income</div>
+        </div>
+        <div class="col-lg-4 col-md-5 col-sm-6">
+          <div class="mb-1">${transaction.propertyName}</div>
+          <div class="text-muted">Property</div>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-6">
+          <div class="mb-1 font-weight-bold">${amount}</div>
+          <div class="text-muted">Amount</div>
+        </div>
+        <div class="ml-auto col-auto">
+          <div class="mb-1">${status}</div>
+          <div class="text-muted text-right">Status</div>
+        </div>
+        <div class="ml-auto col-auto d-flex align-items-center">
+          <span class="fe fe-chevron-right"></span>
+        </div>
+      </div>
+    `);
+  });
+}
+
+const setupPagination = () => {
+  try {
+    const pageCnt = Math.ceil(items.length / page_cnt);
+    var visiblePageCnt = Math.min(page_cnt, pageCnt);
+    $('.transactionPagination').twbsPagination('destroy');
+    $('.transactionPagination').twbsPagination({
+        totalPages: pageCnt,
+        // the current page that show on start
+        startPage: 1,
+        // maximum visible pages
+        visiblePages: visiblePageCnt,
+        initiateStartPageClick: true,
+        // template for pagination links
+        href: false,
+        // variable name in href template for page number
+        hrefVariable: '{{number}}',
+        // Text labels
+        first: '<<',
+        prev: 'Prev',
+        next: 'Next',
+        last: '>>',
+        // carousel-style pagination
+        loop: false,
+        // callback function
+        onPageClick: function (event, page) {
+          $('.transaction-list .list-group-item').addClass('d-none');
+          $('.page'+page).removeClass('d-none');
+        },
+        // pagination Classes
+        paginationClass: 'pagination',
+        nextClass: 'next',
+        prevClass: 'prev',
+        lastClass: 'last',
+        firstClass: 'first',
+        pageClass: 'page',
+        activeClass: 'active',
+        disabledClass: 'disabled'
+    });
+  } catch(e) {}
+}
+
+// fetch transaction data from server
+const fetchTransactions = (id=undefined, cnt=-1) => {
+  fetch(`/transaction/all/get/${id}/${cnt}`, {method: 'GET'})
+    .then(res => res.json())
+    .then(res => {
+      transactions = res.transactions;
+      items = transactions;
+      displayTransactions()
+      setupPagination();
+    })
+    .catch(err => {
+        console.log(err);
+    })
 }
 
 $(function() {
@@ -1052,27 +1179,6 @@ $(function() {
         chartInit(document.getElementById('tenancyChart').getContext('2d'), data, true, false);
       }
 
-      // const cashflowStartDate = flatpickr("#cashflowStartDate", {
-      //   onChange: function(selectedDates, dateStr, instance) {
-          
-      //   },
-      // });
-      // const cashflowEndDate = flatpickr("#cashflowEndDate", {});
-      // $('#cashflowStartDate').flatpickr({
-      //   mode: "range",
-      //   onChange: function(selectedDates, dateStr, instance) {
-      //     if (selectedDates.length == 2) {
-      //         if (!dateStr.includes('to')) {
-      //             startDate = endDate = dateStr;
-      //         } else {
-      //             startDate = dateStr.split('to')[0].trim();
-      //             endDate = dateStr.split('to')[1].trim();
-      //         }
-      //     }
-      //   }
-      // });
-      
-
     // thousands separator on input
     $('input.number').keyup(function(event) {
       // skip for arrow keys
@@ -1095,6 +1201,7 @@ $(function() {
       });
     });
 
+    // Search on navbar - property, unit, tenant
     $('body').click(function(e){
       $('#property-search-list').removeClass('show');
     })
@@ -1115,16 +1222,16 @@ $(function() {
           $('#property-search-list .card-body .list-group').append(`<b class="mb-2">Properties</b>`);
         }
         res.properties.map(property => {
-            let avatar = '/img/icons/single.svg';
+            let avatar = '/img/avatars/projects/single.png';
             if (property.image) {
               avatar = '/' + property.image;
             } else {
-              avatar = property.tenancies.length ? '/img/icons/multiple.svg' : '/img/icons/single.svg';
+              avatar = property.tenancies.length ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png';
             }
             $('#property-search-list .card-body .list-group').append(`<a href="/property/overview/${property.id}" class="list-group-item border-0 px-0">
                 <div class="row align-items-center">
                   <div class="col-auto">
-                    <div class="avatar">
+                    <div class="avatar avatar-4by3">
                       <img src="${avatar}" alt=" .." class="avatar-img rounded">
                     </div>
                   </div>
@@ -1145,12 +1252,13 @@ $(function() {
         }
         // unit list
         res.units.map(unit => {
+          let avatar = unit.isMulti ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png';
           const href = `/property/overview/${unit.property_id}/units/${unit.id}`;
           $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item border-0 px-0">
                 <div class="row align-items-center">
                   <div class="col-auto">
-                    <div class="avatar">
-                      <img src="/img/icons/single.svg" alt=" .." class="avatar-img rounded">
+                    <div class="avatar avatar-4by3">
+                      <img src="${avatar}" alt=" .." class="avatar-img rounded">
                     </div>
                   </div>
                   <div class="col ml-n2">
@@ -1170,12 +1278,13 @@ $(function() {
           $('#property-search-list .card-body .list-group').append(`<b class="mb-2">Tenants</b>`);
         }
         res.tenants.map(tenant => {
+          let avatar = tenant.isMulti ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png';
           const href = `/property/overview/${tenant.property_id}/units/${tenant.unit_id}`;
           $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item border-0 px-0">
             <div class="row align-items-center">
               <div class="col-auto">
-                <div class="avatar">
-                  <img src="/img/icons/single.svg" alt="avatar" class="avatar-img rounded">
+                <div class="avatar avatar-4by3">
+                  <img src="${avatar}" alt="avatar" class="avatar-img rounded">
                 </div>
               </div>
               <div class="col ml-n2">
@@ -1202,6 +1311,19 @@ $(function() {
       })
        
     });
+
+
+    // filter by category in transactions
+    $('#categoryFilter').val('All').trigger('change');
+        $('#categoryFilter').on('select2:select', function (e) {
+          if (e.params.data.id == 'All') {
+            items = transactions;
+          } else {
+            items = transactions.filter(item => item.category == e.params.data.id);
+          }
+          displayTransactions();
+          setupPagination();
+        });
 
     // Mark the seleted transactions into paid
     $(document).on('click', '.transaction-multiple-paid-btn', function(e) {
@@ -1340,6 +1462,7 @@ $(function() {
       $('#modalAddNewTransaction input').val('');
       $('#transaction_account').val('Manual Transaction');
       $('#transaction_property').val('');
+      $('#transaction_unit').val('');
       $('#transaction_property').trigger('change');
       $('#transaction_category').val('');
       $('#transaction_category').trigger('change');
@@ -1347,6 +1470,7 @@ $(function() {
       $('#transaction_status').trigger('change');
     }
 
+    // action to select transaction item in transactions page
     $(document).on('click', '.transaction-item', function(e) {
       if ($(e.target).hasClass('tranaction-checkbox') || $(e.target).hasClass('custom-control-label')) {
         return;
@@ -1409,7 +1533,7 @@ $(function() {
       doPaginate();
     });
 
-    $('#document_property').on('select2:select', function (e) {
+    $('.property-filter').on('select2:select', function (e) {
       var data = {
         property: {
           id: e.params.data.id
@@ -1428,11 +1552,11 @@ $(function() {
       .then(response => response.json())
       .then(function(res) {
         if (res.status == 200) {
-          $('#document_unit').empty();
-          $('#document_unit').val(null).trigger('change');
+          $('.unit-filter').empty();
+          $('.unit-filter').val(null).trigger('change');
           res.units.map(unit => {
             var option = new Option(unit.description, unit.id, true, true);
-            $('#document_unit').append(option);
+            $('.unit-filter').append(option);
           })
         }
       })
@@ -1620,7 +1744,18 @@ $(function() {
       });
     });
 
-    // Overview
+    /* Overview */
+    // add loan details
+    $(document).on('click', '.addloan-btn', function(e){
+      $('#loan-modal-title').html('Add a Loan Value');
+      $('#addLoanBtn').html('Add');
+      $('#modalAddNewLoan input').val('');
+      $('#on_loan').val('1');
+      $('#off_loan').val('0');
+      $('#modalAddNewLoan').modal();
+    });
+
+    // add new tenant
     $('#add-tenant-form').submit(function(e){
       e.preventDefault();
       const data = {

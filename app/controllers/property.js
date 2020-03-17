@@ -330,7 +330,8 @@ exports.search = async function(req, res) {
           property_name: `${property.address}, ${property.city}`,
           property_id: property.id,
           description: unit.description,
-          active: unit.rent_frequency == 'Vacant'
+          active: unit.rent_frequency == 'Vacant',
+          isMulti: property.tenancies.length > 0
         })
       }
       unit.tenants.map(tenant => {
@@ -343,6 +344,7 @@ exports.search = async function(req, res) {
             unit_name: unit.description,
             first_name: tenant.first_name,
             last_name: tenant.last_name,
+            isMulti: property.tenancies.length > 0
           })
         }
       })

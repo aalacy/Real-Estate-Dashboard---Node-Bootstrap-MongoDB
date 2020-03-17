@@ -15,7 +15,7 @@ const uuidv4 = require('uuid/v4');
 exports.all = async function(req, res) {
   const { user } = req.session;
 
-  const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
+  let properties  = await Properties.find({ user_id: user.id }, { _id: 0 });
 
   res.render('transaction/index', {
     title: 'Avenue - Transactions',
@@ -26,7 +26,15 @@ exports.all = async function(req, res) {
 
 exports.all_get = async function(req, res) {
   const { user } = req.session;
-  let transactions = await Transactions.find({ user_id: user.id }, { _id: 0 });
+  const { params: { id, cnt } } = req;
+
+  let transactions = []
+  if (id != undefined && cnt != -1) {
+    transactions = await Transactions.find({ user_id: user.id, property_id: id }, { _id: 0 }).limit(Number(cnt));
+  } else {
+    transactions = await Transactions.find({ user_id: user.id }, { _id: 0 });
+  }
+
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
   const documents = await Documents.find({}, { _id: 0 });
   let newTransactions = transactions.map(function(transaction)  {

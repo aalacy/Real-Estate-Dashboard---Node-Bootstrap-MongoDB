@@ -16,124 +16,7 @@
   </head>
   <body>
 
-    <div class="modal  fade" id="modalAddNewLoan" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <%=property.id%>
-        <form id="add-loan-form" method="post" action="/property/loan/new/">
-          <input type="hidden" name="_csrf" value="<%= token %>">
-          <input type="hidden" name="property[id]" value="<%= property.id%>">
-          <input type="hidden" id="current_value" value="<%= property.current_value%>">
-          <div class="modal-content bg-lighter">
-            <div class="modal-header">
-                <!-- Header -->
-              <h3 class="modal-title" id="loan-modal-title">Add a Loan Value</h3>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="d-flex mb-4">
-                <div class="mr-3">Does this property have loan?</div>
-                <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
-                  <label class="btn btn-outline-dark active">
-                    <input type="radio" name="property[has_loan]" value="1" id="on_loan" autocomplete="off" checked> Yes
-                  </label>
-                  <label class="btn btn-outline-dark">
-                    <input type="radio" name="property[has_loan]" value="0" id="off_loan" autocomplete="off"> No
-                  </label>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-12 col-md-6">
-                  <div class="form-group">
-                    <label class="mr-2">
-                      Lender
-                    </label>
-                    <div class="input-group">
-                      <input type="text" name="property[lender]" class="form-control form-control-prepended">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="mr-2">
-                      Amount borrowed
-                    </label>
-                    <div class="input-group input-group-merge">
-                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[amount_borrowed]" class="form-control form-control-prepended number">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text">
-                          <span>£</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="mr-2">
-                      Interest Rate
-                    </label>
-                    <div class="input-group input-group-merge">
-                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[interest_rate]" class="form-control form-control-prepended number">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text">
-                          <span>%</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="mr-2">
-                      Monthly payment
-                    </label>
-                    <div class="input-group input-group-merge">
-                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[monthly_payment]" class="form-control form-control-prepended number">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text">
-                          <span>£</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6">
-                  <div class="form-group">
-                    <label class="mr-2">
-                      Current Loan Balance
-                    </label>
-                    <div class="input-group input-group-merge">
-                      <input type="text" onkeypress="return isNumberKey(event)"  name="property[loan]" class="form-control form-control-prepended number property_debt" aria-describedby="loanHelperUpdatedAt" required>
-                      <div class="input-group-prepend">
-                        <div class="input-group-text">
-                          <span>£</span>
-                        </div>
-                      </div>
-                    </div>
-                    <small id="loanHelperUpdatedAt" class="form-text text-muted">
-                      Last updated: <span class="update-at"></span>
-                    </small>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Start Date
-                    </label>
-                    <input type="text" name="property[start_date]" class="form-control" value=""  data-toggle="flatpickr">
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Maturity Date
-                    </label>
-                    <input type="text" name="property[maturity_date]" class="form-control" value=""  data-toggle="flatpickr">
-                  </div>
-                  <input type="hidden" onkeypress="return isNumberKey(event)"  name="property[equity]" class="form-control form-control-prepended number property_equity" readonly>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary" id="addLoanBtn">Save Changes</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+    <% include ../partials/loan_modal %>
 
     <!-- Modal Add New Unit -->
     <div class="modal  fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
@@ -430,8 +313,8 @@
           <div class="header-body">
             <div class="row align-items-center">
               <div class="col-auto">
-                <div class="avatar avatar-lg">
-                  <img src="<%=property.image ? '/' + property.image : (property.tenancies.length ? '/img/icons/multiple.svg' : '/img/icons/single.svg')%>" alt="..." class="card-img-top thumb-image">
+                <div class="avatar  avatar-4by3 avatar-lg">
+                  <img src="<%=property.image ? '/' + property.image : (property.tenancies.length ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png')%>" alt="..." class="card-img-top thumb-image">
                 </div>
               </div>
               <div class="col ml-n3 ml-md-n2">
@@ -638,7 +521,7 @@
                         </h4>
                       </div>
                       <div class="col-auto">
-                        <select class="form-control text-right" id="cashflowDateFilter" data-toggle="select" data-options='{"placeholder": "Select a frequency", "minimumResultsForSearch": "Infinity" }' required style="max-width: 250px;">
+                        <select class="form-control text-right cashflowDateFilter"  data-toggle="select" data-options='{"placeholder": "Select a frequency", "minimumResultsForSearch": "Infinity" }' required style="max-width: 250px;">
                           <option></option>
                           <option value="Current Month">Current Month</option>
                           <option value="Previous Month">Previous Month</option>
@@ -753,7 +636,7 @@
                     </div>
                     <div class="ownership-empty-block">
                       <div>No loan information provided</div>
-                      <button class="btn btn-sm btn-outline-dark addloan-btn">Add a loan</button>
+                      <button class="btn btn-sm btn-white addloan-btn">Add a loan</button>
                     </div>
                   </div>
                 </div>
@@ -1259,10 +1142,32 @@
                       Recent Transactions
                     </h4>
                   </div>
+                  <div class="ml-auto" style="min-width: 220px;">
+                    <select class="form-control" style="min-width: 350px;" id="categoryFilter" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
+                      <option></option>
+                      <option value="All">All Categories</option>
+                      <optgroup label="Income">
+                        <option value="Rental Income">Rental Income</option>
+                        <option value="Deposit">Deposit</option>
+                        <option value="Uncategorised">Uncategorised</option>
+                      </optgroup>
+                      <optgroup label="Expenses">
+                        <option value="Insurance">Insurance</option>
+                        <option value="Repairs & Maintenance">Repairs & Maintenance</option>
+                        <option value="Management Fees">Management Fees</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Tax">Tax</option>
+                        <option value="Legal">Legal</option>
+                        <option value="Mortgage or Loans">Mortgage or Loans</option>
+                        <option value="Deposit">Deposit</option>
+                        <option value="Uncategorised">Uncategorised</option>
+                      </optgroup>
+                    </select> 
+                  </div>
                 </div>
               </div>
               <div class="card-body">
-                <div class="row align-items-center justify-content-center">
+                <div class="transaction-list">
                 </div>
               </div>
             </div>
@@ -1760,15 +1665,6 @@
           }
         });
 
-        $(document).on('click', '.addloan-btn', function(e){
-          $('#loan-modal-title').html('Add a Loan Value');
-          $('#addLoanBtn').html('Add');
-          $('#modalAddNewLoan input').val('');
-          $('#on_loan').val('1');
-          $('#off_loan').val('0');
-          $('#modalAddNewLoan').modal();
-        });
-
         $('.ownership-summary-edit').click(function(e){
           $('#loan-modal-title').html('Edit Ownership details');
           $('#addLoanBtn').html('Edit');
@@ -1897,9 +1793,11 @@
 
         filterCashflowByDate('YTD');
         // cashflow date filter
-        $('#cashflowDateFilter').on('select2:select', function (e) {
+        $('.cashflowDateFilter').on('select2:select', function (e) {
           filterCashflowByDate(e.params.data.id);
         });
+
+        fetchTransactions(property.id, 5);
       });
     </script>
   </body>
