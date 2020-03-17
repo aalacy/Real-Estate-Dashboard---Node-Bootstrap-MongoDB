@@ -654,13 +654,7 @@ exports.delete_tenant = async function(req, res) {
   });
 }
 
-exports.new_unit = async function(req, res) {
-  const { body: { property, unit } } = req;
-
-  if (!unit) {
-    const link = req.headers.referer.split(req.headers.host);
-    return res.redirect(link[1]);
-  } 
+const createNewUnit = async function(property, unit) {
   if (!unit.rent_price || unit.rent_price == 0) {
     unit.rent_frequency = 'Vacant';
   }
@@ -703,9 +697,38 @@ exports.new_unit = async function(req, res) {
       $set: { rental_income, rental_yield, units, status, tenancies }
     };
   }
+
+  return new_values;
+}
+
+exports.new_tenancy = async function(req, res) {
+  const { body: { property, unit } } = req;
+
+  if (!unit) {
+    const link = req.headers.referer.split(req.headers.host);
+    return res.redirect(link[1]);
+  } 
+
+  const new_values = createNewUnit(property, unit)
+  
+  return Properties.updateOne({ id: property.id }, new_values).then(() => {
+    res.redirect('/property/tenancies');
+  });
+};
+
+exports.new_unit = async function(req, res) {
+  const { body: { property, unit } } = req;
+
+  if (!unit) {
+    const link = req.headers.referer.split(req.headers.host);
+    return res.redirect(link[1]);
+  } 
+
+  const new_values = createNewUnit(property, unit)
+  
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
     const link = req.headers.referer.split(req.headers.host);
-    res.redirect(link[1]);
+    res.redirect(`/property/overview/${property.id}/overview`);
   });
 };
 

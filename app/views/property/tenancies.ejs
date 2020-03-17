@@ -6,7 +6,7 @@
   <body>
     <% include ../partials/topnav %>
 
-    <div class="modal  fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="add-unit-form" method="post" action="/property/unit/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
@@ -132,7 +132,7 @@
 
     <div class="modal  fade" id="modalAddNewUnitWithProperty" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
-        <form id="add-unit-with-property-form" method="post" action="/property/unit/new/">
+        <form id="add-unit-with-property-form" method="post" action="/property/tenancies/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
