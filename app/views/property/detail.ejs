@@ -376,13 +376,15 @@
                     <label>
                       Loan
                     </label>
-                    <% if (property.equity == 0) { %>
-                      <button class="btn btn-white addloan-btn">Add loan details</button>
-                    <% } else if (property.debt == 0) { %>
-                      <button class="btn btn-success">You own 100% of this property</button>
-                    <% } else { %>
-                      <button class="btn btn-danger">1 Loan attached to this property</button>
-                    <% } %>
+                    <div>
+                      <% if (property.equity == 0) { %>
+                        <button class="btn btn-white addloan-btn">Add loan details</button>
+                      <% } else if (property.debt == 0) { %>
+                        <button class="btn btn-success">You own 100% of this property</button>
+                      <% } else { %>
+                        <button class="btn btn-danger">1 Loan attached to this property</button>
+                      <% } %>
+                    </div>
                   </div>
                 </div>
               </div>
