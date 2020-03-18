@@ -364,17 +364,18 @@
 
                     </div>
                     <div class="col-12 col-md-4">
-                      
                       <div class="form-group">
                         <label>
                           Purchase Date
                         </label>
                         <input type="text" name="property[purchase_date]" class="form-control" value="<%= property.purchase_date%>"  data-toggle="flatpickr">
                       </div>
-
                     </div>
                   </div> 
                   <div class="form-group">
+                    <label>
+                      Loan
+                    </label>
                     <% if (property.equity == 0) { %>
                       <button class="btn btn-white addloan-btn">Add loan details</button>
                     <% } else if (property.debt == 0) { %>

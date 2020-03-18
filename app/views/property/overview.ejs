@@ -18,7 +18,6 @@
 
     <% include ../partials/loan_modal %>
 
-    <!-- Modal Add New Unit -->
     <div class="modal  fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="add-unit-form" method="post" action="/property/unit/new/">
@@ -143,7 +142,6 @@
       </div>
     </div>
 
-      <!-- Modal Add New Tenant -->
     <div class="modal  fade" id="modalAddNewTenant" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="add-tenant-form" method="post" action="/property/unit/tenant/new/">
@@ -215,7 +213,7 @@
       </div>
     </div>
 
-      <!-- Modal Adjust Summary -->
+    <!-- Modal Adjust Summary -->
     <div class="modal fade" id="modalAdjustSummary" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="search-address-form" method="post" action="/property/adjust_summary/">
@@ -232,12 +230,10 @@
             <div class="modal-body">
     
               <div class="row">
-                <div class="col-12 col-md-6">
-                  
-                  <!-- Start date -->
+                <div class="col-12 col-md-6 mb-4">
                   <div class="form-group">
                     <label>
-                      Current Valuation
+                      Property Value
                     </label>
                     <div class="input-group input-group-merge mb-3">
                       <input type="text" onkeypress="return isNumberKey(event)" name="property[current_value]" id="property_current_value" class="form-control form-control-prepended number" placeholder="" value="<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>" required>
@@ -250,16 +246,24 @@
                   </div>
     
                 </div>
-                <div class="col-12 col-md-6 d-flex align-items-center">
-                  <button type="button" class="btn btn-primary" id="estimatePropertyBtn" data-property="<%=JSON.stringify(property)%>">
-                    <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span> 
-                    Use Avenue Estimate 
-                  </button>
+                <div class="col-12 col-md-6 mb-0" style="align-self: flex-end;">
+                  <div class="form-group">
+                    <button type="button" class="btn btn-primary" id="estimatePropertyBtn" aria-describedby="estimateHelp" data-property="<%=JSON.stringify(property)%>">
+                      <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span> 
+                      Use Estimate Value
+                    </button>
+                    <a href="#" id="estimateHelp" class="form-text text-muted"><small>What is this?</small></a>
+                  </div>
                 </div>
               </div>
+              <div class="col-6 p-4 text-center border-success mb-3" style="border-style: double;">
+                <div class="text-muted text-uppercase mb-2">Estimate Value</div>
+                <div style="font-size: 30px;">£1,000,000</div>
+                <div class="text-muted">+/-£15,000</div>
+              </div>
+              <div class="text-muted"><i class="fe fe-refresh-cw"></i> <small>Next update in 30 days</small></div>
               <!-- <div class="row">
                 <div class="col-12 col-md-6">
-                  
                   <div class="form-group">
                     <label>
                       Annual Income
@@ -284,7 +288,6 @@
                       Rental Yield % 
                     </label>
                     <input type="text" name="property[rental_yield]" class="form-control " placeholder="<%= property.rental_yield.toFixed(2)%>" value="" required readonly>
-                 
                   </div>
     
                 </div>
@@ -533,54 +536,27 @@
                     </div>
                   </div>
                   <div class="card-body my-4">
-                    <div class="row align-items-center justify-content-center mb-6">
-                      <div class="col-4 text-center border-right">
-                        <span class="h2 font-medium first-gross-yield">
-                        <%=gross_yield%> % 
-                        </span>
-                        <div class="text-uppercase text-muted text-ss">
-                          Gross Yield
-                        </div>
-                      </div>
-                      <div class="col-4 text-center border-right">
-                        <span class="h2 font-medium first-net-yield">
-                        <%=net_yield%> %  
-                        </span>
-
-                        <div class="text-uppercase text-muted text-ss">Net Yield</div>
-                      </div>
-                      <div class="col-4 text-center">
-                        <!-- Heading -->
-                        <span class="h2 font-medium first-expense-ratio">
-                         <%=operating_expense_ratio%> %
-                        </span>
-                        <div class="text-uppercase text-muted text-ss">
-                          Operating Expense Ratio
-                        </div>
-                      </div>
-                    </div>
-
                     <div class="row align-items-center justify-content-center">
                       <div class="col-4 text-center border-right">
-                        <!-- Heading -->
-                        <span class="h2 font-medium first-total-income">
-                          <span class="text-success h2">+£</span> <%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                        </span>
                         <div class="text-uppercase text-muted text-ss">
                           Total Income
                         </div>
+                        <span class="h2 font-medium first-total-income">
+                          <span class="text-success h2">+£</span> <%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                        </span>
                       </div>
                       <div class="col-4 text-center border-right">
-                        <!-- Heading -->
-                        <span class="h2 font-medium first-total-expenses">
-                         <span class="text-danger h2">-£</span> <%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
-                        </span>
                         <div class="text-uppercase text-muted text-ss">
                           Total Expenses
                         </div>
+                        <span class="h2 font-medium first-total-expenses">
+                         <span class="text-danger h2">-£</span> <%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                        </span>
                       </div>
                       <div class="col-4 text-center">
-                        <!-- Heading -->
+                        <div class="text-uppercase text-muted text-ss">
+                          NET Income
+                        </div>
                         <span class="h2 font-medium first-net-income">
                           <% if (net_profit > 0) {%>
                             <span class="text-success h2">+£</span> <%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
@@ -588,9 +564,31 @@
                             <span class="text-danger h2">-£</span> <%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
                           <% } %>
                         </span>
+                      </div>
+                    </div>
+
+                    <div class="row align-items-center justify-content-center mb-6">
+                      <div class="col-4 text-center border-right">
                         <div class="text-uppercase text-muted text-ss">
-                          NET Income
+                          Gross Yield
                         </div>
+                        <span class="h2 font-medium first-gross-yield">
+                        <%=gross_yield%> % 
+                        </span>
+                      </div>
+                      <div class="col-4 text-center border-right">
+                        <div class="text-uppercase text-muted text-ss">Net Yield</div>
+                        <span class="h2 font-medium first-net-yield">
+                        <%=net_yield%> %  
+                        </span>
+                      </div>
+                      <div class="col-4 text-center">
+                        <div class="text-uppercase text-muted text-ss">
+                          Operating Expense Ratio
+                        </div>
+                        <span class="h2 font-medium first-expense-ratio">
+                         <%=operating_expense_ratio%> %
+                        </span>
                       </div>
                     </div>
                   </div>
