@@ -15,6 +15,8 @@ var moment = require('moment');
 const PropertiesSchema = new Schema({
     id: {type: String, default: ''},
     user_id: {type: String, default: ''},
+    cron_id: {type: String, default: ''},
+    cron_status: {type: String, default: 'disabled'},
     image: { type: String, default: '' },
     address: { type: String, default: '' },
     address2: { type: String, default: '' },
@@ -27,20 +29,21 @@ const PropertiesSchema = new Schema({
     fulladdress: { type: String, default: '' },
     zip: { type: String, default: '' },
     units: { type: Number, default: 1 }, // Single Unit / Multiple Units
-    current_value: { type: Number, default: 0.0 }, //£240
+    current_value: { type: Number, default: 0.0 }, // property value from api https://propertydata.co.uk/api/documentation/valuation-sale
+    margin: { type: Number, default: 0.0 }, // property margin from api https://propertydata.co.uk/api/documentation/valuation-sale
     purchase_price: { type: Number, default: 0.0 }, // £240
     purchase_date: { type: String, default: '' }, // 2019-01-02
     bedrooms: { type: Number, default: 1 }, // 1
     bathrooms: { type: Number, default: 1 }, // 2
     square_feet: { type: Number, default: 0.0 },
-    type: { type: String, default: '' }, // Detached House / Semi Detached House / Terraced House / Flat
-    finish_quality: { type: String, default: '' }, // Very High / High / Average / Below Average / Unmordernised
-    outdoor_space: { type: String, default: '' }, // None / Balcony Terrace / Garden / Garden (Large)
+    type: { type: String, default: 'detached_house' }, // Detached House / Semi Detached House / Terraced House / Flat
+    finish_quality: { type: String, default: 'unmodernised' }, // Very High / High / Average / Below Average / Unmordernised
+    outdoor_space: { type: String, default: 'none' }, // None / Balcony Terrace / Garden / Garden (Large)
     ownership: { type: String, default: '' }, // Freehold / Leasehold
-    construction_date: { type: String, default: '' }, // 2019-01-02
+    construction_date: { type: String, default: 'pre_1914' }, // 2019-01-02
     rental_yield: { type: Number, default: 0.0 }, // 3.8%
     rental_income: { type: Number, default: 0.0 }, // £240pcm
-    off_street_parking: { type: String, default: '' }, // 0 ~ 3 Spaces
+    off_street_parking: { type: String, default: '0' }, // 0 ~ 3 Spaces
     is_new: { type: Boolean, default: true }, // used to display alert on top of the overview page
     status: { type: String, default: 'Vacant' }, // Vacant or Occupied
     has_loan: { type: Boolean, default: false }, // used to display alert on top of the overview page

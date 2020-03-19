@@ -987,7 +987,8 @@ $(function() {
 
     // Use property value from api in adjust summary popup
     $('.property-value-block').click(function(e) {
-      $('#property_current_value').val($('.summary-edit-btn').data('val'));
+      $('#property_current_value').val();
+      $('.property_current_value').val($('.summary-edit-btn').data('val'));
       $('#modalAdjustSummary .modal-title').html('Update Property Value');
       $('#modalAdjustSummary').modal()
         .on('hidden.bs.modal', function() {
@@ -1027,7 +1028,7 @@ $(function() {
             missing_value += 'finish quality, ';
             ids.push('#finish_quality');
         } 
-        if (property.outdoor_space && property.outdoor_space == 'none') {
+        if (!property.outdoor_space || property.outdoor_space == 'none') {
             missing_value += 'out spacing, ';
             ids.push('#outdoor_space');
         } 
@@ -1052,7 +1053,12 @@ $(function() {
         .then(function(res) {
             self.find('span').addClass('d-none');
             if (res.status == 200) {
-                $('#property_current_value').val(res.estimate.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+              const property_value = res.estimate.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');  
+              const property_margin = res.margin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');  
+              $('#property_current_value').val(property_value);
+              $('.property_current_value').html(property_value);
+              $('.property_margin').html(property_margin);
+              $('#property_margin').val(property_margin);
             } 
 
             return makeToast({ message: res.message});

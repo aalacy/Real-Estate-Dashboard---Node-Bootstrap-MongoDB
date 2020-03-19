@@ -213,7 +213,6 @@
       </div>
     </div>
 
-    <!-- Modal Adjust Summary -->
     <div class="modal fade" id="modalAdjustSummary" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="search-address-form" method="post" action="/property/adjust_summary/">
@@ -221,7 +220,6 @@
           <input type="hidden" name="property[id]" value="<%= property.id%>">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
-                <!-- Header -->
               <h3 class="modal-title">Add Property Value</h3>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -244,7 +242,7 @@
                       </div>
                     </div>
                   </div>
-    
+                  <input type="hidden" name="property[margin]" id="property_margin" value="<%=property.margin%>" />
                 </div>
                 <div class="col-12 col-md-6 mb-0" style="align-self: flex-end;">
                   <div class="form-group">
@@ -256,10 +254,10 @@
                   </div>
                 </div>
               </div>
-              <div class="col-6 p-4 text-center border-success mb-3" style="border-style: double;">
+              <div class="col-12 col-md-6 p-4 text-center border-success mb-3" style="border-style: double;">
                 <div class="text-muted text-uppercase mb-2">Estimate Value</div>
-                <div style="font-size: 30px;">£1,000,000</div>
-                <div class="text-muted">+/-£15,000</div>
+                <div style="font-size: 30px;">£<span class="property_current_value"><%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%></div>
+                <div class="text-muted">+/-£<span class="property_margin"><%= property.margin ? property.margin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'%></span></div>
               </div>
               <div class="text-muted"><i class="fe fe-refresh-cw"></i> <small>Next update in 30 days</small></div>
               <!-- <div class="row">
@@ -277,9 +275,7 @@
                       </div>
                     </div>
                   </div>
-    
                 </div>
-               
               </div>
               <div class="row">
                 <div class="col-12 col-md-6">
@@ -304,8 +300,7 @@
 
     <% include ../partials/topnav %>
   
-    <!-- MAIN CONTENT
-    ================================================== -->
+    <!-- MAIN CONTENT  -->
     <div class="main-content">
 
       <!-- HEADER -->
@@ -328,9 +323,11 @@
                   <%= property.address%>, <%= property.city%>
                 </h1>
               </div>
-              <a href="/property/detail/<%=property.id%>" class="btn btn-primary d-block d-md-inline-block lift">
-                Edit property
-              </a>
+              <div clas="col-auto">
+                <a href="/property/detail/<%=property.id%>" class="btn btn-primary d-block d-md-inline-block lift">
+                  Edit property
+                </a>
+              </div>
             </div> 
             <div class="row align-items-center">
               <div class="col">

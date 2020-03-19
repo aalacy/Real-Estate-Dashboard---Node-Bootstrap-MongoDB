@@ -9,8 +9,11 @@ const Properties = mongoose.model('Properties');
 const Documents = mongoose.model('Documents');
 const Transactions = mongoose.model('Transactions');
 const Tenants = mongoose.model('Tenants');
-var moment = require('moment');
+const moment = require('moment');
 const uuidv4 = require('uuid/v4');
+const CronJobManager = require('cron-job-manager'),
+
+cronManager = new CronJobManager();
 
  /**
   * Constants map for the property details
@@ -25,6 +28,7 @@ const freq = {
 };
 
 const PROPERTY_TYPE = {
+    "": "",
     detached_house: 'Detached House',
     'semi-detached_house': 'Semi Detached House',
     terraced_house: 'Terraced House',
@@ -32,12 +36,14 @@ const PROPERTY_TYPE = {
 };
 
 const CONSTRUCTION_DATE = {
+  "": "",
   pre_1914: 'Pre-1914',
   '1914_2000': 'Between 1914-2000',
   '2000_onwards': '2000 onwards'
 };
 
 const FINISH_QUALITY = {
+  "": "",
   very_high: 'Very High',
   high: 'High',
   average: 'Average',
@@ -46,6 +52,7 @@ const FINISH_QUALITY = {
 };
 
 const OUTDOOR_SPACE = {
+  "": "",
   none: 'None',
   balcony_terrace: 'Balcony Terrace',
   garden: 'Garden',
@@ -54,6 +61,7 @@ const OUTDOOR_SPACE = {
 };
 
 const OFF_STREET_PARKING = {
+  '': '',
   '0': 'No parking',
   '1': '1 Space',
   '2': '2 Spaces',
@@ -146,6 +154,7 @@ exports.overview = async function(req, res) {
   }
   const { user } = req.session;
   const property = await Properties.findOne({ id: id }, { _id: 0 });
+
   const documents = await Documents.find({ user_id: user.id, property_id: id, status: 'alive' }, { _id: 0 }).limit(3);
   const transactions = await Transactions.find({ user_id: user.id, property_id: id }, { _id: 0 }).sort('-created_at');
 
@@ -241,6 +250,7 @@ exports.overview = async function(req, res) {
 
   // recent 5 transactions
   const recentTrans = transactions.slice(4)
+
 
   res.render('property/overview', {
     title: 'Avenue - Overview',
@@ -787,13 +797,14 @@ exports.delete_unit = async function(req, res) {
 };
 
 exports.adjust_summary = async function(req, res) {
-  const { body: { property: { current_value, id } } } = req;
+  const { body: { property: { margin, current_value, id } } } = req;
 
   const _current_value = current_value.replace(/,/g, '');
+  const _margin = margin.replace(/,/g, '');
   const myproperty = await Properties.findOne({ id: id }, { _id: 0 });
   let rental_yield = calcRentalYield(myproperty.purchase_price, myproperty.rental_income);
   const equity = parseFloat(_current_value) - parseFloat(myproperty.debt || 0); 
-  const new_values = { $set: { current_value: _current_value, rental_yield, equity } };
+  const new_values = { $set: { current_value: _current_value, margin: _margin, rental_yield, equity } };
   return Properties.updateOne({ id }, new_values).then(() => {
     res.redirect('/property/overview/' + id);
   });
@@ -804,7 +815,6 @@ exports.estimated_sale = async function(req, res) {
   const property = await Properties.findOne({ id: property_id }, { _id: 0 });
   const estimate_url = `https://api.propertydata.co.uk/valuation-sale?key=${process.env.PROPERTYDATA_API_KEY}&postcode=${property.zip.replace(' ','')}&internal_area=${property.square_feet}&property_type=${property.type}&construction_date=${property.construction_date}&bedrooms=${property.bedrooms}&bathrooms=${property.bathrooms}&finish_quality=${property.finish_quality}&outdoor_space=${property.outdoor_space}&off_street_parking=${property.off_street_parking}`;
   const est_res = await request({ uri: estimate_url, json: true });
-  console.log(est_res);
   if (est_res.status == 'success') {
     return res.json({
       status: 200,
