@@ -814,7 +814,9 @@ exports.estimated_sale = async function(req, res) {
   const { body: { property_id } } = req;
   const property = await Properties.findOne({ id: property_id }, { _id: 0 });
   const estimate_url = `https://api.propertydata.co.uk/valuation-sale?key=${process.env.PROPERTYDATA_API_KEY}&postcode=${property.zip.replace(' ','')}&internal_area=${property.square_feet}&property_type=${property.type}&construction_date=${property.construction_date}&bedrooms=${property.bedrooms}&bathrooms=${property.bathrooms}&finish_quality=${property.finish_quality}&outdoor_space=${property.outdoor_space}&off_street_parking=${property.off_street_parking}`;
-  const est_res = await request({ uri: estimate_url, json: true });
+  const est_res = await request({ uri: estimate_url, json: true }).catch(e => {
+    console.log(e)
+  });
   if (est_res.status == 'success') {
     return res.json({
       status: 200,
