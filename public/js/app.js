@@ -1589,11 +1589,11 @@ $(function() {
     });
 
     $(document).on('click', '.modal-upload', function(e) {
-        e.preventDefault()
-        $('#document_property').empty();
-        $('#document_unit').empty();
-        $('.property-row').removeClass('d-none');
-        $('.unit-row').removeClass('d-none');
+      e.preventDefault()
+      $('#document_property').empty();
+      $('#document_unit').empty();
+      $('.property-row').removeClass('d-none');
+      $('.unit-row').removeClass('d-none');
       if (!$(this).hasClass('modal-property') && !$(this).hasClass('modal-unit')) {
           properties.map(property => {
             var property_name = property.address + ', ' + property.city;

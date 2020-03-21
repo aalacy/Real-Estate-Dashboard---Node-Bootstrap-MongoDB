@@ -149,11 +149,9 @@
                     <label>
                       Property
                     </label>
-                    <select class="form-control" id="property_id" name="property[id]" data-toggle="select" data-options='{"placeholder": "Select a property"}' required>
+                    <select class="form-control property-filter" id="property_id" name="property[id]" data-toggle="select" data-options='{"placeholder": "Select a property"}' required>
                       <option></option>
-                      <% properties.forEach(property => {%>
-                        <option value="<%=property.id%>"><%=property.address%>, <%=property.city%></option>
-                      <% }) %>
+                      
                     </select>
                   </div>
                 </div>
@@ -333,7 +331,7 @@
               <div class="tab-pane fade active show" id="all" role="tabpanel">
                 <div class="row my-3">
                   <div class="col-12 col-md-4">
-                    <select class="form-control my-3 propertyFilter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
+                    <select class="form-control my-3 property-filter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
                         <option></option>
                     </select>
                   </div>
@@ -345,7 +343,7 @@
               <div class="tab-pane fade" id="occupied" role="tabpanel">
                 <div class="row my-3">
                   <div class="col-12 col-md-4">
-                    <select class="form-control my-3 propertyFilter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
+                    <select class="form-control my-3 property-filter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
                         <option></option>
                     </select>
                   </div>
@@ -357,7 +355,7 @@
               <div class="tab-pane fade" id="vacant" role="tabpanel">
                   <div class="row my-3">
                     <div class="col-12 col-md-4">
-                      <select class="form-control my-3 propertyFilter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
+                      <select class="form-control my-3 property-filter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
                           <option></option>
                       </select>
                     </div>
@@ -519,18 +517,18 @@
       $(function(){
         // display property filter
         var option = new Option('All', 'all', true, true);
-        $('.propertyFilter').append(option);
+        $('.property-filter').append(option);
         allProperties.map(property => {
           var property_name = property.address + ', ' + property.city;
           option = new Option(property_name, property.id, true, true);
-          $('.propertyFilter').append(option);
+          $('.property-filter').append(option);
         });
-        $('.propertyFilter').val('all').trigger('change');
+        $('.property-filter').val('all').trigger('change');
 
         // Initialize
         displayAllTenancies();
 
-        $('.propertyFilter').on('select2:select', function (e) {
+        $('.property-filter').on('select2:select', function (e) {
           if (e.params.data.id == 'all') {
             items = properties;
           } else {
