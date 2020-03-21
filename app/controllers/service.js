@@ -19,3 +19,12 @@ exports.all = async function(req, res) {
     token: req.csrfToken(),
   });
 }
+
+exports.instant_valuations = async function(req, res) {
+  const { user } = req.session;
+
+  res.render('service/valuations', {
+    title: 'Avenue - Services',
+    token: req.csrfToken(),
+  });
+}

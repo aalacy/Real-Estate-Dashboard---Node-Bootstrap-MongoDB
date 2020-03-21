@@ -106,5 +106,6 @@ router.post('/transaction/mark/paid', auth.checkToken, transaction.mark);
 
 // services
 router.get('/services', auth.checkToken, service.all);
+router.get('/services/instantValuations', auth.checkToken, service.instant_valuations);
 
 module.exports = router;
