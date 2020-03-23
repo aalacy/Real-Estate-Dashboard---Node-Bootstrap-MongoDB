@@ -108,7 +108,7 @@ function doPopulate() {
 
               <!-- Text -->
               <p class="card-text small text-muted mb-1">
-                ${doc.display_name} &bull;
+                ${doc.display_name} &bull; ${doc.category || ''}
               </p>
 
               <!-- Time -->
@@ -1559,11 +1559,13 @@ $(function() {
       .then(function(res) {
         if (res.status == 200) {
           $('.unit-filter').empty();
-          $('.unit-filter').val(null).trigger('change');
+          var option = new Option('No unit specified', '-1', true, true);
+          $('.unit-filter').append(option);
           res.units.map(unit => {
             var option = new Option(unit.description, unit.id, true, true);
             $('.unit-filter').append(option);
           })
+          $('.unit-filter').val(null).trigger('change');
         }
       })
       .catch(error => {
