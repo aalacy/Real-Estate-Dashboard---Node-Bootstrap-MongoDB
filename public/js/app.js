@@ -90,44 +90,29 @@ function doPopulate() {
       $('.documentList').append(`<li class="list-group-item document-item px-0 page${page}">
           <div class="row align-items-center">
             <div class="col-auto">
-              
-              <!-- Avatar -->
               <a href="/${doc.path}" class="avatar" target="_blank">
                 <div class="avatar-title rounded bg-white text-secondary">
                   ${avatar}
                 </div>
               </a>
-
             </div>
             <div class="col ml-n2">
-
-              <!-- Title -->
               <h4 class="card-title mb-1 name document-name document-lg-name">
                 <a target="_blank" href="/${doc.path}">${doc.filename}</a>
               </h4>
-
-              <!-- Text -->
               <p class="card-text small text-muted mb-1">
                 ${doc.display_name} &bull; ${doc.category || ''}
               </p>
-
-              <!-- Time -->
               <p class="card-text small text-muted">
                 Uploaded on <time datetime="${uploaded_at}">${uploaded_at}</time>
               </p>
-              
             </div>
             <div class="col-auto">
-              
-              <!-- Button -->
               <a href="/${doc.path}" target="_blank" class="btn btn-sm btn-white d-none d-md-inline-block">
                 View
               </a>
-
             </div>
             <div class="col-auto">
-              
-              <!-- Dropdown -->
               <div class="dropdown">
                 <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fe fe-more-vertical"></i>
@@ -650,6 +635,50 @@ const fetchTransactions = (id=undefined, cnt=-1) => {
     })
 }
 
+// check the availability of update property value from api
+const checkAvailabilityForPropertyValueUpdate = (property) => {
+  let missing_value = '';
+  let ids = []
+  if (!property.zip) {
+      missing_value += 'postal code, ';
+      ids.push('#property_zip');
+  } 
+  if (!property.type ) {
+      missing_value += 'type, ';
+      ids.push('#property_type');
+  } 
+  if (!property.construction_date) {
+     missing_value += 'construction date, ';
+     ids.push('#construction_date');
+  } 
+  if (!property.square_feet) {
+      missing_value += 'square feet, ';
+      ids.push('#square_feet');
+  } 
+  if (!property.bedrooms) {
+      missing_value += 'bedrooms, ';
+      ids.push('#bedrooms');
+  } 
+  if (!property.bathrooms) {
+      missing_value += 'bathrooms, ';
+      ids.push('#bathrooms');
+  } 
+  if (!property.finish_quality) {
+      missing_value += 'finish quality, ';
+      ids.push('#finish_quality');
+  } 
+  if (!property.outdoor_space || property.outdoor_space == 'none') {
+      missing_value += 'out spacing, ';
+      ids.push('#outdoor_space');
+  } 
+  if (!property.off_street_parking) {
+      missing_value += 'off street parking, ';
+      ids.push('#off_street_parking');
+  }
+  localStorage.setItem('est_missing_ids', JSON.stringify(ids));
+  return missing_value.substr(0, missing_value.length-2)
+}
+
 $(function() {
     /**
      * User Authentication
@@ -989,55 +1018,41 @@ $(function() {
     $('.property-value-block').click(function(e) {
       $('#property_current_value').val();
       $('.property_current_value').val($('.summary-edit-btn').data('val'));
+      const property = $('#estimatePropertyBtn').data('property')
       $('#modalAdjustSummary .modal-title').html('Update Property Value');
+      const is_missing = checkAvailabilityForPropertyValueUpdate(property);
+      if (is_missing) {
+        $('.property-estimate-box').html(`
+          <div class="text-muted text-uppercase mb-2">Estimate Value</div>
+          <div style="font-size: 30px;">£<span class="property_current_value">${property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</div>
+          <div class="text-muted">+/-£<span class="property_margin">${property.margin ? property.margin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}</span></div>
+        `)
+        $('.property-estimate-helper').html(`<i class="fe fe-refresh-cw h6"></i> <small class="h6">Next update in 30 days</small>`)
+      } else {
+        $('.property-estimate-box').html(`
+          <div class="h-100 text-center d-flex  flex-column justify-content-center align-items-center p-4">
+              <span class="fe fe-alert-circle"></span>
+              <h5 class="card-title text-muted mt-2">
+                No estimate available
+              </h5>
+          </div>
+        `)
+        $('.property-estimate-helper').html(`<span class="h6">This property is missing required information to get a valuation.</span> <a href="/property/detail/${property.id}" class="btn-link"><small class="h6">Update details now</small></a>`)
+      }
       $('#modalAdjustSummary').modal()
         .on('hidden.bs.modal', function() {
           $('#modalAdjustSummary .modal-title').html('Add Property Value');
         });
     });
 
+    // turn on/off auto estimate
+    $('#estimatePropertyBtn').change(function() {
+      console.log('Toggle: ' + $(this).prop('checked'))
+    })
+
     $('#estimatePropertyBtn').click(function(e){
         const property = $(this).data('property');
-        let missing_value = '';
-        let ids = []
-        if (!property.zip) {
-            missing_value += 'postal code, ';
-            ids.push('#property_zip');
-        } 
-        if (!property.type ) {
-            missing_value += 'type, ';
-            ids.push('#property_type');
-        } 
-        if (!property.construction_date) {
-           missing_value += 'construction date, ';
-           ids.push('#construction_date');
-        } 
-        if (!property.square_feet) {
-            missing_value += 'square feet, ';
-            ids.push('#square_feet');
-        } 
-        if (!property.bedrooms) {
-            missing_value += 'bedrooms, ';
-            ids.push('#bedrooms');
-        } 
-        if (!property.bathrooms) {
-            missing_value += 'bathrooms, ';
-            ids.push('#bathrooms');
-        } 
-        if (!property.finish_quality) {
-            missing_value += 'finish quality, ';
-            ids.push('#finish_quality');
-        } 
-        if (!property.outdoor_space || property.outdoor_space == 'none') {
-            missing_value += 'out spacing, ';
-            ids.push('#outdoor_space');
-        } 
-        if (!property.off_street_parking) {
-            missing_value += 'off street parking, ';
-            ids.push('#off_street_parking');
-        }
-        localStorage.setItem('est_missing_ids', JSON.stringify(ids));
-        missing_value = missing_value.substr(0, missing_value.length-2)
+        const missing_value = checkAvailabilityForPropertyValueUpdate(property);
         if (missing_value) {
             $('#modalAdjustSummary').modal('hide');
             makeToast({ message: `Complete missing property details to get valuation estimate` });
@@ -1545,7 +1560,7 @@ $(function() {
           id: e.params.data.id
         }
       };
-      const token = $('input[name="_csrf"]').val();
+      const token = $('meta[name="csrf"]').attr('content');
       fetch('/property/unit/all', {
           credentials: 'same-origin', // <-- includes cookies in the request
           headers: {

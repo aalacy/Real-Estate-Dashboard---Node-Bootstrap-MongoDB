@@ -103,7 +103,7 @@ exports.index = async function(req, res) {
     });
   })
 
-  if (portfolio_value) {
+  if (portfolio_value && total_purchase_price) {
     badge_value = portfolio_value - total_purchase_price;
   } 
 
