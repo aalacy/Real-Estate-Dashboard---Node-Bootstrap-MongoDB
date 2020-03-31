@@ -748,6 +748,16 @@ exports.new_unit = async function(req, res) {
   });
 };
 
+exports.update_unit = async function(req, res) {
+  const { body: { property, unit } } = req;
+
+  const new_values = await createNewUnit(property, unit)
+  
+  return Properties.updateOne({ id: property.id }, new_values).then(() => {
+    res.redirect('/property/tenancies');
+  });
+};
+
 exports.clear_unit = async function(req, res) {
   const { body: { unit_id, property_id } } = req;
 

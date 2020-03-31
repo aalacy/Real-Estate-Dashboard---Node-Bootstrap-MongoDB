@@ -77,6 +77,7 @@ router.use('/property/remove', auth.checkToken, property.remove);
 router.get('/property/tenancies', auth.checkToken, property.tenancies);
 router.use('/property/unit/all', auth.checkToken, property.all_units);
 router.use('/property/unit/new', auth.checkToken, property.new_unit);
+router.use('/property/unit/update', auth.checkToken, property.update_unit);
 router.use('/property/tenancies/new', auth.checkToken, property.new_tenancy);
 router.use('/property/unit/delete', auth.checkToken, property.delete_unit);
 router.use('/property/unit/clear', auth.checkToken, property.clear_unit);

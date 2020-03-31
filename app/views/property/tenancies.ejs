@@ -8,14 +8,13 @@
 
     <div class="modal fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
-        <form id="add-unit-form" method="post" action="/property/unit/new/">
+        <form id="add-unit-form" method="post" action="/property/unit/update">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" id="property_id" name="property[id]" value="">
           <input type="hidden" name="unit[id]" value="">
           <input type="hidden" name="unit[tenants]" id="unit_tenants" value="">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
-                <!-- Header -->
               <h3 class="modal-title" id="unit-modal-title">Add a New Unit</h3>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
