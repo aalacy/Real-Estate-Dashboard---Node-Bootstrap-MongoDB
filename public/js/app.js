@@ -473,59 +473,55 @@ const drawMap = function(options) {
 // Chart
  function chartInit(chart, data, percentage=false, need_legend = true) {
     const options = {
-      chart: {
-          plotBackgroundColor: null,
-          plotBorderWidth: null,
-          plotShadow: false,
-          type: 'pie',
-          height: '60%'
+      cutoutPercentage: 40,
+      responsive: true,
+      animation: {
+          animateScale: true,
+          animateRotate: true
       },
-      title: {
-          text: ''
-      },
-      tooltip: {
-        crosshairs: false,
-        shared: true,
-        borderColor: '#651FFF',
-        valuePrefix: '£',
-        pointFormat: '<b>£{point.y:,.0f} ({point.percentage:.1f}%)</b>',
-      },
-      accessibility: {
-        announceNewData: {
-              enabled: true
-        },
-        point: {
-          valueSuffix: '%'
+      plugins: {
+        datalabels: {
+            formatter: (value, ctx) => {
+                let sum = 0;
+                let dataArr = ctx.chart.data.datasets[0].data;
+                dataArr.map(data => {
+                    sum += data;
+                });
+                let percentage = (value*100 / sum).toFixed(1)+"%";
+                return percentage;
+            },
+            color: '#1f1f1f',
         }
       },
-      plotOptions: {
-          pie: {
-              allowPointSelect: true,
-              cursor: 'pointer',
-              dataLabels: {
-                  enabled: true,
-                  format: '{point.percentage:.1f}%',
-                  distance: '-20%',
-              },
-              showInLegend: true,
-              center: ['50%', '50%'],
-          },
-      },
-      series: [{
-        name: '',
-        colorByPoint: true,
-        size: '100%',
-        innerSize: '70%',
-        data: data
-      }]
-    };
-
-    Highcharts.setOptions({
-      lang: {
-        thousandsSep: ','
+      tooltips: {
+        callbacks: {
+          label: function(tooltipItem, data) {
+            // get the data label and data value to display
+            // convert the data value to local string so it uses a comma seperated number
+            var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
+            // return the text to display on the tooltip
+            let sum = 0;
+            let dataArr = data.datasets[0].data;
+            dataArr.map(data => {
+                sum += data;
+            });
+            let percentage = (parseFloat(value.replace(/,/g, ''))*100/sum).toFixed(1);
+            return `&nbsp;£${value} (${percentage})%`;
+          }
+        }
       }
-    })
-    Highcharts.chart(chart, options)
+    };
+    if (need_legend) {
+      options.legend = {
+          position: 'bottom',
+          display: true
+      }
+    }
+    new Chart(chart, {
+        type: 'doughnut',
+        options: options,
+        data: data
+    });
   }
 
 const formatNumber = function(num) {
@@ -1174,33 +1170,39 @@ $(function() {
       if ($('#marketChart')[0]) {
         const labels = $('#marketChart').data('option').labels;
         const dataset = $('#marketChart').data('option').dataset;
-        const data = []
-        for (var i = 0; i < labels.length; i++) {
-          data.push({
-            name: labels[i],
-            y: parseFloat(dataset[i]),
-            drilldown: labels[i],
-            sliced: i == 0,
-            selected: i == 0
-          })
+        const data = {
+          labels: labels,
+          datasets: [{
+            data: dataset,
+            backgroundColor: [
+              '#4dc9f6',
+              '#f67019',
+              '#f53794',
+              '#537bc4',
+              '#acc236'
+            ]
+          }]
         }
-        chartInit('marketChart', data);
+        chartInit(document.getElementById("marketChart").getContext('2d'), data);
     }
 
     if ($('#incomeChart')[0]) {
         const labels = $('#incomeChart').data('option').labels;
         const dataset = $('#incomeChart').data('option').dataset;
-        const data = []
-        for (var i = 0; i < labels.length; i++) {
-          data.push({
-            name: labels[i],
-            y: parseFloat(dataset[i]),
-            drilldown: labels[i],
-            sliced: i == 0,
-            selected: i == 0
-          })
+        const data = {
+          labels: labels,
+          datasets: [{
+            data: dataset,
+            backgroundColor: [
+              '#4dc9f6',
+              '#f67019',
+              '#f53794',
+              '#537bc4',
+              '#acc236'
+            ]
+          }]
         }
-        chartInit('incomeChart', data);
+        chartInit(document.getElementById("incomeChart").getContext('2d'), data);
     }
 
     if ($('#tenancyChart')[0]) {

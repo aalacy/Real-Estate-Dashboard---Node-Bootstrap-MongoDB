@@ -230,12 +230,12 @@
                 <div class="tab-content">
                   <div class="tab-pane fade active show" id="market" role="tabpanel">
                     <div class="chart chart-appended">
-                      <div id="marketChart" class="chart-canvas" data-option='{"labels": <%=JSON.stringify(labels)%>, "dataset": [<%=market_data%>]}'></div>
+                      <canvas id="marketChart" class="chart-canvas" data-option='{"labels": <%=JSON.stringify(labels)%>, "dataset": [<%=market_data%>]}'></canvas>
                     </div>
                   </div>
                   <div class="tab-pane fade" id="income" role="tabpanel">
                     <div class="chart chart-appended">
-                      <div id="incomeChart" class="chart-canvas" data-option='{"labels": <%=JSON.stringify(labels)%>, "dataset": [<%=income_data%>]}'></div>
+                      <canvas id="incomeChart" class="chart-canvas" data-option='{"labels": <%=JSON.stringify(labels)%>, "dataset": [<%=income_data%>]}'></canvas>
                     </div>
                   </div>
                 </div>
