@@ -101,7 +101,7 @@
                       Category
                     </label>
                     <div class="col-lg-9 col-sm-12">
-                      <select class="form-control" style="min-width: 250px;" name="transaction[category]" id="transaction_category" data-toggle="select" data-options='{"placeholder": "All Categories", "width": "element"}' required>
+                      <select class="form-control" style="min-width: 250px;" name="transaction[category]" id="transaction_category" data-toggle="select" data-options='{"placeholder": "Select a Category", "width": "element"}' required>
                         <option></option>
                       </select>  
                     </div>
@@ -121,7 +121,7 @@
                       Status
                     </label>
                     <div class="col-lg-9 col-sm-12">
-                      <select class="form-control" style="min-width: 250px;" name="transaction[status]" id="transaction_status" data-toggle="select" data-options='{"placeholder": "All Categories", "width": "element", "minimumResultsForSearch": "-1"}' required>
+                      <select class="form-control" style="min-width: 250px;" name="transaction[status]" id="transaction_status" data-toggle="select" data-options='{"placeholder": "Has this transaction been paid?", "width": "element", "minimumResultsForSearch": "-1"}' required>
                         <option></option>
                         <option class="text-success" value="Paid">Paid</option>
                         <option class="text-danger" value="Due">Due</option>
@@ -329,6 +329,9 @@
 
       // initialize the category with income
       changeCategorySelection(income_categories);
+      
+      $('#transaction_category').val('');
+      $('#transaction_category').trigger('change');
 
     	$(function() {
     		fetchTransactions();

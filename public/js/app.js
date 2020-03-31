@@ -431,7 +431,7 @@ const getAddress = function() {
 const drawMap = function(options) {
     // const coordinates = [-74.50, 40];
     // const zoom = 9;
-    mapboxgl.accessToken = 'pk.eyJ1IjoidG9wZGV2MDAzIiwiYSI6ImNqcHg1bmw4ODBpN2c0OW9kc2JjZW1zdWoifQ.50gYTaOTgxBYvtIi6eQVGA';
+    mapboxgl.accessToken = 'pk.eyJ1Ijoib2ZsZW1pbmcxMiIsImEiOiJjazhleHh1eHowMTNjM2xuNHB6NGVuamd3In0.WPSErSvPNgCbSecSrWqGIg';
 
     var map = new mapboxgl.Map({
         container: 'map',
@@ -577,6 +577,21 @@ const displayTransactions = () => {
       </div>
     `);
   });
+}
+
+const clearTransactionModal = () => {
+  $('#addTransactionBtn').text('Add');
+  $('#transaction-modal-title').text('Add a New Transaction');
+  $('#modalAddNewTransaction').find('form').attr('action', '/transaction/create');
+  $('#modalAddNewTransaction input').val('');
+  $('#transaction_account').val('Manual Transaction');
+  $('#transaction_property').val('');
+  $('#transaction_unit').val('');
+  $('#transaction_property').trigger('change');
+  $('#transaction_category').val('');
+  $('#transaction_category').trigger('change');
+  $('#transaction_status').val('');
+  $('#transaction_status').trigger('change');
 }
 
 const setupPagination = () => {
@@ -1476,21 +1491,6 @@ $(function() {
       });
     });
 
-    const clearTransactionModal = () => {
-      $('#addTransactionBtn').text('Add');
-      $('#transaction-modal-title').text('Add a New Transaction');
-      $('#modalAddNewTransaction').find('form').attr('action', '/transaction/create');
-      $('#modalAddNewTransaction input').val('');
-      $('#transaction_account').val('Manual Transaction');
-      $('#transaction_property').val('');
-      $('#transaction_unit').val('');
-      $('#transaction_property').trigger('change');
-      $('#transaction_category').val('');
-      $('#transaction_category').trigger('change');
-      $('#transaction_status').val('');
-      $('#transaction_status').trigger('change');
-    }
-
     // action to select transaction item in transactions page
     $(document).on('click', '.transaction-item', function(e) {
       if ($(e.target).hasClass('tranaction-checkbox') || $(e.target).hasClass('custom-control-label')) {
@@ -1505,6 +1505,11 @@ $(function() {
         $('#modalAddNewTransaction #income_option').click();
       } else {
         $('#modalAddNewTransaction #expenses_option').click();
+      }
+      if (transaction.type == 'In') {
+        $('#income_option').click()
+      } else {
+        $('#expenses_option').click()
       }
       $('#modalAddNewTransaction').find('form').attr('action', '/transaction/edit');
       $('#transaction_id').val(transaction.id);

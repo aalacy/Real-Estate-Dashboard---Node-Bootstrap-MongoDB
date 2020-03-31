@@ -242,7 +242,7 @@ exports.overview = async function(req, res) {
   const income_percent = (total_income/total_cost*100).toFixed(2);
   const expenses_percent = total_cost > 0 ? (Math.abs(total_expenses)/total_income*100).toFixed(2) : 0;
   const operating_expense_ratio = expenses_percent;
-  const gross_yield = (total_income/parseFloat(property.current_value)*100).toFixed(2);
+  const gross_yield = property.current_value > 0 && (total_income/property.current_value*100).toFixed(2) || 0.0;
   let net_yield = 0;
   if (property.purchase_price > 0) {
     net_yield = (net_profit/parseFloat(property.purchase_price)*100).toFixed(2);
@@ -943,7 +943,7 @@ exports.cashflow_date = async function(req, res) {
   const income_percent = (total_income/total_cost*100).toFixed(2);
   const expenses_percent = total_cost > 0 ? (Math.abs(total_expenses)/total_cost*100).toFixed(2) : 0;
   const operating_expense_ratio = expenses_percent;
-  const gross_yield = (total_income/parseFloat(myproperty.current_value)*100).toFixed(2);
+  const gross_yield = myproperty.current_value > 0 ? (total_income/parseFloat(myproperty.current_value)*100).toFixed(2) : 0.0;
   const net_yield = 0;
   if (myproperty.purchase_price > 0) {
     (net_profit/parseFloat(myproperty.purchase_price)*100).toFixed(2);

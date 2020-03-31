@@ -310,7 +310,7 @@
           <div class="header-body">
             <div class="row align-items-center">
               <div class="col-auto">
-                <div class="avatar avatar-lg avatar-4by3 ">
+                <div class="avatar avatar-xl avatar-4by3 ">
                   <img src="<%=property.image ? '/' + property.image : (property.tenancies.length ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png')%>" alt="..." class="card-img-top thumb-image">
                 </div>
               </div>
@@ -538,7 +538,7 @@
                           Total Income
                         </div>
                         <span class="h2 font-medium first-total-income">
-                          <span class="h2">+£</span> <%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                          <span class="h2">£</span><%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                         </span>
                       </div>
                       <div class="col-4 text-center border-right">
@@ -546,7 +546,7 @@
                           Total Expenses
                         </div>
                         <span class="h2 font-medium first-total-expenses">
-                         <span class="h2">-£</span> <%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                         <span class="h2">-£</span><%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                         </span>
                       </div>
                       <div class="col-4 text-center">
@@ -1017,6 +1017,34 @@
 
           <div class="tab-pane fade" id="income_expenses" role="tabpanel">
             <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center justify-content-center">
+                  <div class="col-12 col-md-4 text-center border-right">
+                    <div class="text-uppercase text-muted text-ss">
+                      Property Value
+                    </div>
+                    <span class="h2 font-medium">
+                    <%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%> % 
+                    </span>
+                  </div>
+                  <div class="col-12 col-md-4 text-center border-right">
+                    <div class="text-uppercase text-muted text-ss">
+                      Gross Yield
+                    </div>
+                    <span class="h2 font-medium">
+                    <%=gross_yield%> % 
+                    </span>
+                  </div>
+                  <div class="col-12 col-md-4 text-center">
+                    <div class="text-uppercase text-muted text-ss">Net Yield</div>
+                    <span class="h2 font-medium first-net-yield">
+                    <%=net_yield%> %  
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
               <div class="card-header">
                 <div class="row align-items-center">
                   <div class="col">
@@ -1028,7 +1056,7 @@
               </div>
               <div class="card-body">
                 <div class="row align-items-center justify-content-center">
-                  <div class="col-12 col-md-4 text-center border-right">
+                  <div class="col-12 col-md-4 text-center border-right d-flex justify-content-center">
                     <div id="incomeExpensesChart" style="width:250px; height:200px;" data-value="<%=expenses_chart_data%>"></div>
                   </div>
                   <div class="col-12 col-md-8">
@@ -1360,7 +1388,7 @@
             series: [{
               name: "",
               size: '100%',
-              innerSize: '0%',
+              innerSize: '60%',
               colorByPoint: true,
               data: [
                   {
