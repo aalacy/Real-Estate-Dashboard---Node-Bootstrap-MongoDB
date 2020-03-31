@@ -76,8 +76,12 @@ exports.index = async function(req, res) {
   let markers = [];
   let market_data = [];
   let income_data = [];
+  let temp_market_data = [];
+  let temp_income_data = [];
   let labels = [];
   let vacant_cnt = 0;
+
+  let total_current_value = 0;
   properties.map(property => {
     if (property.current_value < property.purchase_price) {
 	   portfolio_value -= property.current_value;
@@ -86,14 +90,15 @@ exports.index = async function(req, res) {
     }
 
     total_purchase_price += property.purchase_price;
-  	rental_income += property.rental_income;
   	all_units += property.units;
   	if (property.status == 'Occupied') {
   		occupied += property.units;
   	}
   	markers.push({"lng": property.lng, "lat": property.lat});
-    market_data.push(property.current_value);
-    income_data.push(property.rental_income);
+    total_current_value += property.current_value;
+  	rental_income += property.rental_income;
+    temp_market_data.push(property.current_value);
+    temp_income_data.push(property.rental_income);
     labels.push(property.address.toString());
 
     property.tenancies.map(unit => {
@@ -101,6 +106,15 @@ exports.index = async function(req, res) {
         vacant_cnt++;
       }
     });
+  })
+
+  // calc percentage in chart data
+  market_data = temp_market_data.map(data => {
+    return (data/total_current_value*100).toFixed(2)
+  })
+
+  income_data = temp_income_data.map(data => {
+    return (data/rental_income*100).toFixed(2)
   })
 
   if (portfolio_value && total_purchase_price) {

@@ -473,39 +473,50 @@ const drawMap = function(options) {
 // Chart
  function chartInit(chart, data, percentage=false, need_legend = true) {
     const options = {
-      cutoutPercentage: 40,
-      responsive: true,
-      animation: {
-          animateScale: true,
-          animateRotate: true
+      chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          type: 'pie',
+          height: '60%'
       },
-      tooltips: {
-          callbacks: {
-      // this callback is used to create the tooltip label
-              label: function(tooltipItem, data) {
-                // get the data label and data value to display
-                // convert the data value to local string so it uses a comma seperated number
-                var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
-                // return the text to display on the tooltip
-                if (percentage) {
-                  value += '%';
-                }
-                return value;
-              }
-            }
-      }
-    };
-    if (need_legend) {
-      options.legend = {
-          position: 'bottom',
-          display: true
-      }
-    }
-    new Chart(chart, {
-        type: 'doughnut',
-        options: options,
+      title: {
+          text: ''
+      },
+      tooltip: {
+          pointFormat: '<b>{point.percentage:.1f}%</b>'
+      },
+      accessibility: {
+        announceNewData: {
+              enabled: true
+        },
+        point: {
+            valueSuffix: '%'
+        }
+      },
+      plotOptions: {
+          pie: {
+              allowPointSelect: true,
+              cursor: 'pointer',
+              dataLabels: {
+                  enabled: true,
+                  format: '{point.y:.1f} %',
+                  distance: '-20%',
+              },
+              showInLegend: true,
+              center: ['50%', '50%'],
+          },
+      },
+      series: [{
+        name: '',
+        colorByPoint: true,
+        size: '100%',
+        innerSize: '70%',
         data: data
-    });
+      }]
+    };
+
+    Highcharts.chart(chart, options)
   }
 
 const formatNumber = function(num) {
@@ -1154,65 +1165,46 @@ $(function() {
       if ($('#marketChart')[0]) {
         const labels = $('#marketChart').data('option').labels;
         const dataset = $('#marketChart').data('option').dataset;
-        const data = {
-            labels: labels,
-            datasets: [{
-              data: dataset,
-              backgroundColor: [
-                '#4dc9f6',
-                '#f67019',
-                '#f53794',
-                '#537bc4',
-                '#acc236'
-              ]
-            }]
-          }
-        chartInit(document.getElementById('marketChart').getContext('2d'), data);
+        const data = []
+        for (var i = 0; i < labels.length; i++) {
+          data.push({
+            name: labels[i],
+            y: parseFloat(dataset[i]),
+            drilldown: labels[i],
+            sliced: i == 0,
+            selected: i == 0
+          })
+        }
+        chartInit('marketChart', data);
     }
 
     if ($('#incomeChart')[0]) {
         const labels = $('#incomeChart').data('option').labels;
         const dataset = $('#incomeChart').data('option').dataset;
-        const data = {
-            labels: labels,
-            datasets: [{
-              data: dataset,
-              backgroundColor: [
-                '#4dc9f6',
-                '#f67019',
-                '#f53794',
-                '#537bc4',
-                '#acc236'
-              ]
-            }]
-          }
-        chartInit($('#incomeChart')[0], data);
+        const data = []
+        for (var i = 0; i < labels.length; i++) {
+          data.push({
+            name: labels[i],
+            y: parseFloat(dataset[i]),
+            drilldown: labels[i],
+            sliced: i == 0,
+            selected: i == 0
+          })
+        }
+        chartInit('incomeChart', data);
     }
 
     if ($('#tenancyChart')[0]) {
         const labels = $('#tenancyChart').data('labels');
         const dataset = $('#tenancyChart').data('dataset');
-        const data = {
-            labels: labels,
-            datasets: [{
-              data: dataset,
-              backgroundColor: [
-                '#4dc9f6',
-                '#f67019',
-                '#f53794',
-                '#537bc4',
-                '#acc236'
-              ],
-               borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)'
-              ],
-               borderWidth: 1
-            }]
-          }
-        chartInit(document.getElementById('tenancyChart').getContext('2d'), data, true, false);
+        const data = []
+        for (var i = 0; i < labels.length; i++) {
+          data.push({
+            name: labels[i],
+            y: parseFloat(dataset[i]),
+          })
+        }
+        chartInit('tenancyChart', data);
       }
 
     // thousands separator on input
