@@ -484,14 +484,18 @@ const drawMap = function(options) {
           text: ''
       },
       tooltip: {
-          pointFormat: '<b>{point.percentage:.1f}%</b>'
+        crosshairs: false,
+        shared: true,
+        borderColor: '#651FFF',
+        valuePrefix: '£',
+        pointFormat: '<b>£{point.y:,.0f} ({point.percentage:.1f}%)</b>',
       },
       accessibility: {
         announceNewData: {
               enabled: true
         },
         point: {
-            valueSuffix: '%'
+          valueSuffix: '%'
         }
       },
       plotOptions: {
@@ -500,7 +504,7 @@ const drawMap = function(options) {
               cursor: 'pointer',
               dataLabels: {
                   enabled: true,
-                  format: '{point.y:.1f} %',
+                  format: '{point.percentage:.1f}%',
                   distance: '-20%',
               },
               showInLegend: true,
@@ -516,6 +520,11 @@ const drawMap = function(options) {
       }]
     };
 
+    Highcharts.setOptions({
+      lang: {
+        thousandsSep: ','
+      }
+    })
     Highcharts.chart(chart, options)
   }
 
