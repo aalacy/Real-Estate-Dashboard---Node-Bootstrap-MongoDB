@@ -164,9 +164,7 @@
                     <label>
                       Unit Description
                     </label>
-                     <select class="form-control unit-filter" id="transaction_unit" name="unit[description]" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
-                        <option></option>
-                      </select>  
+                     <input class="form-control" id="transaction_unit" name="unit[description]" />
                   </div>
     
                 </div>
@@ -505,8 +503,8 @@
       }
       $(function(){
         // display property filter
-        var option = new Option('All', 'all', true, true);
-        $('.property-filter').append(option);
+        // var option = new Option('All', 'all', true, true);
+        // $('.property-filter').append(option);
         allProperties.map(property => {
           var property_name = property.address + ', ' + property.city;
           option = new Option(property_name, property.id, true, true);
