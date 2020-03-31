@@ -1003,15 +1003,15 @@ $(function() {
         if (property_id) {
           $('#property_id').val(property_id);
         }
-        const unit = $(this).data('unit');
-        $('#unit_description').val(unit.description);
-        $('#unit_start_date').val(unit.start_date);
-        $('#unit_end_date').val(unit.end_date);
-        $('#unit_rent_frequency').val(unit.rent_frequency);
-        $('#unit_rent_frequency').trigger('change');
-        $('#unit_rent_price').val(unit.rent_price);
-        $('#unit_deposit').val(unit.deposit);
-        $('#unit_tenants').val(JSON.stringify(unit.tenants));
+        const unit = $(this).data('unit')
+        $('input[name="unit[description]"]').val(unit.description);
+        $('input[name="unit[start_date]"]').val(unit.start_date);
+        $('input[name="unit[end_date]"]').val(unit.end_date);
+        $('input[name="unit[rent_frequency]"]').val(unit.rent_frequency);
+        $('input[name="unit[rent_frequency]"]').trigger('change');
+        $('input[name="unit[rent_price]"]').val(unit.rent_price);
+        $('input[name="unit[deposit]"]').val(unit.deposit);
+        $('input[name="unit[tenants]"]').val(JSON.stringify(unit.tenants));
         $('input[name="unit[id]"]').val(unit.id);
         if ($('.unit-item').length > 1) {
             $(".action-unit").removeClass('d-none').removeClass('btn-unit-clear').addClass('btn-unit-delete').text('Delete this unit');
@@ -1019,12 +1019,12 @@ $(function() {
         if ($('.unit-item').length == 1) {
             $(".action-unit").removeClass('d-none').removeClass('btn-unit-delete').addClass('btn-unit-clear').text('Clear this unit');
         }
-        $('#addUnitBtn').text('Update');
+        $('.addUnitBtn').text('Update');
         $('#unit-modal-title').text('Edit Unit');
         $('#modalAddNewUnit').modal()
         .on('hidden.bs.modal', function() {
             $(".btn-unit-delete").addClass('d-none');
-            $('#addUnitBtn').text('Add');
+            $('.addUnitBtn').text('Add');
             $('#unit-modal-title').text('Create a New Unit');
         });
     });
@@ -1099,7 +1099,7 @@ $(function() {
     });
 
     // Delete the unit
-    $(".action-unit").click(function(e){
+    $(document).on('click', ".action-unit", function(e){
         e.preventDefault();
         const _csrf = $('input[name="_csrf"]').val();
         let property_id = $('input[name="property[id]"]').val();
@@ -1345,7 +1345,6 @@ $(function() {
       .catch(err => {
           console.log(err);
       })
-       
     });
 
 

@@ -725,7 +725,7 @@ exports.new_tenancy = async function(req, res) {
     return res.redirect(link[1]);
   } 
 
-  const new_values = createNewUnit(property, unit)
+  const new_values = await createNewUnit(property, unit)
   
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
     res.redirect('/property/tenancies');
@@ -740,7 +740,7 @@ exports.new_unit = async function(req, res) {
     return res.redirect(link[1]);
   } 
 
-  const new_values = createNewUnit(property, unit)
+  const new_values = await createNewUnit(property, unit)
   
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
     const link = req.headers.referer.split(req.headers.host);

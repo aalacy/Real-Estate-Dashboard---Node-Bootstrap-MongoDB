@@ -62,7 +62,7 @@
                     <label>
                       Start Date
                     </label>
-                    <input type="text" id="unit_start_date" name="unit[start_date]" class="form-control" value=""  data-toggle="flatpickr" required>
+                    <input type="text" name="unit[start_date]" class="form-control" value=""  data-toggle="flatpickr" required>
                   </div>
     
                 </div>
@@ -123,7 +123,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary" id="addUnitBtn">Add</button>
+              <button type="submit" class="btn btn-primary addUnitBtn">Add</button>
             </div>
           </div>
         </form>
@@ -137,7 +137,7 @@
           <div class="modal-content bg-lighter">
             <div class="modal-header">
                 <!-- Header -->
-              <h3 class="modal-title" id="unit-modal-title">Add a New Unit</h3>
+              <h3 class="modal-title">Add a New Unit</h3>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -164,7 +164,9 @@
                     <label>
                       Unit Description
                     </label>
-                    <input type="text" id="unit_description" name="unit[description]" class="form-control" placeholder="Description" value="" required>
+                     <select class="form-control unit-filter" id="transaction_unit" name="unit[description]" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
+                        <option></option>
+                      </select>  
                   </div>
     
                 </div>
@@ -176,7 +178,7 @@
                       Deposit
                     </label>
                     <div class="input-group input-group-merge mb-3">
-                      <input type="text" id="unit_deposit" onkeypress="return isNumberKey(event)"  name="unit[deposit]" class="form-control form-control-prepended number">
+                      <input type="text" onkeypress="return isNumberKey(event)"  name="unit[deposit]" class="form-control form-control-prepended number">
                       <div class="input-group-prepend">
                         <div class="input-group-text">
                           <span>£</span>
@@ -195,7 +197,7 @@
                     <label>
                       Start Date
                     </label>
-                    <input type="text" id="unit_start_date" name="unit[start_date]" class="form-control" value=""  data-toggle="flatpickr" required>
+                    <input type="text" name="unit[start_date]" class="form-control" value=""  data-toggle="flatpickr" required>
                   </div>
     
                 </div>
@@ -206,7 +208,7 @@
                     <label>
                       End Date (Optional)
                     </label>
-                    <input type="text" id="unit_end_date" name="unit[end_date]" class="form-control" value=""  data-toggle="flatpickr">
+                    <input type="text" name="unit[end_date]" class="form-control" value=""  data-toggle="flatpickr">
                   </div>
     
                 </div>
@@ -220,7 +222,7 @@
                       Rent Price
                     </label>
                     <div class="input-group input-group-merge mb-3">
-                      <input type="text" id="unit_rent_price" onkeypress="return isNumberKey(event)"  name="unit[rent_price]" class="form-control form-control-prepended number">
+                      <input type="text" onkeypress="return isNumberKey(event)"  name="unit[rent_price]" class="form-control form-control-prepended number">
                       <div class="input-group-prepend">
                         <div class="input-group-text">
                           <span>£</span>
@@ -237,7 +239,7 @@
                     <label>
                       Rent Frequency
                     </label>
-                    <select class="form-control" id="unit_rent_frequency" name="unit[rent_frequency]" data-toggle="select" data-options='{"placeholder": "Select a frequency"}' required>
+                    <select class="form-control" name="unit[rent_frequency]" data-toggle="select" data-options='{"placeholder": "Select a frequency"}' required>
                       <option></option>
                       <option value="Daily">Daily</option>
                       <option value="Weekly">Weekly</option>
@@ -256,35 +258,22 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary" id="addUnitBtn">Add</button>
+              <button type="submit" class="btn btn-primary addUnitBtn">Add</button>
             </div>
           </div>
         </form>
       </div>
     </div>
 
-    <!-- NAVIGATION
-    ================================================== -->
-   
-    <!-- MAIN CONTENT
-    ================================================== -->
     <div class="main-content">
-<!-- 
-      @@if (navPosition == 'combo' || demoMode) {
-        @@include("partials/topbar.html")
-      } -->
 
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-12">
-            
-            <!-- Header -->
             <div class="header">
               <div class="header-body">
                 <div class="row align-items-center">
                   <div class="col">
-					  
-                    <!-- Title -->
                     <h1 class="header-title">
                       Tenancies
                     </h1>
@@ -295,7 +284,7 @@
                       Add tenancy
                     </a>
                   </div>
-                </div> <!-- / .row -->
+                </div> 
                 <div class="row align-items-center">
                   <div class="col">
                     
@@ -407,7 +396,7 @@
       const displayAllTenancies = () => {
         $(current_list).empty();
         items.forEach( function(property) {
-          property.tenancies.forEach( function(unit){
+          property.tenancies.forEach(function(unit){
             let tenants = ''
             if (unit.tenants.length == 0) {
               tenants = '●&nbsp;No Tenants';
@@ -431,7 +420,7 @@
                       </div>
                       <div class="col-4">
                         <h4 class="card-title mb-1">
-                          <a href="/property/overview/${property.id}/units/${unit.id}" class="detail-unit" data-unit="${JSON.stringify(unit)}">${name}</a>
+                          <a href="/property/overview/${property.id}/units/${unit.id}" class="detail-unit">${name}</a>
                         </h4>
                         <p class="card-text small text-muted">
                           Vacant &nbsp;●&nbsp; <a href="#" class="edit-unit" data-property="${property.id}" data-unit='${JSON.stringify(unit)}'>Add a tenancy</a>
@@ -451,7 +440,7 @@
                           <i class="fe fe-more-vertical"></i>
                           </a>
                           <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#!" class="dropdown-item edit-unit" data-property="${property.id}" data-unit="${JSON.stringify(unit)}">
+                            <a href="#!" class="dropdown-item edit-unit" data-property="${property.id}" data-unit=${JSON.stringify(unit)}>
                               Edit
                             </a>
                             <a href="#!" class="dropdown-item delete-unit action-unit"  data-property="${property.id }" data-unit="${unit.id}">
@@ -477,7 +466,7 @@
                         </div>
                         <div class="col-4">
                           <h4 class="card-title mb-1">
-                            <a href="/property/overview/${property.id}/units/${unit.id}" class="detail-unit" data-unit="${JSON.stringify(unit)}">${name}</a>
+                            <a href="/property/overview/${property.id}/units/${unit.id}" class="detail-unit">${name}</a>
                           </h4>
                           <p class="card-text small text-muted">
                             <span class="text-success mr-2">●</span>Active Tenancy
@@ -497,7 +486,7 @@
                             <i class="fe fe-more-vertical"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                              <a href="#!" class="dropdown-item edit-unit" data-property="${property.id}" data-unit="${JSON.stringify(unit)}">
+                              <a href="#!" class="dropdown-item edit-unit" data-property="${property.id}" data-unit='${JSON.stringify(unit)}'>
                                 Edit
                               </a>
                               <a href="#!" class="dropdown-item delete-unit action-unit"   data-property="${property.id}" data-unit="${unit.id}">
