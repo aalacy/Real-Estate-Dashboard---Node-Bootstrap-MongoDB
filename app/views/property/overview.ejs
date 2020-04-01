@@ -1304,12 +1304,12 @@
             if (res.status == 'ok') {
               let net_income = '';
               if (res.net_profit > 0) {
-                net_income = `<span class="h2">+£</span> ${res.net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`;
+                net_income = `<span class="h2">£</span>${res.net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`;
               } else { 
                 net_income = `<span class="h2">-£</span>  ${res.net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
               }
               $('.first-net-income').html(net_income);
-              $('.first-total-income').html(`<span class="h2">+£</span> ${res.total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`)
+              $('.first-total-income').html(`<span class="h2">£</span>${res.total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`)
               $('.first-total-expenses').html(`<span class="h2">-£</span> ${Math.abs(res.total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`)  
               
               $('.first-gross-yield').html(`${res.gross_yield} %`);          
