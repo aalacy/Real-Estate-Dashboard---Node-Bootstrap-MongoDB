@@ -167,14 +167,16 @@ exports.logout = function(req, res) {
 
 exports.password_reset = function(req, res) {
   res.render('auth/password_reset', {
-    token: req.csrfToken(),
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
     title: 'Avenue - Reset Password'
   });
 };
 
 exports.password_recovery = function(req, res) {
   res.render('auth/password_recovery', {
-    token: req.csrfToken(),
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
     title: 'Avenue - Recover Password'
   });
 };
@@ -263,7 +265,8 @@ exports.settings = async function(req, res) {
   const { user } = req.session;
   const myuser = await Users.findOne({ id: user.id });
   res.render('auth/settings', {
-    token: req.csrfToken(),
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
     title: 'Avenue - Settings',
     user: myuser
   });

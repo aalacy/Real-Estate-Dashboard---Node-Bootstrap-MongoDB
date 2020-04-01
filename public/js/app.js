@@ -14,6 +14,7 @@ const PROPERTY_TYPE = {
 const page_cnt = 5;
 let items = [];
 let transactions = [];
+let cur_transaction;
 
 const toComma = function(val) {
     if (val) {
@@ -84,7 +85,7 @@ function doPopulate() {
       const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
       let avatar = '<span class="fe fe-file" style="font-size: 2rem;"></span>';
       if (doc.mimetype.includes('image')) {
-        avatar = `<img src="/${doc.path}" alt="document image preview" class="avatar"/>`;
+        avatar = `<img src="/${doc.path}" alt="document image preview" class="avatar rounded"/>`;
       }
 
       $('.documentList').append(`<li class="list-group-item document-item px-0 page${page}">
@@ -243,49 +244,82 @@ function doPopulate() {
     new Dropzone(el, options);
   }
 
+  // property filter in transaction
+  const selectPropertyFilter = async (id) => {
+    var data = {
+        property: {
+          id 
+        }
+      };
+      const token = $('meta[name="csrf"]').attr('content');
+      const res = await fetch('/property/unit/all', {
+          credentials: 'same-origin', // <-- includes cookies in the request
+          headers: {
+              'CSRF-Token': token, 
+              'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .catch(error => {
+        console.log(error);
+      });
+      if (res.status == 200) {
+        $('.unit-filter').empty();
+        var option = new Option('No unit specified', '-1', true, true);
+        $('.unit-filter').append(option);
+        res.units.map(unit => {
+          var option = new Option(unit.description, unit.id, true, true);
+          $('.unit-filter').append(option);
+        })
+        $('.unit-filter').val(null).trigger('change');
+      }
+  }
+
 /**
  * Confirm Dialog
  */
 
 function confirmDialog(message, handler){
   $(`<div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-card card">
-        <div class="card-header">
-          <div class="row align-items-center">
-            <div class="col">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-card card">
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col">
 
-              <!-- Title -->
-              <h4 class="card-header-title">
-                Warning
-              </h4>
-          
-            </div>
-            <div class="col-auto">
+                <!-- Title -->
+                <h4 class="card-header-title">
+                  Warning
+                </h4>
+            
+              </div>
+              <div class="col-auto">
 
-              <!-- Close -->
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-          
-            </div>
-          </div> <!-- / .row -->
-        </div>
-        </div class="card-header">
-        <div class="card-body">
-          <p>
-            ${message}
-          </p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-no">Cancel</button>
-          <button type="button" class="btn btn-danger btn-yes delete-document">Ok</button>
+                <!-- Close -->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            
+              </div>
+            </div> <!-- / .row -->
+          </div>
+          </div class="card-header">
+          <div class="card-body">
+            <p>
+              ${message}
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-no">Cancel</button>
+            <button type="button" class="btn btn-danger btn-yes delete-document">Ok</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>`).appendTo('body');
+  </div>`).appendTo('body');
  
   //Trigger the modal
   $("#modalConfirm").modal({
@@ -488,7 +522,7 @@ const drawMap = function(options) {
                     sum += data;
                 });
                 let percentage = (value*100 / sum).toFixed(1)+"%";
-                return percentage;
+                return '';
             },
             color: '#1f1f1f',
         }
@@ -506,7 +540,7 @@ const drawMap = function(options) {
                 sum += data;
             });
             let percentage = (parseFloat(value.replace(/,/g, ''))*100/sum).toFixed(1);
-            return `&nbsp;£${value} (${percentage})%`;
+            return `&nbsp;£${value} (${percentage}%)`;
           }
         }
       }
@@ -540,7 +574,7 @@ const displayTransactions = () => {
     const sign = parseFloat(transaction.amount) < 0;
     let amount = '£' + transaction.amount.replace('-', '');
    
-    if (sign) {
+    if (transaction.type == 'Out') {
       amount = '-' + amount;
     }
     let avatar = '<svg style="opacity: 0.7;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><g class="nc-icon-wrapper"><path d="M21,0H3C2.4,0,2,0.4,2,1v22c0,0.6,0.4,1,1,1h18c0.6,0,1-0.4,1-1V1C22,0.4,21.6,0,21,0z M11,9h5v2h-5V9z M9,19H6v-2h3V19z M9,15H6v-2h3V15z M9,11H6V9h3V11z M9,7H6V5h3V7z M15,19h-4v-2h4V19z M18,15h-7v-2h7V15z M18,7h-7V5h7V7z"></path></g></svg>';
@@ -557,7 +591,7 @@ const displayTransactions = () => {
     }
     const status = `<span class="${status_color} font-weight-bold">${status_text}</span>`
     $('.transaction-list').append(`
-      <div class="transaction-item list-group-item cursor-hand px-4 page${page}" data-val='${val}''>
+      <div class="transaction-item list-group-item cursor-hand px-4 page${page}" data-val='${val}'>
         <div class="col-auto avatar d-flex align-items-center">
           <div class="custom-control custom-checkbox my-1 mr-sm-2 d-none">
             <input type="checkbox" name="tranaction[id]" class="custom-control-input tranaction-checkbox" id="customCheck${idx}" value="${transaction.id}">
@@ -573,7 +607,7 @@ const displayTransactions = () => {
         </div>
         <div class="col-lg-2 col-md-3 col-sm-4">
           <div class="mb-1">${contact}</div>
-          <div class="text-muted">Rental Income</div>
+          <div class="text-muted">${transaction.category}</div>
         </div>
         <div class="col-lg-4 col-md-5 col-sm-6">
           <div class="mb-1">${transaction.propertyName}</div>
@@ -1175,10 +1209,10 @@ $(function() {
           datasets: [{
             data: dataset,
             backgroundColor: [
-              '#4dc9f6',
-              '#f67019',
-              '#f53794',
-              '#537bc4',
+              '#0E67DC',
+              '#555F7F',
+              '#41D3BD',
+              '#EF476F',
               '#acc236'
             ]
           }]
@@ -1194,10 +1228,10 @@ $(function() {
           datasets: [{
             data: dataset,
             backgroundColor: [
-              '#4dc9f6',
-              '#f67019',
-              '#f53794',
-              '#537bc4',
+              '#0E67DC',
+              '#555F7F',
+              '#41D3BD',
+              '#EF476F',
               '#acc236'
             ]
           }]
@@ -1494,7 +1528,7 @@ $(function() {
     });
 
     // action to select transaction item in transactions page
-    $(document).on('click', '.transaction-item', function(e) {
+    $(document).on('click', '.transaction-item', async function(e) {
       if ($(e.target).hasClass('tranaction-checkbox') || $(e.target).hasClass('custom-control-label')) {
         return;
       }
@@ -1502,6 +1536,7 @@ $(function() {
       $('#addTransactionBtn').text('Update');
       $('#transaction-modal-title').text('Update Transaction');
       const transaction = $(this).data('val');
+      cur_transaction = transaction;
       const amount = Number(transaction.amount.replace(',', ''));
       if (amount > 0) {
         $('#modalAddNewTransaction #income_option').click();
@@ -1520,6 +1555,9 @@ $(function() {
       $('#transaction_amount').val(amount.toString().replace('-','').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
       $('#transaction_property').val(transaction.property_id);
       $('#transaction_property').trigger('change');
+      await selectPropertyFilter(transaction.property_id)
+      $('#transaction_unit').val(transaction.unit_id);
+      $('#transaction_unit').trigger('change');
       $('#transaction_category').val(transaction.category);
       $('#transaction_category').trigger('change');
       $('#transaction_status').val(transaction.status);
@@ -1561,38 +1599,8 @@ $(function() {
       doPaginate();
     });
 
-    $('.property-filter').on('select2:select', function (e) {
-      var data = {
-        property: {
-          id: e.params.data.id
-        }
-      };
-      const token = $('meta[name="csrf"]').attr('content');
-      fetch('/property/unit/all', {
-          credentials: 'same-origin', // <-- includes cookies in the request
-          headers: {
-              'CSRF-Token': token, 
-              'Content-Type': 'application/json'
-          },
-          method: 'POST',
-          body: JSON.stringify(data)
-      })
-      .then(response => response.json())
-      .then(function(res) {
-        if (res.status == 200) {
-          $('.unit-filter').empty();
-          var option = new Option('No unit specified', '-1', true, true);
-          $('.unit-filter').append(option);
-          res.units.map(unit => {
-            var option = new Option(unit.description, unit.id, true, true);
-            $('.unit-filter').append(option);
-          })
-          $('.unit-filter').val(null).trigger('change');
-        }
-      })
-      .catch(error => {
-          console.log(error);
-      });
+    $('.property-filter').on('select2:select', async function (e) {
+      await selectPropertyFilter(e.params.data.id);
     });
 
     $('#document_tag').select2({

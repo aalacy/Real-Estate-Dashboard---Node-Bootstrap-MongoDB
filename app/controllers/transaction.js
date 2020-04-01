@@ -19,7 +19,8 @@ exports.all = async function(req, res) {
 
   res.render('transaction/index', {
     title: 'Avenue - Transactions',
-    token: req.csrfToken(),
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
     properties
   });
 }
@@ -49,6 +50,7 @@ exports.all_get = async function(req, res) {
   		created_at: moment(transaction.created_at).format('YYYY-MM-DD'), 
   		propertyName,
       property_id: transaction.property_id,
+      unit_id: transaction.unit_id,
   		user: transaction.user,
   		category: transaction.category,
   		account: transaction.account,
@@ -79,9 +81,6 @@ exports.create = async function(req, res) {
   newTransaction.id = uuidv4();
   newTransaction.user_id = user.id;
   newTransaction.document_id = document.id;
-  if (transaction.type == "Out") {
-    newTransaction.amount = '-' + transaction.amount;
-  }
 
   newTransaction.save().then( () => {
  	  res.redirect('/transaction/all');

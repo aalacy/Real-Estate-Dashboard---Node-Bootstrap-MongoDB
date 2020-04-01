@@ -683,7 +683,11 @@
                           <!-- Avatar -->
                           <a href="/<%=document.path%>" class="avatar">
                             <div class="avatar-title rounded bg-white text-secondary">
-                              <span class="fe fe-folder" style="font-size: 2rem;"></span>
+                              <% if (document.mimetype.includes('image')) {%>
+                                <img src="/<%=document.path%>" alt="document image preview" class="avatar rounded"/>
+                              <% } else {%>
+                                <span class="fe fe-file" style="font-size: 2rem;"></span>
+                              <% } %>
                             </div>
                           </a>
 
@@ -1310,7 +1314,7 @@
               }
               $('.first-net-income').html(net_income);
               $('.first-total-income').html(`<span class="h2">£</span>${res.total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`)
-              $('.first-total-expenses').html(`<span class="h2">-£</span> ${Math.abs(res.total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`)  
+              $('.first-total-expenses').html(`<span class="h2">-£</span>${Math.abs(res.total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`)  
               
               $('.first-gross-yield').html(`${res.gross_yield} %`);          
               $('.first-net-yield').html(`${res.net_yield} %`);          

@@ -143,7 +143,8 @@ exports.my = async function(req, res, next) {
  
   res.render('property/myproperties', {
     title: 'Avenue - MyProperties',
-    token: req.csrfToken(),
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
   });
 };
 
@@ -254,7 +255,8 @@ exports.overview = async function(req, res) {
 
   res.render('property/overview', {
     title: 'Avenue - Overview',
-    token: req.csrfToken(),
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
     property,
     empty_cnt,
     total_units,
@@ -292,7 +294,8 @@ exports.detail = async function(req, res) {
 
   res.render('property/detail', {
     title: 'Avenue - Detail',
-    token: req.csrfToken(),
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
     property
   });
 };
@@ -314,7 +317,8 @@ exports.review = async function(req, res) {
   
     res.render('property/review', {
       title: 'Avenue - Add Property',
-      token: req.csrfToken(),
+      // token: req.csrfToken(),
+    token: 'req.csrfToken()',
       property: property
     });
   }).catch(err => console.log(err));
@@ -451,7 +455,8 @@ exports.documents = async function(req, res) {
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
   const documents = await Documents.find({ user_id: user.id, status: 'alive' }, { _id: 0 });
   res.render('property/documents', {
-    token: req.csrfToken(),
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
     title: 'Avenue - Documents',
     properties,
     documents
@@ -569,7 +574,8 @@ exports.tenancies = async function(req, res) {
   });
 
   res.render('property/tenancies', {
-    token: req.csrfToken(),
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
     title: 'Avenue - Tenancies',
     properties,
     occupied_properties,

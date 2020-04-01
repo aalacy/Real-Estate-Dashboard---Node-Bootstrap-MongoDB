@@ -111,7 +111,8 @@ exports.index = async function(req, res) {
 
   const occupancy = all_units == 0 ? 0.0 : (occupied * 100 / all_units).toFixed(2);
   res.render('dashboard/index', {
-    token: req.csrfToken(),
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
     title: 'Avenue - Dashboard',
     username: current_user.first_name,
     properties: properties,

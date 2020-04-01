@@ -62,7 +62,7 @@
                       <div class="input-group input-group-merge">
                         <input type="text" id="transaction_amount" onkeypress="return isNumberKey(event)"  name="transaction[amount]" class="form-control form-control-prepended number" required>
                         <div class="input-group-prepend">
-                          <div class="input-group-text">
+                          <div class="input-group-text pound-sign">
                             <span>£</span>
                           </div>
                         </div>
@@ -90,7 +90,7 @@
                       Units
                     </label>
                     <div class="col-lg-9 col-sm-12">
-                      <select class="form-control unit-filter" id="transaction_unit" name="transaction[unit]" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
+                      <select class="form-control unit-filter" id="transaction_unit" name="transaction[unit_id]" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
                         <option></option>
                       </select>  
                     </div>
@@ -339,9 +339,17 @@
         $('input[name="transaction[type]"]').change(function(){
           if ($(this).val() == "In") {
             changeCategorySelection(income_categories);
+
+            // remove - sign from pound
+            $('.pound-sign').html('£');
           } else {
             changeCategorySelection(expenses_categories);
+
+            // add - sign to pound
+            $('.pound-sign').html('-£');
           }
+          $('#transaction_category').val(cur_transaction.category);
+          $('#transaction_category').trigger('change');
         });
 
         // dropzone image upload
