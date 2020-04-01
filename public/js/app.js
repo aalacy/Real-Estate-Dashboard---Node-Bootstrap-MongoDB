@@ -1796,6 +1796,7 @@ $(function() {
             id:  $("input[name='unit[id]']").val()
           },
           tenant: {
+            id: $('#tenant_id').val(),
             first_name: $('#tenant_first_name').val(),
             last_name: $('#tenant_last_name').val(),
             email: $('#tenant_email').val(),
@@ -1817,7 +1818,10 @@ $(function() {
         makeToast({message: res.message});
         if (res.status == 422) {
         } else if (res.status == 200) {
-          addTenant(res.tenant, data.unit);
+          $('.tenant-list').empty();
+          res.tenants.map(tenant => {
+            addTenant(tenant, data.unit);
+          });
           let tenants_cnt = res.cnt == 1 ?  res.cnt + ' Tenant' : res.cnt + ' Tenants';
           if (res.cnt) {
             $('.no-tenants').remove();

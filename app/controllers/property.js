@@ -594,6 +594,7 @@ exports.new_tenant = async function(req, res) {
 
   let new_tenant = new Tenants(tenant);
   let new_values = {};
+  let message = "Sucessfully added.";
   if (!tenant.id) {
     new_tenant.setDate();
     new_tenant.setID();
@@ -608,18 +609,33 @@ exports.new_tenant = async function(req, res) {
       }
     };
     await Tenants.updateOne({ id: tenant.id }, new_values);
+    message = "Successfully updated."
   }
 
   const myproperty = await Properties.findOne({ id: property.id });
   let tenancies = [];
   tenants_cnt = 0;
+  let tenants = []
   myproperty.tenancies.map(_unit => {
     if (!_unit.tenants) {
       _unit.tenants = [];
     } 
     if (_unit.id == unit.id) {
-      _unit.tenants.push(new_tenant);
+      if (!tenant.id) {
+        _unit.tenants.push(new_tenant);
+      } else {
+        let _tenants = []
+        _unit.tenants.map(_tenant => {
+          if (_tenant.id == tenant.id) {
+            _tenants.push(tenant)
+          } else {
+            _tenants.push(_tenant)
+          }
+        })
+        _unit.tenants = _tenants;
+      }
       tenants_cnt = _unit.tenants.length;
+      tenants = _unit.tenants
     }
     tenancies.push(_unit);
   });
@@ -631,8 +647,8 @@ exports.new_tenant = async function(req, res) {
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
     res.json({
       status: 200,
-      tenant: new_tenant,
-      message: "Sucessfully added.",
+      tenants,
+      message,
       cnt: tenants_cnt
     })
   });

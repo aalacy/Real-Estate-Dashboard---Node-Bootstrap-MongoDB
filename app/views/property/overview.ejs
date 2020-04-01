@@ -534,25 +534,25 @@
                   <div class="card-body my-4">
                     <div class="row align-items-center justify-content-center mb-6">
                       <div class="col-4 text-center border-right">
-                        <div class="text-uppercase text-muted text-ss">
+                        <h6 class="card-title text-uppercase text-muted mt-2">
                           Total Income
-                        </div>
+                        </h6>
                         <span class="h2 font-medium first-total-income">
                           <span class="h2">£</span><%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                         </span>
                       </div>
                       <div class="col-4 text-center border-right">
-                        <div class="text-uppercase text-muted text-ss">
+                        <h6 class="card-title text-uppercase text-muted mt-2">
                           Total Expenses
-                        </div>
+                        </h6>
                         <span class="h2 font-medium first-total-expenses">
                          <span class="h2">-£</span><%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                         </span>
                       </div>
                       <div class="col-4 text-center">
-                        <div class="text-uppercase text-muted text-ss">
+                        <h6 class="card-title text-uppercase text-muted mt-2">
                           NET Income
-                        </div>
+                        </h6>
                         <span class="h2 font-medium first-net-income">
                           <% if (net_profit > 0) {%>
                             <span class="h2">+£</span> <%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
@@ -565,23 +565,23 @@
 
                     <div class="row align-items-center justify-content-center">
                       <div class="col-4 text-center border-right">
-                        <div class="text-uppercase text-muted text-ss">
+                        <h6 class="card-title text-uppercase text-muted mt-2">
                           Gross Yield
-                        </div>
+                        </h6>
                         <span class="h2 font-medium first-gross-yield">
                         <%=gross_yield%> % 
                         </span>
                       </div>
                       <div class="col-4 text-center border-right">
-                        <div class="text-uppercase text-muted text-ss">Net Yield</div>
+                        <h6 class="card-title text-uppercase text-muted mt-2">Net Yield</h6>
                         <span class="h2 font-medium first-net-yield">
                         <%=net_yield%> %  
                         </span>
                       </div>
                       <div class="col-4 text-center">
-                        <div class="text-uppercase text-muted text-ss">
+                        <h6 class="card-title text-uppercase text-muted mt-2">
                           Operating Expense Ratio
-                        </div>
+                        </h6>
                         <span class="h2 font-medium first-expense-ratio">
                          <%=operating_expense_ratio%> %
                         </span>
@@ -1066,7 +1066,7 @@
                           Total Income
                         </h6>
                         <span class="h2 font-medium">
-                          <span class="h2">+£</span> <%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                          <span class="h2">£</span><%= total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                         </span>
                         
                       </div>
@@ -1075,7 +1075,7 @@
                           Total Expenses
                         </h6>
                         <span class="h2 font-medium">
-                          <span class="h2">-£</span> <%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                          <span class="h2">-£</span><%= Math.abs(total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                         </span>
                       </div>
                     </div>
@@ -1086,7 +1086,7 @@
                           Operating Expenses Ratio
                         </h6>
                         <span class="h2 font-medium">
-                          <%=operating_expense_ratio%><span class="h2">%</span> 
+                          <%=operating_expense_ratio%><span class="h2"> %</span> 
                         </span>
                       </div>
                       <div class="col-6 text-center">
@@ -1094,7 +1094,7 @@
                           Net Operating Income
                         </h6>
                         <span class="h2 font-medium">
-                          <span class="h2">+£</span> <%=net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                          <span class="h2">£</span><%=net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                         </span>
                       </div>
                     </div>
@@ -1115,7 +1115,7 @@
               </div>
               <div class="card-body">
                 <div class="row justify-content-center">
-                  <div class="col-12 col-md-4 text-center border-right">
+                  <div class="col-12 col-md-4 text-center border-right d-flex justify-content-center">
                     <div id="expensesBreakdownChart" style="width:250px; height:200px;"></div>
                   </div>
                   <div class="col-12 col-md-8 pl-4 mb-3">
