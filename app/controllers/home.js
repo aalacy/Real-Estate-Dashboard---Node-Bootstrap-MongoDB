@@ -13,7 +13,8 @@ let nodemailer = require('nodemailer');
 exports.signin = function(req, res) {
   res.render('auth/signin', {
     title: 'Avenue - Sign In',
-    token: req.csrfToken()
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
   });
 };
 
@@ -93,7 +94,8 @@ exports.signin_post = async function(req, res, next) {
 exports.signup = function(req, res) {
   res.render('auth/signup', {
     title: 'Avenue - Sign Up',
-    token: req.csrfToken()
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
   });
 };
 
