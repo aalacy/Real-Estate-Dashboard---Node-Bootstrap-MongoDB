@@ -610,7 +610,7 @@ const displayTransactions = () => {
           <div class="text-muted">${transaction.category}</div>
         </div>
         <div class="col-lg-4 col-md-5 col-sm-6">
-          <div class="mb-1">${transaction.propertyName}</div>
+          <div class="mb-1">${transaction.propertyName}${transaction.unit_name ?  ' • '+transaction.unit_name: ''}</div>
           <div class="text-muted">Property</div>
         </div>
         <div class="col-lg-2 col-md-3 col-sm-6">

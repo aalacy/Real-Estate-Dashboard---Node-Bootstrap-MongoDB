@@ -41,8 +41,10 @@ exports.all_get = async function(req, res) {
   let newTransactions = transactions.map(function(transaction)  {
   	const property = properties.filter(property => property.id == transaction.property_id);
   	let propertyName = ''
+    let unit = []
   	if (property.length > 0) {
 	  	propertyName = property[0].address + ', ' + property[0].city;
+      unit = property[0].tenancies.filter(unit => unit.id == transaction.unit_id)
   	}
     const doc = documents.filter(document => document.id == transaction.document_id);
   	return { 
@@ -51,6 +53,7 @@ exports.all_get = async function(req, res) {
   		propertyName,
       property_id: transaction.property_id,
       unit_id: transaction.unit_id,
+      unit_name: unit ? unit[0].description : '',
   		user: transaction.user,
   		category: transaction.category,
   		account: transaction.account,

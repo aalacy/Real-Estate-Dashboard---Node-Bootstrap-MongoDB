@@ -96,7 +96,7 @@ exports.all = async function(req, res, next) {
     let net_profit = total_income - Math.abs(total_expenses);
     const total_cost = total_income + Math.abs(total_expenses);
     const income_percent = (total_income/total_cost*100).toFixed(2);
-    const expenses_percent = total_cost > 0 ? (Math.abs(total_expenses)/total_income*100).toFixed(2) : 0;
+    const expenses_percent = total_cost > 0 && total_income > 0 ? (Math.abs(total_expenses)/total_income*100).toFixed(2) : 0;
     const operating_expense_ratio = expenses_percent;
     const gross_yield = (total_income/parseFloat(property.current_value)*100).toFixed(2);
     let net_yield = 0;
@@ -248,10 +248,19 @@ exports.overview = async function(req, res) {
   if (property.purchase_price > 0) {
     net_yield = (net_profit/parseFloat(property.purchase_price)*100).toFixed(2);
   }
+  const since_purchase = property.current_value - property.purchase_price;
+
+  // loan-to-value
+  const debt = parseFloat(property.debt || 0)
+  const equity = parseFloat(property.equity || 0);
+  const current_value = parseFloat(property.current_value || 0);
+  let loan_to_value = 0;
+  if (current_value) {
+    loan_to_value = Math.max(debt/current_value*100, equity/current_value*100).toFixed(2)
+  }
 
   // recent 5 transactions
   const recentTrans = transactions.slice(4)
-
 
   res.render('property/overview', {
     title: 'Avenue - Overview',
@@ -284,7 +293,9 @@ exports.overview = async function(req, res) {
     recentTrans,
     operating_expense_ratio,
     gross_yield,
-    net_yield
+    net_yield,
+    since_purchase,
+    loan_to_value
   });
 };
 
