@@ -314,7 +314,8 @@ exports.detail = async function(req, res) {
 exports.new = function(req, res) {
   res.render('property/new', {
     title: 'Avenue - Add Property',
-    token: req.csrfToken()
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
   });
 };
 
