@@ -53,7 +53,7 @@ exports.all_get = async function(req, res) {
   		propertyName,
       property_id: transaction.property_id,
       unit_id: transaction.unit_id,
-      unit_name: unit ? unit[0].description : '',
+      unit_name: unit.length > 0 ? unit[0].description : '',
   		user: transaction.user,
   		category: transaction.category,
   		account: transaction.account,
