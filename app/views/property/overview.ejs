@@ -675,57 +675,57 @@
                     </div> <!-- / .row -->
                   </div>
                   <div class="card-body">
-                    <% documents.forEach( document => { %>
-                      <% var date = new Date(document.created_at); var uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();%>
-                      <div class="row align-items-center document-item">
-                        <div class="col-auto">
-                        
-                          <!-- Avatar -->
-                          <a href="/<%=document.path%>" class="avatar">
-                            <div class="avatar-title rounded bg-white text-secondary">
-                              <% if (document.mimetype.includes('image')) {%>
-                                <img src="/<%=document.path%>" alt="document image preview" class="avatar rounded"/>
-                              <% } else {%>
-                                <span class="fe fe-file" style="font-size: 2rem;"></span>
-                              <% } %>
-                            </div>
-                          </a>
-
-                        </div>
-                        <div class="col ml-n2">
-
-                          <!-- Title -->
-                          <h4 class="card-title mb-1 document-name">
-                            <a href="/<%=document.path%>" target="_blank">
-                              <%=document.filename %>
-                            </a>
-                          </h4>
-
-                          <!-- Time -->
-                          <p class="card-text small text-muted">
-                            <i class="fe fe-clock"></i>&nbsp;<%=uploaded_at %>
-                          </p>
-                        
-                        </div>
-
-                        <div class="col-auto">
-                          <div class="dropdown">
-                            <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <i class="fe fe-more-vertical"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                              <a href="#!" class="dropdown-item delete-document" data-id="<%=document.id %>">
-                                Delete
+                    <div class="list-group list-group-flush my-n3">
+                      <% documents.forEach( document => { %>
+                        <% var date = new Date(document.created_at); var uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();%>
+                        <div class="list-group-item">
+                          <div class="row align-items-center document-item">
+                            <div class="col-auto">
+                              <a href="/<%=document.path%>" class="avatar">
+                                <div class="avatar-title rounded bg-white text-secondary">
+                                  <% if (document.mimetype.includes('image')) {%>
+                                    <img src="/<%=document.path%>" alt="document image preview" class="avatar rounded"/>
+                                  <% } else {%>
+                                    <span class="fe fe-file" style="font-size: 2rem;"></span>
+                                  <% } %>
+                                </div>
                               </a>
+
+                            </div>
+                            <div class="col ml-n2">
+
+                              <!-- Title -->
+                              <h4 class="card-title mb-1 document-name">
+                                <a href="/<%=document.path%>" target="_blank">
+                                  <%=document.filename %>
+                                </a>
+                              </h4>
+
+                              <!-- Time -->
+                              <p class="card-text small text-muted">
+                                <i class="fe fe-clock"></i>&nbsp;<%=uploaded_at %>
+                              </p>
+                            
+                            </div>
+
+                            <div class="col-auto">
+                              <div class="dropdown">
+                                <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fe fe-more-vertical"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                  <a href="#!" class="dropdown-item delete-document" data-id="<%=document.id %>">
+                                    Delete
+                                  </a>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      <hr>
-                      </div> <!-- / .row -->
-
-                    <% }) %>
-                  </div> <!-- / .card-body -->
-                </div> <!-- / .card -->
+                      <% }) %>
+                    </div>
+                  </div> 
+                </div>
               </div>
             </div>
           </div>
