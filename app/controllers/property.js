@@ -207,7 +207,7 @@ exports.overview = async function(req, res) {
   let total_expenses = 0;
   transactions.forEach(transaction => {
     const amount = parseFloat(transaction.amount) || 0;
-    if ( amount >= 0) {
+    if ( transaction.type == 'In') {
       total_income += amount
     } else {
       total_expenses += (amount)
