@@ -267,12 +267,17 @@ function doPopulate() {
       });
       if (res.status == 200) {
         $('.unit-filter').empty();
-        var option = new Option('No unit specified', '-1', true, true);
-        $('.unit-filter').append(option);
-        res.units.map(unit => {
-          var option = new Option(unit.description, unit.id, true, true);
+        if (res.units.length == 1) {
+          $('.unit-filter').attr("data-placeholder","Single Unit Propert").select2().attr('disabled', true);
+        } else {
+          $('.unit-filter').attr("data-placeholder","Select a Unit").select2().attr('disabled', false);
+          var option = new Option('No unit specified', '-1', true, true);
           $('.unit-filter').append(option);
-        })
+          res.units.map(unit => {
+            var option = new Option(unit.description, unit.id, true, true);
+            $('.unit-filter').append(option);
+          })
+        }
         $('.unit-filter').val(null).trigger('change');
       }
   }
