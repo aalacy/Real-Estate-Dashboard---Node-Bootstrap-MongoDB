@@ -338,7 +338,7 @@
                   </li>
                   <li class="nav-item">
                     <a href="javascript:void(0)" data-href="#units" class="nav-link unit-tab"  <% if (total_units == 1) { %> data-unit="<%=property.tenancies[0].id%>" <% }%>>
-                      <% if (total_units > 1) { %> Units <% }%> <% if (total_units == 1) { %> Units & Tenancies <% }%> <% if (property.tenancies.length > 1) {%><span class="badge badge-pill badge-soft-secondary"><%=property.tenancies.length%></span><% }%>
+                      Units & Tenancies
                     </a>
                   </li>
                   <li class="nav-item">
@@ -452,7 +452,7 @@
                           <h6 class="card-title text-uppercase text-muted mt-2">
                              Property Value
                            </h6>
-                           <span class="h2">
+                           <span class="h1">
                              £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                            </span>
                         </div>
@@ -555,9 +555,9 @@
                         </h6>
                         <span class="h2 first-net-income">
                           <% if (net_profit > 0) {%>
-                            <span class="h2">+£</span> <%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
+                            <span class="h2">+£</span><%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
                           <% } else {%>
-                            <span class="h2">-£</span> <%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
+                            <span class="h2">-£</span><%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
                           <% } %>
                         </span>
                       </div>
@@ -575,7 +575,7 @@
                       <div class="col-4 text-center border-right">
                         <h6 class="card-title text-uppercase text-muted mt-2">Net Yield</h6>
                         <span class="h2 first-net-yield">
-                        <%=net_yield%> %  
+                        <%=net_yield%>%  
                         </span>
                       </div>
                       <div class="col-4 text-center">
@@ -583,7 +583,7 @@
                           Operating Expense Ratio
                         </h6>
                         <span class="h2 first-expense-ratio">
-                         <%=operating_expense_ratio%> %
+                         <%=operating_expense_ratio%>%
                         </span>
                       </div>
                     </div>
@@ -1049,17 +1049,17 @@
                   <div class="tab-pane fade active show" id="capital" role="tabpanel">
                     <div class="row align-items-center justify-content-center">
                       <div class="col-12 col-md-4 text-center border-right">
-                        <div class="text-uppercase text-muted text-ss">
+                        <h6 class="card-title text-muted text-uppercase mt-2">
                           Property Value
-                        </div>
+                        </h6>
                         <span class="h1">
                          £<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>  
                         </span>
                       </div>
                       <div class="col-12 col-md-4 text-center border-right">
-                        <div class="text-uppercase text-muted text-ss">
+                        <h6 class="card-title text-muted text-uppercase mt-2">
                           Since Purchase
-                        </div>
+                        </h6>
                         <span class="h1">
                           <% if (property.purchase_price > 0) { %>
                           <%= since_purchase < 0 ? '-' : '' %>£<%=Math.abs(since_purchase).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%> 
@@ -1069,7 +1069,7 @@
                         </span>
                       </div>
                       <div class="col-12 col-md-4 text-center">
-                        <div class="text-uppercase text-muted text-ss">Loan-To-Value</div>
+                        <h6 class="card-title text-muted text-uppercase mt-2">Loan-To-Value</h6>
                         <span class="h1 first-net-yield">
                           <%=loan_to_value%> %  
                         </span>
@@ -1080,23 +1080,23 @@
                     <div class="row align-items-center justify-content-center">
                       
                       <div class="col-12 col-md-4 text-center border-right">
-                        <div class="text-uppercase text-muted text-ss">
+                        <h6 class="card-title text-muted text-uppercase mt-2">
                           Gross Yield
-                        </div>
+                        </h6>
                         <span class="h1">
                         <%=gross_yield%> % 
                         </span>
                       </div>
                       <div class="col-12 col-md-4 text-center">
-                        <div class="text-uppercase text-muted text-ss">Net Yield</div>
+                        <h6 class="card-title text-muted text-uppercase mt-2">Net Yield</h6>
                         <span class="h1 first-net-yield">
                         <%=net_yield%> %  
                         </span>
                       </div>
                       <div class="col-12 col-md-4 text-center border-right">
-                        <div class="text-uppercase text-muted text-ss">
+                        <h6 class="card-title text-muted text-uppercase mt-2">
                           Local Average
-                        </div>
+                        </h6>
                         <span class="h1">
                          N/A
                         </span>
