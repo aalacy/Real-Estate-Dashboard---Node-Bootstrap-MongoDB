@@ -80,11 +80,12 @@ exports.create = async function(req, res) {
 
   const { user } = req.session;
 
+
   const newTransaction  = new Transactions(transaction);
   newTransaction.id = uuidv4();
   newTransaction.user_id = user.id;
   newTransaction.document_id = document.id;
-  if (transaction.category == '') {
+  if (newTransaction.category == '') {
     newTransaction.category = 'Uncategorised';
   }
 

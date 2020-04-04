@@ -582,9 +582,9 @@ const displayTransactions = () => {
     if (transaction.type == 'Out') {
       amount = '-' + amount;
     }
-    let avatar = '<svg style="opacity: 0.7;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><g class="nc-icon-wrapper"><path d="M21,0H3C2.4,0,2,0.4,2,1v22c0,0.6,0.4,1,1,1h18c0.6,0,1-0.4,1-1V1C22,0.4,21.6,0,21,0z M11,9h5v2h-5V9z M9,19H6v-2h3V19z M9,15H6v-2h3V15z M9,11H6V9h3V11z M9,7H6V5h3V7z M15,19h-4v-2h4V19z M18,15h-7v-2h7V15z M18,7h-7V5h7V7z"></path></g></svg>';
+    let avatar = '<img src="/img/avatars/projects/transaction.png" alt="document image preview" class="avatar" style="height: auto;"/>';
     if (transaction.mimetype && transaction.mimetype.includes('image')) {
-      avatar = `<img src="/${transaction.path}" alt="document image preview" class="avatar"/>`;
+      avatar = `<img src="/${transaction.path}" alt="document image preview" class="avatar" style="height: auto;"/>`;
     }
     const val = JSON.stringify(transaction);
     const contact = transaction.user ? transaction.user : 'No Contact';
