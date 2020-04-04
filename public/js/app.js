@@ -268,7 +268,7 @@ function doPopulate() {
       if (res.status == 200) {
         $('.unit-filter').empty();
         if (res.units.length == 1) {
-          $('.unit-filter').attr("data-placeholder","Single Unit Propert").select2().attr('disabled', true);
+          $('.unit-filter').attr("data-placeholder","Single Unit Property").select2().attr('disabled', true);
         } else {
           $('.unit-filter').attr("data-placeholder","Select a Unit").select2().attr('disabled', false);
           var option = new Option('No unit specified', '-1', true, true);
