@@ -380,6 +380,6 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     padding: .5rem 1.25rem;
 }
 
-.avatar-4by3 {
+.avatar-lg {
     height: 4.5rem !important;
 }
