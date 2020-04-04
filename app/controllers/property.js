@@ -280,10 +280,7 @@ exports.overview = async function(req, res) {
     unit_id,
     tabs,
     property_id: property.id,
-    total_income,
     total_expenses,
-    income_percent,
-    expenses_percent,
     total_income,
     net_profit,
     expenses_breakdown: sortedBreakdown,
@@ -975,14 +972,14 @@ exports.cashflow_date = async function(req, res) {
   let total_expenses = 0;
   transactions.forEach(transaction => {
     const amount = parseFloat(transaction.amount) || 0;
-    if ( amount >= 0) {
+    if ( transaction.type == 'In') {
       total_income += amount
     } else {
-      total_expenses += (amount)
+      total_expenses += Math.abs(amount)
     }
   })
 
-  let net_profit = total_income - Math.abs(total_income);
+  let net_profit = total_income - Math.abs(total_expenses);
   const total_cost = total_income + Math.abs(total_expenses);
   const income_percent = (total_income/total_cost*100).toFixed(2);
   const expenses_percent = total_cost > 0 ? (Math.abs(total_expenses)/total_cost*100).toFixed(2) : 0;
