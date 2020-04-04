@@ -555,9 +555,9 @@
                         </h6>
                         <span class="h2 first-net-income">
                           <% if (net_profit > 0) {%>
-                            <span class="h2">+£</span><%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
+                            <span class="h2">+£</span><%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                           <% } else {%>
-                            <span class="h2">-£</span><%= net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') %>
+                            <span class="h2">-£</span><%= Math.abs(net_profit).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
                           <% } %>
                         </span>
                       </div>
@@ -569,13 +569,13 @@
                           Gross Yield
                         </h6>
                         <span class="h2 first-gross-yield">
-                        <%=gross_yield%> % 
+                        <%=gross_yield%>% 
                         </span>
                       </div>
                       <div class="col-4 text-center border-right">
                         <h6 class="card-title text-uppercase text-muted mt-2">Net Yield</h6>
                         <span class="h2 first-net-yield">
-                        <%=net_yield%>%  
+                          <%=net_yield%>%
                         </span>
                       </div>
                       <div class="col-4 text-center">
@@ -1148,7 +1148,7 @@
                           Operating Expenses Ratio
                         </h6>
                         <span class="h2">
-                          <%=operating_expense_ratio.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><span class="h2"> %</span> 
+                          <%=operating_expense_ratio.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%><span class="h2">%</span> 
                         </span>
                       </div>
                       <div class="col-6 text-center">
@@ -1368,15 +1368,15 @@
               if (res.net_profit > 0) {
                 net_income = `<span class="h2">£</span>${res.net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`;
               } else { 
-                net_income = `<span class="h2">-£</span>  ${res.net_profit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
+                net_income = `<span class="h2">-£</span>${Math.abs(res.net_profit).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
               }
               $('.first-net-income').html(net_income);
               $('.first-total-income').html(`<span class="h2">£</span>${res.total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`)
               $('.first-total-expenses').html(`<span class="h2">-£</span>${Math.abs(res.total_expenses).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`)  
               
-              $('.first-gross-yield').html(`${res.gross_yield} %`);          
-              $('.first-net-yield').html(`${res.net_yield} %`);          
-              $('.first-expense-ratio').html(`${res.operating_expense_ratio} %`);    
+              $('.first-gross-yield').html(`${res.gross_yield}%`);          
+              $('.first-net-yield').html(`${res.net_yield}%`);          
+              $('.first-expense-ratio').html(`${res.operating_expense_ratio}%`);    
             }
           })
           .catch(error => {

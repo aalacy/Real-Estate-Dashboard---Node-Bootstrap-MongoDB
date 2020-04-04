@@ -383,3 +383,7 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 .avatar-lg {
     height: 76px !important;
 }
+
+.avatar-xl {
+    height: 76px !important;
+}

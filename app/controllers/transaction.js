@@ -88,6 +88,7 @@ exports.create = async function(req, res) {
   if (newTransaction.category == '') {
     newTransaction.category = 'Uncategorised';
   }
+  newTransaction.amount = newTransaction.amount.replace(/,/g, '')
 
   newTransaction.save().then( () => {
  	  res.redirect('/transaction/all');

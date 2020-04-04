@@ -610,7 +610,7 @@ const displayTransactions = () => {
           <div class="mb-1">${transaction.created_at}</div>
           <div class="text-muted">Date</div>
         </div>
-        <div class="col-lg-2 col-md-3 col-sm-4">
+        <div class="col-lg-3 col-md-3 col-sm-4">
           <div class="mb-1">${contact}</div>
           <div class="text-muted">${transaction.category}</div>
         </div>
@@ -618,7 +618,7 @@ const displayTransactions = () => {
           <div class="mb-1">${transaction.propertyName}${transaction.unit_name ?  ' • '+transaction.unit_name: ''}</div>
           <div class="text-muted">Property</div>
         </div>
-        <div class="col-lg-2 col-md-3 col-sm-6">
+        <div class="col-lg-1 col-md-3 col-sm-6">
           <div class="mb-1 font-weight-bold">${amount}</div>
           <div class="text-muted">Amount</div>
         </div>
