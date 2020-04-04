@@ -16,7 +16,8 @@ exports.all = async function(req, res) {
 
   res.render('service/index', {
     title: 'Avenue - Services',
-    token: req.csrfToken(),
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
   });
 }
 
@@ -25,6 +26,7 @@ exports.instant_valuations = async function(req, res) {
 
   res.render('service/valuations', {
     title: 'Avenue - Services',
-    token: req.csrfToken(),
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
   });
 }
