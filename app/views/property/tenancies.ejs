@@ -287,11 +287,11 @@
                     
                     <!-- Nav -->
                     <ul class="nav nav-tabs nav-overflow header-tabs">
-                      <li class="nav-item">
+                     <!--  <li class="nav-item">
                         <a href="#all" data-toggle="tab" role="tab" class="nav-link tenancy-tab active">
                           All <span class="badge badge-pill badge-soft-secondary"><%=all_tenancies%></span>
                         </a>
-                      </li>
+                      </li> -->
                       <li class="nav-item">
                         <a href="#occupied" data-toggle="tab" role="tab" class="nav-link tenancy-tab">
                           Active <span class="badge badge-pill badge-soft-secondary"><%=occupied_tenancies%></span>
@@ -299,7 +299,7 @@
                       </li>
                       <li class="nav-item">
                         <a href="#vacant" data-toggle="tab" role="tab" class="nav-link tenancy-tab">
-                          Vacant <span class="badge badge-pill badge-soft-secondary"><%=vacant_tenancies%></span>
+                          Vacant Units <span class="badge badge-pill badge-soft-secondary"><%=vacant_tenancies%></span>
                         </a>
                       </li>
                     </ul>
@@ -315,7 +315,7 @@
 
             <div class="tab-content">
               <div class="tab-pane fade active show" id="all" role="tabpanel">
-                <div class="row my-3">
+                <div class="row" style="margin-bottom: 2rem;">
                   <div class="col-12 col-md-4">
                     <select class="form-control my-3 property-filter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
                         <option></option>
@@ -327,7 +327,7 @@
               </div>
 
               <div class="tab-pane fade" id="occupied" role="tabpanel">
-                <div class="row my-3">
+                <div class="row" style="margin-bottom: 2rem;">
                   <div class="col-12 col-md-4">
                     <select class="form-control my-3 property-filter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
                         <option></option>

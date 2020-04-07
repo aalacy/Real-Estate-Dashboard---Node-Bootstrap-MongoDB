@@ -400,7 +400,7 @@
                                 <div class="w-2 h-2 bg-grey"></div>
                               </div>
                             </div>
-                            <span class="text-grey"> <%=property.tenancies.length%> active tenancies </span>
+                            <span class="text-grey"> <b><%=property.tenancies.length%></b>&nbsp;active tenancies </span>
                           </div><!---->
                           <div class="pb-4 d-flex align-items-center">
                             <div class="pr-4">
@@ -408,7 +408,7 @@
                                 <div class="w-2 h-2 bg-grey"></div>
                               </div>
                             </div> 
-                            Rent P.A: £<%=property.rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>
+                            Rent P.A: <b>£<%=property.rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%></b>
                           </div>
                         </div>
                         <div class="flex-1 text-grey-dark">
@@ -418,7 +418,7 @@
                                 <div class="w-2 h-2 bg-grey"></div>
                               </div>
                             </div> 
-                            <%=property.bedrooms%> bedrooms
+                            <b><%=property.bedrooms%></b>&nbsp;bedrooms
                           </div>
                           <div class="pb-4 d-flex align-items-center ng-star-inserted">
                             <div class="pr-4">
@@ -426,7 +426,7 @@
                                 <div class="w-2 h-2 bg-grey"></div>
                               </div>
                             </div> 
-                            <%=property.bathrooms%> bathrooms
+                            <b><%=property.bathrooms%></b>&nbsp;bathrooms
                           </div>
                           <% if (property.ownership) {%>
                           <div class="pb-4 d-flex align-items-center ng-star-inserted">
@@ -732,7 +732,7 @@
 
           <div class="tab-pane fade" id="units" role="tabpanel">
             <div class="col-12">
-              <button class="btn btn-primary lift mb-3 btn-add-unit" data-toggle="modal" data-target="#modalAddNewUnit">
+              <button class="btn btn-primary lift btn-add-unit" style="margin-bottom: 2rem;" data-toggle="modal" data-target="#modalAddNewUnit">
                 Add a unit
               </button>
               <div class="units-list">
@@ -753,7 +753,7 @@
         
                             <!-- Title -->
                             <h4 class="card-title mb-1">
-                              <a href="#" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%=property.address%>, <%=property.city%>: <%= unit.description%></a>
+                              <a href="#" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
                             </h4>
         
                             <!-- Time -->
@@ -947,7 +947,7 @@
                                 </div>
                               </div>
                             </div>
-                            <span class="unit-start_date"></span> <i style="font-weight: bold;">~</i> <span class="unit-end_date"></span>
+                            <b class="unit-start_date"></b>&nbsp;<i style="font-weight: bold;">~</i>&nbsp;<b class="unit-end_date"></b>
                           </div>
                         </div>
                       </div>
@@ -1528,18 +1528,18 @@
           const unit_documents = documents.filter(document => document.unit_id == unit.id);
           unit.tenants = unit.tenants ? unit.tenants : [];
           let tenants_cnt = unit.tenants.length;
-          tenants_cnt = tenants_cnt == 1 ?  tenants_cnt + ' Tenant' : tenants_cnt + ' Tenants';
+          tenants_cnt = tenants_cnt == 1 ?  `<b>${tenants_cnt}</b>` + '&nbsp;Tenant' : `<b>${tenants_cnt}</b>` + '&nbsp;Tenants';
 
           if (units.length > 1) {
             $('.unit-name').text(unit.description);
           }
           if (unit.deposit) {
-            $('.unit-deposit-section').html(`£<span class="unit-deposit">${toComma(unit.deposit)}</span> Deposit`);
+            $('.unit-deposit-section').html(`£<b class="unit-deposit">${toComma(unit.deposit)}</b>&nbsp;Deposit`);
           } else {
             $('.unit-deposit-section').text('No deposit')
           }
           if (unit.rent_price) {
-            $('.unit-rent-section').html(`£<span class="unit-rent">${toComma(unit.rent_price)}</span> <span class="unit-frequency">${unit.rent_frequency}</span> Rent`);
+            $('.unit-rent-section').html(`£<b class="unit-rent">${toComma(unit.rent_price)}</b> <span class="unit-frequency">${unit.rent_frequency}</span> Rent`);
             $('.unit-badge').html('<span class="badge badge-primary font-weight-bolder p-2 ml-2">Active</span>');
           } else {
             $('.unit-rent-section').text('No rent price ');
@@ -1547,9 +1547,9 @@
           }
 
           if (unit.tenants.length) {
-            $('.unit-tenants').text(tenants_cnt);
+            $('.unit-tenants').html(tenants_cnt);
           } else {
-            $('.unit-tenants').text('No Tenant');
+            $('.unit-tenants').html('No Tenant');
           }
           $('.unit-start_date').text(unit.start_date);
           $('.unit-end_date').text(unit.end_date);
@@ -1576,7 +1576,7 @@
                   if (res.cnt == 0) {
                     $('.tenant-list').append(`<div class="col-auto no-tenants"><p>There is no tenants yet</p></div>`);
                   }
-                  let tenants_cnt = res.cnt == 1 ?  res.cnt + ' Tenant' : res.cnt + ' Tenants';
+                  let tenants_cnt = res.cnt == 1 ?  `<b>${res.cnt}</b>` + '&nbsp;Tenant' : `<b>${res.cnt}</b>` + '&nbsp;Tenants';
                   if (res.cnt) {
                     $('.no-tenants').remove();
                     $('.unit-tenants').text(tenants_cnt);
