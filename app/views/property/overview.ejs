@@ -886,7 +886,7 @@
 
                         <!-- Title -->
                         <h4 class="card-header-title">
-                          <span class="unit-name">Single Unit</span> <span class="unit-badge"></span>
+                          <span class="unit-name">Single Unit</span> <!-- <span class="unit-badge"></span> -->
                         </h4>
 
                       </div>
@@ -1215,13 +1215,16 @@
               </div>
             </div>
 
-            <!--- <div class="card">
+            <div class="card">
               <div class="card-header">
                 <div class="row align-items-center">
                   <div class="col">
                     <h4 class="card-header-title">
-                      Recent Transactions
+                      Recent Payments
                     </h4>
+                  </div>
+                  <div class="ml-auto mr-3">
+                    <button class="btn btn-white">Log new payment</button>
                   </div>
                   <div class="ml-auto" style="min-width: 220px;">
                     <select class="form-control" style="min-width: 350px;" id="categoryFilter" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
@@ -1251,7 +1254,7 @@
                 <div class="transaction-list">
                 </div>
               </div>
-            </div> --->
+            </div>
           </div>
 
           <div class="tab-pane fade" id="documents" role="tabpanel">
@@ -1878,7 +1881,7 @@
           filterCashflowByDate(e.params.data.id);
         });
 
-        fetchTransactions(property.id, 5);
+        fetchTransactions(property.id, 3);
       });
     </script>
   </body>

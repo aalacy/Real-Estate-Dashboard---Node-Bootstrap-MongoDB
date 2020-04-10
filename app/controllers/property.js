@@ -96,7 +96,7 @@ exports.all = async function(req, res, next) {
     let net_profit = total_income - Math.abs(total_expenses);
     const total_cost = total_income + Math.abs(total_expenses);
     const income_percent = (total_income/total_cost*100).toFixed(2);
-    const expenses_percent = total_cost > 0 && total_income > 0 ? (Math.abs(total_expenses)/total_income*100).toFixed(2) : 0;
+    const expenses_percent = total_cost > 0 && total_income > 0 ? (Math.abs(total_expenses)/total_income*100).toFixed(2) : 0.00;
     const operating_expense_ratio = expenses_percent;
     const gross_yield = (total_income/parseFloat(property.current_value)*100).toFixed(2);
     let net_yield = 0;
@@ -118,6 +118,7 @@ exports.all = async function(req, res, next) {
       net_yield,
       gross_yield,
       total_income,
+      operating_expense_ratio,
     });
   })
   // let occupied_properties = await Properties.find({ status: 'Occupied', user_id: user.id }, { _id: 0 });
@@ -578,6 +579,7 @@ exports.tenancies = async function(req, res) {
         occupied_property.tenancies.push(unit);
       }
     });
+    property.tenancies.sort((a, b) => { return moment(a.end_date).isBefore(moment(b.end_date))})
     occupied_properties.push(occupied_property);
     vacant_properties.push(vacant_property);
   });

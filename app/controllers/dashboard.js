@@ -92,7 +92,7 @@ exports.index = async function(req, res) {
   	if (property.status == 'Occupied') {
   		occupied += property.units;
   	}
-  	markers.push({"lng": property.lng, "lat": property.lat});
+  	markers.push({"lng": property.lng, "lat": property.lat, "type": property.units == 1 ? 'single' : 'multiple'});
   	rental_income += property.rental_income;
     market_data.push(property.current_value);
     income_data.push(property.rental_income);
@@ -138,20 +138,26 @@ exports.get_cash_flow = async function(req, res) {
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
   const transactions = await Transactions.find({$and:[{created_at:{$gte:new Date(startDate)}},{created_at:{$lte:new Date(endDate)}}, {user_id: user.id}]}, { _id: 0 });
 
-  let data = {}
-  for (let i = 0; i < 12; i++) {
-    properties.forEach(property => {
-      data[property.id] = {
-          showInLegend: false,  
-          name: property.address + ',' + property.city,
-          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          color: Colors.random()
-        }
-    })
-  }
+  const startMonth = moment(startDate).format('MMM');
+  const endMonth = moment(endDate).format('MMM');
+  const thisYear = moment().format('YYYY')
 
-  let income_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  let expenses_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const _categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  let categories = []
+  _categories.forEach(category => {
+    if (moment(category, 'MMM').isSameOrAfter(moment(startMonth, 'MMM')) && moment(category, 'MMM').isSameOrBefore(moment(endMonth, 'MMM'))) {
+      categories.push(category + '-' + thisYear.substr(2, 2))
+    }
+  });
+
+  let income_data = [];
+  let expenses_data = [];
+  let net_income_data = []
+  for (let i = 0; i < categories.length; i++) {
+   income_data.push(0)
+   expenses_data.push(0)
+   net_income_data.push(0)
+  }
 
   transactions.map(transaction => {
     const date = moment(transaction.created_at).format('MMM');
@@ -159,111 +165,45 @@ exports.get_cash_flow = async function(req, res) {
     if (transaction.amount) {
       amount = parseFloat(transaction.amount.replace(',', ''));
     }
-    switch (date) {
-      case 'Jan':
-        if (amount >= 0) {
-          income_data[0] += amount;
-        } else {
-          expenses_data[0] += amount
-        }
-        break;
-      case 'Feb':
-        if (amount > 0) {
-          income_data[1] += amount;
-        } else {
-          expenses_data[1] += amount
-        }
-        break;
-      case 'Mar':
-        if (amount > 0) {
-          income_data[2] += amount;
-        } else {
-          expenses_data[2] += amount
-        }
-        break;
-      case 'Apr':
-        if (amount > 0) {
-          income_data[3] += amount;
-        } else {
-          expenses_data[3] += amount
-        }
-        break;
-      case 'May':
-        if (amount > 0) {
-          income_data[4] += amount;
-        } else {
-          expenses_data[4] += amount
-        }
-        break;
-      case 'Jun':
-        if (amount > 0) {
-          income_data[5] += amount;
-        } else {
-          expenses_data[5] += amount
-        }
-        break;
-      case 'Jul':
-        if (amount > 0) {
-          income_data[6] += amount;
-        } else {
-          expenses_data[6] += amount
-        }
-        break;
-      case 'Aug':
-        if (amount > 0) {
-          income_data[7] += amount;
-        } else {
-          expenses_data[7] += amount
-        }
-        break;
-      case 'Sep':
-        if (amount > 0) {
-          income_data[8] += amount;
-        } else {
-          expenses_data[8] += amount
-        }
-        break;
-      case 'Oct':
-        if (amount > 0) {
-          income_data[9] += amount;
-        } else {
-          expenses_data[9] += amount
-        }
-        break;
-      case 'Nov':
-        if (amount > 0) {
-          income_data[10] += amount;
-        } else {
-          expenses_data[10] += amount
-        }
-        break;
-      case 'Dec':
-        if (amount > 0) {
-          income_data[11] += amount;
-        } else {
-          expenses_data[11] += amount
-        }
-        break;
+    const idx = categories.indexOf(`${date}-${thisYear.substr(2, 2)}`)
+    if (idx > -1) {
+      if (transaction.type == 'In') {
+        income_data[idx] += amount;
+        net_income_data[idx] += amount;
+      } else {
+        expenses_data[idx] += amount
+        net_income_data[idx] -= amount;
+      }
     }
   })
 
-  console.log(income_data)
-  console.log(expenses_data)
-
   return res.json({
     status: 200,
+    categories,
     data: [
       {
-        showInLegend: false,  
+        type: 'column',
+        showInLegend: true,  
         name: 'Income',
         data: income_data,
         color: '#22D880'
       },
       {
-        showInLegend: false,  
+        type: 'column',
+        showInLegend: true,  
         name: 'Expensed',
         data: expenses_data,
         color: '#E43A5A'
+      },
+      {
+        type: 'spline',
+        name: 'Net Income',
+        data: net_income_data,
+        marker: {
+            lineWidth: 2,
+            lineColor: '#555F7F',
+            fillColor: 'white'
+        }
       }
     ],
   })

@@ -293,7 +293,7 @@
                         </a>
                       </li> -->
                       <li class="nav-item">
-                        <a href="#occupied" data-toggle="tab" role="tab" class="nav-link tenancy-tab">
+                        <a href="#occupied" data-toggle="tab" role="tab" class="nav-link tenancy-tab active">
                           Active <span class="badge badge-pill badge-soft-secondary"><%=occupied_tenancies%></span>
                         </a>
                       </li>
@@ -314,7 +314,7 @@
             <input type="hidden" id="hidden_vacantproperties" value="<%= JSON.stringify(vacant_properties) %>">
 
             <div class="tab-content">
-              <div class="tab-pane fade active show" id="all" role="tabpanel">
+              <!-- <div class="tab-pane fade active show" id="all" role="tabpanel">
                 <div class="row" style="margin-bottom: 2rem;">
                   <div class="col-12 col-md-4">
                     <select class="form-control my-3 property-filter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
@@ -324,9 +324,9 @@
                 </div>
                 <div class="all-tenancies">
                 </div>
-              </div>
+              </div> -->
 
-              <div class="tab-pane fade" id="occupied" role="tabpanel">
+              <div class="tab-pane fade active show" id="occupied" role="tabpanel">
                 <div class="row" style="margin-bottom: 2rem;">
                   <div class="col-12 col-md-4">
                     <select class="form-control my-3 property-filter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
@@ -382,7 +382,7 @@
 
       items = properties;
       let allProperties = properties;
-      let current_list = '.all-tenancies';
+      let current_list = '.occupied-tenancies';
       const freq = {
         Daily: 365,
         Weekly: 52,
@@ -396,10 +396,10 @@
           property.tenancies.forEach(function(unit){
             let tenants = ''
             if (unit.tenants.length == 0) {
-              tenants = '●&nbsp;No Tenants';
+              tenants = '&nbsp;No Tenants';
             } 
             if (unit.tenants.length == 1) {
-             tenants = '●&nbsp;1 Tenant';
+             tenants = '&nbsp;1 Tenant';
             } 
             if (unit.tenants.length > 1) { 
               tenants = `${unit.tenants}Tenants`
@@ -411,7 +411,7 @@
                   <div class="card-body">
                     <div class="row align-items-center unit-item">
                       <div class="col-auto">
-                        <h1 class="mb-0 avatar avatar-lg">
+                        <h1 class="mb-0 avatar">
                           <img src="/img/icons/unit.png" class="avatar-img">
                         </h1>
                       </div>
@@ -451,13 +451,13 @@
                 </div>`);
               } else {
                 let price = (freq[unit.rent_frequency] * parseFloat(unit.rent_price) / 12).toFixed(2);
-                let rent_price_freq = parseFloat(price) > 0 ? `£${price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} per month`: '';
+                let rent_price_freq = parseFloat(price) > 0 ? `<b>£${price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</b> per month`: '';
                 $(current_list).append(`
                   <div class="card mb-3">
                     <div class="card-body">
                       <div class="row align-items-center unit-item">
                         <div class="col-auto">
-                          <h1 class="mb-0 avatar avatar-lg">
+                          <h1 class="mb-0 avatar">
                             <img src="/img/icons/unit.png" class="avatar-img">
                           </h1>
                         </div>
@@ -466,7 +466,7 @@
                             <a href="/property/overview/${property.id}/units/${unit.id}" class="detail-unit">${name}</a>
                           </h4>
                           <p class="card-text small text-muted">
-                            <span class="text-success mr-2">●</span>Active Tenancy
+                            <span class="text-success mr-2">●</span><b>${unit.start_date}</b>&nbsp;<i style="font-weight: bold;">~</i>&nbsp;<b>${unit.end_date}</b>
                           </p>
                         </div>
                         <div class="col-4">
@@ -501,6 +501,7 @@
         });
       }
       $(function(){
+
         // display property filter
         // var option = new Option('All', 'all', true, true);
         // $('.property-filter').append(option);
@@ -524,7 +525,7 @@
         });
 
         $('.tenancy-tab').click(function(e){
-          e.preventDefault();
+          // e.preventDefault();
           const tab = $(this).attr('href').replace('#', '');
           current_list = `.${tab}-tenancies`;
           if (tab == 'all') {
@@ -539,6 +540,11 @@
           }
           displayAllTenancies();
         });
+
+        // check url for #vacant to set vacant tab as default
+        if (location.hash == '#vacant') {
+          $('a[href="#vacant"]').click();
+        }
       })
     </script>
 

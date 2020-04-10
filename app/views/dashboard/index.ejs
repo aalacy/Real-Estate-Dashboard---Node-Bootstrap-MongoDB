@@ -120,9 +120,11 @@
                         </span>
                         <!-- Badge -->
                         <% if (vacant_cnt) { %>
-                        <span class="badge badge-soft-danger mt-n1">
-                          <%=vacant_cnt%> Units Vacant
-                        </span>
+                        <a href="/property/tenancies#vacant">
+                          <span class="badge badge-soft-danger mt-n1">
+                            <%=vacant_cnt%> Units Vacant
+                          </span>
+                        </a>
                         <% } %>
                       </div>
                       
@@ -285,24 +287,16 @@
   <script type="text/javascript">
     const thisYear = moment().format('YYYY');
     const drawCashFlowChart = (res) => {
-      const _categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      let categories = []
-      _categories.forEach(category => {
-        categories.push(category + '-' + thisYear.substr(2, 2))
-      });
       let series = [];
       Object.keys(res.data).map(key => {
         series.push(res.data[key]);
       });
       Highcharts.chart('cashflowChart', {
-        chart: {
-            type: 'column'
-        },
         title: {
             text: ''
         },
         xAxis: {
-          categories: categories
+          categories: res.categories
         },
         yAxis: {
           labels: {
@@ -375,7 +369,7 @@
         localStorage.setItem('endDate', end);
       });
       
-      redrawChart(startDate, endDate)
+      redrawChart(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'))
     })
   </script>
 </body>

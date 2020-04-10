@@ -182,8 +182,15 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary" id="addTransactionBtn">Add</button>
+              <div class="delete-transaction d-none" style="font-size: 1rem;">
+                <button type="button" class="btn btn-text" data-dismiss="modal">
+                  <i class="fe fe-trash"></i>&nbsp;Delete this transaction
+                </button>
+              </div>
+              <div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="addTransactionBtn">Add</button>
+              </div>
             </div>
           </div>
         </form>

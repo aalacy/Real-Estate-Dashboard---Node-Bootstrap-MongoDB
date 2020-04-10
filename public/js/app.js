@@ -479,33 +479,37 @@ const drawMap = function(options) {
         center: options.center
     });
     map.on('load', function() {
-        map.loadImage('/img/map/marker_small.png', function(error, image) {
-            if (error) throw error;
-            map.addImage('cat', image);
-            options.markers.map( (marker, i) => {
-                map.addLayer({
-                    "id": "points" + i,
-                    "type": "symbol",
-                    "source": {
-                        "type": "geojson",
-                        "data": {
-                            "type": "FeatureCollection",
-                            "features": [{
-                                "type": "Feature",
-                                "geometry": {
-                                    "type": "Point",
-                                    "coordinates": [marker.lng, marker.lat]
-                                }
-                            }]
-                        }
-                    },
-                    "layout": {
-                        "icon-image": "cat",
-                        "icon-size": 0.25
-                    }
-                });
-            })
+        map.loadImage('/img/map/single-marker-small.png', function(error, image) {
+          if (error) throw error;
+          map.addImage('single', image);
         });
+        map.loadImage('/img/map/multi-market-small.png', function(error, image) {
+          if (error) throw error;
+          map.addImage('multiple', image);
+        });
+        options.markers.map( (marker, i) => {
+            map.addLayer({
+                "id": "points" + i,
+                "type": "symbol",
+                "source": {
+                    "type": "geojson",
+                    "data": {
+                        "type": "FeatureCollection",
+                        "features": [{
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [marker.lng, marker.lat]
+                            }
+                        }]
+                    }
+                },
+                "layout": {
+                    "icon-image": marker.type,
+                    "icon-size": 0.25
+                }
+            });
+        })
     });
 };
 
@@ -647,6 +651,8 @@ const clearTransactionModal = () => {
   $('#transaction_category').trigger('change');
   $('#transaction_status').val('');
   $('#transaction_status').trigger('change');
+  $('div.delete-transaction').addClass('d-none');
+  $('#modalAddNewTransaction .modal-footer').removeClass('justify-content-between');
 }
 
 const setupPagination = () => {
@@ -1569,6 +1575,8 @@ $(function() {
       $('#transaction_status').trigger('change');
       $('#transaction_account').val(transaction.account);
       $('#transaction_note').val(transaction.note);
+      $('div.delete-transaction').removeClass('d-none');
+      $('#modalAddNewTransaction .modal-footer').addClass('justify-content-between');
       $('#modalAddNewTransaction').modal()
         .on('hidden.bs.modal', function() {
           clearTransactionModal();
