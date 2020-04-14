@@ -18,6 +18,7 @@
           <input type="hidden" id="document_mimetype" name="document[mimetype]" value="">
           <input type="hidden" id="document_filename" name="document[filename]" value="">
           <input type="hidden" id="document_path" name="document[path]" value="">
+          <input type="hidden" id="current_transaction_item" value="">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
                 <!-- Header -->
@@ -182,11 +183,9 @@
               </div>
             </div>
             <div class="modal-footer">
-              <div class="delete-transaction d-none" style="font-size: 1rem;">
-                <button type="button" class="btn btn-text" data-dismiss="modal">
-                  <i class="fe fe-trash"></i>&nbsp;Delete this transaction
-                </button>
-              </div>
+              <button type="button" class="btn btn-text delete-transaction d-none" data-dismiss="modal" style="font-size: 1rem;">
+                <i class="fe fe-trash"></i>&nbsp;Delete this transaction
+              </button>
               <div>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-primary" id="addTransactionBtn">Add</button>

@@ -92,7 +92,8 @@ exports.index = async function(req, res) {
   	if (property.status == 'Occupied') {
   		occupied += property.units;
   	}
-  	markers.push({"lng": property.lng, "lat": property.lat, "type": property.units == 1 ? 'single' : 'multiple'});
+    const title = property.address + ', ' + property.city
+  	markers.push({"lng": property.lng, "lat": property.lat, "title": title, "type": property.units == 1 ? 'single' : 'multiple'});
   	rental_income += property.rental_income;
     market_data.push(property.current_value);
     income_data.push(property.rental_income);
@@ -186,14 +187,14 @@ exports.get_cash_flow = async function(req, res) {
         showInLegend: true,  
         name: 'Income',
         data: income_data,
-        color: '#22D880'
+        color: '#41D3BD'
       },
       {
         type: 'column',
         showInLegend: true,  
         name: 'Expensed',
         data: expenses_data,
-        color: '#E43A5A'
+        color: '#EF476F'
       },
       {
         type: 'spline',

@@ -478,39 +478,47 @@ const drawMap = function(options) {
         zoom: options.zoom,
         center: options.center
     });
-    map.on('load', function() {
-        map.loadImage('/img/map/single-marker-small.png', function(error, image) {
-          if (error) throw error;
-          map.addImage('single', image);
-        });
-        map.loadImage('/img/map/multi-market-small.png', function(error, image) {
-          if (error) throw error;
-          map.addImage('multiple', image);
-        });
-        options.markers.map( (marker, i) => {
-            map.addLayer({
-                "id": "points" + i,
-                "type": "symbol",
-                "source": {
-                    "type": "geojson",
-                    "data": {
-                        "type": "FeatureCollection",
-                        "features": [{
-                            "type": "Feature",
-                            "geometry": {
-                                "type": "Point",
-                                "coordinates": [marker.lng, marker.lat]
-                            }
-                        }]
-                    }
-                },
-                "layout": {
-                    "icon-image": marker.type,
-                    "icon-size": 0.25
-                }
-            });
-        })
+    var geojson = {
+      type: 'FeatureCollection',
+      features: []
+    };
+    var _markers = []
+    options.markers.map( (marker, i) => {
+      geojson.features.push({
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [marker.lng, marker.lat]
+        },
+        properties: {
+          title: marker.title,
+          description: 'View property'
+        },
+        propertyType: marker.type
+      })
+      _markers.push([marker.lng, marker.lat])
     });
+
+    geojson.features.forEach(function(marker) {
+
+      // create a HTML element for each feature
+      var el = document.createElement('div');
+      el.className = 'marker';
+      if (marker.propertyType == 'single') {
+        el.className += ' single-marker';
+      } else {
+        el.className += ' multiple-marker';
+      }
+
+      // make a marker for each feature and add to the map
+      new mapboxgl.Marker(el)
+        .setLngLat(marker.geometry.coordinates)
+        .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+          .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+        .addTo(map);
+    });
+
+
 };
 
 // Chart
@@ -600,7 +608,7 @@ const displayTransactions = () => {
     }
     const status = `<span class="${status_color} font-weight-bold">${status_text}</span>`
     $('.transaction-list').append(`
-      <div class="transaction-item list-group-item cursor-hand px-4 page${page}" data-val='${val}'>
+      <div id="tranaction_${idx}" class="transaction-item list-group-item cursor-hand px-4 page${page}" data-val='${val}'>
         <div class="col-auto avatar d-flex align-items-center">
           <div class="custom-control custom-checkbox my-1 mr-sm-2 d-none">
             <input type="checkbox" name="tranaction[id]" class="custom-control-input tranaction-checkbox" id="customCheck${idx}" value="${transaction.id}">
@@ -651,7 +659,7 @@ const clearTransactionModal = () => {
   $('#transaction_category').trigger('change');
   $('#transaction_status').val('');
   $('#transaction_status').trigger('change');
-  $('div.delete-transaction').addClass('d-none');
+  $('button.delete-transaction').addClass('d-none');
   $('#modalAddNewTransaction .modal-footer').removeClass('justify-content-between');
 }
 
@@ -1498,8 +1506,8 @@ $(function() {
 
     $(document).on('click', '.delete-transaction', function(e) {
       e.preventDefault();
-      const parent = $(this).parents('.transaction-row');
-      const ids= [$(this).data('id')];
+      const parent = $($('#current_transaction_item').val());
+      const ids= [$('#transaction_id').val()];
       if (ids.length < 1) {
         return;
       }
@@ -1575,7 +1583,8 @@ $(function() {
       $('#transaction_status').trigger('change');
       $('#transaction_account').val(transaction.account);
       $('#transaction_note').val(transaction.note);
-      $('div.delete-transaction').removeClass('d-none');
+      $('button.delete-transaction').removeClass('d-none');
+      $('#current_transaction_item').val('#'+$(this)[0].id)
       $('#modalAddNewTransaction .modal-footer').addClass('justify-content-between');
       $('#modalAddNewTransaction').modal()
         .on('hidden.bs.modal', function() {

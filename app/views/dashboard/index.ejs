@@ -257,7 +257,7 @@
                       Cash Flow
                     </h4>
                   </div>
-                  <div class="col-auto d-flex flex-wrap">
+                  <div class="col-auto d-flex flex-wrap" style="display: none !important;">
                   
                     <div class="input-group input-group-merge">
                       <input type="text" id="cashflowStartDate" class="form-control form-control-prepended " placeholder="">
@@ -349,17 +349,19 @@
     $(function(){
       
       let startDate = localStorage.getItem('startDate') || '';
-      if (!startDate) {
-        startDate = moment(thisYear + '-01-01');
-      } else {
-        startDate = moment(startDate);
-      }
+      // if (!startDate) {
+      //   startDate = moment(thisYear + '-01-01');
+      // } else {
+      //   startDate = moment(startDate);
+      // }
+      startDate = moment(thisYear + '-01-01');
       let endDate = localStorage.getItem('endDate') || "";
-      if (!endDate) {
-        endDate = moment();
-      } else {
-        endDate = moment(endDate);
-      }
+      endDate = moment(thisYear + '-12-31');
+      // if (!endDate) {
+      //   endDate = moment();
+      // } else {
+      //   endDate = moment(endDate);
+      // }
       $('#cashflowStartDate').daterangepicker({
         startDate,
         endDate,
