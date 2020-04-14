@@ -302,7 +302,7 @@
           labels: {
             formatter: function(e) {
               const sign = parseFloat(e.value) < 0 ? '-' : '';
-              return sign + '£' + Math.abs(e.value)
+              return sign + '£' + Math.abs(e.value).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
               // return sign + '£' + numeral(Math.abs(e.value)).format('0.0a')
             }
           }
