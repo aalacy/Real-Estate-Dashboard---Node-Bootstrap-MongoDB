@@ -894,9 +894,27 @@
                       <div class="col-auto">
 
                         <!-- Button -->
-                        <a href="#!" class="btn btn-sm btn-white edit-unit update-detail" data-unit="">
-                          Update details
+                        <a href="#!" class="btn btn-sm btn-white mr-3" data-toggle="modal" data-target="#modalAddNewUnit">
+                          Add a tenancy
                         </a>
+                        
+                        <div class="dropdown d-inline-block">
+                            <a href="#" class="btn btn-sm btn-white dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="line-height: 1.15;">
+                            <i class="fe fe-more-horizontal"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                              <a href="#!" class="dropdown-item rename-unit" data-unit="" data-property="">
+                                Rename Unit
+                              </a>
+                              <a href="#!" class="dropdown-item edit-unit action-unit update-detail">
+                                Clear tenancy
+                              </a>
+                              <a href="#!" class="dropdown-item delete-unit action-unit" data-property="0b901eae-c833-42b2-b0ed-2461c093c474" data-unit="d0af9566-df38-475c-b0e9-b43291fd6358">
+                                Delete unit
+                              </a>
+                            </div>
+                        </div>
+
                   
                       </div>
                    

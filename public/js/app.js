@@ -496,11 +496,11 @@ const drawMap = function(options) {
         },
         propertyType: marker.type
       })
-      _markers.push([marker.lng, marker.lat])
+      // _markers.push(L.marker([marker.lng, marker.lat]))
     });
 
+    var bounds = new mapboxgl.LngLatBounds();
     geojson.features.forEach(function(marker) {
-
       // create a HTML element for each feature
       var el = document.createElement('div');
       el.className = 'marker';
@@ -516,9 +516,19 @@ const drawMap = function(options) {
         .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
           .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
         .addTo(map);
+
+      bounds.extend(marker.geometry.coordinates);
     });
 
-
+    // var fg = L.featureGroup(markers);
+    // map.fitBounds(fg.getBounds());
+    map.fitBounds(bounds, {
+        padding: {
+        top: 50,
+        bottom: 50,
+        left: 50,
+        right: 50
+    }});
 };
 
 // Chart
@@ -919,6 +929,11 @@ $(function() {
         });
     });
 
+    // date picker to be required
+    $('input[name="unit[start_date]"]').keydown(function (event) {
+        event.preventDefault();
+    })
+    $('input[name="unit[start_date]"]').attr('readonly', false)
 
     // Update the general settings
     $('#settings-general-form').submit(async function(e){

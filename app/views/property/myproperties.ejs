@@ -144,14 +144,14 @@
         properties = oldProperties.filter(property => moment(property.created_at).isBetween(startDate, endDate))
         properties = properties.filter(property => property.city.toLowerCase().includes(search) || property.address.toLowerCase().includes(search))
         if (sort == 'Lowest Value') {
-            properties.sort(function(a,b) {return (a.current_value > b.current_value) ? 1 : ((b.current_value > a.current_value) ? -1 : 0);} );
-          } else if ($(this).text() == 'Highest Value') {
-            properties.sort(function(a,b) {return (a.current_value < b.current_value) ? 1 : ((b.current_value < a.current_value) ? -1 : 0);} );
-          } else if ($(this).text() == 'Lowest Yield %') {
-            properties.sort(function(a,b) {return (a.rental_yield > b.rental_yield) ? 1 : ((b.rental_yield > a.rental_yield) ? -1 : 0);} );
-          } else if ($(this).text() == 'Highest Yield %') {
-            properties.sort(function(a,b) {return (a.rental_yield < b.rental_yield) ? 1 : ((b.rental_yield < a.rental_yield) ? -1 : 0);} );
-          } 
+          properties.sort(function(a,b) {return (a.current_value > b.current_value) ? 1 : ((b.current_value > a.current_value) ? -1 : 0);} );
+        } else if (sort == 'Highest Value') {
+          properties.sort(function(a,b) {return (a.current_value < b.current_value) ? 1 : ((b.current_value < a.current_value) ? -1 : 0);} );
+        } else if (sort == 'Lowest Yield %') {
+          properties.sort(function(a,b) {return (a.rental_yield > b.rental_yield) ? 1 : ((b.rental_yield > a.rental_yield) ? -1 : 0);} );
+        } else if (sort == 'Highest Yield %') {
+          properties.sort(function(a,b) {return (a.rental_yield < b.rental_yield) ? 1 : ((b.rental_yield < a.rental_yield) ? -1 : 0);} );
+        } 
         properties.map( (property, i) => {
           let status = ''
           let badge = '';
@@ -180,7 +180,7 @@
           
           const current_value = property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
           const rental_yield = property.rental_yield.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + '%';
-          let right_label = 'Rental Yield';
+          let right_label = 'Gross Yield';
           let right_value = rental_yield;
 
           // Allow changin time periosds dropdown menu
