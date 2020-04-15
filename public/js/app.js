@@ -472,11 +472,15 @@ const drawMap = function(options) {
     // const zoom = 9;
     mapboxgl.accessToken = 'pk.eyJ1Ijoib2ZsZW1pbmcxMiIsImEiOiJjazhleHh1eHowMTNjM2xuNHB6NGVuamd3In0.WPSErSvPNgCbSecSrWqGIg';
 
+    let center = options.center;
+    if (options.padding == 'no') {
+      center = [options.markers[0].lng, options.markers[0].lat]
+    }
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
         zoom: options.zoom,
-        center: options.center
+        center: center
     });
     var geojson = {
       type: 'FeatureCollection',
@@ -492,9 +496,9 @@ const drawMap = function(options) {
         },
         properties: {
           title: marker.title,
-          description: 'View property'
+          link: marker.link,
+          type: marker.type,
         },
-        propertyType: marker.type
       })
       // _markers.push(L.marker([marker.lng, marker.lat]))
     });
@@ -504,7 +508,7 @@ const drawMap = function(options) {
       // create a HTML element for each feature
       var el = document.createElement('div');
       el.className = 'marker';
-      if (marker.propertyType == 'single') {
+      if (marker.properties.type == 'single') {
         el.className += ' single-marker';
       } else {
         el.className += ' multiple-marker';
@@ -514,7 +518,7 @@ const drawMap = function(options) {
       new mapboxgl.Marker(el)
         .setLngLat(marker.geometry.coordinates)
         .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-          .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+          .setHTML(`<div class="h3 mb-2">${marker.properties.title}</div><a class="mb-2" href="${marker.properties.link}">View Detail</a>`))
         .addTo(map);
 
       bounds.extend(marker.geometry.coordinates);
@@ -522,13 +526,15 @@ const drawMap = function(options) {
 
     // var fg = L.featureGroup(markers);
     // map.fitBounds(fg.getBounds());
-    map.fitBounds(bounds, {
-        padding: {
-        top: 50,
-        bottom: 50,
-        left: 50,
-        right: 50
-    }});
+    if (options.padding != 'no') {
+      map.fitBounds(bounds, {
+          padding: {
+          top: 50,
+          bottom: 50,
+          left: 50,
+          right: 50
+      }});
+    }
 };
 
 // Chart

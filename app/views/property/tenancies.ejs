@@ -61,7 +61,7 @@
                     <label>
                       Start Date
                     </label>
-                    <input type="text" name="unit[start_date]" class="form-control" value=""  data-toggle="flatpickr" required>
+                    <input type="text" name="unit[start_date]" class="form-control" value=""  data-toggle="flatpickr" required autocomplete="off">
                   </div>
     
                 </div>
@@ -522,8 +522,6 @@
           $('.property-filter').append(option);
         });
         $('.property-filter').val('all').trigger('change');
-
-        
 
         // Initialize
         displayAllTenancies();

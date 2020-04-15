@@ -93,7 +93,13 @@ exports.index = async function(req, res) {
   		occupied += property.units;
   	}
     const title = property.address + ', ' + property.city
-  	markers.push({"lng": property.lng, "lat": property.lat, "title": title, "type": property.units == 1 ? 'single' : 'multiple'});
+  	markers.push({
+      "lng": property.lng,
+      "lat": property.lat,
+      "title": title,
+      "type": property.units == 1 ? 'single' : 'multiple',
+      "link": '/property/overview/' + property.id
+    });
   	rental_income += property.rental_income;
     market_data.push(property.current_value);
     income_data.push(property.rental_income);
