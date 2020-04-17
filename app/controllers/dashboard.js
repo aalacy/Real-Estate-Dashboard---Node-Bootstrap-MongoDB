@@ -145,17 +145,16 @@ exports.get_cash_flow = async function(req, res) {
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
   const transactions = await Transactions.find({$and:[{created_at:{$gte:new Date(startDate)}},{created_at:{$lte:new Date(endDate)}}, {user_id: user.id}]}, { _id: 0 });
 
-  const startMonth = moment(startDate).format('MMM');
-  const endMonth = moment(endDate).format('MMM');
-  const thisYear = moment().format('YYYY')
+  const dateStart = moment(startDate);
+  const dateEnd = moment(endDate);
 
-  const _categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   let categories = []
-  _categories.forEach(category => {
-    if (moment(category, 'MMM').isSameOrAfter(moment(startMonth, 'MMM')) && moment(category, 'MMM').isSameOrBefore(moment(endMonth, 'MMM'))) {
-      categories.push(category + '-' + thisYear.substr(2, 2))
-    }
-  });
+  while (dateEnd.diff(dateStart, 'months') >= 0) {
+    categories.push(dateStart.format('MMM YYYY'))
+    dateStart.add(1, 'month')
+  }
+
+  categories.pop()
 
   let income_data = [];
   let expenses_data = [];
@@ -167,18 +166,18 @@ exports.get_cash_flow = async function(req, res) {
   }
 
   transactions.map(transaction => {
-    const date = moment(transaction.created_at).format('MMM');
+    const date = moment(transaction.created_at).format('MMM YYYY');
     let amount = 0;
     if (transaction.amount) {
       amount = parseFloat(transaction.amount.replace(',', ''));
     }
-    const idx = categories.indexOf(`${date}-${thisYear.substr(2, 2)}`)
+    const idx = categories.indexOf(date)
     if (idx > -1) {
       if (transaction.type == 'In') {
         income_data[idx] += amount;
         net_income_data[idx] += amount;
       } else {
-        expenses_data[idx] += amount
+        expenses_data[idx] -= amount
         net_income_data[idx] -= amount;
       }
     }

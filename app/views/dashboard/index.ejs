@@ -289,6 +289,8 @@
 
   <script type="text/javascript">
     const thisYear = moment().format('YYYY');
+    const today = moment().format('MM-DD');
+    const yesterday = moment().subtract(1, 'days').format('MM-DD');
     const drawCashFlowChart = (res) => {
       let series = [];
       Object.keys(res.data).map(key => {
@@ -357,9 +359,9 @@
       // } else {
       //   startDate = moment(startDate);
       // }
-      startDate = moment(thisYear + '-01-01');
+      startDate = moment((thisYear-1) + '-' + yesterday);
       let endDate = localStorage.getItem('endDate') || "";
-      endDate = moment(thisYear + '-12-31');
+      endDate = moment();
       // if (!endDate) {
       //   endDate = moment();
       // } else {

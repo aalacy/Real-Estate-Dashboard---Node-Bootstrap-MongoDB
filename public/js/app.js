@@ -668,15 +668,13 @@ const clearTransactionModal = () => {
   $('#modalAddNewTransaction').find('form').attr('action', '/transaction/create');
   $('#modalAddNewTransaction input').val('');
   $('#transaction_account').val('Manual Transaction');
-  $('#transaction_property').val('');
-  $('#transaction_unit').val('');
-  $('#transaction_property').trigger('change');
-  $('#transaction_category').val('');
-  $('#transaction_category').trigger('change');
-  $('#transaction_status').val('');
-  $('#transaction_status').trigger('change');
+  $('#transaction_property').val(null).trigger('change')
+  $('#transaction_unit').val(null).trigger('change')
+  $('#transaction_category').val(null).trigger('change');
+  $('#transaction_status').val(null).trigger('change');
   $('button.delete-transaction').addClass('d-none');
   $('#modalAddNewTransaction .modal-footer').removeClass('justify-content-between');
+  $('#income_option').trigger('click');
 }
 
 const setupPagination = () => {
@@ -1018,11 +1016,10 @@ $(function() {
     if ($('*[data-toggle="cmap"]')) {
         $('*[data-toggle="cmap"]').map(function(i, item){
             try {
-                if ($(item).data('option').center) {
-                    drawMap($(item).data('option'));
-                }
-            } catch (error) {
-            }
+              if ($(item).data('option').center) {
+                drawMap($(item).data('option'));
+              }
+            } catch (error) {}
         });
     }
 

@@ -183,7 +183,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-text delete-transaction d-none" data-dismiss="modal" style="font-size: 1rem;">
+              <button type="button" class="btn btn-text delete-transaction d-none" data-dismiss="modal">
                 <i class="fe fe-trash"></i>&nbsp;Delete this transaction
               </button>
               <div>
@@ -343,7 +343,7 @@
     		fetchTransactions();
 
         $('input[name="transaction[type]"]').change(function(){
-          if ($(this).val() == "In") {
+          if ($(this)[0].id == "income_option") {
             changeCategorySelection(income_categories);
 
             // remove - sign from pound
@@ -354,8 +354,11 @@
             // add - sign to pound
             $('.pound-sign').html('-£');
           }
-          $('#transaction_category').val(cur_transaction.category);
-          $('#transaction_category').trigger('change');
+
+          if (cur_transaction) {
+            $('#transaction_category').val(cur_transaction.category);
+            $('#transaction_category').trigger('change');
+          }
         });
 
         // dropzone image upload

@@ -55,7 +55,7 @@
                       Deposit
                     </label>
                     <div class="input-group input-group-merge mb-3">
-                      <input type="text" id="unit_deposit" onkeypress="return isNumberKey(event)"  name="unit[deposit]" class="form-control form-control-prepended number">
+                      <input type="text" id="unit_deposit" onkeypress="return isNumberKey(event)"  name="unit[deposit]" class="form-control form-control-prepended number" required>
                       <div class="input-group-prepend">
                         <div class="input-group-text">
                           <span>£</span>
@@ -99,7 +99,7 @@
                       Rent Price
                     </label>
                     <div class="input-group input-group-merge mb-3">
-                      <input type="text" id="unit_rent_price" onkeypress="return isNumberKey(event)"  name="unit[rent_price]" class="form-control form-control-prepended number">
+                      <input type="text" id="unit_rent_price" onkeypress="return isNumberKey(event)"  name="unit[rent_price]" class="form-control form-control-prepended number" required>
                       <div class="input-group-prepend">
                         <div class="input-group-text">
                           <span>£</span>
@@ -348,7 +348,7 @@
                   </li>
                   <li class="nav-item">
                     <a href="javascript:void(0)" data-href="#documents" data-toggle="tab" role="tab" class="nav-link overview-tab">
-                      Documents <span class="badge badge-pill badge-soft-secondary doc_cnt"><%=documents.length%></span>
+                      Documents <span class="badge badge-pill badge-soft-secondary doc_cnt"></span>
                     </a>
                   </li>
                 </ul>
@@ -400,7 +400,7 @@
                                 <div class="w-2 h-2 bg-grey"></div>
                               </div>
                             </div>
-                            <span class="text-grey"> <b><%=property.tenancies.length%></b>&nbsp;active tenancies </span>
+                            <span class="text-grey"> <b><% let activeTenancies = property.tenancies.filter(unit => unit.rent_frequency != 'Vacant')%><%=activeTenancies.length%></b>&nbsp;active tenancies </span>
                           </div><!---->
                           <div class="pb-4 d-flex align-items-center">
                             <div class="pr-4">
@@ -647,8 +647,8 @@
                   </div>
                   <div class="card-body">
                   
-                  <div class="embed-responsive embed-responsive-21by9 rounded">
-                    <div class="embed-responsive-item" id="map" data-toggle="cmap" data-option='{"center": [<%= property.lng%>, <%= property.lat%>], "zoom": 12, "markers": [{"lng":<%= property.lng%>, "lat":<%= property.lat%>}], "padding": "no"}'></div>
+                  <div class="embed-responsive embed-responsive-4by3 rounded">
+                    <div class="embed-responsive-item" id="map" data-toggle="cmap" data-option='{"center": [<%= property.lng%>, <%= property.lat%>], "zoom": 12, "markers": [{"lng":<%= property.lng%>, "lat":<%= property.lat%>, "type": "<%=property.units == 1 ? "single" : "multiple"%>", "title": "<%=property.address%>", "link": "<%="/property/overview/" + property.id%>"}], "padding": "no"}'></div>
                   </div>
 
                   </div>
@@ -1307,7 +1307,12 @@
       let documents = [];
       let units = [];
       try {
+        var names = window.location.pathname.split('/');
+        names.pop(); 
+        var propertyId = names.pop()
         documents = JSON.parse($('#hidden_documents').val());
+        documents = documents.filter(document => document.property_id == propertyId)
+        $('.doc_cnt').html(documents.length)
         units = JSON.parse($('#hidden_units').val());
         items = documents;
       } catch(e){}
