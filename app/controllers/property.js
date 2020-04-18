@@ -456,6 +456,10 @@ exports.update = async function(req, res) {
 exports.remove = async function(req, res) {
   const { body: { property } } = req;
 
+  await Documents.deleteMany({ property_id: property.id })
+
+  await Transactions.deleteMany({ property_id: property.id })
+
   await Properties.deleteOne({ id: property.id });
   res.redirect('/property/my');
 };
@@ -601,9 +605,13 @@ exports.tenancies = async function(req, res) {
 exports.all_units = async function(req, res) {
   const { body: { property } } = req;
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
+  let units = []
+  if (myproperty) {
+    units = myproperty.tenancies
+  }
   return res.json({
     status: 200,
-    units:myproperty.tenancies
+    units
   })
 }
 
