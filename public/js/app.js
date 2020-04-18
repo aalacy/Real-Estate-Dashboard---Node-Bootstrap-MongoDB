@@ -1641,6 +1641,7 @@ $(function() {
       await selectPropertyFilter(transaction.property_id)
       $('#transaction_unit').val(transaction.unit_id);
       $('#transaction_unit').trigger('change');
+      $('input[name="transaction[unit_id]"]').val(transaction.unit_id)
       $('#transaction_category').val(transaction.category);
       $('#transaction_category').trigger('change');
       $('#transaction_status').val(transaction.status);

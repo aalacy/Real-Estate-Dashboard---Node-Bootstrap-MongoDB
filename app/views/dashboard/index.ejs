@@ -313,7 +313,8 @@
             var x = ''
             this.points.forEach(point => {
               x = point.x;
-              output1 += `<span style="color:${point.color}">●</span> ${point.series.name}: <b style="fill:white;">£${point.y.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</b><br/>`
+              const sign = parseFloat(point.y) < 0 ? '-' : '';
+              output1 += `<span style="color:${point.color}">●</span> ${point.series.name}: <b style="fill:white;">${sign}£${Math.abs(point.y).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</b><br/>`
             })
             output1 = `<b style="font-size:14px;">${x}</b><br/><br/>` + output1
             return output1

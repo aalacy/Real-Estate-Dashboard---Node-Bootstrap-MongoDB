@@ -388,6 +388,11 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     height: 76px !important;
 }
 
+.avatar-md {
+    height: 65px !important;
+    width: 65px !important;
+}
+
 .marker {
     background-size: cover;
     width: 40px;

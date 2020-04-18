@@ -303,6 +303,7 @@
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" id="transaction_id" name="transaction[id]" value="">
           <input type="hidden" name="transaction[property_id]" value="<%=property.id%>">
+          <input type="hidden" name="transaction[unit_id]" value="<%=unit_id%>">
           <input type="hidden" id="status" name="document[status]" value="upload">
           <input type="hidden" id="document_id" name="document[id]" value="">
           <input type="hidden" id="document_size" name="document[size]" value="">
@@ -359,17 +360,6 @@
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-    
-                  <div class="form-wrapper">
-                    <label class="form-label">
-                      Units
-                    </label>
-                    <div class="col-lg-9 col-sm-12">
-                      <select class="form-control unit-filter" id="transaction_unit" name="transaction[unit_id]" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
-                        <option></option>
-                      </select>  
                     </div>
                   </div>
 
@@ -919,7 +909,7 @@
                           <div class="col-auto">
                         
                             <!-- Avatar -->
-                            <h1 class="mb-0 avatar">
+                            <h1 class="mb-0 avatar avatar-md">
                               <img src="/img/icons/unit.png" class="avatar-img">
                             </h1>
         
@@ -1204,6 +1194,25 @@
                 </div>
 
                 <div class="card">
+                  <div class="card-header">
+                    <div class="row align-items-center">
+                      <div class="col">
+                        <h4 class="card-header-title">
+                          Recent Payments
+                        </h4>
+                      </div>
+                      <div class="ml-auto mr-3">
+                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAddNewTransaction">Log new payment</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="transaction-list">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card">
                   <div class="card-body">
                     <a href="#" class="btn btn-danger lift action-unit btn-unit-delete" data-block="units">
                       Delete Unit
@@ -1411,46 +1420,7 @@
               </div>
             </div>
 
-            <div class="card">
-              <div class="card-header">
-                <div class="row align-items-center">
-                  <div class="col">
-                    <h4 class="card-header-title">
-                      Recent Payments
-                    </h4>
-                  </div>
-                  <div class="ml-auto mr-3">
-                    <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAddNewTransaction">Log new payment</button>
-                  </div>
-                 <!--  <div class="ml-auto" style="min-width: 220px;">
-                    <select class="form-control" style="min-width: 350px;" id="categoryFilter" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
-                      <option></option>
-                      <option value="All">All Categories</option>
-                      <optgroup label="Income">
-                        <option value="Rental Income">Rental Income</option>
-                        <option value="Deposit">Deposit</option>
-                        <option value="Uncategorised">Uncategorised</option>
-                      </optgroup>
-                      <optgroup label="Expenses">
-                        <option value="Insurance">Insurance</option>
-                        <option value="Repairs & Maintenance">Repairs & Maintenance</option>
-                        <option value="Management Fees">Management Fees</option>
-                        <option value="Utilities">Utilities</option>
-                        <option value="Tax">Tax</option>
-                        <option value="Legal">Legal</option>
-                        <option value="Mortgage or Loans">Mortgage or Loans</option>
-                        <option value="Deposit">Deposit</option>
-                        <option value="Uncategorised">Uncategorised</option>
-                      </optgroup>
-                    </select> 
-                  </div> -->
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="transaction-list">
-                </div>
-              </div>
-            </div>
+            
           </div>
 
           <div class="tab-pane fade" id="documents" role="tabpanel">
@@ -1908,7 +1878,7 @@
           });
 
           if (unit_documents.length == 0) {
-            $('.unit-document-list').append(`<div class="col-auto no-documents"><p>There is no documents yet</p></div>`)
+            $('.unit-document-list').append(`<div class="col-auto no-documents"><p class="my-3">There is no documents yet</p></div>`)
           }
 
           $('.modal-upload').attr('data-property', $('#hidden_property').val());
