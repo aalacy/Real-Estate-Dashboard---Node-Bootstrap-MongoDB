@@ -903,7 +903,7 @@
               <div class="units-list">
                 <% property.tenancies.forEach( function(unit){ %>
                   <% if (unit.rent_frequency == 'Vacant') {%>
-                    <div class="card">
+                    <div class="card" style="margin-bottom: 2rem;">
                       <div class="card-body">
                         <div class="row align-items-center unit-item">
                           <div class="col-auto">
@@ -935,7 +935,7 @@
                           </div>
                           <div class="col-2 text-muted">
                             <% if (unit.tenants.length == 0) { %>
-                              No Tenants
+                              ●&nbsp;No Tenants
                             <% } %>
                             <% if (unit.tenants.length == 1) { %> 
                               1 Tenant
@@ -964,7 +964,7 @@
                       </div>
                     </div>
                   <% } else {%>
-                  <div class="card">
+                  <div class="card" style="margin-bottom: 2rem;">
                     <div class="card-body">
                       <div class="row align-items-center unit-item">
                         <div class="col-auto">
@@ -1004,7 +1004,7 @@
                         </div>
                         <div class="col-2 text-muted">
                           <% if (unit.tenants.length == 0) { %>
-                            No Tenants
+                            ●&nbsp;No Tenants
                           <% } %>
                           <% if (unit.tenants.length == 1) { %> 
                             1 Tenant

@@ -197,7 +197,7 @@ exports.get_cash_flow = async function(req, res) {
       {
         type: 'column',
         showInLegend: true,  
-        name: 'Expensed',
+        name: 'Expenses',
         data: expenses_data,
         color: '#EF476F'
       },

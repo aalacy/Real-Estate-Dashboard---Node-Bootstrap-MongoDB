@@ -11,7 +11,8 @@ const Transactions = mongoose.model('Transactions');
 const Tenants = mongoose.model('Tenants');
 const moment = require('moment');
 const uuidv4 = require('uuid/v4');
-const CronJobManager = require('cron-job-manager'),
+const CronJobManager = require('cron-job-manager');
+var urlLib = require('url');
 
 cronManager = new CronJobManager();
 
@@ -762,9 +763,9 @@ const createNewUnit = async function(property, unit) {
 exports.new_tenancy = async function(req, res) {
   const { body: { property, unit } } = req;
 
+  const referer = urlLib.parse(req.headers.referer)
   if (!unit) {
-    const link = req.headers.referer.split(req.headers.host);
-    return res.redirect(link[1]);
+    return res.redirect(referer.path);
   } 
 
   const new_values = await createNewUnit(property, unit)
@@ -777,16 +778,15 @@ exports.new_tenancy = async function(req, res) {
 exports.new_unit = async function(req, res) {
   const { body: { property, unit } } = req;
 
+  const referer = urlLib.parse(req.headers.referer)
   if (!unit) {
-    const link = req.headers.referer.split(req.headers.host);
-    return res.redirect(link[1]);
+    return res.redirect(referer.path);
   } 
 
   const new_values = await createNewUnit(property, unit)
   
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
-    const link = req.headers.referer.split(req.headers.host);
-    return res.redirect(link[1]);
+    return res.redirect(referer.path);
   });
 };
 
