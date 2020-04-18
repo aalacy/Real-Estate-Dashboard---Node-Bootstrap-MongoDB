@@ -302,6 +302,7 @@
         <form id="add-transaction-form" class="form-inline" method="post" action="/transaction/create">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" id="transaction_id" name="transaction[id]" value="">
+          <input type="hidden" name="transaction[property_id]" value="<%=property.id%>">
           <input type="hidden" id="status" name="document[status]" value="upload">
           <input type="hidden" id="document_id" name="document[id]" value="">
           <input type="hidden" id="document_size" name="document[size]" value="">
