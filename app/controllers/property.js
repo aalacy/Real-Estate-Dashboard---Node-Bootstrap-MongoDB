@@ -85,7 +85,7 @@ exports.all = async function(req, res, next) {
     let total_expenses = 0;
     transactions.forEach(transaction => {
       const amount = parseFloat(transaction.amount) || 0;
-      if ( amount >= 0) {
+      if ( transaction.type == 'In') {
         total_income += amount
       } else {
         total_expenses += (amount)
@@ -95,7 +95,7 @@ exports.all = async function(req, res, next) {
     let net_profit = total_income - Math.abs(total_expenses);
     const total_cost = total_income + Math.abs(total_expenses);
     const income_percent = (total_income/total_cost*100).toFixed(2);
-    const expenses_percent = total_cost > 0 && total_income > 0 ? (Math.abs(total_expenses)/total_income*100).toFixed(2) : 0.00;
+    const expenses_percent = total_cost > 0 ? (Math.abs(total_expenses)/total_cost*100).toFixed(2) : 0.00;
     const operating_expense_ratio = expenses_percent;
     // const gross_yield = (total_income/parseFloat(property.current_value)*100).toFixed(2);
     const gross_yield = property.rental_yield
@@ -242,7 +242,7 @@ exports.overview = async function(req, res) {
   let net_profit = total_income - Math.abs(total_expenses);
   const total_cost = total_income + Math.abs(total_expenses);
   const income_percent = (total_income/total_cost*100).toFixed(2);
-  const expenses_percent = total_cost > 0 ? (Math.abs(total_expenses)/total_income*100).toFixed(2) : 0;
+  const expenses_percent = total_cost > 0 ? (Math.abs(total_expenses)/total_cost*100).toFixed(2) : 0;
   const operating_expense_ratio = expenses_percent;
   // const gross_yield = property.current_value > 0 && (total_income/property.current_value*100).toFixed(2) || 0.0;
   const gross_yield = property.rental_yield;

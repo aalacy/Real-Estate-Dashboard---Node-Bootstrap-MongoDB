@@ -184,7 +184,7 @@
               <div class="card-body">
                 
                 <div class="embed-responsive embed-responsive-21by9 rounded">
-                  <div class="embed-responsive-item" id="map" data-toggle="cmap" data-option='{"center": [-4.946224, 54.456967], "zoom": 4, "markers": <%=markers%>}'>
+                  <div class="embed-responsive-item" id="map" data-toggle="cmap" data-option='{"center": [-4.946224, 54.456967], "zoom": 11, "markers": <%=markers%>}'>
                     
                   </div>
                 </div>
@@ -297,8 +297,27 @@
         series.push(res.data[key]);
       });
       Highcharts.chart('cashflowChart', {
+        lang: {
+          thousandsSep: ','
+        },
         title: {
             text: ''
+        },
+        tooltip: {
+          borderRadius: 10,
+          borderWidth: 1,
+          shared: true,
+          pointFormat: '{point.y:,.0f}',
+          formatter(e) { 
+            var output1 = ''
+            var x = ''
+            this.points.forEach(point => {
+              x = point.x;
+              output1 += `<span style="color:${point.color}">●</span> ${point.series.name}: <b style="fill:white;">£${point.y.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</b><br/>`
+            })
+            output1 = `<b style="font-size:14px;">${x}</b><br/><br/>` + output1
+            return output1
+          }
         },
         xAxis: {
           categories: res.categories

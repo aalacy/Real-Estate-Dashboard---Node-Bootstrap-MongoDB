@@ -350,7 +350,7 @@ function confirmDialog(message, handler){
    });
 }
 
- /**
+/**
   * Making toast
   */
 
@@ -473,7 +473,7 @@ const drawMap = function(options) {
     mapboxgl.accessToken = 'pk.eyJ1Ijoib2ZsZW1pbmcxMiIsImEiOiJjazhleHh1eHowMTNjM2xuNHB6NGVuamd3In0.WPSErSvPNgCbSecSrWqGIg';
 
     let center = options.center;
-    if (options.padding == 'no') {
+    if (options.markers.length == 1) {
       center = [options.markers[0].lng, options.markers[0].lat]
     }
     var map = new mapboxgl.Map({
@@ -526,7 +526,7 @@ const drawMap = function(options) {
 
     // var fg = L.featureGroup(markers);
     // map.fitBounds(fg.getBounds());
-    if (options.padding != 'no') {
+    if (options.markers.length != 1) {
       map.fitBounds(bounds, {
           padding: {
           top: 50,
@@ -540,7 +540,6 @@ const drawMap = function(options) {
 // Chart
  function chartInit(chart, data, percentage=false, need_legend = true) {
     const options = {
-      cutoutPercentage: 40,
       responsive: true,
       animation: {
           animateScale: true,
@@ -596,13 +595,16 @@ const formatNumber = function(num) {
 }
 
 // Display transactions
-const displayTransactions = () => {
+const displayTransactions = (paginated=true) => {
   $('.transaction-list').empty();
   items.map( (transaction, idx) => {
     if (idx % page_cnt == 0) { 
       page = (parseInt(idx/page_cnt) + 1)
     } else {
       page = (parseInt(idx/page_cnt) + 1) + ' d-none'
+    }
+    if (!paginated) {
+      page = page.toString().replace(' d-none', '')
     }
     const sign = parseFloat(transaction.amount) < 0;
     let amount = '£' + transaction.amount.replace('-', '');
@@ -718,15 +720,35 @@ const setupPagination = () => {
   } catch(e) {}
 }
 
+/*
+* Transactions
+*/
+
+// transaction categories
+const income_categories = ['Rental Income', 'Deposit', 'Uncategorised'];
+const expenses_categories = ['Insurance', 'Repairs & Maintenance', 'Management Fees', 'Utilities', 'Tax', 'Legal', 'Mortgage or Loans', 'Deposit', 'Uncategorised'];
+const changeCategorySelection = (list) => {
+  $('#transaction_category').empty();
+  list.forEach(item => {
+      option = new Option(item, item, true, true);
+      $('#transaction_category').append(option);
+  })
+
+  $('#transaction_category').val(null);
+  $('#transaction_category').trigger('change');
+};
+
 // fetch transaction data from server
-const fetchTransactions = (id=undefined, cnt=-1) => {
+const fetchTransactions = (id=undefined, cnt=-1, paginated=true) => {
   fetch(`/transaction/all/get/${id}/${cnt}`, {method: 'GET'})
     .then(res => res.json())
     .then(res => {
       transactions = res.transactions;
       items = transactions;
-      displayTransactions()
-      setupPagination();
+      displayTransactions(paginated)
+      if (paginated) {
+        setupPagination();
+      }
     })
     .catch(err => {
         console.log(err);
@@ -1421,6 +1443,30 @@ $(function() {
       })
     });
 
+    
+    // initialize the category with income
+    changeCategorySelection(income_categories);
+    
+    
+
+    $('input[name="transaction[type]"]').change(function(){
+      if ($(this)[0].id == "income_option") {
+        changeCategorySelection(income_categories);
+
+        // remove - sign from pound
+        $('.pound-sign').html('£');
+      } else {
+        changeCategorySelection(expenses_categories);
+
+        // add - sign to pound
+        $('.pound-sign').html('-£');
+      }
+
+      if (cur_transaction) {
+        $('#transaction_category').val(cur_transaction.category);
+        $('#transaction_category').trigger('change');
+      }
+    });
 
     // filter by category in transactions
     $('#categoryFilter').val('All').trigger('change');

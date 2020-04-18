@@ -11,6 +11,7 @@ const Tenants = mongoose.model('Tenants');
 const Transactions = mongoose.model('Transactions');
 var moment = require('moment');
 const uuidv4 = require('uuid/v4');
+const urlLib = require('url');
 
 exports.all = async function(req, res) {
   const { user } = req.session;
@@ -90,20 +91,24 @@ exports.create = async function(req, res) {
   }
   newTransaction.amount = newTransaction.amount.replace(/,/g, '')
 
-  newTransaction.save().then( () => {
- 	  res.redirect('/transaction/all');
+  const referer = urlLib.parse(req.headers.referer)
+
+  newTransaction.save().then(() => {
+ 	  res.redirect(referer.path);
   })
 }
 
 exports.edit = async function(req, res) {
   const { body: { transaction } } = req;
 
+  const referer = urlLib.parse(req.headers.referer)
+
   const { user } = req.session;
   transaction.update_at = moment().format('YYYY-MM-DD HH:mm:ss');
   const new_values = { $set: transaction };
 
   return Transactions.updateOne({ id: transaction.id }, new_values).then(() => {
-    res.redirect('/transaction/all');
+    res.redirect(referer.path);
   });
 }
 

@@ -323,43 +323,9 @@
 
       let query = ''
 
-      const income_categories = ['Rental Income', 'Deposit', 'Uncategorised'];
-      const expenses_categories = ['Insurance', 'Repairs & Maintenance', 'Management Fees', 'Utilities', 'Tax', 'Legal', 'Mortgage or Loans', 'Deposit', 'Uncategorised'];
-      const changeCategorySelection = (list) => {
-        $('#transaction_category').empty();
-        list.forEach(item => {
-            option = new Option(item, item, true, true);
-            $('#transaction_category').append(option);
-        })
-      };
-
-      // initialize the category with income
-      changeCategorySelection(income_categories);
-      
-      $('#transaction_category').val('');
-      $('#transaction_category').trigger('change');
 
     	$(function() {
-    		fetchTransactions();
-
-        $('input[name="transaction[type]"]').change(function(){
-          if ($(this)[0].id == "income_option") {
-            changeCategorySelection(income_categories);
-
-            // remove - sign from pound
-            $('.pound-sign').html('£');
-          } else {
-            changeCategorySelection(expenses_categories);
-
-            // add - sign to pound
-            $('.pound-sign').html('-£');
-          }
-
-          if (cur_transaction) {
-            $('#transaction_category').val(cur_transaction.category);
-            $('#transaction_category').trigger('change');
-          }
-        });
+    		fetchTransactions(undefined, -1);
 
         // dropzone image upload
         if (document.querySelector('.dropzone')) {

@@ -116,8 +116,8 @@
     <script type="text/javascript">
       let properties = [];
       let oldProperties = [];
-      let period = 'All Time'; // all, Last Full Year, YTD
-      let metric = 'Rental Yield';
+      let period = localStorage.getItem('period') || 'All Time'; // all, Last Full Year, YTD
+      let metric = localStorage.getItem('metric') || 'Rental Yield';
       let sort = 'Highest Value';
 
       const listProperties = (search='') => {
@@ -202,7 +202,7 @@
               right_value = '£' + property.total_income;
               break;
             case 'OER':
-              right_label = 'Operating Expense Ratio';
+              right_label = 'OER';
               right_value = property.operating_expense_ratio + '%';
           }
 
@@ -333,6 +333,7 @@
         $(document).on('click', '.timePeriod a', function(e){
           e.preventDefault();
           period = $(this).text().trim()
+          localStorage.setItem('period', period)
           listProperties()
         })
 
@@ -340,6 +341,7 @@
         $(document).on('click', '.changeMetric a', function(e){
           e.preventDefault();
           metric = $(this).text().trim()
+          localStorage.setItem('metric', metric)
           listProperties()
         })
       });
