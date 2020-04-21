@@ -416,3 +416,8 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     font-family: 'Open Sans', sans-serif;
     padding: 25px 15px 0px;
 }
+
+.chart-appended {
+    display: flex;
+    justify-content: center;
+}

@@ -538,6 +538,46 @@ const drawMap = function(options) {
 };
 
 // Chart
+const highchartDoughnut = (id, data) => {
+  return Highcharts.chart(id, {
+        chart: {
+            type: 'pie'
+        },
+        title: {
+            text: ''
+        },
+        plotOptions: {
+          series: {
+              dataLabels: {
+                  enabled: false,
+                  format: '{point.name}: {point.y:.1f}%'
+              }
+          },
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            },
+            showInLegend: true
+          }
+        },
+        tooltip: {
+          borderRadius: 10,
+          borderWidth: 1,
+          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+          pointFormat: '<span style="color:{point.color}">{point.name}</span><b><br />£{point.y:.2f}</b> ({point.percentage:.2f}%)<br/>'
+        },
+        series: [{
+          name: "",
+          size: '100%',
+          innerSize: '60%',
+          colorByPoint: true,
+          data
+        }]
+      });
+}
+
  function chartInit(chart, data, percentage=false, need_legend = true) {
     const options = {
       responsive: true,
@@ -1276,39 +1316,61 @@ $(function() {
       if ($('#marketChart')[0]) {
         const labels = $('#marketChart').data('option').labels;
         const dataset = $('#marketChart').data('option').dataset;
-        const data = {
-          labels: labels,
-          datasets: [{
-            data: dataset,
-            backgroundColor: [
-              '#0E67DC',
-              '#555F7F',
-              '#41D3BD',
-              '#EF476F',
-              '#acc236'
-            ]
-          }]
-        }
-        chartInit(document.getElementById("marketChart").getContext('2d'), data);
+        var colors = Highcharts.getOptions().colors;
+        data = []
+        labels.map((label, i) => {
+          data.push({
+              name: label,
+              color: colors[i],
+              y: dataset[i],
+              drilldown: label
+          })
+        })
+        highchartDoughnut('marketChart', data)
+        // const data = {
+        //   labels: labels,
+        //   datasets: [{
+        //     data: dataset,
+        //     backgroundColor: [
+        //       '#0E67DC',
+        //       '#555F7F',
+        //       '#41D3BD',
+        //       '#EF476F',
+        //       '#acc236'
+        //     ]
+        //   }]
+        // }
+        // chartInit(document.getElementById("marketChart").getContext('2d'), data);
     }
 
     if ($('#incomeChart')[0]) {
         const labels = $('#incomeChart').data('option').labels;
         const dataset = $('#incomeChart').data('option').dataset;
-        const data = {
-          labels: labels,
-          datasets: [{
-            data: dataset,
-            backgroundColor: [
-              '#0E67DC',
-              '#555F7F',
-              '#41D3BD',
-              '#EF476F',
-              '#acc236'
-            ]
-          }]
-        }
-        chartInit(document.getElementById("incomeChart").getContext('2d'), data);
+        var colors = Highcharts.getOptions().colors;
+        data = []
+        labels.map((label, i) => {
+          data.push({
+              name: label,
+              color: colors[i],
+              y: dataset[i],
+              drilldown: label
+          })
+        })
+        highchartDoughnut('incomeChart', data)
+        // const data = {
+        //   labels: labels,
+        //   datasets: [{
+        //     data: dataset,
+        //     backgroundColor: [
+        //       '#0E67DC',
+        //       '#555F7F',
+        //       '#41D3BD',
+        //       '#EF476F',
+        //       '#acc236'
+        //     ]
+        //   }]
+        // }
+        // chartInit(document.getElementById("incomeChart").getContext('2d'), data);
     }
 
     if ($('#tenancyChart')[0]) {

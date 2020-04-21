@@ -1242,10 +1242,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="card-body">
-                    <div class="transaction-list">
-                    </div>
-                  </div>
+                  <div class="transaction-list"></div>
                 </div>
 
                 <div class="card">
@@ -1599,33 +1596,7 @@
       $(async function() {
         // Create the chart
         var colors = Highcharts.getOptions().colors;
-        Highcharts.chart('occupancyChart', {
-          chart: {
-              type: 'pie'
-          },
-          title: {
-              text: ''
-          },
-          plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: false,
-                    format: '{point.name}: {point.y:.1f}%'
-                }
-            }
-          },
-          tooltip: {
-            borderRadius: 10,
-            borderWidth: 1,
-            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
-          },
-          series: [{
-            name: "",
-            size: '100%',
-            innerSize: '60%',
-            colorByPoint: true,
-            data: [
+        const occupancyData = [
                 {
                     name: "Vacant",
                     color: colors[1],
@@ -1638,37 +1609,10 @@
                     y: <%=tenancy_value%>,
                     drilldown: "Tenancy"
                 }]
-              }]
-          });
+        highchartDoughnut('occupancyChart', occupancyData)
 
-          // Income Expenses Chart
-          Highcharts.chart('incomeExpensesChart', {
-            chart: {
-                type: 'pie'
-            },
-            title: {
-                text: ''
-            },
-            plotOptions: {
-              series: {
-                  dataLabels: {
-                      enabled: false,
-                      format: '{point.name}: {point.y:.1f}%'
-                  }
-              }
-            },
-            tooltip: {
-              borderRadius: 10,
-              borderWidth: 1,
-              headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-              pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>£{point.y:.2f} ({point.percentage:.2f}%)</b> of total<br/>'
-            },
-            series: [{
-              name: "",
-              size: '100%',
-              innerSize: '60%',
-              colorByPoint: true,
-              data: [
+        // Income Expenses Chart
+        const incomeExpensesData = [
                   {
                       name: "Income",
                       color: '#41d3bd',
@@ -1680,42 +1624,12 @@
                       color: '#ef476f',
                       y: <%=total_expenses%>,
                       drilldown: "Expenses"
-              }]
-            }]
-        });
+              }]  
+        highchartDoughnut('incomeExpensesChart', incomeExpensesData)
 
         // Expenses Breakdown Chart
         const expenses_chart_data = $('#expensesBreakdownChart').data('value');
-        Highcharts.chart('expensesBreakdownChart', {
-          chart: {
-              type: 'pie'
-          },
-          title: {
-              text: ''
-          },
-          plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: false,
-                    format: '{point.name}: {point.y:.1f}%'
-                }
-            }
-          },
-          tooltip: {
-            borderRadius: 10,
-            borderWidth: 1,
-            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>£{point.y:.0f}</b> of total<br/>'
-
-          },
-          series: [{
-            name: "",
-            size: '100%',
-            innerSize: '0%',
-            colorByPoint: true,
-            data: expenses_chart_data
-          }]
-        });
+        highchartDoughnut('expensesBreakdownChart', expenses_chart_data)
 
         $('.overview-tab').click(function(e){
           e.preventDefault();
