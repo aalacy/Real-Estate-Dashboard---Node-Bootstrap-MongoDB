@@ -547,12 +547,6 @@ const highchartDoughnut = (id, data) => {
             text: ''
         },
         plotOptions: {
-          series: {
-              dataLabels: {
-                  enabled: false,
-                  format: '{point.name}: {point.y:.1f}%'
-              }
-          },
           pie: {
             allowPointSelect: true,
             cursor: 'pointer',
@@ -565,8 +559,12 @@ const highchartDoughnut = (id, data) => {
         tooltip: {
           borderRadius: 10,
           borderWidth: 1,
-          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-          pointFormat: '<span style="color:{point.color}">{point.name}</span><b><br />£{point.y:.2f}</b> ({point.percentage:.2f}%)<br/>'
+          pointFormat: '{point.y:,.0f}',
+          formatter(e) { 
+            output1 = `<b style="fill:${this.point.color}">${this.point.name}</b><br />`
+            output1 += `<span>£${this.point.y.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} (${this.point.percentage.toFixed(1)} %)</span>`
+            return output1
+          }
         },
         series: [{
           name: "",
@@ -635,7 +633,7 @@ const formatNumber = function(num) {
 }
 
 // Display transactions
-const displayTransactions = (paginated=true) => {
+const displayTransactions = (paginated=true, unit_id=-1) => {
   $('.transaction-list').empty();
   items.map( (transaction, idx) => {
     if (idx % page_cnt == 0) { 
@@ -645,6 +643,9 @@ const displayTransactions = (paginated=true) => {
     }
     if (!paginated) {
       page = page.toString().replace(' d-none', '')
+    }
+    if (unit_id != -1 && unit_id != transaction.unit_id) {
+      return
     }
     const sign = parseFloat(transaction.amount) < 0;
     let amount = '£' + transaction.amount.replace('-', '');
@@ -779,13 +780,13 @@ const changeCategorySelection = (list) => {
 };
 
 // fetch transaction data from server
-const fetchTransactions = (id=undefined, cnt=-1, paginated=true) => {
+const fetchTransactions = (id=undefined, cnt=-1, paginated=true, unit_id=-1) => {
   fetch(`/transaction/all/get/${id}/${cnt}`, {method: 'GET'})
     .then(res => res.json())
     .then(res => {
       transactions = res.transactions;
       items = transactions;
-      displayTransactions(paginated)
+      displayTransactions(paginated, unit_id)
       if (paginated) {
         setupPagination();
       }

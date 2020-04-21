@@ -1181,6 +1181,22 @@
                   <div class="card-header">
                     <div class="row align-items-center">
                       <div class="col">
+                        <h4 class="card-header-title">
+                          Recent Payments
+                        </h4>
+                      </div>
+                      <div class="ml-auto mr-3">
+                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAddNewTransaction">Log new payment</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="transaction-list"></div>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="row align-items-center">
+                      <div class="col">
                         <!-- Title -->
                         <h4 class="card-header-title">
                           Tenants
@@ -1229,21 +1245,7 @@
                   </div> 
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="row align-items-center">
-                      <div class="col">
-                        <h4 class="card-header-title">
-                          Recent Payments
-                        </h4>
-                      </div>
-                      <div class="ml-auto mr-3">
-                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAddNewTransaction">Log new payment</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="transaction-list"></div>
-                </div>
+                
 
                 <div class="card">
                   <div class="card-body">
@@ -1693,6 +1695,9 @@
           $('.unit-end_date').text(unit.end_date);
           $('input[name="unit[id]"]').val(unit.id);
 
+          // show 3 most recent payment
+          fetchTransactions(property.id, 3, false, unit.id);
+          
           // display tenants section
           $('.tenant-list').empty();
           unit.tenants.map(tenant => {
@@ -2015,9 +2020,6 @@
         $('.cashflowDateFilter').on('select2:select', function (e) {
           filterCashflowByDate(e.params.data.id);
         });
-
-        // show 3 most recent payment
-        fetchTransactions(property.id, 3, false);
 
         // fetch units of this property
         await selectPropertyFilter(property.id)
