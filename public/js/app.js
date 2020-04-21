@@ -202,8 +202,8 @@ function doPopulate() {
         });
 
         this.on('removedfile', function(file){
-          if ($('#status').val() == 'upload') {
-            $('#document_id').val('');
+          if ($('.status').val() == 'upload') {
+            $('.document_id').val('');
           }
         });
       },
@@ -216,15 +216,15 @@ function doPopulate() {
             var mydoc = JSON.parse(res.xhr.response);
             $('.dropzone-image').attr('src', res.dataURL);
             $('.dropzone-image').addClass('active');
-            if ($('#status').val() == 'upload') {
-              $('#document_id').val(mydoc.id);
-              $('#document_path').val(mydoc.path);
+            if ($('.status').val() == 'upload') {
+              $('.document_id').val(mydoc.id);
+              $('.document_path').val(mydoc.path);
               $('.big-title').text('Upload a New Image')
             } else {
-              $('#document_size').val(mydoc.size);
-              $('#document_mimetype').val( mydoc.mimetype);
-              $('#document_filename').val(mydoc.filename);
-              $('#document_path').val(mydoc.path);
+              $('.document_size').val(mydoc.size);
+              $('.document_mimetypee').val( mydoc.mimetype);
+              $('.document_filename').val(mydoc.filename);
+              $('.document_path').val(mydoc.path);
             }
           } catch(e) {}
         } else {
@@ -1106,6 +1106,13 @@ $(function() {
     })
 
     // Adjust tenancey
+    $(document).on('click', '.rename-unit', function(e) {
+      const unit = $(this).data('unit')
+      $('input[name="unit[description]"]').val(unit.description);
+      $('input[name="unit[id]"]').val(unit.id);
+      $('#modalEditUnitName').modal()
+    })
+
     $(document).on('click', '.edit-unit', function(e){
         e.preventDefault();
         const property_id = $(this).data('property');
@@ -1114,10 +1121,16 @@ $(function() {
         }
         const unit = $(this).data('unit')
         $('input[name="unit[description]"]').val(unit.description);
+        const unit_description_formgroup = $($('input[name="unit[description]"]')[1]).parents('div.col-12.col-md-6')
+        if ($(this).hasClass('update-detail')) {
+          unit_description_formgroup.addClass('d-none')
+        } else {
+          unit_description_formgroup.removeClass('d-none')
+        }
         $('input[name="unit[start_date]"]').val(unit.start_date);
         $('input[name="unit[end_date]"]').val(unit.end_date);
-        $('input[name="unit[rent_frequency]"]').val(unit.rent_frequency);
-        $('input[name="unit[rent_frequency]"]').trigger('change');
+        $('#unit_rent_frequency').val(unit.rent_frequency);
+        $('#unit_rent_frequency').trigger('change');
         $('input[name="unit[rent_price]"]').val(unit.rent_price);
         $('input[name="unit[deposit]"]').val(unit.deposit);
         $('input[name="unit[tenants]"]').val(JSON.stringify(unit.tenants));
@@ -1690,7 +1703,7 @@ $(function() {
       await selectPropertyFilter(e.params.data.id);
     });
 
-    $('#document_tag').select2({
+    $('.document_tag').select2({
       tags: true,
       createTag: function (params) {
         var term = $.trim(params.term);
@@ -1710,7 +1723,7 @@ $(function() {
     $(document).on('click', '.modal-upload', function(e) {
       e.preventDefault()
       $('#document_property').empty();
-      $('#document_unit').empty();
+      $('.document_unit').empty();
       $('.property-row').removeClass('d-none');
       $('.unit-row').removeClass('d-none');
       if (!$(this).hasClass('modal-property') && !$(this).hasClass('modal-unit')) {
@@ -1728,13 +1741,13 @@ $(function() {
         if ($(this).hasClass('modal-property')) {
             units.map(unit => {
                 var option = new Option(unit.description, unit.id, true, true);
-                $('#document_unit').append(option);
+                $('.document_unit').append(option);
             })
         }
         if ($(this).hasClass('modal-unit')) {
             var unit = $(this).data('unit');
             option = new Option(unit.description, unit.id, true, true);
-            $('#document_unit').append(option);
+            $('.document_unit').append(option);
             $('.unit-row').addClass('d-none');
         }
       }
@@ -1747,31 +1760,31 @@ $(function() {
         const tag = $(this).data('tag');
         const image = $(this).data('path');
         var option = new Option(unit_name, unit_id, true, true);
-        $('#document_unit').append(option);
+        $('.document_unit').append(option);
         $('#document_property').val(property_id).trigger('change');
         option = new Option(tag, tag, true, true);
-        $('#document_tag').append(option);
-        $('#document_id').val($(this).data('id'));
-        $('#document_size').val($(this).data('size'));
-        $('#document_path').val(image);
-        $('#document_mimetype').val($(this).data('mimetype'));
-        $('#document_filename').val($(this).data('filename'));
-        $('#document_note').val($(this).data('note') || '');
+        $('.document_tag').append(option);
+        $('.document_id').val($(this).data('id'));
+        $('.document_size').val($(this).data('size'));
+        $('.document_path').val(image);
+        $('.document_mimetypee').val($(this).data('mimetype'));
+        $('.document_filename').val($(this).data('filename'));
+        $('.document_note').val($(this).data('note') || '');
         $('.dz-message-placeholder').html('Replace a New File');
         $('.document-upload-image').removeClass('d-none').css('background-image', `url('/${image}')`);
         $('#modalUpload .modal-title').text('Edit Document');
-        $('#modalUpload #status').val('edit');
+        $('#modalUpload .status').val('edit');
       } else {
         if (!$(this).hasClass('modal-property') && !$(this).hasClass('modal-unit')) {
             $('#document_property').val(null).trigger("change");
         }
-        $('#document_tag').empty();
+        $('.document_tag').empty();
         
-        $('#document_id').val('');
+        $('.document_id').val('');
         $('.document-upload-image').addClass('d-none');
         $('.dz-message-placeholder').html('Choose a file or drag it here');
         $('#modalUpload .modal-title').text('Upload Document');
-        $('#modalUpload #status').val('upload');
+        $('#modalUpload .status').val('upload');
       }
 
       $('#modalUpload').modal();
@@ -1783,7 +1796,7 @@ $(function() {
     });
 
     $('#uploadDocumentBtn').click(function(e) {
-      if ($('#document_id').val().length == 0) {
+      if ($('.document_id').val().length == 0) {
         return makeToast({message: "Please upload a document"});
       }
 
@@ -1792,19 +1805,19 @@ $(function() {
       const token = $('meta[name="csrf"]').attr('content');
       const data = {
         document:  {
-          id: $('#document_id').val(),
+          id: $('.document_id').val(),
           property_id: $('#document_property').val(),
           property_name: $('#document_property option:selected').text(),
-          unit_id: $('#document_unit').val(),
-          unit_name: $('#document_unit option:selected').text(),
-          tag: $('#document_tag').val(),
-          note: $('#document_note').val(),
-          category: $('#document_category').val(),
-          status: $('#status').val(),
-          size: $('#document_size').val(),
-          path: $('#document_path').val(),
-          mimetype: $('#document_mimetype').val(),
-          filename: $('#document_filename').val()
+          unit_id: $('.document_unit').val(),
+          unit_name: $('.document_unit option:selected').text(),
+          tag: $('.document_tag').val(),
+          note: $('.document_note').val(),
+          category: $('.document_category').val(),
+          status: $('.status').val(),
+          size: $('.document_size').val(),
+          path: $('.document_path').val(),
+          mimetype: $('.document_mimetypee').val(),
+          filename: $('.document_filename').val()
         }
       }
       fetch('/property/documents/upload_all', {

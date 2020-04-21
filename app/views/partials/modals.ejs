@@ -2,12 +2,12 @@
   <div class="modal-dialog modal-lg" role="document">
     <form id="document-upload-form" method="post" action="/property/documents/upload_all" >
       <input type="hidden" name="_csrf" value="<%= token %>">
-      <input type="hidden" id="status" name="document[status]" value="upload">
-      <input type="hidden" id="document_id" name="document[id]" value="">
-      <input type="hidden" id="document_size" name="document[size]" value="">
-      <input type="hidden" id="document_mimetype" name="document[mimetype]" value="">
-      <input type="hidden" id="document_filename" name="document[filename]" value="">
-      <input type="hidden" id="document_path" name="document[path]" value="">
+      <input type="hidden" class="status" name="document[status]" value="upload">
+      <input type="hidden" class="document_id" name="document[id]" value="">
+      <input type="hidden" class="document_size" name="document[size]" value="">
+      <input type="hidden" class="document_mimetype" name="document[mimetype]" value="">
+      <input type="hidden" class="document_filename" name="document[filename]" value="">
+      <input type="hidden" class="document_path" name="document[path]" value="">
       <div class="modal-content bg-lighter">
         <div class="modal-header">
             <!-- Header -->
@@ -52,7 +52,7 @@
                     <label>
                       Category
                     </label>
-                    <select class="form-control" id="document_category" name="document[category]" data-toggle="select"  data-options='{"placeholder": "Select a Category"}'>
+                    <select class="form-control" class="document_category" name="document[category]" data-toggle="select"  data-options='{"placeholder": "Select a Category"}'>
                       <option></option>
                       <option value="Tenancy Documents">Tenancy Documents</option>
                       <option value="Certificates ">Certificates</option>
@@ -82,7 +82,7 @@
 
                 <!-- Fallback -->
                 <div class="fallback">
-                  <input type="file" class="custom-file-input" id="customFileUploadMultiple">
+                  <input type="file" class="custom-file-input">
                 </div>
 
                 <div class="dz-message" data-dz-message>

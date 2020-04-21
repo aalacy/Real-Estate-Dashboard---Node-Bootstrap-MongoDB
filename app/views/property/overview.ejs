@@ -18,6 +18,43 @@
 
     <% include ../partials/loan_modal %>
 
+    <div class="modal  fade" id="modalEditUnitName" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <form method="post" action="/property/unit/edit/name">
+          <input type="hidden" name="_csrf" value="<%= token %>">
+          <input type="hidden" name="property[id]" value="<%= property.id%>">
+          <input type="hidden" name="unit[id]" value="">
+          <div class="modal-content bg-lighter">
+            <div class="modal-header">
+                <!-- Header -->
+              <h3 class="modal-title">Edit Unit</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+    
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  
+                  <div class="form-group">
+                    <label>
+                      Unit Description
+                    </label>
+                    <input type="text" name="unit[description]" class="form-control" placeholder="Description" value="" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <div class="modal  fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="add-unit-form" method="post" action="/property/unit/new/">
@@ -43,7 +80,7 @@
                     <label>
                       Unit Description
                     </label>
-                    <input type="text" id="unit_description" name="unit[description]" class="form-control" placeholder="Description" value="" required>
+                    <input type="text" name="unit[description]" class="form-control" placeholder="Description" value="" required>
                   </div>
     
                 </div>
@@ -305,11 +342,11 @@
           <input type="hidden" name="transaction[property_id]" value="<%=property.id%>">
           <input type="hidden" name="transaction[unit_id]" value="<%=unit_id%>">
           <input type="hidden" id="status" name="document[status]" value="upload">
-          <input type="hidden" id="document_id" name="document[id]" value="">
-          <input type="hidden" id="document_size" name="document[size]" value="">
-          <input type="hidden" id="document_mimetype" name="document[mimetype]" value="">
-          <input type="hidden" id="document_filename" name="document[filename]" value="">
-          <input type="hidden" id="document_path" name="document[path]" value="">
+          <input type="hidden" class="document_id" name="document[id]" value="">
+          <input type="hidden" class="document_size" name="document[size]" value="">
+          <input type="hidden" class="document_mimetype" name="document[mimetype]" value="">
+          <input type="hidden" class="document_filename" name="document[filename]" value="">
+          <input type="hidden" class="document_path" name="document[path]" value="">
           <input type="hidden" id="current_transaction_item" value="">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
@@ -1057,7 +1094,6 @@
           
                       <div class="col-auto">
 
-                        <!-- Button -->
                         <a href="#!" class="btn btn-sm btn-white add-tenancy mr-3" data-toggle="modal" data-target="#modalAddNewUnit">
                           Add a tenancy
                         </a>
@@ -1074,10 +1110,10 @@
                               <a href="#!" class="dropdown-item rename-unit" data-unit="" data-property="">
                                 Rename Unit
                               </a>
-                              <a href="#!" class="dropdown-item edit-unit clear-tenancy">
+                              <a href="#!" class="dropdown-item action-unit clear-tenancy">
                                 Clear tenancy
                               </a>
-                              <a href="#!" class="dropdown-item delete-unit action-unit" data-property="0b901eae-c833-42b2-b0ed-2461c093c474" data-unit="d0af9566-df38-475c-b0e9-b43291fd6358">
+                              <a href="#!" class="dropdown-item del-unit delete-unit action-unit" data-unit="">
                                 Delete unit
                               </a>
                             </div>
@@ -1708,6 +1744,9 @@
 
           $('.update-detail').attr('data-unit', JSON.stringify(unit));
           $('.modal-unit').attr('data-unit', JSON.stringify(unit));
+          $('.rename-unit').attr('data-unit', JSON.stringify(unit));
+          $('.del-unit').attr('data-unit', unit.id);
+          $('.clear-tenancy').attr('data-unit', unit.id);
           const unit_documents = documents.filter(document => document.unit_id == unit.id);
           unit.tenants = unit.tenants ? unit.tenants : [];
           let tenants_cnt = unit.tenants.length;

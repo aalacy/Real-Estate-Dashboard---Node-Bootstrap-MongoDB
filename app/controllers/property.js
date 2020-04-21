@@ -790,6 +790,29 @@ exports.new_unit = async function(req, res) {
   });
 };
 
+exports.rename_unit = async function(req, res) {
+  const { body: { property, unit } } = req;
+
+  let new_values;
+  let tenancies = [];
+  const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
+  myproperty.tenancies.map(element => {
+    if (element.id == unit.id) {
+      element.description = unit.description
+    }
+    tenancies.push(element);
+  });
+  new_values = {
+    $set: { tenancies }
+  };
+
+  const referer = urlLib.parse(req.headers.referer)
+  
+  return Properties.updateOne({ id: property.id }, new_values).then(() => {
+    return res.redirect(referer.path);
+  });
+}
+
 exports.update_unit = async function(req, res) {
   const { body: { property, unit } } = req;
 
