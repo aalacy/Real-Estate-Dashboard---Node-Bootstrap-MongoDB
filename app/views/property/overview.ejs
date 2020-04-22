@@ -967,19 +967,19 @@
                           <div class="col-4">
                             <!-- Title -->
                             <div class="card-title text-muted mb-1">
-                              ●&nbsp;Not Collecting Rent
+                              Not Collecting Rent
                             </div>
                             
                           </div>
                           <div class="col-2 text-muted">
                             <% if (unit.tenants.length == 0) { %>
-                              No Tenants
+                              ●&nbsp;No Tenants
                             <% } %>
                             <% if (unit.tenants.length == 1) { %> 
-                              1 Tenant
+                              ●&nbsp;1 Tenant
                             <% } %>
                             <% if (unit.tenants.length > 1) { %> 
-                              <%=unit.tenants%> Tenants
+                              ●&nbsp;<%=unit.tenants%> Tenants
                             <% } %>
                           </div>
                           <div class="col-auto ml-auto">
@@ -1042,13 +1042,13 @@
                         </div>
                         <div class="col-2 text-muted">
                           <% if (unit.tenants.length == 0) { %>
-                            No Tenants
+                            ●&nbsp;No Tenants
                           <% } %>
                           <% if (unit.tenants.length == 1) { %> 
-                            1 Tenant
+                            ●&nbsp;1 Tenant
                           <% } %>
                           <% if (unit.tenants.length > 1) { %> 
-                            <%=unit.tenants%> Tenants
+                            ●&nbsp;<%=unit.tenants%> Tenants
                           <% } %>
 
                         </div>

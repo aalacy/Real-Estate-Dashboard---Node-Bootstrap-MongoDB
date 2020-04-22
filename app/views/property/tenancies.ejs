@@ -413,13 +413,13 @@
           property.tenancies.forEach(function(unit){
             let tenants = ''
             if (unit.tenants.length == 0) {
-              tenants = '&nbsp;No Tenants';
+              tenants = '●&nbsp;No Tenants';
             } 
             if (unit.tenants.length == 1) {
-             tenants = '&nbsp;1 Tenant';
+             tenants = '●&nbsp;1 Tenant';
             } 
             if (unit.tenants.length > 1) { 
-              tenants = `${unit.tenants}Tenants`
+              tenants = `●&nbsp;${unit.tenants}Tenants`
             }
             const name = `${property.address}, ${property.city}: ${unit.description}`;
             if (unit.rent_frequency == 'Vacant') {
@@ -442,7 +442,7 @@
                       </div>
                       <div class="col-4">
                         <div class="card-title text-muted mb-1">
-                          ●&nbsp;Not Collecting Rent
+                          Not Collecting Rent
                         </div>
 
                       </div>
