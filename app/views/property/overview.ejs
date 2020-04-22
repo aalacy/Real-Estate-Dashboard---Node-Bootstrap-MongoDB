@@ -18,43 +18,6 @@
 
     <% include ../partials/loan_modal %>
 
-    <div class="modal  fade" id="modalEditUnitName" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <form method="post" action="/property/unit/edit/name">
-          <input type="hidden" name="_csrf" value="<%= token %>">
-          <input type="hidden" name="property[id]" value="<%= property.id%>">
-          <input type="hidden" name="unit[id]" value="">
-          <div class="modal-content bg-lighter">
-            <div class="modal-header">
-                <!-- Header -->
-              <h3 class="modal-title">Edit Unit</h3>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-    
-              <div class="row">
-                <div class="col-12 col-md-6">
-                  
-                  <div class="form-group">
-                    <label>
-                      Unit Description
-                    </label>
-                    <input type="text" name="unit[description]" class="form-control" placeholder="Description" value="" required>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary">Update</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
     <div class="modal  fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="add-unit-form" method="post" action="/property/unit/new/">
@@ -78,7 +41,7 @@
                   <!-- Start date -->
                   <div class="form-group">
                     <label>
-                      Unit Description
+                      Unit
                     </label>
                     <input type="text" name="unit[description]" class="form-control" placeholder="Description" value="" required>
                   </div>
@@ -173,6 +136,43 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
               <button type="submit" class="btn btn-primary" id="addUnitBtn">Add</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+     <div class="modal  fade" id="modalEditUnitName" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <form method="post" action="/property/unit/edit/name">
+          <input type="hidden" name="_csrf" value="<%= token %>">
+          <input type="hidden" name="property[id]" value="<%= property.id%>">
+          <input type="hidden" name="unit[id]" value="">
+          <div class="modal-content bg-lighter">
+            <div class="modal-header">
+                <!-- Header -->
+              <h3 class="modal-title">Edit Unit</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+    
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  
+                  <div class="form-group">
+                    <label>
+                      Unit
+                    </label>
+                    <input type="text" name="unit[description]" class="form-control" placeholder="Description" value="" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Update</button>
             </div>
           </div>
         </form>
@@ -960,14 +960,14 @@
         
                             <!-- Time -->
                             <p class="card-text small text-muted">
-                              Vacant &nbsp;&nbsp;●&nbsp; &nbsp; <a href="#" class="edit-unit" data-property="<%=property.id%>" data-unit='<%= JSON.stringify(unit)%>'>Add a tenancy</a>
+                              Vacant &nbsp;&nbsp;●&nbsp; &nbsp; <a href="#" class="edit-unit update-detail" data-property="<%=property.id%>" data-unit='<%= JSON.stringify(unit)%>'>Add a tenancy</a>
                             </p>
                           </div>
                           <div class="col-4">
                             <!-- Title -->
-                            <h4 class="card-title text-muted mb-1">
+                            <div class="card-title text-muted mb-1">
                               Not Collecting Rent
-                            </h4>
+                            </div>
                             
                           </div>
                           <div class="col-2 text-muted">
@@ -1007,7 +1007,7 @@
                         <div class="col-auto">
                         
                             <!-- Avatar -->
-                            <h1 class="mb-0 avatar">
+                            <h1 class="mb-0 avatar avatar-md">
                               <img src="/img/icons/unit.png" class="avatar-img">
                             </h1>
         
@@ -1016,7 +1016,7 @@
       
                           <!-- Title -->
                           <h4 class="card-title mb-1">
-                            <a href="#" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%=property.address%>, <%=property.city%>:<%= unit.description%></a>
+                            <a href="#" class="detail-unit" data-unit="<%=JSON.stringify(unit)%>"><%= unit.description%></a>
                           </h4>
       
                           <!-- Time -->
@@ -1094,7 +1094,7 @@
           
                       <div class="col-auto">
 
-                        <a href="#!" class="btn btn-sm btn-white add-tenancy mr-3" data-toggle="modal" data-target="#modalAddNewUnit">
+                        <a href="#!" class="btn btn-sm btn-white add-tenancy  mr-3">
                           Add a tenancy
                         </a>
 
@@ -1484,8 +1484,6 @@
       let debt = 0;
       let equity = 0;
       
-      let documents = [];
-      let units = [];
       try {
         var names = window.location.pathname.split('/');
         names.pop(); 
@@ -1659,6 +1657,7 @@
           $('.btn-add-unit').addClass('d-none');
 
           $('.update-detail').attr('data-unit', JSON.stringify(unit));
+          $('.add-tenancy').attr('data-unit', JSON.stringify(unit));
           $('.modal-unit').attr('data-unit', JSON.stringify(unit));
           $('.rename-unit').attr('data-unit', JSON.stringify(unit));
           $('.del-unit').attr('data-unit', unit.id);
@@ -1697,7 +1696,7 @@
 
           // show 3 most recent payment
           fetchTransactions(property.id, 3, false, unit.id);
-          
+
           // display tenants section
           $('.tenant-list').empty();
           unit.tenants.map(tenant => {

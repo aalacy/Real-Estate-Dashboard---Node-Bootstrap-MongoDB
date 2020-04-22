@@ -15,6 +15,8 @@ const page_cnt = 5;
 let items = [];
 let transactions = [];
 let cur_transaction;
+let documents = [];
+let units = [];
 
 const toComma = function(val) {
     if (val) {
@@ -267,12 +269,14 @@ function doPopulate() {
       });
       if (res.status == 200) {
         $('.unit-filter').empty();
+        units = res.units
         if (res.units.length == 1) {
+          $('#unit_tenants').val(JSON.stringify(res.units[0].tenants))
           $('.unit-filter').attr("data-placeholder","Single Unit Property").select2().attr('disabled', true);
         } else {
           $('.unit-filter').attr("data-placeholder","Select a Unit").select2().attr('disabled', false);
-          var option = new Option('No unit specified', '-1', true, true);
-          $('.unit-filter').append(option);
+          // var option = new Option('No unit specified', '-1', true, true);
+          // $('.unit-filter').append(option);
           res.units.map(unit => {
             var option = new Option(unit.description, unit.id, true, true);
             $('.unit-filter').append(option);
@@ -538,7 +542,7 @@ const drawMap = function(options) {
 };
 
 // Chart
-const highchartDoughnut = (id, data) => {
+const highchartDoughnut = (id, data, showInLegend = false) => {
   return Highcharts.chart(id, {
         chart: {
             type: 'pie'
@@ -553,7 +557,7 @@ const highchartDoughnut = (id, data) => {
             dataLabels: {
                 enabled: false
             },
-            showInLegend: true
+            showInLegend
           }
         },
         tooltip: {
@@ -718,6 +722,12 @@ const clearTransactionModal = () => {
   $('button.delete-transaction').addClass('d-none');
   $('#modalAddNewTransaction .modal-footer').removeClass('justify-content-between');
   $('#income_option').trigger('click');
+}
+
+const clearUnitModal = () => {
+  $('.property-filter').val(null).trigger('change')
+  $('.unit-filter').val(null).trigger('change')
+  $('input').val('')
 }
 
 const setupPagination = () => {
@@ -1154,6 +1164,28 @@ $(function() {
       $('#modalEditUnitName').modal()
     })
 
+    // add new tenancy from unit in overview page
+    $(document).on('click', '.add-tenancy', function(e) {
+      const unit_description_formgroup = $($('input[name="unit[description]"]')[0]).parents('div.col-12.col-md-6')
+      const unit = $(this).data('unit')
+      $($('input[name="unit[description]"]')[0]).val(unit.description)
+      $('#unit-modal-title').text('Add a Tenancy');
+      unit_description_formgroup.addClass('d-none')
+      $('#modalAddNewUnit').modal()
+      .on('hidden.bs.modal', function() {
+          $("#modalAddNewUnit .btn-unit-delete").addClass('d-none');
+          $('.addUnitBtn').text('Add');
+          $('#unit-modal-title').text('Add a New Unit');
+          unit_description_formgroup.removeClass('d-none');
+      });
+    })
+
+    // add new tanancy from tenancies page
+    $(document).on('click', '.add-new-tenancy', function(e) {
+      clearUnitModal()
+      $('#modalAddNewUnitWithProperty').modal()
+    })
+
     $(document).on('click', '.edit-unit', function(e){
         e.preventDefault();
         const property_id = $(this).data('property');
@@ -1162,7 +1194,7 @@ $(function() {
         }
         const unit = $(this).data('unit')
         $('input[name="unit[description]"]').val(unit.description);
-        const unit_description_formgroup = $($('input[name="unit[description]"]')[1]).parents('div.col-12.col-md-6')
+        const unit_description_formgroup = $($('input[name="unit[description]"]')[0]).parents('div.col-12.col-md-6')
         if ($(this).hasClass('update-detail')) {
           unit_description_formgroup.addClass('d-none')
         } else {
@@ -1177,18 +1209,19 @@ $(function() {
         $('input[name="unit[tenants]"]').val(JSON.stringify(unit.tenants));
         $('input[name="unit[id]"]').val(unit.id);
         if ($('.unit-item').length > 1) {
-            $(".action-unit").removeClass('d-none').removeClass('btn-unit-clear').addClass('btn-unit-delete').text('Delete this unit');
+            $("#modalAddNewUnit .action-unit").removeClass('d-none').removeClass('btn-unit-clear').addClass('btn-unit-delete').text('Delete this unit');
         } 
         if ($('.unit-item').length == 1) {
-            $(".action-unit").removeClass('d-none').removeClass('btn-unit-delete').addClass('btn-unit-clear').text('Clear this unit');
+            $("#modalAddNewUnit .action-unit").removeClass('d-none').removeClass('btn-unit-delete').addClass('btn-unit-clear').text('Clear this unit');
         }
         $('.addUnitBtn').text('Update');
-        $('#unit-modal-title').text('Edit Unit');
+        $('#unit-modal-title').text('Add a Tenancy');
         $('#modalAddNewUnit').modal()
         .on('hidden.bs.modal', function() {
-            $(".btn-unit-delete").addClass('d-none');
+            $("#modalAddNewUnit .btn-unit-delete").addClass('d-none');
             $('.addUnitBtn').text('Add');
-            $('#unit-modal-title').text('Create a New Unit');
+            $('#unit-modal-title').text('Add a New Unit');
+            unit_description_formgroup.removeClass('d-none');
         });
     });
 
@@ -1327,7 +1360,7 @@ $(function() {
               drilldown: label
           })
         })
-        highchartDoughnut('marketChart', data)
+        highchartDoughnut('marketChart', data, true)
         // const data = {
         //   labels: labels,
         //   datasets: [{
@@ -1357,7 +1390,7 @@ $(function() {
               drilldown: label
           })
         })
-        highchartDoughnut('incomeChart', data)
+        highchartDoughnut('incomeChart', data, true)
         // const data = {
         //   labels: labels,
         //   datasets: [{
@@ -1764,6 +1797,11 @@ $(function() {
 
     $('.property-filter').on('select2:select', async function (e) {
       await selectPropertyFilter(e.params.data.id);
+    });
+
+    // Clear unit selection on modal
+    $('.clear-unit-selection').click(function(e) {
+      $('.unit-filter').val(null).trigger('change')
     });
 
     $('.document_tag').select2({
