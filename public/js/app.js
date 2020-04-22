@@ -2046,5 +2046,8 @@ $(function() {
       });
     }) 
 
-    
+    // Dropzone
+    if (document.querySelector('.dropzone')) {
+      Dropzone_init( document.querySelector('.dropzone'));
+    }
 });

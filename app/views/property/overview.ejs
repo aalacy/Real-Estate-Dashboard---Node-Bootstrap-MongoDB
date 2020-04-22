@@ -1877,11 +1877,6 @@
         $('.modal-upload').attr('data-property', $('#hidden_property').val());
         $('.edit-document').addClass('modal-property').attr('data-property', $('#hidden_property').val());
 
-        // Dropzone
-        if (document.querySelector('.dropzone')) {
-          Dropzone_init( document.querySelector('.dropzone'));
-        }
-
         // Update loan
         $('input.property_debt').keyup(function(e){
           if ($(this).val()) {
