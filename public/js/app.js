@@ -2047,7 +2047,9 @@ $(function() {
     }) 
 
     // Dropzone
-    if (document.querySelector('.dropzone')) {
-      Dropzone_init( document.querySelector('.dropzone'));
+    if ($('.dropzone').length) {
+      document.querySelectorAll('.dropzone').forEach(el => {
+        Dropzone_init(el);
+      })
     }
 });
