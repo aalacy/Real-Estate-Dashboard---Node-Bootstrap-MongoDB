@@ -17,6 +17,7 @@
   <body>
 
     <% include ../partials/loan_modal %>
+    <% include ../partials/modals %>
 
     <div class="modal  fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -1459,6 +1460,7 @@
           </div>
 
           <div class="tab-pane fade" id="documents" role="tabpanel">
+            
             <% include ./_documents %>
           </div>
 		    </div>
@@ -1469,7 +1471,6 @@
     <input type="hidden" name="documents" id="hidden_documents" value="<%=JSON.stringify(documents)%>">
     <input type="hidden" name="units" id="hidden_units" value="<%=JSON.stringify(property.tenancies)%>">
     <input type="hidden" id="hidden_property" value="<%=JSON.stringify(property)%>">
-    <% include ../partials/modals %>
     <!-- JAVASCRIPT
     ================================================== -->
     <% include ../partials/scripts %>
@@ -1875,6 +1876,8 @@
         doPaginate();
         $('.modal-upload').attr('data-property', $('#hidden_property').val());
         $('.edit-document').addClass('modal-property').attr('data-property', $('#hidden_property').val());
+
+        // Dropzone
         if (document.querySelector('.dropzone')) {
           Dropzone_init( document.querySelector('.dropzone'));
         }

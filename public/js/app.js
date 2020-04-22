@@ -1096,6 +1096,7 @@ $(function() {
         });
     }
 
+
     /**
      * Property
      */
@@ -2043,5 +2044,7 @@ $(function() {
       .catch(error => {
         console.log(error);
       });
-    })  
+    }) 
+
+    
 });

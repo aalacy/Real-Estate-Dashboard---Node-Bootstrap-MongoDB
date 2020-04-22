@@ -328,11 +328,6 @@
     	$(function() {
     		fetchTransactions(undefined, -1);
 
-        // dropzone image upload
-        if (document.querySelector('.dropzone')) {
-          Dropzone_init( document.querySelector('.dropzone'));
-        }
-
         // setup properties filter
         var option = new Option('All Properties', 'All', true, true);
         $('#propertyFilter').append(option);

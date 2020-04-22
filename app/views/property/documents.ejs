@@ -43,6 +43,11 @@
 
         doPaginate();
 
+        // Dropzone
+        if (document.querySelector('.dropzone')) {
+          Dropzone_init( document.querySelector('.dropzone'));
+        }
+
         $('.filter-by-property').removeClass('d-none');
         var option = new Option('All Properties', 'all', true, true);
         $('#filterByProperty').append(option);
@@ -52,11 +57,6 @@
           $('#filterByProperty').append(option);
         });
         $('#filterByProperty').val('all').trigger('change');
-
-        if (document.querySelector('.dropzone')) {
-          Dropzone_init( document.querySelector('.dropzone'));
-        }
-
       });
     </script>
 
