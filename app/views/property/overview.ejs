@@ -437,7 +437,7 @@
                       Property Value
                     </label>
                     <div class="input-group input-group-merge mb-3">
-                      <input type="text" onkeypress="return isNumberKey(event)" name="property[current_value]" id="property_current_value" class="form-control form-control-prepended number" placeholder="<%=property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>" value="" required>
+                      <input type="text" onkeypress="return isNumberKey(event)" name="property[current_value]" id="property_current_value" class="form-control form-control-prepended number" placeholder="<%=property.estimate_value ? property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '' %>" value="" required>
                       <div class="input-group-prepend">
                         <div class="input-group-text">
                           <span>£</span>
