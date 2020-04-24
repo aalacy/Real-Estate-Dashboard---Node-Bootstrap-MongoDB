@@ -1249,7 +1249,7 @@ $(function() {
       } else {
         $('.property-estimate-box').html(`
           <div class="text-muted text-uppercase mb-2">Estimate Value</div>
-          <div style="font-size: 30px;">£<span class="">${property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</div>
+          <div style="font-size: 30px;">£<span class="">${property.estimate_value ? property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}</div>
           <div class="text-muted">+/-£<span class="property_margin">${property.margin ? property.margin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}</span></div>
         `)
 

@@ -116,6 +116,9 @@ const managePropertyEstimateCron = async (property, estimate_cron_on=true) => {
       cronManager.stop(property.id);
     }
   } else {
+    // initially run the api to get the estimate value
+    estimateValueCron(property.id)
+    
     if (cronManager.exists(property.id)) {
       cronManager.update(property.id, ESTIMATE_CRON_INTERVAL, async () => { 
         await estimateValueCron(property.id)
