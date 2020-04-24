@@ -20,7 +20,7 @@ const passport = require('passport');
 const config = require('./config');
 
 const models = join(__dirname, 'app/models');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3002;
 
 const app = express();
 const connection = connect();
@@ -43,6 +43,7 @@ fs.readdirSync(models)
 require('./config/passport')(passport);
 require('./config/express')(app, passport);
 app.use(require('./routes'));
+const propertyController = require('./app/controllers/property');
 
 app.use(function(err, req, res, next) {
   console.log('server', err);
@@ -78,10 +79,14 @@ function listen() {
   if (app.get('env') === 'test') return;
   app.listen(port);
   console.log('Express app started on port ' + port);
+
+  // manage cron job for estimate value
+  propertyController._managePropertyEstimateCron()
 }
 
 function connect() {
   var options = { keepAlive: 1, useNewUrlParser: true };
   mongoose.connect(config.db, options);
+  console.log('mongo')
   return mongoose.connection;
 }

@@ -431,13 +431,13 @@
             <div class="modal-body">
     
               <div class="row">
-                <div class="col-12 col-md-6 mb-4">
+                <div class="col-12 col-md-6">
                   <div class="form-group">
                     <label>
                       Property Value
                     </label>
                     <div class="input-group input-group-merge mb-3">
-                      <input type="text" onkeypress="return isNumberKey(event)" name="property[current_value]" id="property_current_value" class="form-control form-control-prepended number" placeholder="" value="<%=property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>" required>
+                      <input type="text" onkeypress="return isNumberKey(event)" name="property[current_value]" id="property_current_value" class="form-control form-control-prepended number" placeholder="<%=property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>" value="" required>
                       <div class="input-group-prepend">
                         <div class="input-group-text">
                           <span>£</span>
@@ -445,15 +445,14 @@
                       </div>
                     </div>
                   </div>
-                  <input type="hidden" name="property[margin]" id="property_margin" value="<%=property.margin%>" />
+                  <!-- <input type="hidden" name="property[margin]" id="property_margin" value="<%=property.margin%>" /> -->
                 </div>
                 <div class="col-12 col-md-6 mb-0" style="align-self: flex-end;">
                   <div class="form-group">
-                    <input type="checkbox" id="estimatePropertyBtn" data-size="large" data-width="250" data-offstyle='success' data-onstyle="danger" data-toggle="toggle" data-off="Turn auto-update on" data-on="Turn auto-update off" data-property="<%=JSON.stringify(property)%>" aria-describedby="estimateHelp">
-                    <!---<button type="button" class="btn btn-success" aria-describedby="estimateHelp" data-property="<%=JSON.stringify(property)%>">
-                      <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span> 
-                      Turn auto-update on
-                    </button> --->
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox" class="custom-control-input" id="estimatePropertyBtn" data-property="<%=JSON.stringify(property)%>" aria-describedby="estimateHelp" <%=property.estimate_cron_on ? 'checked' : ''%>>
+                      <label class="custom-control-label" for="estimatePropertyBtn">Auto-update using estimate</label>
+                    </div>
                     <a href="#" id="estimateHelp" class="form-text text-muted"><small>What is this?</small></a>
                   </div>
                 </div>
@@ -645,9 +644,9 @@
                       </div>
                     </div>
                     <div class="col-sm-12 col-lg-4">
-                      <div class="h-100 d-flex <%= property.current_value > 0 ? 'cursor-hand': '' %> property-value-block text-center justify-content-center align-items-center p-4">
+                      <div class="h-100 d-flex <%= property.current_value > 0 ? 'cursor-hand show-property-value': '' %> property-value-block  text-center justify-content-center align-items-center p-4">
                         <% if (property.current_value == 0) { %>
-                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAdjustSummary">
+                        <button class="btn btn-sm btn-white show-property-value" >
                           <i class="fe fe-plus font-weight-bold"></i> Add Value/Price
                         </button>
                         <% } else { %>
@@ -1600,17 +1599,17 @@
         const occupancyData = [
                 {
                     name: "Vacant",
-                    color: colors[1],
+                    color: '#DEE5EF',
                     y: <%=vacant_value%>,
                     drilldown: "Vacant"
                 },
                 {
-                    name: "Tenancy",
-                    color: colors[4],
+                    name: "Occupied",
+                    color: '#0e67dc',
                     y: <%=tenancy_value%>,
                     drilldown: "Tenancy"
                 }]
-        highchartDoughnut('occupancyChart', occupancyData)
+        highchartDoughnut('occupancyChart', occupancyData, false, false)
 
         // Income Expenses Chart
         const incomeExpensesData = [

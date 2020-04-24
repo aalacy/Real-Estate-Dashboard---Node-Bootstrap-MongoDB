@@ -542,7 +542,7 @@ const drawMap = function(options) {
 };
 
 // Chart
-const highchartDoughnut = (id, data, showInLegend = false) => {
+const highchartDoughnut = (id, data, showInLegend = false, showPound=true) => {
   return Highcharts.chart(id, {
         chart: {
             type: 'pie'
@@ -566,7 +566,11 @@ const highchartDoughnut = (id, data, showInLegend = false) => {
           pointFormat: '{point.y:,.0f}',
           formatter(e) { 
             output1 = `<b style="fill:${this.point.color}">${this.point.name}</b><br />`
-            output1 += `<span>£${this.point.y.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} (${this.point.percentage.toFixed(1)} %)</span>`
+            let tooltip = `(${this.point.percentage.toFixed(1)} %)`
+            if (showPound) {
+              tooltip = `£${this.point.y.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} ` + tooltip 
+            }
+            output1 += `<span>${tooltip}</span>`
             return output1
           }
         },
@@ -822,7 +826,7 @@ const checkAvailabilityForPropertyValueUpdate = (property) => {
      missing_value += 'construction date, ';
      ids.push('#construction_date');
   } 
-  if (!property.square_feet) {
+  if (parseFloat(property.square_feet) < 300) {
       missing_value += 'square feet, ';
       ids.push('#square_feet');
   } 
@@ -838,7 +842,7 @@ const checkAvailabilityForPropertyValueUpdate = (property) => {
       missing_value += 'finish quality, ';
       ids.push('#finish_quality');
   } 
-  if (!property.outdoor_space || property.outdoor_space == 'none') {
+  if (!property.outdoor_space || property.outdoor_space == 'None') {
       missing_value += 'out spacing, ';
       ids.push('#outdoor_space');
   } 
@@ -1226,21 +1230,10 @@ $(function() {
         });
     });
 
-    // Use property value from api in adjust summary popup
-    $('.property-value-block').click(function(e) {
-      $('#property_current_value').val();
-      $('.property_current_value').val($('.summary-edit-btn').data('val'));
-      const property = $('#estimatePropertyBtn').data('property')
-      $('#modalAdjustSummary .modal-title').html('Update Property Value');
+    // show property value modal
+    $('.show-property-value').click(function() {
       const is_missing = checkAvailabilityForPropertyValueUpdate(property);
       if (is_missing) {
-        $('.property-estimate-box').html(`
-          <div class="text-muted text-uppercase mb-2">Estimate Value</div>
-          <div style="font-size: 30px;">£<span class="property_current_value">${property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</div>
-          <div class="text-muted">+/-£<span class="property_margin">${property.margin ? property.margin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}</span></div>
-        `)
-        $('.property-estimate-helper').html(`<i class="fe fe-refresh-cw h6"></i> <small class="h6">Next update in 30 days</small>`)
-      } else {
         $('.property-estimate-box').html(`
           <div class="h-100 text-center d-flex  flex-column justify-content-center align-items-center p-4">
               <span class="fe fe-alert-circle"></span>
@@ -1249,51 +1242,53 @@ $(function() {
               </h5>
           </div>
         `)
+        // disable auto estimate switch
+        $('#estimatePropertyBtn').prop('disabled', true);
+        $('#estimatePropertyBtn').prop('checked', false);
         $('.property-estimate-helper').html(`<span class="h6">This property is missing required information to get a valuation.</span> <a href="/property/detail/${property.id}" class="btn-link"><small class="h6">Update details now</small></a>`)
+      } else {
+        $('.property-estimate-box').html(`
+          <div class="text-muted text-uppercase mb-2">Estimate Value</div>
+          <div style="font-size: 30px;">£<span class="">${property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</div>
+          <div class="text-muted">+/-£<span class="property_margin">${property.margin ? property.margin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}</span></div>
+        `)
+
+        // enable auto estimate switch
+        $('#estimatePropertyBtn').prop('disabled', false);
+        const remaining_days = moment(property.estimate_cron_run_date).diff(moment(), 'days')
+        $('.property-estimate-helper').html(`<i class="fe fe-refresh-cw h6"></i> <small class="h6">Next update in ${remaining_days} days</small>`)
       }
+
+      if (property.current_value) {
+        $('#property_current_value').val(property.current_value)
+        $('#modalAdjustSummary .modal-title').html('Update Property Value');
+      } else {
+        $('#modalAdjustSummary .modal-title').html('Add Property Value');
+      }
+
       $('#modalAdjustSummary').modal()
-        .on('hidden.bs.modal', function() {
-          $('#modalAdjustSummary .modal-title').html('Add Property Value');
-        });
-    });
+    })
 
     // turn on/off auto estimate
     $('#estimatePropertyBtn').change(function() {
-      console.log('Toggle: ' + $(this).prop('checked'))
-    })
-
-    $('#estimatePropertyBtn').click(function(e){
-        const property = $(this).data('property');
-        const missing_value = checkAvailabilityForPropertyValueUpdate(property);
-        if (missing_value) {
-            $('#modalAdjustSummary').modal('hide');
-            makeToast({ message: `Complete missing property details to get valuation estimate` });
-            location.href = `/property/detail/${property.id}`;
-            return;
-        }
-
-        const self = $(this);
-        self.find('span').removeClass('d-none');
-        const _csrf = $('input[name="_csrf"]').val();
-        fetch(new Request('/property/estimated_sale/', {method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({property_id:property.id, _csrf})}))
-        .then(response => response.json())
+      const _csrf = $('input[name="_csrf"]').val();
+      const estimate_cron_on = $(this).prop('checked')
+      fetch('/property/cron/estimate',
+        { 
+          credentials: 'same-origin',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({estimate_cron_on, property_id:property.id, _csrf})
+        })
+        .then(res => res.json())
         .then(function(res) {
-            self.find('span').addClass('d-none');
-            if (res.status == 200) {
-              const property_value = res.estimate.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');  
-              const property_margin = res.margin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');  
-              $('#property_current_value').val(property_value);
-              $('.property_current_value').html(property_value);
-              $('.property_margin').html(property_margin);
-              $('#property_margin').val(property_margin);
-            } 
-
-            return makeToast({ message: res.message});
+          makeToast({message: res.message});
         }).catch(function(text) {
-            self.find('span').addClass('d-none');
             console.log(text);
         });
-    });
+    })
 
     // Delete the unit
     $(document).on('click', ".action-unit", function(e){
@@ -1362,20 +1357,6 @@ $(function() {
           })
         })
         highchartDoughnut('marketChart', data, true)
-        // const data = {
-        //   labels: labels,
-        //   datasets: [{
-        //     data: dataset,
-        //     backgroundColor: [
-        //       '#0E67DC',
-        //       '#555F7F',
-        //       '#41D3BD',
-        //       '#EF476F',
-        //       '#acc236'
-        //     ]
-        //   }]
-        // }
-        // chartInit(document.getElementById("marketChart").getContext('2d'), data);
     }
 
     if ($('#incomeChart')[0]) {

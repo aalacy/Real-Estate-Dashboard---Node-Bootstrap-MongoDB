@@ -45,7 +45,7 @@
                 <div class="dz-message" data-dz-message>
                   <img src="<%= property.image ? '/'+property.image : '/img/avatars/projects/single.png'%>" alt="property image" class="card-img-top cover-image dropzone-image mb-4">
                   <div class="big-title h3"><%= property.image ? 'Upload a New Image' : 'Upload a Cover Image' %></div>
-                  <div class="small-title text-muted">Max file size is 30MB per image, JPG, PNG, or GIF formats only.</div>
+                  <div class="small-title text-muted mx-3">Max file size is 30MB per image, JPG, PNG, or GIF formats only.</div>
                 </div>
 
                 <ul class="dz-preview d-none dz-preview-multiple list-group list-group-lg list-group-flush">
@@ -272,7 +272,7 @@
                         </label>
                         <input type="text" id="square_feet" onkeypress="return isNumberKey(event)"  name="property[square_feet]" class="form-control number" value="<%=property.square_feet.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%>">
                         <div class="invalid-feedback">
-                          Please provide a square feet
+                          This field must be 300sqft at least.
                         </div>
                       </div>
 
@@ -421,10 +421,6 @@
         } catch (e){
         }
         localStorage.setItem('est_missing_ids', '');
-
-        if (document.querySelector('.dropzone')) {
-          Dropzone_init( document.querySelector('.dropzone'));
-        }
       });
     </script>
     

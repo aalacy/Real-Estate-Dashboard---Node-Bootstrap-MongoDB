@@ -197,10 +197,10 @@ table.dataTable.table-sm .sorting:after, table.dataTable.table-sm .sorting_asc:a
     right: 0;
 }
 
-.property-value-block:hover {
+/*.property-value-block:hover {
     background-color: #f0f3f8;
 }
-
+*/
 .table-responsive .bottom {
     display: flex;
     align-items: center;
@@ -420,4 +420,8 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 .chart-appended {
     display: flex;
     justify-content: center;
+}
+
+.custom-control-input:disabled~.custom-control-label:before {
+    background-color: #eee !important;
 }

@@ -205,10 +205,9 @@ exports.get_cash_flow = async function(req, res) {
         type: 'spline',
         name: 'Net Income',
         data: net_income_data,
-        dashStyle: 'longdash',
         marker: {
             lineWidth: 2,
-            lineColor: '#555F7F',
+            lineColor: '#FFF689',
             fillColor: 'white',
         }
       }

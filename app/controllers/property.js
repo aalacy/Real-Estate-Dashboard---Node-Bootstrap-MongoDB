@@ -12,6 +12,7 @@ const Tenants = mongoose.model('Tenants');
 const moment = require('moment');
 const uuidv4 = require('uuid/v4');
 const CronJobManager = require('cron-job-manager');
+
 var urlLib = require('url');
 
 cronManager = new CronJobManager();
@@ -72,6 +73,102 @@ const OFF_STREET_PARKING = {
 const calcRentalYield = function(purchase_price, rental_income) {
   let rental_yield = purchase_price == 0 ? 0 : parseFloat(rental_income) * 100 / parseFloat(purchase_price);
   return rental_yield.toFixed(2);
+}
+
+const ESTIMATE_CRON_INTERVAL = '0 0 0 */30 * *'
+const estimateValueCron = async (property_id) => {
+  const property = await Properties.findOne({id: property_id}, {_id: 0})
+  if (property.estimate_cron_run_date == moment().format('YYYY-MM-DD')) {
+   const estimate_url = `https://api.propertydata.co.uk/valuation-sale?key=${process.env.PROPERTYDATA_API_KEY}&postcode=${property.zip.replace(' ','')}&internal_area=${property.square_feet}&property_type=${property.type}&construction_date=${property.construction_date}&bedrooms=${property.bedrooms}&bathrooms=${property.bathrooms}&finish_quality=${property.finish_quality}&outdoor_space=${property.outdoor_space}&off_street_parking=${property.off_street_parking}`;
+    const est_res = await request({ uri: estimate_url, json: true }).catch(e => {
+      console.log(e)
+    });
+    if (est_res.status == 'success') {
+      estimate_value = est_res.result.estimate,
+      margin = est_res.result.margin
+      estimate_cron_run_date = moment().add(30, 'days').format('YYYY-MM-DD')
+      const res = await Properties.updateOne({ id: property.id }, {$set: { estimate_value, margin, estimate_cron_run_date}})
+        .catch(err => console.log(err));
+    }
+  }
+}
+
+exports._managePropertyEstimateCron = async () => {
+  const properties = await Properties.find({})
+  properties.map(property => {
+    if (property.estimate_cron_on) {
+      if (!cronManager.exists(property.id)) {
+        cronManager.add(property.id, ESTIMATE_CRON_INTERVAL, async () => { 
+          await estimateValueCron(property.id)
+        })
+      }
+      cronManager.start(property.id);
+    }
+  })
+  console.log('_managePropertyEstimateCron', cronManager)
+}
+
+// create a cronjob to get the property estimate from api
+const managePropertyEstimateCron = async (property, estimate_cron_on=true) => {
+  console.log('managePropertyEstimateCron', cronManager)
+  if (!estimate_cron_on) {
+    if (cronManager.exists(property.id)) {
+      cronManager.stop(property.id);
+    }
+  } else {
+    if (cronManager.exists(property.id)) {
+      cronManager.update(property.id, ESTIMATE_CRON_INTERVAL, async () => { 
+        await estimateValueCron(property.id)
+      })
+    } else {
+      cronManager.add(property.id, ESTIMATE_CRON_INTERVAL, async () => { 
+        await estimateValueCron(property.id)
+      })
+    }
+    cronManager.start(property.id);
+  }
+}
+
+const checkAvailabilityForPropertyValueUpdate = (property) => {
+  let missing_value = '';
+  let ids = []
+  if (!property.zip) {
+      missing_value += 'postal code, ';
+      ids.push('#property_zip');
+  } 
+  if (!property.type ) {
+      missing_value += 'type, ';
+      ids.push('#property_type');
+  } 
+  if (!property.construction_date) {
+     missing_value += 'construction date, ';
+     ids.push('#construction_date');
+  } 
+  if (parseFloat(property.square_feet) < 300) {
+      missing_value += 'square feet, ';
+      ids.push('#square_feet');
+  } 
+  if (!property.bedrooms) {
+      missing_value += 'bedrooms, ';
+      ids.push('#bedrooms');
+  } 
+  if (!property.bathrooms) {
+      missing_value += 'bathrooms, ';
+      ids.push('#bathrooms');
+  } 
+  if (!property.finish_quality) {
+      missing_value += 'finish quality, ';
+      ids.push('#finish_quality');
+  } 
+  if (!property.outdoor_space || property.outdoor_space == 'None') {
+      missing_value += 'out spacing, ';
+      ids.push('#outdoor_space');
+  } 
+  if (!property.off_street_parking) {
+      missing_value += 'off street parking, ';
+      ids.push('#off_street_parking');
+  }
+  return missing_value.substr(0, missing_value.length-2)
 }
 
 exports.all = async function(req, res, next) {
@@ -216,6 +313,8 @@ exports.overview = async function(req, res) {
       expenses_breakdown[transaction.category] += Math.abs(amount)
     }
   })
+
+  console.log('====', expenses_breakdown)
 
   transactions.forEach(transaction => {
     breakdown_percent[transaction.category] = (expenses_breakdown[transaction.category]/Math.abs(total_expenses) * 100).toFixed(1)
@@ -435,7 +534,7 @@ exports.update = async function(req, res) {
   
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
 
-  request({uri: address, json: true}).then(geo_data => {
+  request({uri: address, json: true}).then( geo_data => {
     property.lat = geo_data.results[0].geometry.location.lat;
     property.lng = geo_data.results[0].geometry.location.lng;
     property.purchase_price = property.purchase_price.replace(/,/g, '') ? parseFloat(property.purchase_price.replace(/,/g, '')) : 0;
@@ -446,12 +545,21 @@ exports.update = async function(req, res) {
     property.is_new = false;
     property.rental_yield = calcRentalYield(property.purchase_price, myproperty.rental_income);
     property.update_at = moment().format('YYYY-MM-DD HH:mm:ss');
+
+    const missing_value = checkAvailabilityForPropertyValueUpdate(property)
+    console.log('missing_value', missing_value)
+    if (!missing_value) {
+      property.estimate_cron_run_date = moment().format('YYYY-MM-DD')
+      managePropertyEstimateCron(property)
+    } else {
+      property.estimate_cron_run_date = ''
+    }
+
     const new_values = { $set: property };
 
-    return Properties.updateOne({ id: property.id }, new_values).then(_property => {
+    return Properties.updateOne({ id: property.id }, new_values) }).then( () => {
       res.redirect('/property/overview/' + property.id);
-    });
-  }).catch(err => console.log(err));
+    }).catch(err => console.log(err));
 };
 
 exports.remove = async function(req, res) {
@@ -879,11 +987,11 @@ exports.adjust_summary = async function(req, res) {
   const { body: { property: { margin, current_value, id } } } = req;
 
   const _current_value = current_value.replace(/,/g, '');
-  const _margin = margin.replace(/,/g, '');
+  // const _margin = margin.replace(/,/g, '');
   const myproperty = await Properties.findOne({ id: id }, { _id: 0 });
   let rental_yield = calcRentalYield(myproperty.purchase_price, myproperty.rental_income);
   const equity = parseFloat(_current_value) - parseFloat(myproperty.debt || 0); 
-  const new_values = { $set: { current_value: _current_value, margin: _margin, rental_yield, equity } };
+  const new_values = { $set: { current_value: _current_value, rental_yield, equity } };
   return Properties.updateOne({ id }, new_values).then(() => {
     res.redirect('/property/overview/' + id);
   });
@@ -909,6 +1017,32 @@ exports.estimated_sale = async function(req, res) {
       message: est_res.message
     })
   }
+}
+
+// turn on/off estimate cron
+exports.cron_estimate = async function(req, res) {
+  const { body: { property_id, estimate_cron_on  } } = req;
+  let estimate_cron_run_date = ''
+  console.log('cron', estimate_cron_on)
+  const property = await Properties.findOne({ id: property_id})
+  if (estimate_cron_on) {
+    property.estimate_cron_run_date = moment().format('YYYY-MM-DD')
+    await managePropertyEstimateCron(property, estimate_cron_on)
+  } else {
+    property.estimate_cron_run_date = ''
+  }
+  const new_values = { $set: { estimate_cron_on, estimate_cron_run_date:property.estimate_cron_run_date } };
+  return Properties.updateOne({ id: property_id }, new_values).then((_property) => {
+    res.json({
+      status: 200,
+      message: 'Successfully done'
+    })
+  }).catch(e => {
+    res.json({
+      status: 500,
+      message: 'Something wrong happened on server'
+    })
+  });
 }
 
 // Loan-to-value

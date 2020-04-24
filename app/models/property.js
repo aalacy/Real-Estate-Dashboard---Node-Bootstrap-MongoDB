@@ -15,8 +15,6 @@ var moment = require('moment');
 const PropertiesSchema = new Schema({
     id: {type: String, default: ''},
     user_id: {type: String, default: ''},
-    cron_id: {type: String, default: ''},
-    cron_status: {type: String, default: 'disabled'},
     image: { type: String, default: '' },
     address: { type: String, default: '' },
     address2: { type: String, default: '' },
@@ -29,8 +27,12 @@ const PropertiesSchema = new Schema({
     fulladdress: { type: String, default: '' },
     zip: { type: String, default: '' },
     units: { type: Number, default: 1 }, // Single Unit / Multiple Units
-    current_value: { type: Number, default: 0.0 }, // property value from api https://propertydata.co.uk/api/documentation/valuation-sale
+    current_value: { type: Number, default: 0.0 }, // property value from user input
+    estimate_value: { type: Number, default: 0.0 }, // estimate value from api https://propertydata.co.uk/api/documentation/valuation-sale
     margin: { type: Number, default: 0.0 }, // property margin from api https://propertydata.co.uk/api/documentation/valuation-sale
+    estimate_cron_on: { type: Boolean, default: false},
+    estimate_cron_possible: { type: Boolean, default: false},
+    estimate_cron_run_date: { type: String, default: ''},
     purchase_price: { type: Number, default: 0.0 }, // £240
     purchase_date: { type: String, default: '' }, // 2019-01-02
     bedrooms: { type: Number, default: 1 }, // 1

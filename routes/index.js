@@ -32,7 +32,7 @@ router.get('/signup', home.signup);
 router.post('/signin', auth.optional, home.signin_post);
 router.get('/signin', home.signin);
 
-router.post('/logout', auth.checkToken, home.logout);
+router.post('/logout', home.logout);
 
 //  Password Reset
 router.get('/password_reset', home.password_reset);
@@ -41,7 +41,7 @@ router.get('/password_recovery/*', home.password_recovery);
 router.post('/password_reset_generate', home.password_reset_generate);
 router.post('/password_reset_post', home.password_reset_post);
 
-router.get('/settings', auth.checkToken, home.settings);
+router.get('/settings', home.settings);
 router.post('/settings/update', home.update_settings);
 router.post('/settings/password', home.update_password);
 
@@ -52,62 +52,63 @@ router.use('/current', auth.required, home.current);
  * Dashboard
  */
 
-router.get('/', auth.checkToken, dashboard.index);
-router.post('/dashboard/cash_flow', auth.checkToken, dashboard.get_cash_flow);
+router.get('/', dashboard.index);
+router.post('/dashboard/cash_flow', dashboard.get_cash_flow);
 
 /**
  * Property
  */
 
-router.get('/property/my', auth.checkToken, property.my);
-router.get('/property/all', auth.checkToken, property.all);
-router.get('/property/overview/:id/:tabs', auth.checkToken, property.overview);
-router.get('/property/overview/:id/:tabs/:unit_id', auth.checkToken, property.overview);
-router.get('/property/overview/:id', auth.checkToken, property.overview);
-router.post('/property/overview/cashflow/date', auth.checkToken, property.cashflow_date);
-router.get('/property/detail/:id', auth.checkToken, property.detail);
-router.use('/property/new', auth.checkToken, property.new);
-router.use('/property/review', auth.checkToken, property.review);
-router.use('/property/search/:query', auth.checkToken,  property.search);
-router.use('/property/create', auth.checkToken, property.create);
-router.use('/property/update', auth.checkToken, property.update);
-router.use('/property/remove', auth.checkToken, property.remove);
+router.get('/property/my', property.my);
+router.get('/property/all', property.all);
+router.get('/property/overview/:id/:tabs', property.overview);
+router.get('/property/overview/:id/:tabs/:unit_id', property.overview);
+router.get('/property/overview/:id', property.overview);
+router.post('/property/overview/cashflow/date', property.cashflow_date);
+router.get('/property/detail/:id', property.detail);
+router.use('/property/new', property.new);
+router.use('/property/review', property.review);
+router.use('/property/search/:query',  property.search);
+router.use('/property/create', property.create);
+router.use('/property/update', property.update);
+router.use('/property/remove', property.remove);
+router.use('/property/adjust_summary', property.adjust_summary);
+router.use('/property/estimated_sale', property.estimated_sale);
+router.post('/property/cron/estimate', property.cron_estimate);
 
 // Add Tenancy
-router.get('/property/tenancies', auth.checkToken, property.tenancies);
-router.use('/property/unit/all', auth.checkToken, property.all_units);
-router.use('/property/unit/new', auth.checkToken, property.new_unit);
-router.use('/property/unit/edit/name', auth.checkToken, property.rename_unit);
-router.use('/property/unit/update', auth.checkToken, property.update_unit);
-router.use('/property/tenancies/new', auth.checkToken, property.new_tenancy);
-router.use('/property/unit/delete', auth.checkToken, property.delete_unit);
-router.use('/property/unit/clear', auth.checkToken, property.clear_unit);
-router.use('/property/adjust_summary', auth.checkToken, property.adjust_summary);
-router.use('/property/estimated_sale', auth.checkToken, property.estimated_sale);
+router.get('/property/tenancies', property.tenancies);
+router.use('/property/unit/all', property.all_units);
+router.use('/property/unit/new', property.new_unit);
+router.use('/property/unit/edit/name', property.rename_unit);
+router.use('/property/unit/update', property.update_unit);
+router.use('/property/tenancies/new', property.new_tenancy);
+router.use('/property/unit/delete', property.delete_unit);
+router.use('/property/unit/clear', property.clear_unit);
 
-router.use('/property/unit/tenant/new', auth.checkToken, property.new_tenant);
-router.use('/property/unit/tenant/delete', auth.checkToken, property.delete_tenant);
+router.use('/property/unit/tenant/new', property.new_tenant);
+router.use('/property/unit/tenant/delete', property.delete_tenant);
 
 // documents
-router.get('/property/documents', auth.checkToken, property.documents);
+router.get('/property/documents', property.documents);
 router.post('/property/documents/upload', upload.single( 'file' ), property.documents_upload);
-router.post('/property/documents/delete', auth.checkToken, property.documents_delete);
-router.post('/property/documents/upload_all', auth.checkToken, property.upload_doc_to_property);
+router.post('/property/documents/delete', property.documents_delete);
+router.post('/property/documents/upload_all', property.upload_doc_to_property);
 
 // loan
-router.post('/property/loan/all', auth.checkToken, property.get_equity_debt);
-router.post('/property/loan/new', auth.checkToken, property.new_loan);
+router.post('/property/loan/all', property.get_equity_debt);
+router.post('/property/loan/new', property.new_loan);
 
 // transactions
-router.get('/transaction/all', auth.checkToken, transaction.all);
-router.get('/transaction/all/get/:id/:cnt', auth.checkToken, transaction.all_get);
-router.post('/transaction/create', auth.checkToken, transaction.create);
-router.post('/transaction/edit', auth.checkToken, transaction.edit);
-router.post('/transaction/delete', auth.checkToken, transaction.delete);
-router.post('/transaction/mark/paid', auth.checkToken, transaction.mark);
+router.get('/transaction/all', transaction.all);
+router.get('/transaction/all/get/:id/:cnt', transaction.all_get);
+router.post('/transaction/create', transaction.create);
+router.post('/transaction/edit', transaction.edit);
+router.post('/transaction/delete', transaction.delete);
+router.post('/transaction/mark/paid', transaction.mark);
 
 // services
-router.get('/services', auth.checkToken, service.all);
-router.get('/services/instantValuations', auth.checkToken, service.instant_valuations);
+router.get('/services', service.all);
+router.get('/services/instantValuations', service.instant_valuations);
 
 module.exports = router;
