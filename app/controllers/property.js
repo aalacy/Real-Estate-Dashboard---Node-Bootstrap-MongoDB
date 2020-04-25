@@ -93,6 +93,25 @@ const estimateValueCron = async (property_id) => {
   }
 }
 
+const estimatePropertyValue = async (property_id) => {
+  const property = await Properties.findOne({ id: property_id }, { _id: 0 });
+  const estimate_url = `https://api.propertydata.co.uk/valuation-sale?key=${process.env.PROPERTYDATA_API_KEY}&postcode=${property.zip.replace(' ','')}&internal_area=${property.square_feet}&property_type=${property.type}&construction_date=${property.construction_date}&bedrooms=${property.bedrooms}&bathrooms=${property.bathrooms}&finish_quality=${property.finish_quality}&outdoor_space=${property.outdoor_space}&off_street_parking=${property.off_street_parking}`;
+  const est_res = await request({ uri: estimate_url, json: true }).catch(e => {
+    console.log(e)
+  });
+  if (est_res.status == 'success') {
+    await Properties.updateOne({ id: property.id }, {$set: { estimate_value, margin, estimate_cron_run_date}})
+        .catch(err => console.log(err));
+    estimate_value = est_res.result.estimate,
+    margin = est_res.result.margin
+    property.estimate_value = estimate_value
+    property.margin = margin
+    return property
+  } else {
+    return null
+  }
+}
+
 exports._managePropertyEstimateCron = async () => {
   const properties = await Properties.find({})
   properties.map(property => {
@@ -115,10 +134,7 @@ const managePropertyEstimateCron = async (property, estimate_cron_on=true) => {
     if (cronManager.exists(property.id)) {
       cronManager.stop(property.id);
     }
-  } else {
-    // initially run the api to get the estimate value
-    estimateValueCron(property.id)
-    
+  } else {  
     if (cronManager.exists(property.id)) {
       cronManager.update(property.id, ESTIMATE_CRON_INTERVAL, async () => { 
         await estimateValueCron(property.id)
@@ -1002,17 +1018,12 @@ exports.adjust_summary = async function(req, res) {
 
 exports.estimated_sale = async function(req, res) {
   const { body: { property_id } } = req;
-  const property = await Properties.findOne({ id: property_id }, { _id: 0 });
-  const estimate_url = `https://api.propertydata.co.uk/valuation-sale?key=${process.env.PROPERTYDATA_API_KEY}&postcode=${property.zip.replace(' ','')}&internal_area=${property.square_feet}&property_type=${property.type}&construction_date=${property.construction_date}&bedrooms=${property.bedrooms}&bathrooms=${property.bathrooms}&finish_quality=${property.finish_quality}&outdoor_space=${property.outdoor_space}&off_street_parking=${property.off_street_parking}`;
-  const est_res = await request({ uri: estimate_url, json: true }).catch(e => {
-    console.log(e)
-  });
-  if (est_res.status == 'success') {
+  const property = await estimatePropertyValue(property_id)
+  if (property) {
     return res.json({
       status: 200,
       message: 'Sucessfully got the estimate',
-      estimate: est_res.result.estimate,
-      margin: est_res.result.margin
+      property
     })
   } else {
     return res.json({
@@ -1027,10 +1038,11 @@ exports.cron_estimate = async function(req, res) {
   const { body: { property_id, estimate_cron_on  } } = req;
   let estimate_cron_run_date = ''
   console.log('cron', estimate_cron_on)
-  const property = await Properties.findOne({ id: property_id})
+  let property = await Properties.findOne({ id: property_id})
   if (estimate_cron_on) {
-    property.estimate_cron_run_date = moment().format('YYYY-MM-DD')
     await managePropertyEstimateCron(property, estimate_cron_on)
+    property = await estimatePropertyValue(property_id)
+    property.estimate_cron_run_date = moment().format('YYYY-MM-DD')
   } else {
     property.estimate_cron_run_date = ''
   }
@@ -1038,7 +1050,8 @@ exports.cron_estimate = async function(req, res) {
   return Properties.updateOne({ id: property_id }, new_values).then((_property) => {
     res.json({
       status: 200,
-      message: 'Successfully done'
+      message: 'Successfully done',
+      property
     })
   }).catch(e => {
     res.json({

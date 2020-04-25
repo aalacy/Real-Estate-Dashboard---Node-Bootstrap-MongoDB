@@ -450,17 +450,33 @@
                 <div class="col-12 col-md-6 mb-0" style="align-self: flex-end;">
                   <div class="form-group">
                     <div class="custom-control custom-switch">
-                      <input type="checkbox" class="custom-control-input" id="estimatePropertyBtn" data-property="<%=JSON.stringify(property)%>" aria-describedby="estimateHelp" <%=property.estimate_cron_on ? 'checked' : ''%>>
+                      <input type="checkbox" class="custom-control-input" id="estimatePropertyBtn" data-property="<%=JSON.stringify(property)%>" aria-describedby="estimateHelp">
                       <label class="custom-control-label" for="estimatePropertyBtn">Auto-update using estimate</label>
                     </div>
-                    <a href="#" id="estimateHelp" class="form-text text-muted"><small>What is this?</small></a>
+                    <!-- <a href="#" id="estimateHelp" class="form-text text-muted"><small>What is this?</small></a> -->
                   </div>
                 </div>
               </div>
-              <div class="col-12 p-4 text-center border-success mb-3 property-estimate-box" style="border-style: double;">
-                
+              <div class="col-12 p-4 text-center bg-white mb-3 property-estimate-box">
+                <div class="text-muted text-uppercase mb-2">Estimate Value</div>
+                <div style="font-size: 30px;">£<span class="estimate_value"></div>
+                <div class="text-muted mb-2">+/- £<span class="property_margin"></span></div>
+                <div><i class="fe fe-refresh-cw h6"></i> <small class="h6">Next update in <span class="remaining-est-days"> </span> days</small></div>
               </div>
-              <div class="text-muted property-estimate-helper"></div>
+              <div class="col-12 p-4 text-center bg-white mb-3 property-estimate-box-empty">
+                <div class="h-100 text-center d-flex  flex-column justify-content-center align-items-center p-4">
+                    <button type="button" class="btn btn-sm btn-outline-primary get-property-est-btn d-flex align-items-center"><i class="fe fe-bar-chart-2 mr-2"></i><span>Get valuation</span></button>
+                </div>
+              </div>
+              <div class="col-12 p-4 text-center bg-white mb-3 property-estimate-box-missing-value">
+                <div class="h-100 text-center d-flex  flex-column justify-content-center align-items-center p-4">
+                    <a type="button" href="/property/detail/<%=property.id%>" class="btn btn-sm btn-outline-primary d-flex align-items-center"><i class="fe fe-bar-chart-2 mr-2"></i><span>Update Detail</span></a>
+                    <div><span class="badge badge-danger pa-1 px-2 mt-3"><small class="h6">Missing required details for valuation</small></span></div>
+                </div>
+              </div>
+              <!-- <div class="text-muted property-estimate-helper">
+                <span class="h6">This property is missing required information to get a valuation.</span> <a href="/property/detail/${property.id}" class="btn-link"><small class="h6">Update details now</small></a>
+              </div> -->
               <!-- <div class="row">
                 <div class="col-12 col-md-6">
                   <div class="form-group">

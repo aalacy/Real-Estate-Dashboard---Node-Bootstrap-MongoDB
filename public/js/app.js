@@ -1230,34 +1230,38 @@ $(function() {
         });
     });
 
-    // show property value modal
-    $('.show-property-value').click(function() {
+    const updateEstBox = () => {
       const is_missing = checkAvailabilityForPropertyValueUpdate(property);
+      $('.property-estimate-box').removeClass('d-none')
+      $('.property-estimate-box-empty').removeClass('d-none')
+      $('.property-estimate-box-missing-value').removeClass('d-none')
       if (is_missing) {
-        $('.property-estimate-box').html(`
-          <div class="h-100 text-center d-flex  flex-column justify-content-center align-items-center p-4">
-              <span class="fe fe-alert-circle"></span>
-              <h5 class="card-title text-muted mt-2">
-                No estimate available
-              </h5>
-          </div>
-        `)
+        $('.property-estimate-box').addClass('d-none')
+        $('.property-estimate-box-empty').addClass('d-none')
         // disable auto estimate switch
         $('#estimatePropertyBtn').prop('disabled', true);
+        $('.get-property-est-btn').prop('disabled', true);
         $('#estimatePropertyBtn').prop('checked', false);
-        $('.property-estimate-helper').html(`<span class="h6">This property is missing required information to get a valuation.</span> <a href="/property/detail/${property.id}" class="btn-link"><small class="h6">Update details now</small></a>`)
       } else {
-        $('.property-estimate-box').html(`
-          <div class="text-muted text-uppercase mb-2">Estimate Value</div>
-          <div style="font-size: 30px;">£<span class="">${property.estimate_value ? property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}</div>
-          <div class="text-muted">+/-£<span class="property_margin">${property.margin ? property.margin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}</span></div>
-        `)
-
+        $('.property-estimate-box-missing-value').addClass('d-none')
+        if (property.estimate_value) {
+          $('.property-estimate-box-empty').addClass('d-none')
+          $('#estimatePropertyBtn').prop('disabled', false);
+        } else {
+          $('.property-estimate-box').addClass('d-none')
+        }
+        $('.estimate_value').html(`${property.estimate_value ? property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}`)
+        $('.property_margin').html(`${property.margin ? property.margin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}`)
         // enable auto estimate switch
-        $('#estimatePropertyBtn').prop('disabled', false);
+        $('.get-property-est-btn').prop('disabled', false);
         const remaining_days = moment(property.estimate_cron_run_date).diff(moment(), 'days')
-        $('.property-estimate-helper').html(`<i class="fe fe-refresh-cw h6"></i> <small class="h6">Next update in ${remaining_days} days</small>`)
+        $('.remaining-est-days').html(remaining_days)
       }
+    }
+
+    // show property value modal
+    $('.show-property-value').click(function() {
+      updateEstBox()
 
       if (property.current_value) {
         $('#property_current_value').val(property.current_value)
@@ -1269,10 +1273,13 @@ $(function() {
       $('#modalAdjustSummary').modal()
     })
 
-    // turn on/off auto estimate
-    $('#estimatePropertyBtn').change(function() {
+    // get property estimate
+    $('.get-property-est-btn').click(function() {
+      const self = $(this)
+      self.find('i').addClass('spinner-grow')
       const _csrf = $('input[name="_csrf"]').val();
-      const estimate_cron_on = $(this).prop('checked')
+      // const estimate_cron_on = $(this).prop('checked')
+      const estimate_cron_on = true
       fetch('/property/cron/estimate',
         { 
           credentials: 'same-origin',
@@ -1280,14 +1287,27 @@ $(function() {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({estimate_cron_on, property_id:property.id, _csrf})
+          body: JSON.stringify({ property_id:property.id, _csrf })
         })
         .then(res => res.json())
         .then(function(res) {
           makeToast({message: res.message});
+          if (res.status == 200) {
+            property = res.property
+            updateEstBox()
+          }
         }).catch(function(text) {
             console.log(text);
-        });
+        }).finally( () => {
+          self.find('i').removeClass('spinner-grow')
+        })
+    })
+
+    // turn on/off auto estimate
+    $('#estimatePropertyBtn').change(function() {
+      if ($(this).prop('checked')) {
+        $('#property_current_value').val(property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+      }
     })
 
     // Delete the unit
@@ -1610,7 +1630,7 @@ $(function() {
           .catch(error => {
               console.log(error);
           }).
-          finaly(() =>{
+          finally(() =>{
             $('.transaction-dropdown').toggleClass('show')
           });
         }

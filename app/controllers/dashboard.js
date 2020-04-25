@@ -62,8 +62,12 @@ Colors.random = function() {
     return Colors.names[result];
 };
 
-exports.index = async function(req, res) {
+exports.index = async function(req, res, next) {
   const { user } = req.session;
+  if (!user) {
+    return res.redirect('/signin');
+  }
+  console.log('=========')
   const current_user = await Users.findOne({id: user.id}, {_id: 0});
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 }).sort('-rental_yield');
   const transactions = await Transactions.find({ user_id: user.id }, { _id: 0 });
