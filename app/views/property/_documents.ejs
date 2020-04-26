@@ -17,31 +17,39 @@
               </h4>
 
             </div>
-            <div class="col-sm-12 col-md-4 filter-by-property">
+            <div class="col-sm-12 col-md-3 filter-by-property">
               
-                <select class="form-control" style="min-width: 250px;" id="filterByProperty" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
+                <select class="form-control" style="min-width: 200px;" id="filterByProperty" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
                     <option></option>
                 </select>  
             </div>
 
-            <div class="col-12 col-md-4">
-              <select class="form-control" style="min-width: 350px;" id="filterByCategory" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
+            <div class="col-12 col-md-3">
+              <select class="form-control filter-by-doc-category" style="min-width: 250px;" id="filterByCategory" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
                   <option></option>
                   <option value="All">All Categories</option>
-                  <option value="Tenancy Documents">Tenancy Documents</option>
-                  <option value="Certificates ">Certificates</option>
-                  <option value="Title Deeds">Title Deeds</option>
-                  <option value="Insurance">Insurance</option>
+                  <option value="Key Documents">Key Documents</option>
+                  <option value="Ownership">Ownership</option>
                   <option value="Mortgage & Financing">Mortgage & Financing</option>
-                  <option value="Taxes">Taxes</option>
-                  <option value="Plans">Plans</option>
+                  <option value="Other Financial">Other Financial</option>
                   <option value="Uncategorised">Uncategorised</option>
               </select> 
             </div>
+            <div class="col-12 col-md-3 keydoc-subcategory-group d-none">
+              <select class="form-control" id="filterByDocSubcategory" name="document[subcategory]" data-toggle="select"  data-options='{"placeholder": "Select a Subcategory"}'>
+                <option value="All">All Subcategories</option>
+                <option value="EPC">EPC</option>
+                <option value="Gas Safety Record">Gas Safety Record</option>
+                <option value="Fire Safety Record">Fire Safety Record</option>
+                <option value="Floorplan">Floorplan</option>
+                <option value="EICR">EICR</option>
+              </select>  
+            </div>
+
             <div class="col-auto doc-upload-btn-wrapper">
-                <a href="#" class="btn lift btn-primary modal-upload">
-                  Upload
-                </a>
+              <a href="#" class="btn lift btn-primary modal-upload">
+                Upload
+              </a>
             </div>
           </div> <!-- / .row -->
         </div>

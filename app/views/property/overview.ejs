@@ -626,7 +626,7 @@
                                 <div class="w-2 h-2 bg-grey"></div>
                               </div>
                             </div> 
-                            Rent P.A: <b>£<%=property.rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%></b>
+                            Rent P.A:&nbsp;<b>£<%=property.rental_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')%></b>
                           </div>
                         </div>
                         <div class="flex-1 text-grey-dark">
@@ -880,7 +880,7 @@
                       
                         <!-- Title -->
                         <h4 class="card-header-title">
-                          Latest Files
+                          Key Documents
                         </h4>
 
                       </div>
@@ -1530,7 +1530,7 @@
               marginRight: 0
           },
           title: {
-              text: `${data.percent}%`,
+              text: `<span style="font-size: .85rem;">LTV</span><br><span style="font-weight:600;">${data.percent}%</span>`,
               align: 'center',
               verticalAlign: 'middle',
               y: 15
@@ -1552,8 +1552,8 @@
                   },
                   startAngle: -90,
                   endAngle: 90,
-                  center: ['50%', '55%'],
-                  size: '120%'
+                  center: ['50%', '65%'],
+                  size: '130%'
               }
           },
           series: [{

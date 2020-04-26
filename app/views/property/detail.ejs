@@ -391,13 +391,9 @@
             </form>
             <!-- Divider -->
             <hr class="mt-5 mb-5">
-            <form method="POST" action="/property/remove" class="text-right">
-              <input type="hidden" name="_csrf" value="<%= token %>">
-              <input type="hidden" name="property[id]" value="<%= property.id%>">
-              <button type="submit" class="btn btn-danger">
-                Delete property
-              </button>
-            </form>
+            <button type="submit" class="btn btn-danger delete-property" data-id="<%=property.id%>">
+              Delete property
+            </button>
           </div>
         </div> <!-- / .row -->
       </div>

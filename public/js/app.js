@@ -74,6 +74,34 @@ const addTenant = function(tenant, unit) {
 </div>`);
 }
 
+// documents
+const showDocSubcategories = (category) => {
+  $('.filter-by-doc-subcategory').val(null).trigger('change')
+
+  if (category == 'Key Documents') {
+    $('.keydoc-subcategory-group').removeClass('d-none')
+  } else {
+    $('.keydoc-subcategory-group').addClass('d-none')
+  }
+}
+
+const showDocExpiryAndRating = (subcategory) => {
+  $('.doc-expiry-date').val('')
+  $('.doc-rating').val(null).trigger('change')
+  if (['EPC', 'Gas Safety Record', 'Fire Safety Record'].includes(subcategory)) {
+    $('.doc-expirydate-group').removeClass('d-none')
+  } else {
+    $('.doc-expirydate-group').addClass('d-none')
+  }
+
+  if ( subcategory == 'EPC') {
+    $('.doc-rating-group').removeClass('d-none')
+  } else {
+    $('.doc-rating-group').addClass('d-none')
+    $('.doc-rating').val(null).trigger('change')
+  }
+}
+
 function doPopulate() {
     $('.documentList').empty();
     let page = 0; 
@@ -88,6 +116,16 @@ function doPopulate() {
       let avatar = '<span class="fe fe-file" style="font-size: 2rem;"></span>';
       if (doc.mimetype.includes('image')) {
         avatar = `<img src="/${doc.path}" alt="document image preview" class="avatar rounded"/>`;
+      }
+      let uploaded_on = `&nbsp;<time datetime="${doc.uploaded_at}">${moment(doc.uploaded_at).format('DD MMM YY')}</time>`
+      if (doc.category == 'Key Documents') {
+        uploaded_on = 'Last updated:' + uploaded_on
+      } else {
+        uploaded_on = 'Uploaded:' + uploaded_on
+      }
+      let category = `<span class="badge badge-soft-primary px-2">${doc.category}</span>`
+      if (doc.category != 'Key Documents') {
+        category = `<span class="badge badge-soft-dark px-2">${doc.category}</span>`
       }
 
       $('.documentList').append(`<li class="list-group-item document-item px-0 page${page}">
@@ -104,15 +142,15 @@ function doPopulate() {
                 <a target="_blank" href="/${doc.path}">${doc.filename}</a>
               </h4>
               <p class="card-text small text-muted mb-1">
-                ${doc.display_name} &bull; ${doc.category || ''}
+                ${doc.display_name}
               </p>
-              <p class="card-text small text-muted">
-                Uploaded on <time datetime="${uploaded_at}">${uploaded_at}</time>
+              <p class="card-text">
+                ${category}
               </p>
             </div>
             <div class="col-auto">
-              <a href="/${doc.path}" target="_blank" class="btn btn-sm btn-white d-none d-md-inline-block">
-                View
+              <a href="#" class="btn btn-sm btn-white edit-document modal-upload" data-id="${doc.id}" data-property_id="${doc.property_id}" data-property_name="${doc.property_name}" data-unit_id="${doc.unit_id}" data-unit_name="${doc.unit_name}" data-tag="${doc.tag}" data-path="${doc.path}" data-size="${doc.size}" data-note="${doc.note}" data-filename="${doc.filename}" data-mimetype="${doc.mimetype}" data-category="${doc.category}" data-subcategory="${doc.subcategory}" data-expirydate="${doc.expiry_date}" data-rating="${doc.rating}">
+                ${uploaded_on}
               </a>
             </div>
             <div class="col-auto">
@@ -121,7 +159,7 @@ function doPopulate() {
                   <i class="fe fe-more-vertical"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-                  <button class="dropdown-item edit-document modal-upload" data-id="${doc.id}" data-property_id="${doc.property_id}" data-property_name="${doc.property_name}" data-unit_id="${doc.unit_id}" data-unit_name="${doc.unit_name}" data-tag="${doc.tag}" data-path="${doc.path}" data-size="${doc.size}" data-note="${doc.note}" data-filename="${doc.filename}" data-mimetype="${doc.mimetype}">
+                  <button class="dropdown-item edit-document modal-upload" data-id="${doc.id}" data-property_id="${doc.property_id}" data-property_name="${doc.property_name}" data-unit_id="${doc.unit_id}" data-unit_name="${doc.unit_name}" data-tag="${doc.tag}" data-path="${doc.path}" data-size="${doc.size}" data-note="${doc.note}" data-filename="${doc.filename}" data-mimetype="${doc.mimetype}" data-category="${doc.category}" data-subcategory="${doc.subcategory}" data-expirydate="${doc.expiry_date}" data-rating="${doc.rating}">
                     Edit
                   </button>
                   <button class="dropdown-item delete-document" data-id="${doc.id}">
@@ -169,13 +207,6 @@ function doPopulate() {
           },
           // pagination Classes
           paginationClass: 'pagination',
-          nextClass: 'next',
-          prevClass: 'prev',
-          lastClass: 'last',
-          firstClass: 'first',
-          pageClass: 'page',
-          activeClass: 'active',
-          disabledClass: 'disabled'
       });
     } catch(e) {}
   }
@@ -271,9 +302,11 @@ function doPopulate() {
         $('.unit-filter').empty();
         units = res.units
         if (res.units.length == 1) {
+          $('.unit-label').html('Unit')
           $('#unit_tenants').val(JSON.stringify(res.units[0].tenants))
           $('.unit-filter').attr("data-placeholder","Single Unit Property").select2().attr('disabled', true);
         } else {
+          $('.unit-label').html('Units')
           $('.unit-filter').attr("data-placeholder","Select a Unit").select2().attr('disabled', false);
           // var option = new Option('No unit specified', '-1', true, true);
           // $('.unit-filter').append(option);
@@ -764,13 +797,6 @@ const setupPagination = () => {
         },
         // pagination Classes
         paginationClass: 'pagination',
-        nextClass: 'next',
-        prevClass: 'prev',
-        lastClass: 'last',
-        firstClass: 'first',
-        pageClass: 'page',
-        activeClass: 'active',
-        disabledClass: 'disabled'
     });
   } catch(e) {}
 }
@@ -1797,6 +1823,14 @@ $(function() {
       doPaginate();
     });
 
+    $('.filter-by-doc-category').on('select2:select', function (e) {
+      showDocSubcategories(e.params.data.id)
+    })
+
+    $('.filter-by-doc-subcategory').on('select2:select', function (e) {
+      showDocExpiryAndRating(e.params.data.id)
+    })
+
     $('.property-filter').on('select2:select', async function (e) {
       await selectPropertyFilter(e.params.data.id);
     });
@@ -1823,7 +1857,7 @@ $(function() {
       }
     });
 
-    $(document).on('click', '.modal-upload', function(e) {
+    $(document).on('click', '.modal-upload', async function(e) {
       e.preventDefault()
       $('#document_property').empty();
       $('.document_unit').empty();
@@ -1860,13 +1894,18 @@ $(function() {
         const unit_id = $(this).data('unit_id');
         const property_id = $(this).data('property_id');
         const property_name = $(this).data('property_name');
-        const tag = $(this).data('tag');
+        const doc_category = $(this).data('category')
+        const doc_subcategory =$(this).data('subcategory')
         const image = $(this).data('path');
-        var option = new Option(unit_name, unit_id, true, true);
-        $('.document_unit').append(option);
         $('#document_property').val(property_id).trigger('change');
-        option = new Option(tag, tag, true, true);
-        $('.document_tag').append(option);
+        await selectPropertyFilter(property_id)
+        $('.unit-filter').val(unit_id).trigger('change')
+        $('.document_category').val(doc_category).trigger('change')
+        showDocSubcategories(doc_category)
+        $('.filter-by-doc-subcategory').val(doc_subcategory).trigger('change')
+        showDocExpiryAndRating(doc_subcategory)
+        $('.doc-expiry-date').val($(this).data('expirydate')).trigger('change')
+        $('.doc-rating').val($(this).data('rating')).trigger('change')
         $('.document_id').val($(this).data('id'));
         $('.document_size').val($(this).data('size'));
         $('.document_path').val(image);
@@ -1916,6 +1955,9 @@ $(function() {
           tag: $('.document_tag').val(),
           note: $('.document_note').val(),
           category: $('.document_category').val(),
+          subcategory: $('.filter-by-doc-subcategory').val(),
+          expiry_date: $('.doc-expiry-date').val(),
+          rating: $('.doc-rating').val(),
           status: $('.status').val(),
           size: $('.document_size').val(),
           path: $('.document_path').val(),
@@ -1973,6 +2015,7 @@ $(function() {
             if (res.status == 422) {
             } else if (res.status == 200) {
               parent.remove();
+              doPaginate()
               // $('.doc_cnt').html(res.doc_cnt);
             }
           })
