@@ -334,12 +334,12 @@
                     <div class="col-12 col-md-4">
                       <div class="form-group">
                         <label>
-                          Ownership
+                          Ownership Type
                         </label>
                         <select class="form-control" name="property[ownership]" data-toggle="select" value="<%= property.ownership%>" data-options='{"placeholder": "Freehold or Leasehold"}'>
                           <option></option>
-                          <option value="freehold" <% if (property.ownership == 'freehold'){ %><%='selected'%><%}%>>Freehold</option>
-                          <option value="leasehold" <% if (property.ownership == 'leasehold'){ %><%='selected'%><%}%>>Leasehold</option>
+                          <option value="Freehold" <% if (property.ownership == 'Freehold'){ %><%='selected'%><%}%>>Freehold</option>
+                          <option value="Leasehold" <% if (property.ownership == 'Leasehold'){ %><%='selected'%><%}%>>Leasehold</option>
                         </select>
                       </div>
 
