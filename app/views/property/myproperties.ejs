@@ -181,7 +181,7 @@
           const current_value = property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
           const rental_yield = property.rental_yield.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + '%';
           let right_label = 'Gross Yield';
-          let right_value = rental_yield;
+          let right_value = rental_yield.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
           // Allow changin time periosds dropdown menu
           $('#timePeriod').removeClass('disabled');
@@ -189,7 +189,7 @@
           switch (metric) {
             case 'Gross Yield':
               right_label = 'Gross Yield';
-              right_value = rental_yield;
+              right_value = rental_yield.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
               // Disable changing time periods dropdown menu
               $('#timePeriod').addClass('disabled');
               break;
@@ -199,7 +199,7 @@
               break;
             case 'Income':
               right_label = 'Income';
-              right_value = '£' + property.total_income;
+              right_value = '£' + property.total_income.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
               break;
             case 'OER':
               right_label = 'OER';

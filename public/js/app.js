@@ -192,12 +192,12 @@ function doPopulate() {
           // template for pagination links
           href: false,
           // variable name in href template for page number
-          hrefVariable: '{{number}}',
+          hrefVariable: '',
           // Text labels
-          first: '<<',
+          first: '',
           prev: 'Prev',
           next: 'Next',
-          last: '>>',
+          last: '',
           // carousel-style pagination
           loop: false,
           // callback function
@@ -308,8 +308,8 @@ function doPopulate() {
         } else {
           $('.unit-label').html('Units')
           $('.unit-filter').attr("data-placeholder","Select a Unit").select2().attr('disabled', false);
-          // var option = new Option('No unit specified', '-1', true, true);
-          // $('.unit-filter').append(option);
+          var option = new Option('No unit selected', '-1', true, true);
+          $('.unit-filter').append(option);
           res.units.map(unit => {
             var option = new Option(unit.description, unit.id, true, true);
             $('.unit-filter').append(option);
@@ -323,9 +323,9 @@ function doPopulate() {
  * Confirm Dialog
  */
 
-function confirmDialog(message, handler){
+function confirmDialog(message, handler, title="Warning"){
   $(`<div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-card card">
           <div class="card-header">
@@ -334,7 +334,7 @@ function confirmDialog(message, handler){
 
                 <!-- Title -->
                 <h4 class="card-header-title">
-                  Warning
+                  ${title}
                 </h4>
             
               </div>
@@ -353,10 +353,13 @@ function confirmDialog(message, handler){
             <p>
               ${message}
             </p>
+            <div>
+              This action cannot be undone
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary btn-no">Cancel</button>
-            <button type="button" class="btn btn-danger btn-yes delete-document">Ok</button>
+            <button type="button" class="btn btn-danger btn-yes delete-document">Delete</button>
           </div>
         </div>
       </div>
@@ -689,7 +692,7 @@ const displayTransactions = (paginated=true, unit_id=-1) => {
       return
     }
     const sign = parseFloat(transaction.amount) < 0;
-    let amount = '£' + transaction.amount.replace('-', '');
+    let amount = '£' + transaction.amount.replace('-', '').toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
    
     if (transaction.type == 'Out') {
       amount = '-' + amount;
@@ -1167,7 +1170,7 @@ $(function() {
       const property = {
         id: $(this).data('id')
       }
-      confirmDialog("Are you sure?", (ans) => {
+      confirmDialog("Are you sure want to delete this property and all its associated data?", (ans) => {
         if (ans) {
           fetch(new Request('/property/remove/', 
             {
@@ -1184,7 +1187,7 @@ $(function() {
               console.log(text);
           });
         }
-      });
+      }, 'Delete Property');
     })
 
     // Adjust tenancey
@@ -1274,6 +1277,7 @@ $(function() {
           $('.property-estimate-box-empty').addClass('d-none')
           $('#estimatePropertyBtn').prop('disabled', false);
         } else {
+          $('#estimatePropertyBtn').prop('disabled', true);
           $('.property-estimate-box').addClass('d-none')
         }
         $('.estimate_value').html(`${property.estimate_value ? property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}`)
@@ -1313,7 +1317,7 @@ $(function() {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ property_id:property.id, _csrf })
+          body: JSON.stringify({ estimate_cron_on, property_id:property.id, _csrf })
         })
         .then(res => res.json())
         .then(function(res) {
@@ -1333,6 +1337,8 @@ $(function() {
     $('#estimatePropertyBtn').change(function() {
       if ($(this).prop('checked')) {
         $('#property_current_value').val(property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+      } else {
+        $('#property_current_value').val(property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
       }
     })
 

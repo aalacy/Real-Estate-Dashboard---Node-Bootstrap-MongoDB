@@ -25,6 +25,34 @@
             </div>
 
             <div class="col-12 col-md-3">
+              <ul class="dropdown-menu" aria-labelledby="topnavDocumentation">
+                <li class="dropright">
+                  <a class="dropdown-item dropdown-toggle " href="#" id="keyDocuments" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Key Documents
+                  </a>
+                  <div class="dropdown-menu keyDocuments" aria-labelledby="keyDocuments">
+                    <a class="dropdown-item " href="#">
+                      EPC
+                    </a>
+                    <a class="dropdown-item " href="#">
+                      Gas Safety Record
+                    </a>
+                    <a class="dropdown-item " href="#">
+                      Fire Safety Record
+                    </a>
+                    <a class="dropdown-item " href="#">
+                      Floorplan 
+                    </a>
+                    <a class="dropdown-item " href="#">
+                      EICR 
+                    </a>
+                  </div>
+                </li>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item " href="#">
+                  Ownership
+                </a>
+              </ul>
               <select class="form-control filter-by-doc-category" style="min-width: 250px;" id="filterByCategory" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
                   <option></option>
                   <option value="All">All Categories</option>
@@ -84,7 +112,7 @@
         </div>
       </div>
 
-      <ul id="documentPagination" class="pagination-md mt-5"></ul>
+      <ul id="documentPagination" class="pagination-md mt-5 justify-content-end"></ul>
     </div>
   </div> <!-- / .row -->
 </div>

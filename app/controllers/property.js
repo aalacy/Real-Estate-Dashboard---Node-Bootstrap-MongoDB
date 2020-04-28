@@ -100,12 +100,15 @@ const estimatePropertyValue = async (property_id) => {
     console.log(e)
   });
   if (est_res.status == 'success') {
-    await Properties.updateOne({ id: property.id }, {$set: { estimate_value, margin, estimate_cron_run_date}})
-        .catch(err => console.log(err));
     estimate_value = est_res.result.estimate,
     margin = est_res.result.margin
+    estimate_cron_run_date = moment().add(30, 'days').format('YYYY-MM-DD')
+    estimate_cron_on = true
+    await Properties.updateOne({ id: property.id }, {$set: { estimate_value, margin, estimate_cron_on, estimate_cron_run_date}})
+        .catch(err => console.log(err));
     property.estimate_value = estimate_value
     property.margin = margin
+    property.estimate_cron_run_date = estimate_cron_run_date
     return property
   } else {
     return null
@@ -646,7 +649,7 @@ exports.upload_doc_to_property = async function(req, res) {
   const property_name = document.property_name;
   const unit_name = document.unit_name;
   let display_name = property_name;
-  if (unit_name != 'No unit specified' && unit_name) {
+  if (unit_name != 'No unit selected' && unit_name) {
     display_name += ' - ' + unit_name
   }
   const new_document = {
