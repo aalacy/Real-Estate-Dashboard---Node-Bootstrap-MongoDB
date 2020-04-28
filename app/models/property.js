@@ -38,11 +38,11 @@ const PropertiesSchema = new Schema({
     bedrooms: { type: Number, default: 1 }, // 1
     bathrooms: { type: Number, default: 1 }, // 2
     square_feet: { type: Number, default: 0.0 },
-    type: { type: String, default: 'detached_house' }, // Detached House / Semi Detached House / Terraced House / Flat
-    finish_quality: { type: String, default: 'unmodernised' }, // Very High / High / Average / Below Average / Unmordernised
+    type: { type: String, default: '' }, // Detached House / Semi Detached House / Terraced House / Flat
+    finish_quality: { type: String, default: '' }, // Very High / High / Average / Below Average / Unmordernised
     outdoor_space: { type: String, default: 'none' }, // None / Balcony Terrace / Garden / Garden (Large)
     ownership: { type: String, default: '' }, // Freehold / Leasehold
-    construction_date: { type: String, default: 'pre_1914' }, // 2019-01-02
+    construction_date: { type: String, default: '' }, // 2019-01-02
     rental_yield: { type: Number, default: 0.0 }, // 3.8% - gross yeild
     rental_income: { type: Number, default: 0.0 }, // £240pcm
     off_street_parking: { type: String, default: '0' }, // 0 ~ 3 Spaces
