@@ -35,8 +35,8 @@ const PropertiesSchema = new Schema({
     estimate_cron_run_date: { type: String, default: ''},
     purchase_price: { type: Number, default: 0.0 }, // £240
     purchase_date: { type: String, default: '' }, // 2019-01-02
-    bedrooms: { type: Number, default: 1 }, // 1
-    bathrooms: { type: Number, default: 1 }, // 2
+    bedrooms: { type: Number, default: 0 }, // 1
+    bathrooms: { type: Number, default: 0 }, // 2
     square_feet: { type: Number, default: 0.0 },
     type: { type: String, default: '' }, // Detached House / Semi Detached House / Terraced House / Flat
     finish_quality: { type: String, default: '' }, // Very High / High / Average / Below Average / Unmordernised

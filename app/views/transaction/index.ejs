@@ -51,7 +51,7 @@
                       Date
                     </label>
                     <div class="col-lg-9 col-sm-12">
-                      <input type="text" id="transaction_created_at" name="transaction[created_at]" class="form-control w-100" value=""  data-toggle="flatpickr" required>
+                      <input type="text" id="transaction_created_at" name="transaction[created_at]" class="form-control w-100" value="" data-toggle="flatpickr" required>
                     </div>
                   </div>
 
@@ -91,7 +91,7 @@
                       Units 
                     </label>
                     <div class="col-lg-9 col-sm-12 d-flex">
-                      <select class="form-control unit-filter" id="transaction_unit" name="transaction[unit_id]" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
+                      <select class="form-control unit-filter no-unit" id="transaction_unit" name="transaction[unit_id]" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
                         <option></option>
                       </select>  
                     <!--   &nbsp;<button title="Clear Unit" type="button" class="btn btn-white btn-sm clear-unit-selection"><i class="fe fe-refresh-cw"></i></button> -->
@@ -306,7 +306,7 @@
               <div class="transaction-list">
               </div>
             </div>
-            <ul class="transactionPagination pagination-md mt-5"></ul>
+            <ul class="transactionPagination pagination-md mt-5 justify-content-end"></ul>
           </div>
         </div>
       </div>

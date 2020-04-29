@@ -461,7 +461,7 @@
                 <div class="text-muted text-uppercase mb-2">Estimate Value</div>
                 <div style="font-size: 30px;">£<span class="estimate_value"></div>
                 <div class="text-muted mb-2">+/- £<span class="property_margin"></span></div>
-                <div><i class="fe fe-refresh-cw h6"></i> <small class="h6">Next update in <span class="remaining-est-days"> </span> days</small></div>
+                <span class="badge badge-soft-secondary px-2"><i class="fe fe-refresh-cw h6"></i> <small class="h6">Next update in <span class="remaining-est-days"> </span> days</small></span>
               </div>
               <div class="col-12 p-4 text-center bg-white mb-3 property-estimate-box-empty">
                 <div class="h-100 text-center d-flex  flex-column justify-content-center align-items-center p-4">
@@ -1702,8 +1702,8 @@
           } else {
             $('.unit-tenants').html('No Tenant');
           }
-          $('.unit-start_date').text(unit.start_date);
-          $('.unit-end_date').text(unit.end_date);
+          $('.unit-start_date').text(moment(unit.start_date).format('DD MMM YY'));
+          $('.unit-end_date').text(moment(unit.end_date).format('DD MMM YY'));
           $('input[name="unit[id]"]').val(unit.id);
 
           // show 3 most recent payment
@@ -1911,10 +1911,10 @@
           $('input[name="property[amount_borrowed]"]').val(property.amount_borrowed.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
           $('input[name="property[interest_rate]"]').val(property.interest_rate.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
           $('input[name="property[monthly_payment]"]').val(property.monthly_payment.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
-          $('input[name="property[start_date]"]').val(property.start_date)
-          $('input[name="property[maturity_date]"]').val(property.maturity_date)
+          $('input[name="property[start_date]"]').val(moment(property.start_date).format('DD MMM YY'))
+          $('input[name="property[maturity_date]"]').val(moment(property.maturity_date).format('DD MMM YY'))
           if (property.loan_updated_at) {
-            $('#loanHelperUpdatedAt .update-at').text(moment(property.loan_updated_at).format('MM/DD/YYYY'))
+            $('#loanHelperUpdatedAt .update-at').text(moment(property.loan_updated_at).format('DD MMM YY'))
           }
           $('#modalAddNewLoan').modal();
         });
@@ -1939,9 +1939,9 @@
             amount_borrowed: $('input[name="property[amount_borrowed]"]').val().replace(',', ''),
             monthly_payment: $('input[name="property[monthly_payment]"]').val().replace(',', ''),
             interest_rate: $('input[name="property[interest_rate]"]').val().replace(',', ''),
-            start_date: $('input[name="property[start_date]"]').val(),
-            maturity_date: $('input[name="property[maturity_date]"]').val(),
-            loan_updated_at: moment().format('YYYY-MM-DD HH:mm:ss')
+            start_date: moment($('input[name="property[start_date]"]').val()).format('DD MMM YY'),
+            maturity_date: moment($('input[name="property[maturity_date]"]').val()).format('DD MMM YY'),
+            loan_updated_at: moment().format('DD MMM YY HH:mm:ss')
           };
 
           const token = $('meta[name="csrf"]').attr('content');

@@ -187,7 +187,7 @@ function doPopulate() {
           // the current page that show on start
           startPage: 1,
           // maximum visible pages
-          visiblePages: visiblePageCnt,
+          visiblePages: 0,
           initiateStartPageClick: true,
           // template for pagination links
           href: false,
@@ -304,18 +304,25 @@ function doPopulate() {
         if (res.units.length == 1) {
           $('.unit-label').html('Unit')
           $('#unit_tenants').val(JSON.stringify(res.units[0].tenants))
-          $('.unit-filter').attr("data-placeholder","Single Unit Property").select2().attr('disabled', true);
+          $('.unit-filter').data('select2').selection.placeholder.text = "Single Unit Property";
+          $('.unit-filter').next("span.select2:first").find("span.select2-selection__placeholder").html("Single Unit Property")
+          $('.unit-filter').attr('disabled', true);
         } else {
           $('.unit-label').html('Units')
-          $('.unit-filter').attr("data-placeholder","Select a Unit").select2().attr('disabled', false);
-          var option = new Option('No unit selected', '-1', true, true);
-          $('.unit-filter').append(option);
+          if ($('.unit-filter').hasClass('no-unit')) {
+            var option = new Option('No unit selected', '-1', true, true);
+            $('.unit-filter').append(option);
+          }
           res.units.map(unit => {
             var option = new Option(unit.description, unit.id, true, true);
             $('.unit-filter').append(option);
           })
+          $('.unit-filter').attr("data-options", '{"placeholder": "Select a Unit"}');
+          $('.unit-filter').data('select2').selection.placeholder.text = "Select a Unit";
+          $('.unit-filter').next("span.select2:first").find("span.select2-selection__placeholder").html("Select a Unit");
+          $('.unit-filter').attr('disabled', false);
+          $('.unit-filter').val(null).trigger('change');
         }
-        $('.unit-filter').val(null).trigger('change');
       }
   }
 
@@ -722,7 +729,7 @@ const displayTransactions = (paginated=true, unit_id=-1) => {
           </div>  
         </div>
         <div class="col-lg-2 col-md-3 col-sm-4">
-          <div class="mb-1">${transaction.created_at}</div>
+          <div class="mb-1">${moment(transaction.created_at).format('DD MMM YY')}</div>
           <div class="text-muted">Date</div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-4">
@@ -780,17 +787,17 @@ const setupPagination = () => {
         // the current page that show on start
         startPage: 1,
         // maximum visible pages
-        visiblePages: visiblePageCnt,
+        visiblePages: 0,
         initiateStartPageClick: true,
         // template for pagination links
         href: false,
         // variable name in href template for page number
         hrefVariable: '{{number}}',
         // Text labels
-        first: '<<',
+        first: '',
         prev: 'Prev',
         next: 'Next',
-        last: '>>',
+        last: '',
         // carousel-style pagination
         loop: false,
         // callback function
@@ -884,6 +891,12 @@ const checkAvailabilityForPropertyValueUpdate = (property) => {
 }
 
 $(function() {
+    // set dateformat 
+    $('input[data-toggle="flatpickr"]').flatpickr({
+      dateFormat: "Y-m-d",
+    }) 
+
+
     /**
      * User Authentication
      */
@@ -1182,7 +1195,7 @@ $(function() {
             }
           ))
           .then(function() {
-              location.reload();
+            location.href = '/property/my'
           }).catch(function(text) {
               console.log(text);
           });
@@ -1234,8 +1247,8 @@ $(function() {
         } else {
           unit_description_formgroup.removeClass('d-none')
         }
-        $('input[name="unit[start_date]"]').val(unit.start_date);
-        $('input[name="unit[end_date]"]').val(unit.end_date);
+        $('input[name="unit[start_date]"]').val(moment(unit.start_date).format('dd MMM YY'));
+        $('input[name="unit[end_date]"]').val(moment(unit.end_date).format('dd MMM YY'));
         $('#unit_rent_frequency').val(unit.rent_frequency);
         $('#unit_rent_frequency').trigger('change');
         $('input[name="unit[rent_price]"]').val(unit.rent_price);
@@ -1394,16 +1407,17 @@ $(function() {
       var randomScalingFactor = function() {
             return Math.round(Math.random() * 100);
         };
+
+      var _colors = ['#0E67DC', '#555F7F', '#41D3BD', '#051A35']
       
       if ($('#marketChart')[0]) {
         const labels = $('#marketChart').data('option').labels;
         const dataset = $('#marketChart').data('option').dataset;
-        var colors = Highcharts.getOptions().colors;
         data = []
         labels.map((label, i) => {
           data.push({
               name: label,
-              color: colors[i],
+              color: _colors[i],
               y: dataset[i],
               drilldown: label
           })
@@ -1414,12 +1428,11 @@ $(function() {
     if ($('#incomeChart')[0]) {
         const labels = $('#incomeChart').data('option').labels;
         const dataset = $('#incomeChart').data('option').dataset;
-        var colors = Highcharts.getOptions().colors;
         data = []
         labels.map((label, i) => {
           data.push({
               name: label,
-              color: colors[i],
+              color: _colors[i],
               y: dataset[i],
               drilldown: label
           })

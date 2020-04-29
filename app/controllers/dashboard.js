@@ -67,14 +67,12 @@ exports.index = async function(req, res, next) {
   if (!user) {
     return res.redirect('/signin');
   }
-  console.log('=========')
   const current_user = await Users.findOne({id: user.id}, {_id: 0});
-  const properties = await Properties.find({ user_id: user.id }, { _id: 0 }).sort('-rental_yield');
+  const properties = await Properties.find({ user_id: user.id }, { _id: 0 }).sort('-current_value');
   const transactions = await Transactions.find({ user_id: user.id }, { _id: 0 });
   let portfolio_value = 0;
   let total_purchase_price = 0;
   let badge_value = 0;
-  let rental_income = 0;
   let all_units = 0;
   let occupied = 0;
   let markers = [];
@@ -84,7 +82,9 @@ exports.index = async function(req, res, next) {
   let vacant_cnt = 0;
 
   let total_current_value = 0;
-  properties.map(property => {
+  let rental_income = 0;
+  let current_value = 0;
+  properties.map( (property, idx) => {
     if (property.current_value < property.purchase_price) {
 	   portfolio_value -= property.current_value;
     } else {
@@ -104,11 +104,22 @@ exports.index = async function(req, res, next) {
       "type": property.units == 1 ? 'single' : 'multiple',
       "link": '/property/overview/' + property.id
     });
-  	rental_income += property.rental_income;
-    market_data.push(property.current_value);
-    income_data.push(property.rental_income);
-    labels.push(property.address.toString());
-
+    if (idx < 3) {
+    	rental_income = property.rental_income;
+      current_value = property.current_value
+      market_data.push(current_value);
+      income_data.push(rental_income);
+      labels.push(property.address.toString());
+    } else {
+      rental_income += property.rental_income;
+      current_value += property.current_value
+      if (idx == properties.length - 1) {
+        market_data.push(current_value);
+        income_data.push(rental_income);
+        labels.push('Other');
+      }
+    }
+    
     property.tenancies.map(unit => {
       if (unit.rent_frequency == 'Vacant') {
         vacant_cnt++;

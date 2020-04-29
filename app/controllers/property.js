@@ -515,7 +515,10 @@ exports.create = async function(req, res) {
 
   const floor_area_url = `https://api.propertydata.co.uk/floor-areas?key=${process.env.PROPERTYDATA_API_KEY}&postcode=${property.zip.split(' ').join('+')}`
 
-  const floor_area_list = await request({ uri: floor_area_url, json: true });
+  let floor_area_list = {}
+  try {
+    await request({ uri: floor_area_url, json: true });
+  } catch (e) { console.log(e)}
   if (floor_area_list['known_floor_areas']) {
     floor_area_list['known_floor_areas'].map(area => {
       if (area.address.replace(',', '').replace(' ', '').toLowerCase().includes(property.address.replace(',', '').replace(' ', '').toLowerCase())) {
@@ -525,27 +528,31 @@ exports.create = async function(req, res) {
   }
   
   request({uri: address, json: true}).then(geo_data => {
-    property.lat = geo_data.results[0].geometry.location.lat;
-    property.lng = geo_data.results[0].geometry.location.lng;
-  
-    const myproperty = new Properties(property);
-    myproperty.status = 'Vacant';
-    myproperty.id = uuidv4();
-    myproperty.image = document.path;
-    for (let i = 1; i <= parseInt(property.units); i++) {
-      const unit = {
-        id: uuidv4(),
-        description: 'Unit ' + i,
-        rent_price: 0,
-        rent_frequency: 'Vacant',
-        tenants: []
+    if (geo_data) {
+      property.lat = geo_data.results[0].geometry.location.lat;
+      property.lng = geo_data.results[0].geometry.location.lng;
+    
+      const myproperty = new Properties(property);
+      myproperty.status = 'Vacant';
+      myproperty.id = uuidv4();
+      myproperty.image = document.path;
+      for (let i = 1; i <= parseInt(property.units); i++) {
+        const unit = {
+          id: uuidv4(),
+          description: 'Unit ' + i,
+          rent_price: 0,
+          rent_frequency: 'Vacant',
+          tenants: []
+        }
+        myproperty.tenancies.push(unit)
       }
-      myproperty.tenancies.push(unit)
-    }
 
-    return myproperty.save().then(_property => {
-      res.redirect('/property/overview/' + _property.id);
-    });
+      return myproperty.save().then(_property => {
+        res.redirect('/property/overview/' + _property.id);
+      });
+    } else {
+      res.redirect('/property/my')
+    }
   }).catch(err => console.log(err));
 };
 
