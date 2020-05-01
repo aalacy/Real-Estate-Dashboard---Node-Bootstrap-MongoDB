@@ -852,25 +852,6 @@
                     </div>
                   </div>
                 </div>
-
-                <!-- Weekly Hours -->
-                <div class="card">
-                  <div class="card-header">
-                  
-                    <!-- Title -->
-                    <h4 class="card-header-title">
-                      Location
-                    </h4>
-
-                  </div>
-                  <div class="card-body">
-                  
-                  <div class="embed-responsive embed-responsive-4by3 rounded">
-                    <div class="embed-responsive-item" id="map" data-toggle="cmap" data-option='{"center": [<%= property.lng%>, <%= property.lat%>], "zoom": 12, "markers": [{"lng":<%= property.lng%>, "lat":<%= property.lat%>, "type": "<%=property.units == 1 ? "single" : "multiple"%>", "title": "<%=property.address%>", "link": "<%="/property/overview/" + property.id%>"}], "padding": "no"}'></div>
-                  </div>
-
-                  </div>
-                </div>
   			  
                 <!-- Latest Files -->
                 <div class="card">
