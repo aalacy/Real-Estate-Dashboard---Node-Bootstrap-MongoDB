@@ -1878,6 +1878,9 @@
         });
 
         $('.ownership-summary-edit').click(function(e){
+          if (!property.current_value) {
+            return makeToast({ message: 'Please add a property value first.' })
+          }
           $('#loan-modal-title').html('Edit Ownership details');
           $('#addLoanBtn').html('Edit');
           $('.property_debt').val(debt.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));

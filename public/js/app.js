@@ -330,7 +330,7 @@ function doPopulate() {
  * Confirm Dialog
  */
 
-function confirmDialog(message, handler, title="Warning"){
+function confirmDialog(message, handler, title="Warning", hideDetail=false){
   $(`<div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -361,7 +361,7 @@ function confirmDialog(message, handler, title="Warning"){
               ${message}
             </p>
             <div>
-              This action cannot be undone
+              ${hideDetail ? '' :  'This action cannot be undone'}
             </div>
           </div>
           <div class="modal-footer">
@@ -2045,6 +2045,9 @@ $(function() {
     /* Overview */
     // add loan details
     $(document).on('click', '.addloan-btn', function(e){
+      if (!property.current_value) {
+        return makeToast({ message:'Please add a property value first' })
+      }
       $('#loan-modal-title').html('Add a Loan Value');
       $('#addLoanBtn').html('Add');
       $('#modalAddNewLoan input').val('');
