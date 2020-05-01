@@ -1707,9 +1707,9 @@
                 .then(response => response.json())
                 .then(function(res) {
                   parent.remove();
-                  if (res.cnt == 0) {
-                    $('.tenant-list').append(`<div class="col-auto no-tenants"><p>There is no tenants yet</p></div>`);
-                  }
+                  // if (res.cnt == 0) {
+                  //   $('.tenant-list').append(`<div class="col-auto no-tenants"><p>There is no tenants yet</p></div>`);
+                  // }
                   let tenants_cnt = res.cnt == 1 ?  `<b>${res.cnt}</b>` + '&nbsp;Tenant' : `<b>${res.cnt}</b>` + '&nbsp;Tenants';
                   if (res.cnt) {
                     $('.no-tenants').remove();
@@ -1758,9 +1758,9 @@
               });
           });
 
-          if (unit.tenants.length == 0) {
-            $('.tenant-list').append(`<div class="col-auto no-tenants"><p>There is no tenants yet</p></div>`);
-          }
+          // if (unit.tenants.length == 0) {
+          //   $('.tenant-list').append(`<div class="col-auto no-tenants"><p>There is no tenants yet</p></div>`);
+          // }
 
           // display documents section
           $('.unit-document-list').empty();
@@ -1826,9 +1826,9 @@
               </li>`)
           });
 
-          if (unit_documents.length == 0) {
-            $('.unit-document-list').append(`<div class="col-auto no-documents"><p class="my-3">There is no documents yet</p></div>`)
-          }
+          // if (unit_documents.length == 0) {
+          //   $('.unit-document-list').append(`<div class="col-auto no-documents"><p class="my-3">There is no documents yet</p></div>`)
+          // }
 
           $('.modal-upload').attr('data-property', $('#hidden_property').val());
         });
@@ -1891,10 +1891,10 @@
           $('input[name="property[amount_borrowed]"]').val(property.amount_borrowed.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
           $('input[name="property[interest_rate]"]').val(property.interest_rate.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
           $('input[name="property[monthly_payment]"]').val(property.monthly_payment.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
-          $('input[name="property[start_date]"]').val(moment(property.start_date).format('DD MMM YY'))
-          $('input[name="property[maturity_date]"]').val(moment(property.maturity_date).format('DD MMM YY'))
+          $('input[name="property[start_date]"]').val(property.start_date)
+          $('input[name="property[maturity_date]"]').val(property.maturity_date)
           if (property.loan_updated_at) {
-            $('#loanHelperUpdatedAt .update-at').text(moment(property.loan_updated_at).format('DD MMM YY'))
+            $('#loanHelperUpdatedAt .update-at').text(property.loan_updated_at)
           }
           $('#modalAddNewLoan').modal();
         });
@@ -1919,9 +1919,9 @@
             amount_borrowed: $('input[name="property[amount_borrowed]"]').val().replace(',', ''),
             monthly_payment: $('input[name="property[monthly_payment]"]').val().replace(',', ''),
             interest_rate: $('input[name="property[interest_rate]"]').val().replace(',', ''),
-            start_date: moment($('input[name="property[start_date]"]').val()).format('DD MMM YY'),
-            maturity_date: moment($('input[name="property[maturity_date]"]').val()).format('DD MMM YY'),
-            loan_updated_at: moment().format('DD MMM YY HH:mm:ss')
+            start_date: $('input[name="property[start_date]"]').val(),
+            maturity_date: $('input[name="property[maturity_date]"]').val(),
+            loan_updated_at: $('input[name="property[loan_updated_at]"]').val()
           };
 
           const token = $('meta[name="csrf"]').attr('content');

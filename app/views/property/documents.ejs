@@ -50,6 +50,7 @@
           var property_name = property.address + ', ' + property.city;
           option = new Option(property_name, property.id, true, true);
           $('#filterByProperty').append(option);
+          $('#document_property').append(option);
         });
         $('#filterByProperty').val('all').trigger('change');
       });

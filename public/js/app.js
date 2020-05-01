@@ -1247,8 +1247,8 @@ $(function() {
         } else {
           unit_description_formgroup.removeClass('d-none')
         }
-        $('input[name="unit[start_date]"]').val(moment(unit.start_date).format('dd MMM YY'));
-        $('input[name="unit[end_date]"]').val(moment(unit.end_date).format('dd MMM YY'));
+        $('input[name="unit[start_date]"]').val(unit.start_date);
+        $('input[name="unit[end_date]"]').val(unit.end_date);
         $('#unit_rent_frequency').val(unit.rent_frequency);
         $('#unit_rent_frequency').trigger('change');
         $('input[name="unit[rent_price]"]').val(unit.rent_price);
@@ -1878,17 +1878,12 @@ $(function() {
 
     $(document).on('click', '.modal-upload', async function(e) {
       e.preventDefault()
-      $('#document_property').empty();
+      $('#modalUpload').find('input').empty();
+      $('#modalUpload').find('select').val('').trigger('change')
       $('.document_unit').empty();
       $('.property-row').removeClass('d-none');
       $('.unit-row').removeClass('d-none');
-      if (!$(this).hasClass('modal-property') && !$(this).hasClass('modal-unit')) {
-          properties.map(property => {
-            var property_name = property.address + ', ' + property.city;
-            var option = new Option(property_name, property.id, true, true);
-            $('#document_property').append(option);
-          });
-      } else {
+      if ($(this).hasClass('modal-property') || $(this).hasClass('modal-unit')) {
         var property = $(this).data('property');
         var property_name = property.address + ', ' + property.city;
         var option = new Option(property_name, property.id, true, true);
