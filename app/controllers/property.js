@@ -277,7 +277,7 @@ exports.overview = async function(req, res) {
   const { user } = req.session;
   const property = await Properties.findOne({ id: id }, { _id: 0 });
 
-  const documents = await Documents.find({ user_id: user.id, property_id: id, status: 'alive' }, { _id: 0 }).limit(3);
+  const documents = await Documents.find({ user_id: user.id, property_id: id, status: 'alive' }, { _id: 0 });
   const transactions = await Transactions.find({ user_id: user.id, property_id: id }, { _id: 0 }).sort('-created_at');
 
   let empty_cnt = 0;
@@ -659,6 +659,7 @@ exports.upload_doc_to_property = async function(req, res) {
   if (unit_name != 'No unit selected' && unit_name) {
     display_name += ' - ' + unit_name
   }
+  console.log(document)
   const new_document = {
     tag: document.tag,
     note: document.note,

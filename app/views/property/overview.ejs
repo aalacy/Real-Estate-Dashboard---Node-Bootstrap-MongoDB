@@ -885,7 +885,7 @@
                   </div>
                   <div class="card-body">
                     <div class="list-group list-group-flush my-n3">
-                      <% documents.forEach( document => { %>
+                      <% documents.slice(0, 3).forEach( document => { %>
                         <% var date = new Date(document.created_at); var uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();%>
                         <div class="list-group-item">
                           <div class="row align-items-center document-item">
@@ -1204,20 +1204,18 @@
                   <div class="card-header">
                     <div class="row align-items-center">
                       <div class="col">
-                        <!-- Title -->
                         <h4 class="card-header-title">
                           Tenants
                         </h4>
                       </div>
                       <div class="col-auto">
-                        <!-- Button -->
                         <a href="#!" class="btn btn-sm btn-white add-tenant">
                           Add
                         </a>
                       </div>
-                    </div> <!-- / .row -->
+                    </div> 
                   </div>
-                  <div class="card-body row tenant-list">
+                  <div class="tenant-list p-3">
                    
                   </div> 
                 </div>
@@ -1226,35 +1224,26 @@
                   <div class="card-header">
                     <div class="row align-items-center">
                       <div class="col">
-
-                        <!-- Title -->
                         <h4 class="card-header-title">
                           Documents
                         </h4>
-
                       </div>
           
                       <div class="col-auto">
-
-                        <!-- Button -->
                         <a href="#!" class="btn btn-sm btn-white modal-upload modal-unit" data-unit="" data-property="<%=JSON.stringify(property)%>">
                           Upload
                         </a>
-                  
                       </div>
-                   
                     </div> <!-- / .row -->
                   </div>
-                  <div class="card-body">
-                    <ul class="list-group list-group-lg list-group-flush list my-n4 unit-document-list">
+                  <div class="d-block">
+                    <ul class="list-group list-group-lg list-group-flush list unit-document-list p-3">
                       
                     </ul>
                   </div> 
                 </div>
 
-                
-
-                <div class="card">
+                <div class="">
                   <div class="card-body">
                     <a href="#" class="btn btn-danger lift action-unit btn-unit-delete" data-block="units">
                       Delete Unit
