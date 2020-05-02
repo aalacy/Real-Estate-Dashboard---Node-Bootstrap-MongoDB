@@ -556,7 +556,7 @@
                   </li>
                   <li class="nav-item">
                     <a href="javascript:void(0)" data-href="#units" class="nav-link unit-tab"  <% if (total_units == 1) { %> data-unit="<%=property.tenancies[0].id%>" <% }%>>
-                      Units & Tenancies
+                      Occupancy
                     </a>
                   </li>
                   <li class="nav-item">
@@ -566,7 +566,7 @@
                   </li>
                   <li class="nav-item">
                     <a href="javascript:void(0)" data-href="#documents" data-toggle="tab" role="tab" class="nav-link overview-tab">
-                      Documents <span class="badge badge-pill badge-soft-secondary doc_cnt"></span>
+                      Documents
                     </a>
                   </li>
                 </ul>
@@ -593,13 +593,13 @@
                         </h4>
                       </div>
                       <div class="col-auto">
-                        <button class="btn btn-sm btn-text btn-white dropdown-ellipses dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-horizontal"></i></button>
+                        <button class="btn btn-sm btn-text btn-white dropdown-ellipses dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="line-height: 1.15;"><i class="fe fe-more-horizontal"></i></button>
                         <div class="dropdown-menu dropdown-menu-right">
                           <a href="/property/detail/<%= property.id%>" class="dropdown-item">
-                            Property detail
+                            Update details
                           </a>
                           <a href="#" class="dropdown-item show-property-value">
-                            Valuation Settions
+                            Change valuation settings
                           </a>
                           <a href="#!" class="dropdown-item delete-property" data-id="<%= property.id%>">
                             Delete this property
@@ -825,7 +825,7 @@
                       <div class="row align-items-center">
                         <div class="col">
                           <h4 class="card-header-title">
-                            Ownership Summary
+                            Ownership
                           </h4>
 
                         </div>
