@@ -37,7 +37,7 @@ const toNormalBtn = function(el) {
 }
 
 const addTenant = function(tenant, unit) {
-  $('.tenant-list').append(`<div class="col-4 tenant-item"><div class="card">
+  $('.tenant-list').append(`<div class="col-4 tenant-item"><div class="card my-2">
     <div class="card-body">
       <div class="row align-items-center">
       <div class="col-auto">

@@ -1215,7 +1215,7 @@
                       </div>
                     </div> 
                   </div>
-                  <div class="tenant-list p-3">
+                  <div class="tenant-list">
                    
                   </div> 
                 </div>
@@ -1237,7 +1237,7 @@
                     </div> <!-- / .row -->
                   </div>
                   <div class="d-block">
-                    <ul class="list-group list-group-lg list-group-flush list unit-document-list p-3">
+                    <ul class="list-group list-group-lg list-group-flush list unit-document-list">
                       
                     </ul>
                   </div> 
@@ -1771,7 +1771,7 @@
             if (doc.mimetype.includes('image')) {
               avatar = `<img src="/${doc.path}" alt="document image preview" class="avatar"/>`;
             }
-            $('.unit-document-list').append(`<li class="list-group-item px-0">
+            $('.unit-document-list').append(`<li class="list-group-item px-2">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <a href="/${doc.path}" class="avatar" target="_blank">
