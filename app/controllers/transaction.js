@@ -32,7 +32,7 @@ exports.all_get = async function(req, res) {
 
   let transactions = []
   if (id != undefined && cnt != -1) {
-    transactions = await Transactions.find({ user_id: user.id, property_id: id }, { _id: 0 }).limit(Number(cnt));
+    transactions = await Transactions.find({ user_id: user.id, property_id: id, type: 'In' }, { _id: 0 }).limit(Number(cnt));
   } else {
     transactions = await Transactions.find({ user_id: user.id }, { _id: 0 });
   }

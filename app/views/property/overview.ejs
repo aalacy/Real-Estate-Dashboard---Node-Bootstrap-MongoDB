@@ -994,12 +994,14 @@
                               <i class="fe fe-more-vertical"></i>
                               </a>
                               <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#!" class="dropdown-item edit-unit" data-unit='<%=JSON.stringify(unit)%>'>
-                                  Edit
+                                <a href="#!" class="dropdown-item edit-unit" data-property="<%=property.id%>" data-unit='<%=JSON.stringify(unit)%>'>
+                                  Add a tenancy
                                 </a>
-                                <a href="#!" class="dropdown-item delete-unit action-unit" data-block="units" data-unit="<%=unit.id%>">
-                                  Remove
-                                </a>
+                                <% if (property.tenancies.length > 1) { %>
+                                  <a href="#!" class="dropdown-item delete-unit action-unit" data-block="units" data-unit="<%=unit.id%>">
+                                    Delete unit
+                                  </a>
+                                <% } %>
                               </div>
                           </div>
                           </div>
@@ -1067,9 +1069,14 @@
                               <a href="#!" class="dropdown-item edit-unit" data-unit='<%=JSON.stringify(unit)%>'>
                                 Edit
                               </a>
-                              <a href="#!" class="dropdown-item delete-unit action-unit"  data-block="units" data-unit="<%=unit.id%>">
-                                Remove
+                              <a href="#!" class="dropdown-item action-unit" data-property="<%=property.id%>" data-unit='<%=JSON.stringify(unit)%>'>
+                                Clear tenancy
                               </a>
+                              <% if (property.tenancies.length > 1) { %>
+                                <a href="#!" class="dropdown-item delete-unit action-unit" data-block="units" data-unit="<%=unit.id%>">
+                                  Delete unit
+                                </a>
+                              <% } %>
                             </div>
                         </div>
                         </div>
@@ -1081,7 +1088,7 @@
                 <% })%>
               </div>
               <div class="unit-detail-section d-none">
-                <% if (property.units.length > 1) { %>
+                <% if (property.tenancies.length > 1) { %>
                   <button class="btn btn-primary back-to-units-list lift mb-3">
                     Back to units
                   </button>
@@ -1114,7 +1121,7 @@
                             <i class="fe fe-more-horizontal"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                              <% if (property.units.length > 1) { %>
+                              <% if (property.tenancies.length > 1) { %>
                               <a href="#!" class="dropdown-item rename-unit" data-unit="" data-property="">
                                 Rename Unit
                               </a>
@@ -1122,7 +1129,7 @@
                               <a href="#!" class="dropdown-item action-unit clear-tenancy">
                                 Clear tenancy
                               </a>
-                              <% if (property.units.length > 1) { %>
+                              <% if (property.tenancies.length > 1) { %>
                               <a href="#!" class="dropdown-item del-unit delete-unit action-unit" data-unit="">
                                 Delete unit
                               </a>
@@ -1247,7 +1254,7 @@
                   </div> 
                 </div> -->
                 
-                <% if (property.units.length > 1) { %>
+                <% if (property.tenancies.length > 1) { %>
                 <div class="">
                   <div class="card-body">
                     <a href="#" class="btn btn-danger lift action-unit btn-unit-delete" data-block="units">
@@ -1686,8 +1693,8 @@
           } else {
             $('.unit-tenants').html('No Tenant');
           }
-          $('.unit-start_date').text(moment(unit.start_date).format('DD MMM YY'));
-          $('.unit-end_date').text(moment(unit.end_date).format('DD MMM YY'));
+          $('.unit-start_date').text(unit.start_date ? moment(unit.start_date).format('DD MMM YY') : '');
+          $('.unit-end_date').text(unit.end_date ? moment(unit.end_date).format('DD MMM YY') : '');
           $('input[name="unit[id]"]').val(unit.id);
 
           // show 3 most recent payment

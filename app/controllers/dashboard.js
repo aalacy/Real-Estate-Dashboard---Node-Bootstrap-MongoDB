@@ -73,6 +73,7 @@ exports.index = async function(req, res, next) {
   let portfolio_value = 0;
   let total_purchase_price = 0;
   let badge_value = 0;
+  let annual_income = 0;
   let all_units = 0;
   let occupied = 0;
   let markers = [];
@@ -119,6 +120,8 @@ exports.index = async function(req, res, next) {
         labels.push('Other');
       }
     }
+
+    annual_income += property.rental_income;
     
     property.tenancies.map(unit => {
       if (unit.rent_frequency == 'Vacant') {
@@ -131,7 +134,7 @@ exports.index = async function(req, res, next) {
     badge_value = portfolio_value - total_purchase_price;
   } 
 
-  const occupancy = all_units == 0 ? 0.0 : (occupied * 100 / all_units).toFixed(2);
+  const occupancy = all_units == 0 ? 0.0 : ((all_units - vacant_cnt) * 100 / all_units).toFixed(2);
   res.render('dashboard/index', {
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
@@ -139,6 +142,7 @@ exports.index = async function(req, res, next) {
     username: current_user.first_name,
     properties: properties,
     portfolio_value,
+    annual_income,
     rental_income,
     total_current_value,
     all_units,
