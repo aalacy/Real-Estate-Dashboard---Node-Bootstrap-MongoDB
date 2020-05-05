@@ -843,7 +843,7 @@
                   <div class="card-body ownership-block">
                     <div class="ownership-content-block">
                       <div class="border-bottom">
-                        <div id="loanContainer" class="" style="max-width: 310px; height: 120px; margin: 0 auto;"></div>
+                        <div id="loanContainer" class="" style="max-width: 310px; height: 129px; margin: 0 auto;"></div>
                       </div>
                       <div class="row">
                         <div class="col text-center border-right mt-4 px-3">
@@ -1114,15 +1114,19 @@
                             <i class="fe fe-more-horizontal"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
+                              <% if (property.units.length > 1) { %>
                               <a href="#!" class="dropdown-item rename-unit" data-unit="" data-property="">
                                 Rename Unit
                               </a>
+                              <% } %>
                               <a href="#!" class="dropdown-item action-unit clear-tenancy">
                                 Clear tenancy
                               </a>
+                              <% if (property.units.length > 1) { %>
                               <a href="#!" class="dropdown-item del-unit delete-unit action-unit" data-unit="">
                                 Delete unit
                               </a>
+                              <%}%>
                             </div>
                         </div>
 
@@ -1220,7 +1224,7 @@
                   </div> 
                 </div>
 
-                <div class="card">
+             <!--    <div class="card">
                   <div class="card-header">
                     <div class="row align-items-center">
                       <div class="col">
@@ -1234,15 +1238,16 @@
                           Upload
                         </a>
                       </div>
-                    </div> <!-- / .row -->
+                    </div> 
                   </div>
                   <div class="d-block">
                     <ul class="list-group list-group-lg list-group-flush list unit-document-list">
                       
                     </ul>
                   </div> 
-                </div>
-
+                </div> -->
+                
+                <% if (property.units.length > 1) { %>
                 <div class="">
                   <div class="card-body">
                     <a href="#" class="btn btn-danger lift action-unit btn-unit-delete" data-block="units">
@@ -1250,7 +1255,7 @@
                     </a>
                   </div>
                 </div>
-
+                <% } %>
               </div>
             </div>
           </div>
@@ -1659,7 +1664,7 @@
           tenants_cnt = tenants_cnt == 1 ?  `<b>${tenants_cnt}</b>` + '&nbsp;Tenant' : `<b>${tenants_cnt}</b>` + '&nbsp;Tenants';
 
           if (units.length > 1) {
-            $('.unit-name').text(unit.description);
+            $('.unit-name').text(unit.description + ' - Tenancy Details');
           }
           if (unit.deposit) {
             $('.unit-deposit-section').html(`£<b class="unit-deposit">${toComma(unit.deposit)}</b>&nbsp;Deposit`);

@@ -418,7 +418,10 @@
             if (unit.tenants.length > 1) { 
               tenants = `●&nbsp;${unit.tenants}Tenants`
             }
-            const name = `${property.address}, ${property.city}: ${unit.description}`;
+            let name = `${property.address}, ${property.city}`;
+            if (property.units.length > 1) {
+              name += `: ${unit.description}`
+            }
             if (unit.rent_frequency == 'Vacant') {
               $(current_list).append(`
                 <div class="card mb-3">
