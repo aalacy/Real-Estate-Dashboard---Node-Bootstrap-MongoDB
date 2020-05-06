@@ -419,8 +419,14 @@
               tenants = `●&nbsp;${unit.tenants}Tenants`
             }
             let name = `${property.address}, ${property.city}`;
-            if (property.units.length > 1) {
+            if (property.tenancies.length > 1) {
               name += `: ${unit.description}`
+            }
+            let deleteUnit = ''
+            if (property.tenancies.length > 0) {
+              deleteUnit = `<a href="#!" class="dropdown-item delete-unit action-unit"  data-property="${property.id }" data-unit="${unit.id}">
+                Delete unit
+              </a>`
             }
             if (unit.rent_frequency == 'Vacant') {
               $(current_list).append(`
@@ -456,11 +462,9 @@
                           </a>
                           <div class="dropdown-menu dropdown-menu-right">
                             <a href="#!" class="dropdown-item edit-unit" data-property="${property.id}" data-unit=${JSON.stringify(unit)}>
-                              Edit
+                              Add a tenancy
                             </a>
-                            <a href="#!" class="dropdown-item delete-unit action-unit"  data-property="${property.id }" data-unit="${unit.id}">
-                              Remove
-                            </a>
+                            ${deleteUnit}
                           </div>
                       </div>
                       </div>
@@ -504,9 +508,10 @@
                               <a href="#!" class="dropdown-item edit-unit" data-property="${property.id}" data-unit='${JSON.stringify(unit)}'>
                                 Edit
                               </a>
-                              <a href="#!" class="dropdown-item delete-unit action-unit"   data-property="${property.id}" data-unit="${unit.id}">
-                                Remove
+                              <a href="#!" class="dropdown-item action-unit" data-property="${property.id}" data-unit='${JSON.stringify(unit)}'>
+                                Clear tenancy
                               </a>
+                              ${deleteUnit}
                             </div>
                         </div>
                         </div>

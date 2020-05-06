@@ -1089,7 +1089,7 @@
               </div>
               <div class="unit-detail-section d-none">
                 <% if (property.tenancies.length > 1) { %>
-                  <button class="btn btn-primary back-to-units-list lift mb-3">
+                  <button class="btn btn-white back-to-units-list lift" style="margin-bottom: 2rem;">
                     Back to units
                   </button>
                 <% } %>
@@ -1101,7 +1101,7 @@
 
                         <!-- Title -->
                         <h4 class="card-header-title">
-                          <span class="unit-name">Single Unit</span> <!-- <span class="unit-badge"></span> -->
+                          <span class="unit-name">Tenancy Details</span> <!-- <span class="unit-badge"></span> -->
                         </h4>
 
                       </div>
@@ -1600,34 +1600,34 @@
         // Create the chart
         var colors = Highcharts.getOptions().colors;
         const occupancyData = [
-                {
-                    name: "Vacant",
-                    color: '#DEE5EF',
-                    y: <%=vacant_value%>,
-                    drilldown: "Vacant"
-                },
-                {
-                    name: "Occupied",
-                    color: '#0e67dc',
-                    y: <%=tenancy_value%>,
-                    drilldown: "Tenancy"
-                }]
+        {
+            name: "Vacant",
+            color: '#DEE5EF',
+            y: <%=vacant_value%>,
+            drilldown: "Vacant"
+        },
+        {
+            name: "Occupied",
+            color: '#0e67dc',
+            y: <%=tenancy_value%>,
+            drilldown: "Tenancy"
+        }]
         highchartDoughnut('occupancyChart', occupancyData, false, false)
 
         // Income Expenses Chart
         const incomeExpensesData = [
-                  {
-                      name: "Income",
-                      color: '#41d3bd',
-                      y: <%=total_income%>,
-                      drilldown: "Income"
-                  },
-                  {
-                      name: "Expenses",
-                      color: '#ef476f',
-                      y: <%=total_expenses%>,
-                      drilldown: "Expenses"
-              }]  
+        {
+            name: "Income",
+            color: '#41d3bd',
+            y: <%=total_income%>,
+            drilldown: "Income"
+        },
+        {
+            name: "Expenses",
+            color: '#ef476f',
+            y: <%=total_expenses%>,
+            drilldown: "Expenses"
+        }]  
         highchartDoughnut('incomeExpensesChart', incomeExpensesData)
 
         // Expenses Breakdown Chart

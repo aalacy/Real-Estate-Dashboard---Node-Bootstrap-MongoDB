@@ -978,6 +978,7 @@ exports.clear_unit = async function(req, res) {
       element.start_date = element.end_date = '';
       element.rent_frequency = 'Vacant';
       element.rent_price = 0;
+      element.deposit = 0;
       tenancies.push(element);
     }
   });
