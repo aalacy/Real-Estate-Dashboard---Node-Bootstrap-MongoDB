@@ -1161,7 +1161,7 @@ $(function() {
         L.mapbox.featureLayer()
           .loadURL('/dashboard/geojson/all')
           .on('ready', function(e) {
-            var clusterGroup = new L.MarkerClusterGroup();
+            var clusterGroup = new L.MarkerClusterGroup({polygonOptions: {opacity:0}});
             e.target.eachLayer(function(layer) {
               clusterGroup.addLayer(layer);
             });

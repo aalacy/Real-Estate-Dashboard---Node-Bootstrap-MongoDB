@@ -165,7 +165,7 @@ exports.get_all_geojson = async function(req, res, next) {
     "crs": {
       "type": "name",
       "properties": {
-        "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        "name": "avenue"
       }
     },
     "features": [
