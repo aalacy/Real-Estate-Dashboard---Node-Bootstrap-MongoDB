@@ -263,12 +263,12 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 
 .property-unit.active, .property-unit:focus, .property-unit:hover {
     /*box-shadow: 0 .215rem .15rem #22D880,0 .25rem .25rem -.5rem #22D880;*/
-    border: 1px solid #22D880;
+    border: 1px solid #0E67DC;
 }
 
 .property-unit .fe-check-circle {
     display: none;
-    color: #22D880 !important;
+    color: #0E67DC !important;
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -302,7 +302,7 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 }
 
 .dz-message .big-title {
-    color: #22D880;
+    color: #0E67DC;
 }
 
 .dz-message .small-title {
