@@ -156,6 +156,52 @@ exports.index = async function(req, res, next) {
   });
 };
 
+exports.get_all_geojson = async function(req, res, next) {
+  const { user } = req.session;
+  const properties = await Properties.find({ user_id: user.id }, { _id: 0 }).sort('-current_value');
+
+  let geoJson = {
+    "type": "FeatureCollection",
+    "crs": {
+      "type": "name",
+      "properties": {
+        "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+      }
+    },
+    "features": [
+
+    ]
+  }
+  properties.map( (property, idx) => {
+    let iconUrl = '/img/map/single-marker-small.png'
+    if (property.tenancies.length > 1) {
+      iconUrl = '/img/map/multi-marker-small.png'
+    }
+    geoJson.features.push(
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [property.lng, property.lat]
+        },
+        properties: {
+          title: '',
+          description: `<div class="h3 mb-2">${property.address}, ${ property.city}</div><a class="mb-2 text-center" href="/property/overview${property.id}">View Detail</a>`,
+          icon: {
+            iconUrl,
+            iconSize: [30, 30], // size of the icon
+            iconAnchor: [15, 15], // point of the icon which will correspond to marker's location
+            popupAnchor: [0, -15], // point from which the popup should open relative to the iconAnchor
+            className: 'dot'
+          }
+        }
+      }
+    )
+  });
+
+  res.json(geoJson)
+}
+
 exports.get_cash_flow = async function(req, res) {
   const { user } = req.session;
 

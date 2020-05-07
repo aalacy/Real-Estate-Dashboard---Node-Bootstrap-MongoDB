@@ -54,6 +54,7 @@ router.use('/current', auth.required, home.current);
 
 router.get('/', dashboard.index);
 router.post('/dashboard/cash_flow', dashboard.get_cash_flow);
+router.get('/dashboard/geojson/all', dashboard.get_all_geojson);
 
 /**
  * Property

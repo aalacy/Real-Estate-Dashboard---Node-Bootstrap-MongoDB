@@ -411,10 +411,10 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     max-width: 200px;
 }
 
-.mapboxgl-popup-content {
+.mapboxgl-popup-content, .leaflet-popup-content {
     text-align: center;
     font-family: 'Open Sans', sans-serif;
-    padding: 25px 15px 0px;
+    padding: 25px 15px 10px;
 }
 
 .chart-appended {

@@ -240,7 +240,7 @@
                     <label>
                       Start Date
                     </label>
-                    <input type="text" id="unit_start_date" name="unit[start_date]" class="form-control" value=""  data-toggle="flatpickr" required>
+                    <input type="text" id="unit_start_date" name="unit[start_date]" class="form-control" value=""  data-toggle="flatpickr" data-options='{"altFormat": "F j, Y", "dateFormat": "d m Y"}' required>
                   </div>
     
                 </div>
@@ -251,7 +251,7 @@
                     <label>
                       End Date (Optional)
                     </label>
-                    <input type="text" id="unit_end_date" name="unit[end_date]" class="form-control" value=""  data-toggle="flatpickr">
+                    <input type="text" id="unit_end_date" name="unit[end_date]" class="form-control" value=""  data-toggle="flatpickr" data-options='{"altFormat": "F j, Y",}'>
                   </div>
     
                 </div>
@@ -2024,7 +2024,7 @@
         });
 
         // fetch units of this property
-        await selectPropertyFilter(property.id)
+        // await selectPropertyFilter(property.id)
 
         // display categories
         // initialize the category with income

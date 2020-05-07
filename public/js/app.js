@@ -893,7 +893,7 @@ const checkAvailabilityForPropertyValueUpdate = (property) => {
 $(function() {
     // set dateformat 
     $('input[data-toggle="flatpickr"]').flatpickr({
-      dateFormat: "Y-m-d",
+      dateFormat: "D M y",
     }) 
 
 
@@ -1133,13 +1133,37 @@ $(function() {
      */
 
     if ($('*[data-toggle="cmap"]')) {
-        $('*[data-toggle="cmap"]').map(function(i, item){
-            try {
-              if ($(item).data('option').center) {
-                drawMap($(item).data('option'));
-              }
-            } catch (error) {}
-        });
+      $('*[data-toggle="cmap"]').map(function(i, item){
+        try {
+          if ($(item).data('option').center) {
+            drawMap($(item).data('option'));
+          }
+        } catch (error) {}
+      })
+    }
+
+    if ($('#dashboard-map')[0]) {
+      L.mapbox.accessToken = 'pk.eyJ1Ijoib2ZsZW1pbmcxMiIsImEiOiJjazhleHh1eHowMTNjM2xuNHB6NGVuamd3In0.WPSErSvPNgCbSecSrWqGIg';
+      var mapCluster = L.mapbox.map('dashboard-map')
+          .setView([53.253360, -1.633715], 5)
+          .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
+
+        L.mapbox.featureLayer()
+          .loadURL('/dashboard/geojson/all')
+          .on('ready', function(e) {
+            var clusterGroup = new L.MarkerClusterGroup();
+            e.target.eachLayer(function(layer) {
+              clusterGroup.addLayer(layer);
+            });
+            mapCluster.addLayer(clusterGroup);
+          })
+          .on('layeradd', function(e) {
+            var marker = e.layer,
+              feature = marker.feature;
+            marker.setIcon(L.icon(feature.properties.icon));
+            var content = feature.properties.description;
+            marker.bindPopup(content);
+          });
     }
 
 
