@@ -603,6 +603,16 @@ const highchartDoughnut = (id, data, showInLegend = false, showPound=true) => {
             showInLegend
           }
         },
+        legend: {
+          align: 'right',
+          verticalAlign: 'bottom',
+          padding: 3,
+          itemMarginTop: 5,
+          itemMarginBottom: 5,
+          itemStyle: {
+              lineHeight: '14px'
+          }
+        },
         tooltip: {
           borderRadius: 10,
           borderWidth: 1,
@@ -893,7 +903,7 @@ const checkAvailabilityForPropertyValueUpdate = (property) => {
 $(function() {
     // set dateformat 
     $('input[data-toggle="flatpickr"]').flatpickr({
-      dateFormat: "D M y",
+      dateFormat: "d M y",
     }) 
 
 
