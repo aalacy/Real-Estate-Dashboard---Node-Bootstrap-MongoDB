@@ -182,7 +182,7 @@
 
               </div>
               <div class="card-body">
-                <div class="embed-responsive embed-responsive-21by9 rounded" style="max-height: 240px;">
+                <div class="embed-responsive embed-responsive-21by9 rounded" style="min-height: 300px;">
                   <div class="embed-responsive-item" id='dashboard-map'> </div>
                 </div>
               </div>
@@ -227,7 +227,7 @@
                 <!-- Chart -->
                 <div class="tab-content">
                   <div class="tab-pane fade active show" id="market" role="tabpanel">
-                    <div class="chart chart-appended">
+                    <div class="chart">
                       <!-- <canvas id="marketChart" class="chart-canvas" data-option='{"labels": <%=JSON.stringify(labels)%>, "dataset": [<%=market_data%>]}'></canvas> -->
                       <div id="marketChart" style="width:400px; height:305px;" data-option='{"labels": <%=JSON.stringify(labels)%>, "dataset": [<%=market_data%>]}'></div>
                     </div>
@@ -235,7 +235,7 @@
                   <div class="tab-pane fade" id="income" role="tabpanel">
                     <div class="chart chart-appended">
                       <!-- <canvas id="incomeChart" class="chart-canvas" data-option='{"labels": <%=JSON.stringify(labels)%>, "dataset": [<%=income_data%>]}'></canvas> -->
-                      <div id="incomeChart" style="width:400px; height:255px;" data-option='{"labels": <%=JSON.stringify(labels)%>, "dataset": [<%=income_data%>]}'></div>
+                      <div id="incomeChart" style="width:400px; height:305px;" data-option='{"labels": <%=JSON.stringify(labels)%>, "dataset": [<%=income_data%>]}'></div>
                     </div>
                   </div>
                 </div>
