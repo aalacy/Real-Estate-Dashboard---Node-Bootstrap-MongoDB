@@ -423,7 +423,7 @@
               name += `: ${unit.description}`
             }
             let deleteUnit = ''
-            if (property.tenancies.length > 0) {
+            if (property.tenancies.length > 1) {
               deleteUnit = `<a href="#!" class="dropdown-item delete-unit action-unit"  data-property="${property.id }" data-unit="${unit.id}">
                 Delete unit
               </a>`

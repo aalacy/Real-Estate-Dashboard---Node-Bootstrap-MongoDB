@@ -530,7 +530,7 @@
             <div class="row align-items-center">
               <div class="col-auto">
                 <div class="avatar avatar-xl avatar-4by3 ">
-                  <img src="<%=property.image ? '/' + property.image : (property.tenancies.length ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png')%>" alt="..." class="card-img-top thumb-image">
+                  <img src="<%=property.image ? '/' + property.image : (property.tenancies.length > 1 ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png')%>" alt="..." class="card-img-top thumb-image">
                 </div>
               </div>
               <div class="col ml-n3 ml-md-n2">

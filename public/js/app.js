@@ -1548,7 +1548,7 @@ $(function() {
             if (property.image) {
               avatar = '/' + property.image;
             } else {
-              avatar = property.tenancies.length ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png';
+              avatar = property.tenancies.length > 1 ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png';
             }
             $('#property-search-list .card-body .list-group').append(`<a href="/property/overview/${property.id}" class="list-group-item border-0 px-0">
                 <div class="row align-items-center">
