@@ -263,12 +263,12 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 
 .property-unit.active, .property-unit:focus, .property-unit:hover {
     /*box-shadow: 0 .215rem .15rem #22D880,0 .25rem .25rem -.5rem #22D880;*/
-    border: 1px solid #0E67DC;
+    border: 1px solid #41D3BD;
 }
 
 .property-unit .fe-check-circle {
     display: none;
-    color: #0E67DC !important;
+    color: #41D3BD !important;
     position: absolute;
     top: 1rem;
     right: 1rem;
