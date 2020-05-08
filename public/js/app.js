@@ -123,6 +123,7 @@ function doPopulate() {
        </div>
       `)
     }
+    
     let page = 0; 
     items.map( (doc, idx) => {
       if (idx % 3 == 0) { 
