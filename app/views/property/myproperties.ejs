@@ -141,6 +141,24 @@
         }
 
         $('.property-list').empty();
+        if (properties.length == 0) {
+          $('.property-list').html(`
+            <div class="w-100 card card-inactive">
+             <div class="card-body text-center">
+               <img src="/img/icons/empty1.png" alt="..." class="img-fluid" style="max-width: 182px;">
+               <h1>
+                 No properties yet.
+               </h1>
+               <p class="text-muted">
+                 Add your first property to get started
+               </p>
+               <a href="/property/new" class="btn btn-primary">
+                 Add a property
+               </a>
+             </div>
+           </div>
+          `)
+        }
         properties = oldProperties.filter(property => moment(property.created_at).isBetween(startDate, endDate))
         properties = properties.filter(property => property.city.toLowerCase().includes(search) || property.address.toLowerCase().includes(search))
         if (sort == 'Lowest Value') {

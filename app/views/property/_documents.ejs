@@ -12,66 +12,63 @@
             <div class="col">
               
               <!-- Title -->
-              <h4 class="card-header-title mb-2">
+              <h4 class="card-header-title mb-2 document-header">
                 Files
               </h4>
 
             </div>
-            <div class="col-sm-12 col-md-3 filter-by-property">
-              
-                <select class="form-control" style="min-width: 200px;" id="filterByProperty" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
-                    <option></option>
-                </select>  
-            </div>
+            
+            <div class="col-auto">
+              <button class="btn btn-white dropdown-toggle documentCategoryBtn" type="button" id="dropdownMenuButtonAlias" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                All Categories
+              </button>
 
-            <div class="col-12 col-md-3">
-              <ul class="dropdown-menu" aria-labelledby="topnavDocumentation">
+              <ul class="dropdown-menu document-categories" aria-labelledby="dropdownMenuButtonAlias">
+                <li>
+                  <a class="dropdown-item" href="#!" data-value="All Categories">All Categories</a>
+                </li>
                 <li class="dropright">
                   <a class="dropdown-item dropdown-toggle " href="#" id="keyDocuments" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Key Documents
                   </a>
                   <div class="dropdown-menu keyDocuments" aria-labelledby="keyDocuments">
-                    <a class="dropdown-item " href="#">
+                    <a class="dropdown-item " href="#" data-value="Key Documents - EPC">
                       EPC
                     </a>
-                    <a class="dropdown-item " href="#">
+                    <a class="dropdown-item " href="#" data-value="Key Documents - Gas Safety Record">
                       Gas Safety Record
                     </a>
-                    <a class="dropdown-item " href="#">
+                    <a class="dropdown-item " href="#" data-value="Key Documents - Fire Safety Record">
                       Fire Safety Record
                     </a>
-                    <a class="dropdown-item " href="#">
+                    <a class="dropdown-item " href="#" data-value="Key Documents - Floorplan">
                       Floorplan 
                     </a>
-                    <a class="dropdown-item " href="#">
+                    <a class="dropdown-item " href="#" data-value="Key Documents - EICR">
                       EICR 
                     </a>
                   </div>
                 </li>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item " href="#">
-                  Ownership
-                </a>
+                <li>
+                  <a class="dropdown-item" href="#!" data-value="Ownership">Ownership</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#!" data-value="Mortgage & Financing">Mortgage & Financing</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#!" data-value="Other Financial">Other Financial</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#!" data-value="Uncategorised">Uncategorised</a>
+                </li>
               </ul>
-              <select class="form-control filter-by-doc-category" style="min-width: 250px;" id="filterByCategory" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
-                  <option></option>
-                  <option value="All">All Categories</option>
-                  <option value="Key Documents">Key Documents</option>
-                  <option value="Ownership">Ownership</option>
-                  <option value="Mortgage & Financing">Mortgage & Financing</option>
-                  <option value="Other Financial">Other Financial</option>
-                  <option value="Uncategorised">Uncategorised</option>
-              </select> 
             </div>
-            <div class="col-12 col-md-3 keydoc-subcategory-group d-none">
-              <select class="form-control" id="filterByDocSubcategory" name="document[subcategory]" data-toggle="select"  data-options='{"placeholder": "Select a Subcategory"}'>
-                <option value="All">All Subcategories</option>
-                <option value="EPC">EPC</option>
-                <option value="Gas Safety Record">Gas Safety Record</option>
-                <option value="Fire Safety Record">Fire Safety Record</option>
-                <option value="Floorplan">Floorplan</option>
-                <option value="EICR">EICR</option>
-              </select>  
+
+            <div class="col-sm-12 col-md-3 filter-by-property d-none">
+           
+              <select class="form-control property-filter" id="filterByProperty" data-toggle="select"  data-options='{"placeholder": "Select a Property"}' required>
+                <option></option>
+              </select>   
             </div>
 
             <div class="col-auto doc-upload-btn-wrapper">
@@ -104,9 +101,7 @@
 
           <!-- List -->
           <ul class="list-group list-group-lg list-group-flush list my-n4 documentList">
-            <% if(!documents.length) { %>
-              <p class="text-center p-3">There is no any documents yet.</p>
-            <% } %>
+           
           </ul>
           
         </div>

@@ -17,6 +17,7 @@ let transactions = [];
 let cur_transaction;
 let documents = [];
 let units = [];
+let selected_doc_property_id = 'all';
 
 const toComma = function(val) {
     if (val) {
@@ -104,6 +105,24 @@ const showDocExpiryAndRating = (subcategory) => {
 
 function doPopulate() {
     $('.documentList').empty();
+    if (items && items.length) {
+      $('.document-header').html(`${items.length} Documents`)
+    } else {
+      $('.document-header').html(`No Document`);
+      $('.documentList').html(`
+        <div class="card card-inactive">
+         <div class="card-body text-center">
+           <img src="/img/icons/empty2.png" alt="..." class="img-fluid" style="max-width: 182px;">
+           <h1>
+             No document yet.
+           </h1>
+           <p class="text-muted">
+             Your documents will be displayed here
+           </p>
+         </div>
+       </div>
+      `)
+    }
     let page = 0; 
     items.map( (doc, idx) => {
       if (idx % 3 == 0) { 
@@ -128,6 +147,13 @@ function doPopulate() {
         category = `<span class="badge badge-soft-dark px-2">${doc.category}</span>`
       }
 
+      let fileName = `<a target="_blank" href="/${doc.path}">${doc.filename}</a>`
+      if (doc.category == 'Key Documents') {
+        fileName = `<a href="#" class="edit-document modal-upload" data-id="${doc.id}" data-property_id="${doc.property_id}" data-property_name="${doc.property_name}" data-unit_id="${doc.unit_id}" data-unit_name="${doc.unit_name}" data-tag="${doc.tag}" data-path="${doc.path}" data-size="${doc.size}" data-note="${doc.note}" data-filename="${doc.filename}" data-mimetype="${doc.mimetype}" data-category="${doc.category}" data-subcategory="${doc.subcategory}" data-expirydate="${doc.expiry_date}" data-rating="${doc.rating}">
+                    ${doc.subcategory}
+                  </a>`
+      }
+
       $('.documentList').append(`<li class="list-group-item document-item px-0 page${page}">
           <div class="row align-items-center">
             <div class="col-auto">
@@ -139,7 +165,7 @@ function doPopulate() {
             </div>
             <div class="col ml-n2">
               <h4 class="card-title mb-1 name document-name document-lg-name">
-                <a target="_blank" href="/${doc.path}">${doc.filename}</a>
+                ${fileName}
               </h4>
               <p class="card-text small text-muted mb-1">
                 ${doc.display_name}
@@ -249,6 +275,7 @@ function doPopulate() {
             var mydoc = JSON.parse(res.xhr.response);
             $('.dropzone-image').attr('src', res.dataURL);
             $('.dropzone-image').addClass('active');
+            $('.dz-message-placeholder').text('Replace this file')
             if ($('.status').val() == 'upload') {
               $('.document_id').val(mydoc.id);
               $('.document_path').val(mydoc.path);
@@ -696,6 +723,21 @@ const formatNumber = function(num) {
 // Display transactions
 const displayTransactions = (paginated=true, unit_id=-1) => {
   $('.transaction-list').empty();
+  if (items.length == 0) {
+    $('.transaction-list').html(`
+      <div class="w-100 card card-inactive">
+        <div class="card-body text-center">
+           <img src="/img/icons/empty2.png" alt="..." class="img-fluid" style="max-width: 182px;">
+           <h1>
+             No invoices yet.
+           </h1>
+           <p class="text-muted">
+             Your invoices will be displayed here
+           </p>
+         </div>
+      </div>
+    `)
+  }
   items.map( (transaction, idx) => {
     if (idx % page_cnt == 0) { 
       page = (parseInt(idx/page_cnt) + 1)
@@ -1331,7 +1373,7 @@ $(function() {
         $('.property_margin').html(`${property.margin ? property.margin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}`)
         // enable auto estimate switch
         $('.get-property-est-btn').prop('disabled', false);
-        const remaining_days = moment(property.estimate_cron_run_date).diff(moment(), 'days')
+        const remaining_days = moment(property.estimate_cron_run_date).add(30, 'days').diff(moment(), 'days')
         $('.remaining-est-days').html(remaining_days)
       }
     }
@@ -1858,12 +1900,36 @@ $(function() {
     $('#filterByProperty').on('select2:select', function (e) {
       if (e.params.data.id == 'all') {
         items = documents;
+        e.params.data.id = 'all'
       } else {
         items = documents.filter(item => item.property_id == e.params.data.id);
+        selected_doc_property_id = e.params.data.id
       }
       doPopulate();
       doPaginate();
     });
+
+    // change the category for documents
+    $('.document-categories a').click(function(e) {
+      e.preventDefault()
+      const cat = $(this).data('value')
+      $('.documentCategoryBtn').text(cat)
+      if (selected_doc_property_id == 'all') {
+        if (cat == 'All Categories') {
+          items = documents
+        } else {
+          items = documents.filter(item => item.category + (item.subcategory? ' - '+item.subcategory : '') == cat);
+        }
+      } else {
+        if (cat == 'All Categories') {
+          items = documents.filter(item => item.property_id == selected_doc_property_id);
+        } else {
+          items = documents.filter(item => item.property_id == selected_doc_property_id &&  item.category + (item.subcategory? '-'+item.subcategory : '') == cat);
+        }
+      }
+      doPopulate();
+      doPaginate();
+    })
 
     $('#filterByCategory').val('All').trigger('change');
     $('#filterByCategory').on('select2:select', function (e) {
@@ -1924,10 +1990,10 @@ $(function() {
         $('#document_property').append(option);
         $('.property-row').addClass('d-none');
         if ($(this).hasClass('modal-property')) {
-            units.map(unit => {
-                var option = new Option(unit.description, unit.id, true, true);
-                $('.document_unit').append(option);
-            })
+          units.map(unit => {
+              var option = new Option(unit.description, unit.id, true, true);
+              $('.document_unit').append(option);
+          })
         }
         if ($(this).hasClass('modal-unit')) {
             var unit = $(this).data('unit');

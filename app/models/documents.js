@@ -21,7 +21,8 @@ const DocumentsSchema = new Schema({
   property_name: { type: String, default: ''},
   unit_id: { type: String, default: ''},
   unit_name: { type: String, default: ''},
-  category: { type: String, default: ''}, //  key documents( EPC, Gas Safety Record, Fire Safety Record, Floorplan, EICR)
+  category: { type: String, default: ''}, //  Key Documents, Ownership, Mortgage & Financing, Other Financial, Uncategorised
+  subcategory: { type: String, default: ''}, //  sub categories of key documents( EPC, Gas Safety Record, Fire Safety Record, Floorplan, EICR)
   expiry_date: { type: String, default: ''}, // only for subcategory(EPC, Gas Safety Record and Fire Safety Record) when key documents; 
   rating: { type: String, default: ''}, // A-G only for EPC
   filename: { type: String, default: '' },

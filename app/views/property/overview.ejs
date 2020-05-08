@@ -294,7 +294,7 @@
     
                 </div>
               </div> <!-- / .row -->
-              <div class="row">
+              <div class="row d-none">
                 <div class="col-12 col-md-6">
                   <button type="submit" class="btn btn-outline-danger d-none btn-unit-delete action-unit">Delete this unit</button>
                 </div>
@@ -472,7 +472,7 @@
               <div class="col-12 p-4 text-center bg-white mb-3 property-estimate-box-missing-value">
                 <div class="h-100 text-center d-flex  flex-column justify-content-center align-items-center p-4">
                     <a type="button" href="/property/detail/<%=property.id%>" class="btn btn-sm btn-white d-flex align-items-center"><i class="fe fe-bar-chart-2 mr-2 font-weight-bold"></i><span>Update Details</span></a>
-                    <div><span class="badge badge-danger pa-1 px-2 mt-3"><small class="h6">Missing required details for valuation</small></span></div>
+                    <div><span class="badge badge-danger pa-1 px-2 mt-3"><a class="text-white" href="/property/detail/<%=property.id%>"><small class="h6">Missing required details for valuation</small></a></span></div>
                 </div>
               </div>
               <!-- <div class="text-muted property-estimate-helper">
