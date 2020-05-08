@@ -107,22 +107,7 @@ function doPopulate() {
     $('.documentList').empty();
     if (items && items.length) {
       $('.document-header').html(`${items.length} Documents`)
-    } else {
-      $('.document-header').html(`No Document`);
-      $('.documentList').html(`
-        <div class="card card-inactive">
-         <div class="card-body text-center">
-           <img src="/img/icons/empty2.png" alt="..." class="img-fluid" style="max-width: 182px;">
-           <h1>
-             No document yet.
-           </h1>
-           <p class="text-muted">
-             Your documents will be displayed here
-           </p>
-         </div>
-       </div>
-      `)
-    }
+    } 
     
     let page = 0; 
     items.map( (doc, idx) => {
@@ -724,21 +709,7 @@ const formatNumber = function(num) {
 // Display transactions
 const displayTransactions = (paginated=true, unit_id=-1) => {
   $('.transaction-list').empty();
-  if (items.length == 0) {
-    $('.transaction-list').html(`
-      <div class="w-100 card card-inactive">
-        <div class="card-body text-center">
-           <img src="/img/icons/empty2.png" alt="..." class="img-fluid" style="max-width: 182px;">
-           <h1>
-             No invoices yet.
-           </h1>
-           <p class="text-muted">
-             Your invoices will be displayed here
-           </p>
-         </div>
-      </div>
-    `)
-  }
+  
   items.map( (transaction, idx) => {
     if (idx % page_cnt == 0) { 
       page = (parseInt(idx/page_cnt) + 1)
