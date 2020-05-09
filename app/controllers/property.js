@@ -336,8 +336,6 @@ exports.overview = async function(req, res) {
     }
   })
 
-  console.log('====', expenses_breakdown)
-
   transactions.forEach(transaction => {
     breakdown_percent[transaction.category] = (expenses_breakdown[transaction.category]/Math.abs(total_expenses) * 100).toFixed(1)
   })
@@ -385,6 +383,9 @@ exports.overview = async function(req, res) {
 
   // recent 5 transactions
   const recentTrans = transactions.slice(4)
+
+  // key documents
+  
 
   res.render('property/overview', {
     title: 'Avenue - Overview',

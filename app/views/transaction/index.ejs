@@ -235,29 +235,39 @@
               <div class="card-header">
                 <div class="row align-items-center">
                   <div class="col">
-
-                    <div class="row align-items-center">
-                      <div class="col-auto pr-0">
-                        <span class="fe fe-search text-muted"></span>
-                      </div>
-                      <div class="col">
-                          <input type="search" class="form-control form-control-flush search transaction-all-search" placeholder="Search">
-                      </div>
-                    </div>
-                  
+                    <h4 class="card-header-title mb-2 transaction-header">
+                      Files
+                    </h4>
                   </div>
-                  <!-- <div class="col-auto">
-                  
-                    <div class="dropdown">
-                      <button class="btn btn-sm btn-white dropdown-toggle" type="button" id="bulkActionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Bulk action
-                      </button>
-                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bulkActionDropdown">
-                        <a class="dropdown-item bulk-delete-transaction" href="#!">Delete</a>
-                      </div>
-                    </div>
 
-                  </div > -->
+                  <div class="col-12 col-md-3">
+                    <select class="form-control" style="min-width: 350px;" id="propertyFilter" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
+                        <option></option>
+                    </select>  
+                  </div>
+                  
+                  <div class="col-12 col-md-3">
+                    <select class="form-control" style="min-width: 350px;" id="categoryFilter" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
+                        <option></option>
+                        <option value="All">All Categories</option>
+                        <optgroup label="Income">
+                          <option value="Rental Income">Rental Income</option>
+                          <option value="Deposit">Deposit</option>
+                          <option value="Uncategorised">Uncategorised</option>
+                        </optgroup>
+                        <optgroup label="Expenses">
+                          <option value="Insurance">Insurance</option>
+                          <option value="Repairs & Maintenance">Repairs & Maintenance</option>
+                          <option value="Management Fees">Management Fees</option>
+                          <option value="Utilities">Utilities</option>
+                          <option value="Tax">Tax</option>
+                          <option value="Legal">Legal</option>
+                          <option value="Mortgage or Loans">Mortgage or Loans</option>
+                          <option value="Deposit">Deposit</option>
+                          <option value="Uncategorised">Uncategorised</option>
+                        </optgroup>
+                    </select> 
+                  </div>
                 </div>
               </div>
               <div class="d-flex flex-wrap py-4 px-4 border-bottom">
@@ -266,42 +276,17 @@
                     <input type="checkbox" name="tranaction[id]" class="custom-control-input tranaction-checkbox-all" id="customCheck${idx}" >
                     <label class="custom-control-label" for="customCheck${idx}"></label>
                   </div>
-                  <button class="btn btn-outline-secondary transaction-multiple-finish-btn mr-sm-2  d-none">Finish</button>
-                  <button class="btn btn-outline-secondary d-none" id="manageTransactions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage transactions | <span class="selectedItems">0</span></button>
-                   <div class="dropdown-menu transaction-dropdown" aria-labelledby="dropdownMenuButton">
-                    <button class="dropdown-item transaction-multiple-paid-btn">Mark as Paid</button>
-                    <button class="dropdown-item transaction-multiple-del-btn">Delete</button>
+                  <button class="btn btn-outline-secondary transaction-multiple-finish-btn mr-sm-3  d-none">Finish</button>
+                  <button class="btn btn-white transaction-multiple-del-btn mr-sm-3 d-none"><i class="fe fe-trash"></i></button>
+                  <button class="btn btn-white d-none" id="manageTransactions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-horizontal"></i></span>
+                  </button>
+                  <div class="dropdown-menu transaction-dropdown" aria-labelledby="dropdownMenuButton">
+                    <button class="dropdown-item transaction-multiple-paid-btn" data-status='Paid'>Mark as Paid</button>
+                    <button class="dropdown-item transaction-multiple-paid-btn" data-status='Due'>Mark as Due</button>
                   </div>
                   <button class="btn btn-outline-secondary transaction-multiple-btn">Select Multiple</button>
                 </div>
-                <div class="col-12 col-md-3">
-                  <select class="form-control" style="min-width: 350px;" id="propertyFilter" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
-                      <option></option>
-                  </select>  
-                </div>
                 
-                <div class="col-12 col-md-3">
-                  <select class="form-control" style="min-width: 350px;" id="categoryFilter" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
-                      <option></option>
-                      <option value="All">All Categories</option>
-                      <optgroup label="Income">
-                        <option value="Rental Income">Rental Income</option>
-                        <option value="Deposit">Deposit</option>
-                        <option value="Uncategorised">Uncategorised</option>
-                      </optgroup>
-                      <optgroup label="Expenses">
-                        <option value="Insurance">Insurance</option>
-                        <option value="Repairs & Maintenance">Repairs & Maintenance</option>
-                        <option value="Management Fees">Management Fees</option>
-                        <option value="Utilities">Utilities</option>
-                        <option value="Tax">Tax</option>
-                        <option value="Legal">Legal</option>
-                        <option value="Mortgage or Loans">Mortgage or Loans</option>
-                        <option value="Deposit">Deposit</option>
-                        <option value="Uncategorised">Uncategorised</option>
-                      </optgroup>
-                  </select> 
-                </div>
               </div>
               <div class="transaction-list">
               </div>
@@ -353,6 +338,7 @@
           $('.custom-checkbox').removeClass('d-none');
           $('.transaction-multiple-finish-btn').removeClass('d-none');
           $('#manageTransactions').removeClass('d-none');
+          $('.transaction-multiple-del-btn').removeClass('d-none');
           $(this).addClass('d-none');
           $('.transaction-item .avatar-title').addClass('d-none');
         })
@@ -363,6 +349,7 @@
           $('.custom-checkbox').addClass('d-none');
           $('.transaction-multiple-finish-btn').addClass('d-none');
           $('#manageTransactions').addClass('d-none');
+          $('.transaction-multiple-del-btn').addClass('d-none');
           $('.custom-control-input').prop('checked', false);
         })
 

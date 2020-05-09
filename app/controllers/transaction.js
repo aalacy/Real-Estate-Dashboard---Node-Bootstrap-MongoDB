@@ -128,11 +128,11 @@ exports.delete = async function(req, res) {
 }
 
 exports.mark =  async function(req, res) {
-  const { body: { transaction } } = req;
+  const { body: { transaction, status } } = req;
 
   const { user } = req.session;
 
-  Transactions.updateMany({id: {'$in': transaction.ids}}, { $set: {status: 'Paid'} }).then( (err) => {
+  Transactions.updateMany({id: {'$in': transaction.ids}}, { $set: { status } }).then( (err) => {
     res.json({
       status:  200,
       message: 'Successfully deleted'

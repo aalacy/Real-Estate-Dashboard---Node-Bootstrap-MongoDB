@@ -53,15 +53,50 @@
                     <label>
                       Category
                     </label>
-                    <select class="form-control document_category filter-by-doc-category" name="document[category]" data-toggle="select"  data-options='{"placeholder": "Select a Category"}'>
-                      <option></option>
-                      <option value="All">All Categories</option>
-                      <option value="Key Documents">Key Documents</option>
-                      <option value="Ownership">Ownership</option>
-                      <option value="Mortgage & Financing">Mortgage & Financing</option>
-                      <option value="Other Financial">Other Financial</option>
-                      <option value="Uncategorised">Uncategorised</option>
-                    </select>  
+                    <button class="btn btn-white d-block dropdown-toggle documentCategoryBtn" type="button" id="dropdownMenuButtonAlias" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      All Categories
+                    </button>
+
+                    <ul class="dropdown-menu document-categories" aria-labelledby="dropdownMenuButtonAlias">
+                      <li>
+                        <a class="dropdown-item" href="#!" data-value="All Categories">All Categories</a>
+                      </li>
+                      <li class="dropright">
+                        <a class="dropdown-item dropdown-toggle " href="#" id="keyDocuments" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Key Documents
+                        </a>
+                        <div class="dropdown-menu keyDocuments" aria-labelledby="keyDocuments">
+                          <a class="dropdown-item " href="#" data-value="Key Documents - EPC">
+                            EPC
+                          </a>
+                          <a class="dropdown-item " href="#" data-value="Key Documents - Gas Safety Record">
+                            Gas Safety Record
+                          </a>
+                          <a class="dropdown-item " href="#" data-value="Key Documents - Fire Safety Record">
+                            Fire Safety Record
+                          </a>
+                          <a class="dropdown-item " href="#" data-value="Key Documents - Floorplan">
+                            Floorplan 
+                          </a>
+                          <a class="dropdown-item " href="#" data-value="Key Documents - EICR">
+                            EICR 
+                          </a>
+                        </div>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#!" data-value="Ownership">Ownership</a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#!" data-value="Mortgage & Financing">Mortgage & Financing</a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#!" data-value="Other Financial">Other Financial</a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#!" data-value="Uncategorised">Uncategorised</a>
+                      </li>
+                    </ul>
+                    
                   </div>
                 </div>
               </div>

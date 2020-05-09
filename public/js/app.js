@@ -117,7 +117,8 @@ function doPopulate() {
         page = (parseInt(idx/3) + 1) + ' d-none'
       }
       const date = new Date(doc.created_at);
-      const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
+      // const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
+      const uploaded_at = moment(doc.created_at).format('DD/MM/YYYY')
       let avatar = '<span class="fe fe-file" style="font-size: 2rem;"></span>';
       if (doc.mimetype.includes('image')) {
         avatar = `<img src="/${doc.path}" alt="document image preview" class="avatar rounded"/>`;
@@ -125,6 +126,14 @@ function doPopulate() {
       let uploaded_on = `&nbsp;<time datetime="${doc.uploaded_at}">${moment(doc.uploaded_at).format('DD MMM YY')}</time>`
       if (doc.category == 'Key Documents') {
         uploaded_on = 'Last updated:' + uploaded_on
+        if (['EPC', 'Gas Safety', 'Fire Safety'].includes(doc.subcategory)) {
+          if (moment().add(90, 'days').isAfter(moment(doc.expiry_date))) {
+            uploaded_on = '<span class="text-warning">&bull; Expires Soon</span>'
+          }
+          if (moment().isAfter(moment(doc.expiry_date))) {
+            uploaded_on = '<span class="text-danger">&bull; Expired</span>'
+          }
+        }
       } else {
         uploaded_on = 'Uploaded:' + uploaded_on
       }
@@ -379,7 +388,7 @@ function confirmDialog(message, handler, title="Warning", hideDetail=false){
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary btn-no">Cancel</button>
-            <button type="button" class="btn btn-danger btn-yes delete-document">Delete</button>
+            <button type="button" class="btn btn-danger btn-yes delete-document">Ok</button>
           </div>
         </div>
       </div>
@@ -617,7 +626,7 @@ const highchartDoughnut = (id, data, showInLegend = false, showPound=true) => {
           }
         },
         legend: {
-          align: 'right',
+          align: 'center',
           verticalAlign: 'bottom',
           padding: 3,
           itemMarginTop: 5,
@@ -709,6 +718,12 @@ const formatNumber = function(num) {
 // Display transactions
 const displayTransactions = (paginated=true, unit_id=-1) => {
   $('.transaction-list').empty();
+
+  if (items.length) {
+    $('.transaction-header').html(items.length + ' Transaction(s)')
+  } else {
+    $('.transaction-header').html('No Transaction')
+  }
   
   items.map( (transaction, idx) => {
     if (idx % page_cnt == 0) { 
@@ -1698,7 +1713,8 @@ $(function() {
       var data = {
         transaction: {
           ids
-        }
+        },
+        status: $(this).data('status')
       };
       confirmDialog("Are you sure?", (ans) => {
         if (ans) {
@@ -1896,7 +1912,7 @@ $(function() {
         if (cat == 'All Categories') {
           items = documents.filter(item => item.property_id == selected_doc_property_id);
         } else {
-          items = documents.filter(item => item.property_id == selected_doc_property_id &&  item.category + (item.subcategory? '-'+item.subcategory : '') == cat);
+          items = documents.filter(item => item.property_id == selected_doc_property_id &&  item.category + (item.subcategory? ' - '+item.subcategory : '') == cat);
         }
       }
       doPopulate();
