@@ -23,9 +23,15 @@ exports.all = async function(req, res) {
 
 exports.instant_valuations = async function(req, res) {
   const { user } = req.session;
+  
+  let properties = await Properties.find({user_id: user.id}, { _id: 0 });
+  properties.map(property => {
+    property.remaining_days = moment(property.estimate_cron_run_date).add(30, 'days').diff(moment(), 'days')
+  })
 
   res.render('service/valuations', {
     title: 'Avenue - Services',
+    properties,
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
   });

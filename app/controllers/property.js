@@ -557,6 +557,25 @@ exports.create = async function(req, res) {
   }).catch(err => console.log(err));
 };
 
+exports.updateData = async function(req, res) {
+  const { body: { property } } = req;
+  let new_values = { $set: {} }
+  Object.keys(property).map(key => {
+    new_values['$set'][key] = property[key]
+  })
+  return Properties.updateOne({ id: property.id }, new_values).then( () => {
+      res.json({
+        status: 'Ok',
+        message: 'Successfully updated'
+      })
+    }).catch(err => 
+      res.json({
+        status: 'error',
+        message: 'Something went wrong.'
+      })
+    );
+}
+
 exports.update = async function(req, res) {
   const { body: { property } } = req;
 
@@ -587,9 +606,11 @@ exports.update = async function(req, res) {
 
     const new_values = { $set: property };
 
-    return Properties.updateOne({ id: property.id }, new_values) }).then( () => {
+    return Properties.updateOne({ id: property.id }, new_values).then( () => {
       res.redirect('/property/overview/' + property.id);
     }).catch(err => console.log(err));
+
+  });
 };
 
 exports.remove = async function(req, res) {

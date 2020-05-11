@@ -41,14 +41,14 @@
               <div class="col">
                 
                 <!-- Nav -->
-                <ul class="nav nav-tabs nav-overflow header-tabs">
+                <ul class="nav nav-tabs nav-overflow header-tabs"  role="tablist">
                   <li class="nav-item">
-                    <a href="profile-posts.html" class="nav-link active">
+                    <a href="#services" data-toggle="tab" role="tab" aria-controls="services" aria-selected="true"  class="nav-link active">
                       Your Services
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="profile-groups.html" class="nav-link">
+                    <a href="#invoices" data-toggle="tab" role="tab" aria-controls="invoices" aria-selected="true" class="nav-link">
                       Invoices
                     </a>
                   </li>
@@ -63,42 +63,59 @@
 
       <!-- CONTENT -->
       <div class="container mb-4">
-        <div>
-          <div class="row">
-            <div class="col">
-              <div class="card">
-                <div class="card-body text-center">
-                  <div class="text-center">
-                    <a href="/services/instantValuations" class="card-avatar avatar avatar-lg mx-auto">
-                      <img src="/img/icons/valuation.png" alt="" class="avatar-img rounded">
-                    </a>
-                  </div>
-                  <h2 class="card-title text-center mb-3">
-                    <a href="/services/instantValuations">Property Analytics</a>
-                  </h2>
-
-                  <p class="card-text text-center text-muted mb-4">
-                    Discover the current market value of your portfolio. Get monthly valuation estimates and local yield comparisons
-                  </p>
-  				
-                  <!-- Button -->
-                  <a href="/services/instantValuations" class="btn btn-primary btn-block lift mb-4">
-                    Manage
-                  </a>
-
-                  <div class="row align-items-center">
-                    <div class="col">
-                      <p class="card-text small text-muted">
-                        <i></i> 3 enabled properties
-                      </p>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade active show" id="services" role="tabpanel" aria-labelledby="services-tab">
+            <div class="row">
+              <div class="col">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <div class="text-center">
+                      <a href="/services/instantValuations" class="card-avatar avatar avatar-lg mx-auto">
+                        <img src="/img/icons/valuation.png" alt="" class="avatar-img rounded">
+                      </a>
                     </div>
-                  </div> <!-- / .row -->
-                </div> <!-- / .card-body -->
+                    <h2 class="card-title text-center mb-3">
+                      <a href="/services/instantValuations">Property Analytics</a>
+                    </h2>
+
+                    <p class="card-text text-center text-muted mb-4">
+                      Discover the current market value of your portfolio. Get monthly valuation estimates and local yield comparisons
+                    </p>
+    				
+                    <!-- Button -->
+                    <a href="/services/instantValuations" class="btn btn-primary btn-block lift mb-4">
+                      Manage
+                    </a>
+
+                    <div class="row align-items-center">
+                      <div class="col">
+                        <p class="card-text small text-muted">
+                          <i></i> 3 enabled properties
+                        </p>
+                      </div>
+                    </div> <!-- / .row -->
+                  </div> <!-- / .card-body -->
+                </div>
+              </div>
+              <div class="col">
+                <!-- Card -->
+
               </div>
             </div>
-            <div class="col">
-              <!-- Card -->
-
+          </div>
+          <div class="tab-pane fade" id="invoices" role="tabpanel" aria-labelledby="invoices-tab">
+            <div class="row">
+              <div class="card card-inactive w-100">
+                <div class="card-body text-center">
+                  <img src="/img/icons/empty2.png" alt="..." class="img-fluid" style="max-width: 182px;">
+                   <h1>
+                     No invoices yet.
+                   </h1>
+                   <p class="text-muted">
+                     Your invoices will be displayed here
+                   </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

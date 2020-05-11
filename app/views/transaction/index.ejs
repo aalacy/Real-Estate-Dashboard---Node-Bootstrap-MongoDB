@@ -276,15 +276,15 @@
                     <input type="checkbox" name="tranaction[id]" class="custom-control-input tranaction-checkbox-all" id="customCheck${idx}" >
                     <label class="custom-control-label" for="customCheck${idx}"></label>
                   </div>
+                  <button class="btn btn-outline-secondary transaction-multiple-btn mr-3">Select Multiple</button>
                   <button class="btn btn-outline-secondary transaction-multiple-finish-btn mr-sm-3  d-none">Finish</button>
-                  <button class="btn btn-white transaction-multiple-del-btn mr-sm-3 d-none"><i class="fe fe-trash"></i></button>
-                  <button class="btn btn-white d-none" id="manageTransactions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-horizontal"></i></span>
+                  <button class="btn btn-white transaction-multiple-del-btn mr-sm-3"><i class="fe fe-trash"></i></button>
+                  <button class="btn btn-white" id="manageTransactions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-horizontal"></i></span>
                   </button>
                   <div class="dropdown-menu transaction-dropdown" aria-labelledby="dropdownMenuButton">
                     <button class="dropdown-item transaction-multiple-paid-btn" data-status='Paid'>Mark as Paid</button>
                     <button class="dropdown-item transaction-multiple-paid-btn" data-status='Due'>Mark as Due</button>
                   </div>
-                  <button class="btn btn-outline-secondary transaction-multiple-btn">Select Multiple</button>
                 </div>
                 
               </div>
@@ -337,7 +337,7 @@
         $('.transaction-multiple-btn').click(function() {
           $('.custom-checkbox').removeClass('d-none');
           $('.transaction-multiple-finish-btn').removeClass('d-none');
-          $('#manageTransactions').removeClass('d-none');
+          
           $('.transaction-multiple-del-btn').removeClass('d-none');
           $(this).addClass('d-none');
           $('.transaction-item .avatar-title').addClass('d-none');
@@ -348,18 +348,18 @@
           $('.transaction-item .avatar-title').removeClass('d-none');
           $('.custom-checkbox').addClass('d-none');
           $('.transaction-multiple-finish-btn').addClass('d-none');
-          $('#manageTransactions').addClass('d-none');
-          $('.transaction-multiple-del-btn').addClass('d-none');
           $('.custom-control-input').prop('checked', false);
         })
 
         $('.tranaction-checkbox-all').click(function(e){
           if ($('.tranaction-checkbox-all:checked').length) {
             $('.tranaction-checkbox').prop('checked', true);
-            $('#manageTransactions').addClass('active')
+            $('.transaction-multiple-del-btn').addClass('btn-danger').removeClass('btn-white');
+            $('#manageTransactions').addClass('btn-secondary').removeClass('btn-white');
           } else {
             $('.tranaction-checkbox').prop('checked', false);
-            $('#manageTransactions').removeClass('active')
+            $('.transaction-multiple-del-btn').removeClass('btn-danger').addClass('btn-white');
+            $('#manageTransactions').removeClass('btn-secondary').addClass('btn-white');
           }
           $(".selectedItems").html($('.tranaction-checkbox:checked').length);
         });
@@ -367,9 +367,11 @@
         $(document).on('click', '.tranaction-checkbox', function() {
           $(".selectedItems").html($('.tranaction-checkbox:checked').length);
           if ($('.tranaction-checkbox:checked').length) {
-            $('#manageTransactions').addClass('active')
+            $('.transaction-multiple-del-btn').addClass('btn-danger').removeClass('btn-white');
+            $('#manageTransactions').addClass('btn-secondary').removeClass('btn-white');
           } else {
-            $('#manageTransactions').removeClass('active')
+            $('.transaction-multiple-del-btn').removeClass('btn-danger').addClass('btn-white');
+            $('#manageTransactions').removeClass('btn-secondary').addClass('btn-white');
           }
         })
       });

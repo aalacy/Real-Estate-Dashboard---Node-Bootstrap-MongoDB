@@ -45,7 +45,12 @@ exports.all_get = async function(req, res) {
     let unit = []
   	if (property.length > 0) {
 	  	propertyName = property[0].address + ', ' + property[0].city;
-      unit = property[0].tenancies.filter(unit => unit.id == transaction.unit_id)
+      if (property[0].tenancies.length > 1) {
+        unit = property[0].tenancies.filter(unit => unit.id == transaction.unit_id)
+        if (unit.length > 0) {
+          propertyName += ' • ' + unit[0].description
+        }
+      }
   	}
     const doc = documents.filter(document => document.id == transaction.document_id);
   	return { 

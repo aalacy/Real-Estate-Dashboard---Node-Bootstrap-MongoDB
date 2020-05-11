@@ -47,119 +47,121 @@
         <div class="row">
           <div class="col-12 col-xl-8">
             
-            <!-- Card -->
-            <div class="card mb-3">
-              <div class="card-body">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    
-                    <!-- Avatar -->
-                    <a href="#" class="avatar avatar-4by3">
-                      <img src="/img/avatars/profiles/avatar-1.jpg" alt="..." class="avatar-img">
-                    </a>
-
-                  </div>
-                  <div class="col ml-n2">
-                    
-                    <!-- Title -->
-                    <h4 class="card-title mb-1">
-                      <a href="profile-posts.html">Property Name</a>
-                    </h4>
-
-                    <!-- Text -->
-                    <p class="card-text small text-muted mb-1">
-                      Last valuation: £200,000 (12 days ago)
-                    </p>
-
-                    <!-- Status -->
-                    <p class="card-text small">
-                      <span class="text-success">●</span> Auto-update on
-                    </p>
-
-                  </div>
-                  <div class="col-auto">
-                    
-                    <!-- Button -->
-                    <a href="#!" class="btn btn-sm btn-light d-none d-md-inline-block">
-                      Disable
-                    </a>
-
-                  </div>
-                  <div class="col-auto">
-                    
-                    <!-- Dropdown -->
-                    <div class="dropdown">
-                      <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" data-expanded="false">
-                        <i class="fe fe-more-vertical"></i>
+            <% properties.forEach(property => { 
+              if (property.estimate_cron_on) {
+            %>
+              <!-- Card -->
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                      
+                      <!-- Avatar -->
+                      <a href="#" class="avatar avatar-lg avatar-4by3">
+                        <img src="<%=property.image ? '/' + property.image : (property.tenancies.length > 1 ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png')%>" alt="..." class="card-img-top thumb-image">
                       </a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#!" class="dropdown-item">
-                          View Property
-                        </a>
-                      </div>
+
                     </div>
+                    <div class="col ml-n2">
+                      
+                      <!-- Title -->
+                      <h4 class="card-title mb-1">
+                        <a href="profile-posts.html"><%=property.address + ', ' + property.city%></a>
+                      </h4>
 
-                  </div>
-                </div> <!-- / .row -->
-              </div> <!-- / .card-body -->
-            </div>
+                      <!-- Text -->
+                      <p class="card-text small text-muted mb-1">
+                        Next update in <%=property.remaining_days%> days
+                      </p>
 
-            <!-- Card -->
-            <div class="card mb-3">
-              <div class="card-body">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    
-                    <!-- Avatar -->
-                    <a href="#" class="avatar avatar-4by3">
-                      <img src="/img/avatars/profiles/avatar-1.jpg" alt="..." class="avatar-img">
-                    </a>
+                      <!-- Status -->
+                      <p class="card-text small">
+                        <span class="text-success">●</span> Active
+                      </p>
 
-                  </div>
-                  <div class="col ml-n2">
-                    
-                    <!-- Title -->
-                    <h4 class="card-title mb-1">
-                      <a href="profile-posts.html">Property Name</a>
-                    </h4>
-
-                    <!-- Text -->
-                    <p class="card-text small text-muted mb-1">
-                      Last valuation:
-                    </p>
-
-                    <!-- Status -->
-                    <p class="card-text small">
-                      <span class="text-light">●</span> Inactive
-                    </p>
-
-                  </div>
-                  <div class="col-auto">
-                    
-                    <!-- Button -->
-                    <a href="#!" class="btn btn-sm btn-success d-none d-md-inline-block">
-                      Activate
-                    </a>
-
-                  </div>
-                  <div class="col-auto">
-                    
-                    <!-- Dropdown -->
-                    <div class="dropdown">
-                      <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" data-expanded="false">
-                        <i class="fe fe-more-vertical"></i>
+                    </div>
+                    <div class="col-auto">
+                      
+                      <!-- Button -->
+                      <a href="/property/overview/<%=property.id%>" class="btn btn-sm btn-light d-none d-md-inline-block">
+                        View property
                       </a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#!" class="dropdown-item">
-                          View Property
-                        </a>
-                      </div>
-                    </div>
 
-                  </div>
-                </div> <!-- / .row -->
-              </div> <!-- / .card-body -->
-            </div>
+                    </div>
+                    <!-- <div class="col-auto">
+                      <div class="dropdown">
+                        <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" data-expanded="false">
+                          <i class="fe fe-more-vertical"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                          <a href="#!" class="dropdown-item">
+                            View Property
+                          </a>
+                        </div>
+                      </div>
+                    </div> -->
+                  </div> 
+                </div> 
+              </div>
+            <% } })  %>
+
+            <% properties.forEach(property => { 
+              if (!property.estimate_cron_on) {
+            %>
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                      
+                      <!-- Avatar -->
+                      <a href="#" class="avatar avatar-lg avatar-4by3">
+                        <img src="<%=property.image ? '/' + property.image : (property.tenancies.length > 1 ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png')%>" alt="..." class="card-img-top thumb-image">
+                      </a>
+
+                    </div>
+                    <div class="col ml-n2">
+                      
+                      <!-- Title -->
+                      <h4 class="card-title mb-1">
+                        <a href="profile-posts.html">Property Name</a>
+                      </h4>
+
+                      <!-- Text -->
+                      <p class="card-text small text-muted mb-1">
+                        No enough information provided
+                      </p>
+
+                      <!-- Status -->
+                      <p class="card-text small">
+                        <span class="text-light">●</span> Inactive
+                      </p>
+
+                    </div>
+                    <div class="col-auto">
+                      
+                      <!-- Button -->
+                      <a href="#!" data-property="<%=JSON.stringify(property) %>" class="btn btn-sm btn-danger d-none d-md-inline-block service-update-details">
+                        Update Details
+                      </a>
+
+                    </div>
+                   <!--  <div class="col-auto">
+                      <div class="dropdown">
+                        <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" data-expanded="false">
+                          <i class="fe fe-more-vertical"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                          <a href="#!" class="dropdown-item">
+                            View Property
+                          </a>
+                        </div>
+                      </div>
+                    </div> -->
+                  </div> <!-- / .row -->
+                </div> <!-- / .card-body -->
+              </div>
+            <% } }) %>
+           
           </div>
           
           <div class="col-12 col-xl-4">

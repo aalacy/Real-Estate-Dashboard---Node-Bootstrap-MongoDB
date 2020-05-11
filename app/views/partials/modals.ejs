@@ -47,25 +47,24 @@
                   </div>
                 </div>
               </div>
+              <input type="hidden" class="document_category" id="document_category" name="document[category]" value="">
+              <input type="hidden" class="document_subcategory" id="document_subcategory" name="document[subcategory]" value="">
               <div class="row unit-row">
                 <div class="col-12">
                   <div class="form-group">
                     <label>
                       Category
                     </label>
-                    <button class="btn btn-white d-block dropdown-toggle documentCategoryBtn" type="button" id="dropdownMenuButtonAlias" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      All Categories
+                    <button class="btn btn-white d-block dropdown-toggle docModalCategoryBtn" type="button" id="categoryDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Select a Category
                     </button>
 
-                    <ul class="dropdown-menu document-categories" aria-labelledby="dropdownMenuButtonAlias">
-                      <li>
-                        <a class="dropdown-item" href="#!" data-value="All Categories">All Categories</a>
-                      </li>
+                    <ul class="dropdown-menu doc-upload-categories" aria-labelledby="categoryDropdown">
                       <li class="dropright">
-                        <a class="dropdown-item dropdown-toggle " href="#" id="keyDocuments" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="dropdown-item dropdown-toggle " href="#" id="uploadKeyDocuments" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Key Documents
                         </a>
-                        <div class="dropdown-menu keyDocuments" aria-labelledby="keyDocuments">
+                        <div class="dropdown-menu keyDocuments" aria-labelledby="uploadKeyDocuments">
                           <a class="dropdown-item " href="#" data-value="Key Documents - EPC">
                             EPC
                           </a>

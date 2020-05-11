@@ -76,13 +76,13 @@ const addTenant = function(tenant, unit) {
 }
 
 // documents
-const showDocSubcategories = (category) => {
+const showDocSubcategories = (category, subcategory) => {
   $('.filter-by-doc-subcategory').val(null).trigger('change')
 
   if (category == 'Key Documents') {
-    $('.keydoc-subcategory-group').removeClass('d-none')
+    $('.docModalCategoryBtn').text(category + ' - ' + subcategory)
   } else {
-    $('.keydoc-subcategory-group').addClass('d-none')
+    $('.docModalCategoryBtn').text(category)
   }
 }
 
@@ -107,7 +107,9 @@ function doPopulate() {
     $('.documentList').empty();
     if (items && items.length) {
       $('.document-header').html(`${items.length} Documents`)
-    } 
+    } else {
+      $('.document-header').html('No Document')
+    }
     
     let page = 0; 
     items.map( (doc, idx) => {
@@ -776,7 +778,7 @@ const displayTransactions = (paginated=true, unit_id=-1) => {
           <div class="text-muted">${transaction.category}</div>
         </div>
         <div class="col-lg-4 col-md-5 col-sm-6">
-          <div class="mb-1">${transaction.propertyName}${transaction.unit_name ?  ' • '+transaction.unit_name: ''}</div>
+          <div class="mb-1">${transaction.propertyName}</div>
           <div class="text-muted">Property</div>
         </div>
         <div class="col-lg-1 col-md-3 col-sm-6">
@@ -1349,6 +1351,15 @@ $(function() {
         $('#estimatePropertyBtn').prop('checked', false);
       } else {
         $('.property-estimate-box-missing-value').addClass('d-none')
+        if (property.estimate_cron_on) {
+          $('#property_current_value').addClass('form-control-appended').val(property.current_value).attr('placeholder', property.estimate_value)
+          $('.property-current-value-append').removeClass('d-none')
+          $('#estimatePropertyBtn').prop('checked', true);
+        } else {
+          $('#property_current_value').removeClass('form-control-appended')
+          $('.property-current-value-append').addClass('d-none')
+          $('#estimatePropertyBtn').prop('checked', false);
+        }
         if (property.estimate_value) {
           $('.property-estimate-box-empty').addClass('d-none')
           $('#estimatePropertyBtn').prop('disabled', false);
@@ -1370,7 +1381,6 @@ $(function() {
       updateEstBox()
 
       if (property.current_value) {
-        $('#property_current_value').val(property.current_value)
         $('#modalAdjustSummary .modal-title').html('Update Property Value');
       } else {
         $('#modalAdjustSummary .modal-title').html('Add Property Value');
@@ -1410,12 +1420,33 @@ $(function() {
     })
 
     // turn on/off auto estimate
-    $('#estimatePropertyBtn').change(function() {
+    $('#estimatePropertyBtn').change(function(e) {
+      let estimate_cron_on = false;
       if ($(this).prop('checked')) {
-        $('#property_current_value').val(property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+        estimate_cron_on = false;
+        $('#property_current_value').attr('placeholder', property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
       } else {
+        estimate_cron_on = true;
         $('#property_current_value').val(property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
       }
+
+      fetch('/property/updateData',  
+        {
+          method: 'POST', 
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            property: {
+              id: property.id,
+              estimate_cron_on
+            }
+          })
+        })
+        .then(res => res.json())
+        .then(res => {
+          makeToast({ message: res.message })
+        }).catch(function(text) {
+            console.log(text);
+        });
     })
 
     // Delete the unit
@@ -1919,6 +1950,23 @@ $(function() {
       doPaginate();
     })
 
+    // document categories in upload modal
+    $('.doc-upload-categories a').click(function(e) {
+      e.preventDefault()
+      const cat = $(this).data('value')
+      $('.docModalCategoryBtn').text(cat)
+      let subcategory, category
+      if (cat.split('-').length > 1) {
+        subcategory = cat.split('-')[1].trim() 
+        category = cat.split('-')[0].trim() 
+      } else {
+        category = cat
+      }
+      showDocExpiryAndRating(subcategory)
+      $('.document_category').val(category)
+      $('.document_subcategory').val(subcategory)
+    })
+
     $('#filterByCategory').val('All').trigger('change');
     $('#filterByCategory').on('select2:select', function (e) {
       if (e.params.data.id == 'All') {
@@ -1929,14 +1977,6 @@ $(function() {
       doPopulate();
       doPaginate();
     });
-
-    $('.filter-by-doc-category').on('select2:select', function (e) {
-      showDocSubcategories(e.params.data.id)
-    })
-
-    $('.filter-by-doc-subcategory').on('select2:select', function (e) {
-      showDocExpiryAndRating(e.params.data.id)
-    })
 
     $('.property-filter').on('select2:select', async function (e) {
       await selectPropertyFilter(e.params.data.id);
@@ -2002,9 +2042,9 @@ $(function() {
         $('#document_property').val(property_id).trigger('change');
         await selectPropertyFilter(property_id)
         $('.unit-filter').val(unit_id).trigger('change')
-        $('.document_category').val(doc_category).trigger('change')
+        $('.document_category').val(doc_category)
         showDocSubcategories(doc_category)
-        $('.filter-by-doc-subcategory').val(doc_subcategory).trigger('change')
+        $('.doc_subcategory').val(doc_subcategory)
         showDocExpiryAndRating(doc_subcategory)
         $('.doc-expiry-date').val($(this).data('expirydate')).trigger('change')
         $('.doc-rating').val($(this).data('rating')).trigger('change')
@@ -2118,7 +2158,11 @@ $(function() {
             } else if (res.status == 200) {
               parent.remove();
               doPaginate()
-              // $('.doc_cnt').html(res.doc_cnt);
+              if (items && items.length > 1) {
+                $('.document-header').html(`${items.length-1} Documents`)
+              } else {
+                $('.document-header').html('No Document')
+              }
             }
           })
           .catch(error => {
@@ -2201,4 +2245,15 @@ $(function() {
         Dropzone_init(el);
       })
     }
+
+    /* Services */
+    // Valuation
+    $('.service-update-details').click(function(e) {
+      e.preventDefault();
+      try {
+        const property = $(this).data('property')
+        checkAvailabilityForPropertyValueUpdate(property)
+        location.href = '/property/detail/' + property.id
+      } catch (e) {}
+    })
 });

@@ -72,6 +72,7 @@ router.use('/property/review', property.review);
 router.use('/property/search/:query',  property.search);
 router.use('/property/create', property.create);
 router.use('/property/update', property.update);
+router.use('/property/updatedata', property.updateData);
 router.use('/property/remove', property.remove);
 router.use('/property/adjust_summary', property.adjust_summary);
 router.use('/property/estimated_sale', property.estimated_sale);
