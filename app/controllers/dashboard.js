@@ -86,11 +86,12 @@ exports.index = async function(req, res, next) {
   let rental_income = 0;
   let current_value = 0;
   properties.map( (property, idx) => {
-    if (property.current_value < property.purchase_price) {
-	   portfolio_value -= property.current_value;
-    } else {
-      portfolio_value += property.current_value;
-    }
+    // if (property.current_value < property.purchase_price) {
+	   // portfolio_value -= property.current_value;
+    // } else {
+    //   portfolio_value += property.current_value;
+    // }
+    portfolio_value += property.current_value;
 
     total_purchase_price += property.purchase_price;
   	all_units += property.units;
