@@ -269,6 +269,53 @@ exports.my = async function(req, res, next) {
   });
 };
 
+exports.keyDocs = async function(req, res) {
+  const { user } = req.session;
+  const { body: { id } } = req;
+
+  const documents = await Documents.find({ user_id: user.id, property_id: id, status: 'alive' }, { _id: 0 });
+
+  let keyDocs = {
+    'EPC': {},
+    'Gas Safety Record': {},
+    'Fire Safety Record': {},
+    'Floorplan': {},
+    'EICR': {},
+    'EPC': {},
+  }
+ 
+  documents.map(doc => {
+    if (doc.subcategory) {
+      keyDocs[doc.subcategory].title = doc.subcategory
+      keyDocs[doc.subcategory].empty = false
+      if (keyDocs[doc.subcategory].uploaded == undefined) {
+        keyDocs[doc.subcategory].uploaded = 1
+      } else {
+        keyDocs[doc.subcategory].uploaded++;
+      }
+      if (doc.expiry_date && moment().add(90, 'days').isAfter(moment(doc.expiry_date))) {
+        if (keyDocs[doc.subcategory].expiringSoon == undefined) {
+          keyDocs[doc.subcategory].expiringSoon = 1
+        } else {
+          keyDocs[doc.subcategory].expiringSoon++
+        }
+      }
+      if (doc.expiry_date && moment().isAfter(moment(doc.expiry_date))) { 
+        if (keyDocs[doc.subcategory].expired == undefined) {
+          keyDocs[doc.subcategory].expired = 1
+        } else {
+          keyDocs[doc.subcategory].expired++;
+        }
+      }
+    }
+  })
+
+  return res.json({
+    status: 'Ok',
+    keyDocs
+  })
+}
+
 exports.overview = async function(req, res) {
   const { params: { id, unit_id, tabs } } = req;
   if (id == '...' || tabs == '...') {
@@ -382,7 +429,7 @@ exports.overview = async function(req, res) {
   }
 
   // recent 5 transactions
-  const recentTrans = transactions.slice(4)
+  // const recentTrans = transactions.slice(4)
 
   // key documents
   
@@ -412,7 +459,6 @@ exports.overview = async function(req, res) {
     breakdown_percent,
     expenses_chart_data: JSON.stringify(expenses_chart_data),
     colors,
-    recentTrans,
     operating_expense_ratio,
     gross_yield,
     net_yield,

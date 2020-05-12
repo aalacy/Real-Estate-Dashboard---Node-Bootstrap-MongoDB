@@ -890,54 +890,7 @@
                     </div> <!-- / .row -->
                   </div>
                   <div class="card-body">
-                    <div class="list-group list-group-flush my-n3">
-                      <% documents.slice(0, 3).forEach( document => { %>
-                        <% var date = new Date(document.created_at); var uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();%>
-                        <div class="list-group-item">
-                          <div class="row align-items-center document-item">
-                            <div class="col-auto">
-                              <a href="/<%=document.path%>" class="avatar">
-                                <div class="avatar-title rounded bg-white text-secondary">
-                                  <% if (document.mimetype.includes('image')) {%>
-                                    <img src="/<%=document.path%>" alt="document image preview" class="avatar rounded"/>
-                                  <% } else {%>
-                                    <span class="fe fe-file" style="font-size: 2rem;"></span>
-                                  <% } %>
-                                </div>
-                              </a>
-
-                            </div>
-                            <div class="col ml-n2">
-
-                              <!-- Title -->
-                              <h4 class="card-title mb-1 document-name">
-                                <a href="/<%=document.path%>" target="_blank">
-                                  <%=document.filename %>
-                                </a>
-                              </h4>
-
-                              <!-- Time -->
-                              <p class="card-text small text-muted">
-                                <i class="fe fe-clock"></i>&nbsp;<%=uploaded_at %>
-                              </p>
-                            
-                            </div>
-
-                            <div class="col-auto">
-                              <div class="dropdown">
-                                <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  <i class="fe fe-more-vertical"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                  <a href="#!" class="dropdown-item delete-document" data-id="<%=document.id %>">
-                                    Delete
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      <% }) %>
+                    <div class="list-group list-group-flush key-docs-list my-n3">
                     </div>
                   </div> 
                 </div>
@@ -1602,6 +1555,71 @@
           });
       }
 
+      const displayKeydocs = (keyDocs) => {
+        // EPC document
+        Object.keys(keyDocs).map(key => {
+          const doc = keyDocs[key]
+          if (doc.title == undefined) {
+            return
+          }
+          let subtitle = ''
+          if (doc.empty) {
+            subtitle = `<i class="fe fe-upload"></i>&nbsp;Upload`
+          } else if (doc.expired || doc.expiringSoon){
+            if (doc.expired) {
+              subtitle += `<span class="badge badge-danger px-2 py-1 mr-2">${doc.expired}&nbsp;expired</span>`
+            } 
+            if (doc.expiringSoon) {
+              subtitle += `<span class="badge badge-warning px-2 py-1">${doc.expiringSoon}&nbsp;expiring Soon</span>`
+            }
+          } else {
+            subtitle = `<i class="fe fe-check"></i>&nbsp;${doc.uploaded}&nbsp;Uploaded`
+          }
+          $('.key-docs-list').append(`
+            <div class="list-group-item">
+              <div class="row align-items-center document-item">
+                <div class="col-auto">
+                  <a href="/documents" class="avatar">
+                    <div class="avatar-title rounded text-secondary" style="background: #e8edf5">
+                      <span class="fe fe-file"></span>
+                    </div>
+                  </a>
+
+                </div>
+                <div class="col ml-n2">
+
+                  <!-- Title -->
+                  <h4 class="card-title mb-1 document-name">
+                    <a href="/documents" target="_blank">
+                      ${doc.title}
+                    </a>
+                  </h4>
+
+                  <!-- Time -->
+                  <p class="card-text small">
+                    ${subtitle}
+                  </p>
+                
+                </div>
+
+                <div class="col-auto">
+                  <div class="dropdown">
+                    <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fe fe-more-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" >
+                      <a href="#!" class="dropdown-item delete-document" data-id="#">
+                        Delete
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `)
+        })
+      }
+
       $(async function() {
         // Create the chart
         var colors = Highcharts.getOptions().colors;
@@ -1635,6 +1653,16 @@
             drilldown: "Expenses"
         }]  
         highchartDoughnut('incomeExpensesChart', incomeExpensesData)
+
+        // Key Documents
+        fetch(`/property/documents/keyDocs`, { method: 'POST', headers:{'Content-Type': 'application/json'}, body: JSON.stringify({ id: '<%=property.id%>'}) })
+        .then(res => res.json())
+        .then(res => {
+          displayKeydocs(res.keyDocs)
+        })
+        .catch(err => {
+            console.log(err);
+        })
 
         // Expenses Breakdown Chart
         const expenses_chart_data = $('#expensesBreakdownChart').data('value');
@@ -1704,7 +1732,7 @@
           $('input[name="unit[id]"]').val(unit.id);
 
           // show 3 most recent payment
-          fetchTransactions(property.id, 3, false, unit.id);
+          fetchTransactions(property.id, -1, true, unit.id);
 
           // display tenants section
           $('.tenant-list').empty();

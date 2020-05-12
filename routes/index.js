@@ -96,6 +96,7 @@ router.get('/property/documents', property.documents);
 router.post('/property/documents/upload', upload.single( 'file' ), property.documents_upload);
 router.post('/property/documents/delete', property.documents_delete);
 router.post('/property/documents/upload_all', property.upload_doc_to_property);
+router.post('/property/documents/keyDocs', property.keyDocs);
 
 // loan
 router.post('/property/loan/all', property.get_equity_debt);

@@ -2039,11 +2039,12 @@ $(function() {
         const doc_category = $(this).data('category')
         const doc_subcategory =$(this).data('subcategory')
         const image = $(this).data('path');
+        const mimetype = $(this).data('mimetype')
         $('#document_property').val(property_id).trigger('change');
         await selectPropertyFilter(property_id)
         $('.unit-filter').val(unit_id).trigger('change')
         $('.document_category').val(doc_category)
-        showDocSubcategories(doc_category)
+        showDocSubcategories(doc_category, doc_subcategory)
         $('.doc_subcategory').val(doc_subcategory)
         showDocExpiryAndRating(doc_subcategory)
         $('.doc-expiry-date').val($(this).data('expirydate')).trigger('change')
@@ -2051,11 +2052,15 @@ $(function() {
         $('.document_id').val($(this).data('id'));
         $('.document_size').val($(this).data('size'));
         $('.document_path').val(image);
-        $('.document_mimetypee').val($(this).data('mimetype'));
+        $('.document_mimetypee').val(mimetype);
         $('.document_filename').val($(this).data('filename'));
         $('.document_note').val($(this).data('note') || '');
         $('.dz-message-placeholder').html('Replace a New File');
-        $('.document-upload-image').removeClass('d-none').css('background-image', `url('/${image}')`);
+        if (mimetype.includes('image')) {
+          $('.document-upload-image').removeClass('d-none').css('background-image', `url('/${image}')`);
+        } else {
+          $('.document-upload-image').removeClass('d-none').css('background-image', `url('/img/icons/file.svg')`);
+        }
         $('#modalUpload .modal-title').text('Edit Document');
         $('#modalUpload .status').val('edit');
       } else {
@@ -2097,7 +2102,7 @@ $(function() {
           tag: $('.document_tag').val(),
           note: $('.document_note').val(),
           category: $('.document_category').val(),
-          subcategory: $('.filter-by-doc-subcategory').val(),
+          subcategory: $('.document_subcategory').val(),
           expiry_date: $('.doc-expiry-date').val(),
           rating: $('.doc-rating').val(),
           status: $('.status').val(),
