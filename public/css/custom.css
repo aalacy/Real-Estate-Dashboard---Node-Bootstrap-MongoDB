@@ -426,3 +426,7 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 .custom-control-input:disabled~.custom-control-label:before {
     background-color: #eee !important;
 }
+
+.keydoc-pagination a.active {
+    color: #6c757d;
+}

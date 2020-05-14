@@ -241,7 +241,7 @@
                     <label>
                       Start Date
                     </label>
-                    <input type="text" id="unit_start_date" name="unit[start_date]" class="form-control" value=""  data-toggle="flatpickr" data-options='{"altFormat": "F j, Y", "dateFormat": "d m Y"}' required>
+                    <input type="text" id="unit_start_date" name="unit[start_date]" class="form-control" value=""  data-toggle="flatpickr" required>
                   </div>
     
                 </div>
@@ -252,7 +252,7 @@
                     <label>
                       End Date (Optional)
                     </label>
-                    <input type="text" id="unit_end_date" name="unit[end_date]" class="form-control" value=""  data-toggle="flatpickr" data-options='{"altFormat": "F j, Y",}'>
+                    <input type="text" id="unit_end_date" name="unit[end_date]" class="form-control" value=""  data-toggle="flatpickr">
                   </div>
     
                 </div>
@@ -730,16 +730,27 @@
                           Units
                         </h6>
                         <span class="h2">
-                          <%=total_units%>
+                          <%=total_units == 1 ? 'Single Unit' : 'Multi Unit ('+total_units+')'%>
                         </span>
                       </div>
                       <div class="col-4 text-center">
                         <!-- Heading -->
                         <h6 class="card-title text-uppercase text-muted mt-2">
-                          Vacant
+                          Status
                         </h6>
                         <span class="h2">
-                          <%=vacant_cnt%>
+                          <% if (total_units == 1 && vacant_cnt == 1) {%>
+                            Vacant
+                          <% } %>
+                          <% if (total_units == 1 && vacant_cnt == 0) {%>
+                            Occupied
+                          <% } %>
+                          <% if (total_units > 1 && vacant_cnt > 0) {%>
+                            <%=vacant_cnt%> Vacant
+                          <% } %>
+                          <% if (total_units > 1 && vacant_cnt == 0) {%>
+                            Occupied
+                          <% } %>
                         </span>
                       </div>
                     </div>
@@ -884,13 +895,32 @@
                       <div class="col-auto">
 
                         <!-- Link -->
-                        <a href="/property/documents" class="small">View all</a>
+                        <ul class="nav nav-overflow keydoc-pagination"  role="tablist">
+                          <li class="mr-3">
+                            <a href="#key1" data-toggle="tab" role="tab" aria-controls="services" aria-selected="true"  class="active">
+                              <i class="fe fe-chevron-left" style="font-size: 1rem;"></i>
+                            </a>
+                          </li>
+                          <li class="">
+                            <a href="#key2" data-toggle="tab" role="tab" aria-controls="invoices" aria-selected="true" class="">
+                              <i class="fe fe-chevron-right" style="font-size: 1rem;"></i>
+                            </a>
+                          </li>
+                        </ul>
                       
                       </div>
                     </div> <!-- / .row -->
                   </div>
                   <div class="card-body">
-                    <div class="list-group list-group-flush key-docs-list my-n3">
+                    <div class="tab-content" id="keyDocPagination">
+                      <div class="tab-pane fade active show" id="key1" role="tabpanel" aria-labelledby="key1-tab">
+                        <div class="list-group list-group-flush key1-docs-list my-n3">
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="key2" role="tabpanel" aria-labelledby="key2-tab">
+                        <div class="list-group list-group-flush key2-docs-list my-n3">
+                        </div>
+                      </div>
                     </div>
                   </div> 
                 </div>
@@ -1576,11 +1606,18 @@
           } else {
             subtitle = `<i class="fe fe-check"></i>&nbsp;${doc.uploaded}&nbsp;Uploaded`
           }
-          $('.key-docs-list').append(`
+          let parentDom = 'key1-docs-list';
+          if (['EPC', 'Gas Safety Record', 'Fire Safety Record'].includes(key)) {
+            parentDom = '.key1-docs-list';
+          } else {
+            parentDom = '.key2-docs-list';
+          }
+          let category = 'Key Documents - ' + doc.title
+          $(parentDom).append(`
             <div class="list-group-item">
               <div class="row align-items-center document-item">
                 <div class="col-auto">
-                  <a href="/documents" class="avatar">
+                  <a href="/property/documents" class="avatar" data-property="${doc.property_id}" data-category="${category}">
                     <div class="avatar-title rounded text-secondary" style="background: #e8edf5">
                       <span class="fe fe-file"></span>
                     </div>
@@ -1591,7 +1628,7 @@
 
                   <!-- Title -->
                   <h4 class="card-title mb-1 document-name">
-                    <a href="/documents" target="_blank">
+                    <a href="/property/documents" target="_blank" data-property="${doc.property_id}" data-category="${category}">
                       ${doc.title}
                     </a>
                   </h4>
@@ -1637,7 +1674,7 @@
             y: <%=tenancy_value%>,
             drilldown: "Tenancy"
         }]
-        highchartDoughnut('occupancyChart', occupancyData, false, false)
+        highchartDoughnut('occupancyChart', occupancyData, false, false, 'Occupied', '<%=tenancy_value%>' + '%')
 
         // Income Expenses Chart
         const incomeExpensesData = [
@@ -1663,6 +1700,13 @@
         })
         .catch(err => {
             console.log(err);
+        })
+
+        $(document).on('click', '#keyDocPagination a', function(e) {
+          e.preventDefault()
+          localStorage.setItem('doc_property', $(this).data('property'))
+          localStorage.setItem('doc_category', $(this).data('category'))
+          location.href = $(this).attr('href')
         })
 
         // Expenses Breakdown Chart

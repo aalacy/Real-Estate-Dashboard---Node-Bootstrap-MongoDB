@@ -45,7 +45,7 @@ const PropertiesSchema = new Schema({
     construction_date: { type: String, default: '' }, // 2019-01-02
     rental_yield: { type: Number, default: 0.0 }, // 3.8% - gross yeild
     rental_income: { type: Number, default: 0.0 }, // £240pcm
-    off_street_parking: { type: String, default: '0' }, // 0 ~ 3 Spaces
+    off_street_parking: { type: String, default: '' }, // 0 ~ 3 Spaces
     is_new: { type: Boolean, default: true }, // used to display alert on top of the overview page
     status: { type: String, default: 'Vacant' }, // Vacant or Occupied
     has_loan: { type: Boolean, default: false }, // used to display alert on top of the overview page

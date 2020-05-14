@@ -43,6 +43,10 @@
 
         doPaginate();
 
+        const doc_property = localStorage.getItem('doc_property');
+        const doc_category = localStorage.getItem('doc_category');
+
+
         $('.filter-by-property').removeClass('d-none');
         var option = new Option('All Properties', 'all', true, true);
         $('#filterByProperty').append(option);
@@ -51,7 +55,18 @@
           var option = new Option(property_name, property.id, true, true);
           $('.property-filter').append(option);
         });
-        $('#filterByProperty').val('all').trigger('change');
+        if (doc_property && doc_category) {
+          $('#filterByProperty').val(doc_property).trigger('change');
+          $('.document-categories a').map( (x, el) => {
+            if ($(el).data('value') == doc_category) {
+              $(el).click()
+            }
+          })
+          localStorage.setItem('doc_category', '');
+          localStorage.setItem('doc_property', '');
+        } else {
+          $('#filterByProperty').val('all').trigger('change');
+        }
       });
     </script>
 

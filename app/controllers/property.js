@@ -276,12 +276,31 @@ exports.keyDocs = async function(req, res) {
   const documents = await Documents.find({ user_id: user.id, property_id: id, status: 'alive' }, { _id: 0 });
 
   let keyDocs = {
-    'EPC': {},
-    'Gas Safety Record': {},
-    'Fire Safety Record': {},
-    'Floorplan': {},
-    'EICR': {},
-    'EPC': {},
+    'EPC': {
+      title: 'EPC',
+      property_id: id,
+      empty: true
+    },
+    'Gas Safety Record': {
+      title: 'Gas Safety Record',
+      property_id: id,
+      empty: true
+    },
+    'Fire Safety Record': {
+      title: 'Fire Safety Record',
+      property_id: id,
+      empty: true
+    },
+    'Floorplan': {
+      title: 'Floorplan',
+      property_id: id,
+      empty: true
+    },
+    'EICR': {
+      title: 'EICR',
+      property_id: id,
+      empty: true
+    },
   }
  
   documents.map(doc => {
@@ -293,18 +312,18 @@ exports.keyDocs = async function(req, res) {
       } else {
         keyDocs[doc.subcategory].uploaded++;
       }
-      if (doc.expiry_date && moment().add(90, 'days').isAfter(moment(doc.expiry_date))) {
-        if (keyDocs[doc.subcategory].expiringSoon == undefined) {
-          keyDocs[doc.subcategory].expiringSoon = 1
-        } else {
-          keyDocs[doc.subcategory].expiringSoon++
-        }
-      }
+      
       if (doc.expiry_date && moment().isAfter(moment(doc.expiry_date))) { 
         if (keyDocs[doc.subcategory].expired == undefined) {
           keyDocs[doc.subcategory].expired = 1
         } else {
           keyDocs[doc.subcategory].expired++;
+        }
+      } else if (doc.expiry_date && moment().add(90, 'days').isAfter(moment(doc.expiry_date))) {
+        if (keyDocs[doc.subcategory].expiringSoon == undefined) {
+          keyDocs[doc.subcategory].expiringSoon = 1
+        } else {
+          keyDocs[doc.subcategory].expiringSoon++
         }
       }
     }
@@ -469,6 +488,10 @@ exports.overview = async function(req, res) {
 
 exports.detail = async function(req, res) {
   const { params: { id } } = req;
+
+  if (id == '...') {
+    return res.json({})
+  }
   const property = await Properties.findOne({ id: id }, { _id: 0 });
 
   res.render('property/detail', {

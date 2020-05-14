@@ -118,7 +118,7 @@ function doPopulate() {
       } else {
         page = (parseInt(idx/3) + 1) + ' d-none'
       }
-      const date = new Date(doc.created_at);
+      // const date = new Date(doc.created_at);
       // const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
       const uploaded_at = moment(doc.created_at).format('DD/MM/YYYY')
       let avatar = '<span class="fe fe-file" style="font-size: 2rem;"></span>';
@@ -129,11 +129,10 @@ function doPopulate() {
       if (doc.category == 'Key Documents') {
         uploaded_on = 'Last updated:' + uploaded_on
         if (['EPC', 'Gas Safety', 'Fire Safety'].includes(doc.subcategory)) {
-          if (moment().add(90, 'days').isAfter(moment(doc.expiry_date))) {
-            uploaded_on = '<span class="text-warning">&bull; Expires Soon</span>'
-          }
           if (moment().isAfter(moment(doc.expiry_date))) {
             uploaded_on = '<span class="text-danger">&bull; Expired</span>'
+          } else if (moment().add(90, 'days').isAfter(moment(doc.expiry_date))) {
+            uploaded_on = '<span class="text-warning">&bull; Expires Soon</span>'
           }
         }
       } else {
@@ -609,7 +608,7 @@ const drawMap = function(options) {
 };
 
 // Chart
-const highchartDoughnut = (id, data, showInLegend = false, showPound=true) => {
+const highchartDoughnut = (id, data, showInLegend = false, showPound=true, drawCenterLabel='', drawCenterValue='') => {
   return Highcharts.chart(id, {
         chart: {
             type: 'pie'
@@ -622,7 +621,19 @@ const highchartDoughnut = (id, data, showInLegend = false, showPound=true) => {
             allowPointSelect: true,
             cursor: 'pointer',
             dataLabels: {
-                enabled: false
+              enabled: drawCenterLabel != '',
+              distance: '-100%',
+              y: -5,
+              format: drawCenterValue,
+              style: {
+                  fontWeight: 'bold',
+                  fontSize: '14px'
+              },
+              filter: {
+                  property: 'name',
+                  operator: '===',
+                  value: drawCenterLabel
+              },
             },
             showInLegend
           }
@@ -934,7 +945,7 @@ const checkAvailabilityForPropertyValueUpdate = (property) => {
 $(function() {
     // set dateformat 
     $('input[data-toggle="flatpickr"]').flatpickr({
-      dateFormat: "d M y",
+      dateFormat: "d M y"
     }) 
 
 
