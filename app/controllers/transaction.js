@@ -86,7 +86,7 @@ exports.create = async function(req, res) {
 
   const { user } = req.session;
 
-
+  console.log('===', transaction)
   const newTransaction  = new Transactions(transaction);
   newTransaction.id = uuidv4();
   newTransaction.user_id = user.id;

@@ -82,19 +82,19 @@
                         <% properties.forEach(property => {%>
                         	<option value="<%= property.id%>"><%= property.address%>, <%= property.city%></option>
                         <% }) %>
-                      </select>  
+                      </select>
                     </div>
                   </div>
 
                   <div class="form-wrapper">
+                    <input type="hidden" class="unit-filter-hidden" name="transaction[unit_id]" value="">
                     <label class="form-label">
                       Units 
                     </label>
                     <div class="col-lg-9 col-sm-12 d-flex">
-                      <select class="form-control unit-filter no-unit" id="transaction_unit" name="transaction[unit_id]" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
+                      <select class="form-control unit-filter no-unit" id="transaction_unit" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
                         <option></option>
                       </select>  
-                    <!--   &nbsp;<button title="Clear Unit" type="button" class="btn btn-white btn-sm clear-unit-selection"><i class="fe fe-refresh-cw"></i></button> -->
                     </div>
                   </div>
 

@@ -304,10 +304,10 @@
                         </label>
                         <select class="form-control" id="off_street_parking" name="property[off_street_parking]" data-toggle="select" data-options='{"placeholder": "Choose"}'>
                           <option></option>
-                          <option value="0" <% if (property.off_street_parking == 0){ %><%='selected'%><%}%>>No parking</option>
-                          <option value="1" <% if (property.off_street_parking == 1){ %><%='selected'%><%}%>>1 Space</option>
-                          <option value="2" <% if (property.off_street_parking == 2){ %><%='selected'%><%}%>>2 Spaces</option>
-                          <option value="3" <% if (property.off_street_parking == 3){ %><%='selected'%><%}%>>3+ Spaces</option>
+                          <option value="0" <% if (property.off_street_parking == '0'){ %><%='selected'%><%}%>>No parking</option>
+                          <option value="1" <% if (property.off_street_parking == '1'){ %><%='selected'%><%}%>>1 Space</option>
+                          <option value="2" <% if (property.off_street_parking == '2'){ %><%='selected'%><%}%>>2 Spaces</option>
+                          <option value="3" <% if (property.off_street_parking == '3'){ %><%='selected'%><%}%>>3+ Spaces</option>
                         </select>
                         <div class="invalid-feedback">
                           Please select a off street parking

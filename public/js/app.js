@@ -324,12 +324,16 @@ function doPopulate() {
       if (res.status == 200) {
         $('.unit-filter').empty();
         units = res.units
+        
         if (res.units.length == 1) {
           $('.unit-label').html('Unit')
           $('#unit_tenants').val(JSON.stringify(res.units[0].tenants))
-          $('.unit-filter').data('select2').selection.placeholder.text = "Single Unit Property";
-          $('.unit-filter').next("span.select2:first").find("span.select2-selection__placeholder").html("Single Unit Property")
-          $('.unit-filter').attr('disabled', true);
+          var unit = res.units[0]
+          $('.unit-filter').prop('disabled', true);
+          var option = new Option('Single Unit Property', unit.id, true, true);
+          $('.unit-filter').append(option);
+          $('.unit-filter').val(unit.id).trigger('change');
+          $('.unit-filter-hidden').val(unit.id);
         } else {
           $('.unit-label').html('Units')
           if ($('.unit-filter').hasClass('no-unit')) {
@@ -340,10 +344,7 @@ function doPopulate() {
             var option = new Option(unit.description, unit.id, true, true);
             $('.unit-filter').append(option);
           })
-          $('.unit-filter').attr("data-options", '{"placeholder": "Select a Unit"}');
-          $('.unit-filter').data('select2').selection.placeholder.text = "Select a Unit";
-          $('.unit-filter').next("span.select2:first").find("span.select2-selection__placeholder").html("Select a Unit");
-          $('.unit-filter').attr('disabled', false);
+          $('.unit-filter').prop('disabled', false);
           $('.unit-filter').val(null).trigger('change');
         }
       }
@@ -1898,16 +1899,12 @@ $(function() {
       $('#transaction_user').val(transaction.user);
       $('#transaction_created_at').val(transaction.created_at);
       $('#transaction_amount').val(amount.toString().replace('-','').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
-      $('#transaction_property').val(transaction.property_id);
-      $('#transaction_property').trigger('change');
+      $('#transaction_property').val(transaction.property_id).trigger('change');
       await selectPropertyFilter(transaction.property_id)
-      $('#transaction_unit').val(transaction.unit_id);
-      $('#transaction_unit').trigger('change');
-      $('input[name="transaction[unit_id]"]').val(transaction.unit_id)
-      $('#transaction_category').val(transaction.category);
-      $('#transaction_category').trigger('change');
-      $('#transaction_status').val(transaction.status);
-      $('#transaction_status').trigger('change');
+      $('#transaction_unit').val(transaction.unit_id).trigger('change');
+      $('.unit-filter').val(transaction.unit_id)
+      $('#transaction_category').val(transaction.category).trigger('change');
+      $('#transaction_status').val(transaction.status).trigger('change');
       $('#transaction_account').val(transaction.account);
       $('#transaction_note').val(transaction.note);
       $('button.delete-transaction').removeClass('d-none');
@@ -1989,8 +1986,14 @@ $(function() {
       doPaginate();
     });
 
+    // update units whenever change property
     $('.property-filter').on('select2:select', async function (e) {
       await selectPropertyFilter(e.params.data.id);
+    });
+
+    // update hidden tag for unit
+    $('.unit-filter').on('select2:select', async function (e) {
+      $('.unit-filter-hidden').val(e.params.data.id)
     });
 
     // Clear unit selection on modal
