@@ -310,6 +310,7 @@ function doPopulate() {
       $('input[name="unit[rent_price]"]').val(unit.rent_price);
       $('input[name="unit[deposit]"]').val(unit.deposit);
       $('input[name="unit[tenants]"]').val(JSON.stringify(unit.tenants));
+      $('.addUnitBtn').prop('disabled', true)
     }
   }
 
@@ -843,6 +844,7 @@ const clearUnitModal = () => {
   $('.property-filter').val(null).trigger('change')
   $('.unit-filter').val(null).trigger('change').removeClass('is-invalid')
   $('input').val('')
+  $(".addUnitBtn").prop('disabled', false)
 }
 
 const setupPagination = () => {
