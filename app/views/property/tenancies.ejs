@@ -30,7 +30,8 @@
                     <label>
                       Units
                     </label>
-                    <input type="text" id="unit_description" name="unit[description]" class="form-control" placeholder="Description" value="" required>                   
+                    <input type="text" id="unit_description" name="unit[description]" class="form-control unit-description" placeholder="Description" value="" required>  
+                                
                   </div>
     
                 </div>
@@ -103,7 +104,7 @@
                     <label>
                       Rent Frequency
                     </label>
-                    <select class="form-control" id="unit_rent_frequency" name="unit[rent_frequency]" data-toggle="select" data-options='{"placeholder": "Select a frequency"}' required>
+                    <select class="form-control unit-rent-requency" id="unit_rent_frequency" name="unit[rent_frequency]" data-toggle="select" data-options='{"placeholder": "Select a frequency"}' required>
                       <option></option>
                       <option value="Daily">Daily</option>
                       <option value="Weekly">Weekly</option>
@@ -133,7 +134,7 @@
       <div class="modal-dialog" role="document">
         <form id="add-unit-with-property-form" method="post" action="/property/tenancies/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
-          <input type="hidden" name="unit[tenants]" value="">
+          <input type="hidden" name="unit[tenants]" value="[]">
           <input type="hidden" name="unit[description]" value="">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
@@ -158,6 +159,8 @@
                 </div>
               </div>
               <div class="row">
+                <input type="hidden" class="unit-filter-hidden" name="unit[id]">
+                <input type="hidden" class="unit-description" name="unit[description]">
                 <div class="col-12">
                   
                   <!-- Start date -->
@@ -165,9 +168,12 @@
                     <label class="unit-label">
                       Units
                     </label>
-                    <select class="form-control unit-filter" name="unit[id]" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
+                    <select class="form-control unit-filter" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
                       <option></option>
                     </select>  
+                    <div class="invalid-feedback">
+                      This unit is currently occupied.
+                    </div>   
                   </div>
     
                 </div>
@@ -250,7 +256,7 @@
                     <label>
                       Rent Frequency
                     </label>
-                    <select class="form-control" name="unit[rent_frequency]" data-toggle="select" data-options='{"placeholder": "Select a frequency"}' required>
+                    <select class="form-control unit-rent-requency" name="unit[rent_frequency]" data-toggle="select" data-options='{"placeholder": "Select a frequency"}' required>
                       <option></option>
                       <option value="Daily">Daily</option>
                       <option value="Weekly">Weekly</option>
@@ -343,7 +349,7 @@
               <div class="tab-pane fade active show" id="occupied" role="tabpanel">
                 <div class="row" style="margin-bottom: 2rem;">
                   <div class="col-12 col-md-4">
-                    <select class="form-control my-3 property-filter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
+                    <select class="form-control my-3 tenancy-property-filter" id="filterByPropety" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
                         <option></option>
                     </select>
                   </div>
@@ -545,19 +551,21 @@
       $(function(){
 
         // display property filter
-        // var option = new Option('All', 'all', true, true);
-        // $('.property-filter').append(option);
+        var option = new Option('All Properties', 'all', true, true);
+        $('.tenancy-property-filter').append(option);
         allProperties.map(property => {
           var property_name = property.address + ', ' + property.city;
           option = new Option(property_name, property.id, true, true);
           $('.property-filter').append(option);
+          $('.tenancy-property-filter').append(option);
         });
+        $('.tenancy-property-filter').val('all').trigger('change');
         $('.property-filter').val('all').trigger('change');
 
         // Initialize
         displayAllTenancies();
 
-        $('.property-filter').on('select2:select', function (e) {
+        $('.tenancy-property-filter').on('select2:select', function (e) {
           if (e.params.data.id == 'all') {
             items = properties;
           } else {

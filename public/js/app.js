@@ -269,18 +269,16 @@ function doPopulate() {
         if (res.status == "success") {
           try {
             var mydoc = JSON.parse(res.xhr.response);
-            $('.dropzone-image').attr('src', res.dataURL);
-            $('.dropzone-image').addClass('active');
+            $('.dropzone-image').attr('src', res.dataURL).addClass('active');
             $('.dz-message-placeholder').text('Replace this file')
+            $('.document_mimetypee').val( mydoc.mimetype);
+            $('.document_path').val(mydoc.path);
             if ($('.status').val() == 'upload') {
               $('.document_id').val(mydoc.id);
-              $('.document_path').val(mydoc.path);
               $('.big-title').text('Upload a New Image')
             } else {
               $('.document_size').val(mydoc.size);
-              $('.document_mimetypee').val( mydoc.mimetype);
               $('.document_filename').val(mydoc.filename);
-              $('.document_path').val(mydoc.path);
             }
           } catch(e) {}
         } else {
@@ -298,6 +296,21 @@ function doPopulate() {
 
     // Init dropzone
     new Dropzone(el, options);
+  }
+
+  // populate the unit info from api
+  const populateUnit = (unit) => {
+    if (unit.rent_frequency == 'Vacant') {
+      $('.unit-filter').removeClass('is-invalid')
+    } else {
+      $('.unit-filter').addClass('is-invalid')
+      $('input[name="unit[start_date]"]').val(unit.start_date);
+      $('input[name="unit[end_date]"]').val(unit.end_date);
+      $('.unit-rent-requency').val(unit.rent_frequency).trigger('change');
+      $('input[name="unit[rent_price]"]').val(unit.rent_price);
+      $('input[name="unit[deposit]"]').val(unit.deposit);
+      $('input[name="unit[tenants]"]').val(JSON.stringify(unit.tenants));
+    }
   }
 
   // property filter in transaction
@@ -322,7 +335,8 @@ function doPopulate() {
         console.log(error);
       });
       if (res.status == 200) {
-        $('.unit-filter').empty();
+        $('.unit-filter').empty().removeClass('is-invalid');
+        $('input').val('')
         units = res.units
         
         if (res.units.length == 1) {
@@ -334,6 +348,7 @@ function doPopulate() {
           $('.unit-filter').append(option);
           $('.unit-filter').val(unit.id).trigger('change');
           $('.unit-filter-hidden').val(unit.id);
+          populateUnit(unit)
         } else {
           $('.unit-label').html('Units')
           if ($('.unit-filter').hasClass('no-unit')) {
@@ -826,7 +841,7 @@ const clearTransactionModal = () => {
 
 const clearUnitModal = () => {
   $('.property-filter').val(null).trigger('change')
-  $('.unit-filter').val(null).trigger('change')
+  $('.unit-filter').val(null).trigger('change').removeClass('is-invalid')
   $('input').val('')
 }
 
@@ -1324,10 +1339,10 @@ $(function() {
         } else {
           unit_description_formgroup.removeClass('d-none')
         }
+        $(".unit-description").val(unit.description)
         $('input[name="unit[start_date]"]').val(unit.start_date);
         $('input[name="unit[end_date]"]').val(unit.end_date);
-        $('#unit_rent_frequency').val(unit.rent_frequency);
-        $('#unit_rent_frequency').trigger('change');
+        $('.unit-rent-requency').val(unit.rent_frequency).trigger('change');
         $('input[name="unit[rent_price]"]').val(unit.rent_price);
         $('input[name="unit[deposit]"]').val(unit.deposit);
         $('input[name="unit[tenants]"]').val(JSON.stringify(unit.tenants));
@@ -1471,7 +1486,7 @@ $(function() {
         }
         let unit_id = $('input[name="unit[id]"]').val();
         if ($(this).data('unit')) {
-          unit_id = $(this).data('unit');
+          unit_id = $(this).data('unit').id;
         }
         if ($(this).hasClass('btn-unit-delete') || $(this).hasClass('delete-unit')) {
             const block_id = $(this).data('block');
@@ -2023,6 +2038,10 @@ $(function() {
       $('#modalUpload').find('input').empty();
       $('#modalUpload').find('select').val('').trigger('change')
       $('.document_unit').empty();
+      $('.docModalCategoryBtn').html('Select a Category')
+      $('.keydoc-subcategory-group').addClass('d-none')
+      $('.doc-expirydate-group').addClass('d-none')
+      $('.doc-rating-group').addClass('d-none')
       $('.property-row').removeClass('d-none');
       $('.unit-row').removeClass('d-none');
       if ($(this).hasClass('modal-property') || $(this).hasClass('modal-unit')) {
@@ -2066,7 +2085,7 @@ $(function() {
         $('.document_id').val($(this).data('id'));
         $('.document_size').val($(this).data('size'));
         $('.document_path').val(image);
-        $('.document_mimetypee').val(mimetype);
+        $('.document_mimetype').val(mimetype);
         $('.document_filename').val($(this).data('filename'));
         $('.document_note').val($(this).data('note') || '');
         $('.dz-message-placeholder').html('Replace a New File');
