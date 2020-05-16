@@ -301,9 +301,9 @@ function doPopulate() {
   // populate the unit info from api
   const populateUnit = (unit) => {
     if (unit.rent_frequency == 'Vacant') {
-      $('.unit-filter').removeClass('is-invalid')
+      $('#modalAddNewUnitWithProperty .unit-filter').removeClass('is-invalid')
     } else {
-      $('.unit-filter').addClass('is-invalid')
+      $('#modalAddNewUnitWithProperty .unit-filter').addClass('is-invalid')
       $('input[name="unit[start_date]"]').val(unit.start_date);
       $('input[name="unit[end_date]"]').val(unit.end_date);
       $('.unit-rent-requency').val(unit.rent_frequency).trigger('change');
@@ -2148,7 +2148,7 @@ $(function() {
           status: $('.status').val(),
           size: $('.document_size').val(),
           path: $('.document_path').val(),
-          mimetype: $('.document_mimetypee').val(),
+          mimetype: $('.document_mimetype').val(),
           filename: $('.document_filename').val()
         }
       }
