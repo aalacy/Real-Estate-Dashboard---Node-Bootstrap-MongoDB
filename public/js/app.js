@@ -302,15 +302,19 @@ function doPopulate() {
   const populateUnit = (unit) => {
     if (unit.rent_frequency == 'Vacant') {
       $('#modalAddNewUnitWithProperty .unit-filter').removeClass('is-invalid')
+
     } else {
       $('#modalAddNewUnitWithProperty .unit-filter').addClass('is-invalid')
-      $('input[name="unit[start_date]"]').val(unit.start_date);
-      $('input[name="unit[end_date]"]').val(unit.end_date);
-      $('.unit-rent-requency').val(unit.rent_frequency).trigger('change');
-      $('input[name="unit[rent_price]"]').val(unit.rent_price);
-      $('input[name="unit[deposit]"]').val(unit.deposit);
-      $('input[name="unit[tenants]"]').val(JSON.stringify(unit.tenants));
+      $('#modalAddNewUnitWithProperty input[name="unit[start_date]"]').val(unit.start_date);
+      $('#modalAddNewUnitWithProperty input[name="unit[end_date]"]').val(unit.end_date);
+      $('#modalAddNewUnitWithProperty .unit-rent-requency').val(unit.rent_frequency).trigger('change');
+      $('#modalAddNewUnitWithProperty input[name="unit[rent_price]"]').val(unit.rent_price);
+      $('#modalAddNewUnitWithProperty input[name="unit[deposit]"]').val(unit.deposit);
+      $('#modalAddNewUnitWithProperty input[name="unit[tenants]"]').val(JSON.stringify(unit.tenants));
       $('.addUnitBtn').prop('disabled', true)
+      $('#modalAddNewUnitWithProperty input').prop('disabled', true)
+      $('#modalAddNewUnitWithProperty .unit-rent-requency').prop('disabled', true)
+      $('#modalAddNewUnitWithProperty .property-filter').prop('disabled', false)
     }
   }
 
@@ -337,6 +341,9 @@ function doPopulate() {
       });
       if (res.status == 200) {
         $('.unit-filter').empty().removeClass('is-invalid');
+        $('#modalAddNewUnitWithProperty input').prop('disabled', false)
+        $('#modalAddNewUnitWithProperty .unit-rent-requency').prop('disabled', false)
+        $('.addUnitBtn').prop('disabled', false)
         $('#modalAddNewUnitWithProperty input').val('')
         units = res.units
         
