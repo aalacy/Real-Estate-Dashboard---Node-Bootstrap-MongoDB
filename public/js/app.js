@@ -336,7 +336,7 @@ function doPopulate() {
       });
       if (res.status == 200) {
         $('.unit-filter').empty().removeClass('is-invalid');
-        $('input').val('')
+        $('#modalAddNewUnitWithProperty input').val('')
         units = res.units
         
         if (res.units.length == 1) {
@@ -836,7 +836,7 @@ const clearTransactionModal = () => {
   $('#transaction_status').val(null).trigger('change');
   $('button.delete-transaction').addClass('d-none');
   $('#modalAddNewTransaction .modal-footer').removeClass('justify-content-between');
-  $('#income_option').trigger('click');
+  $('#income_option').val('In').trigger('click');
 }
 
 const clearUnitModal = () => {
