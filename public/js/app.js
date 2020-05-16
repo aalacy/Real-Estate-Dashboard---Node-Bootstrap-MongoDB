@@ -1380,12 +1380,13 @@ $(function() {
         $('#estimatePropertyBtn').prop('checked', false);
       } else {
         $('.property-estimate-box-missing-value').addClass('d-none')
+        $('#property_current_value').val(property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
         if (property.estimate_cron_on) {
-          $('#property_current_value').addClass('form-control-appended').val(property.current_value).attr('placeholder', property.estimate_value)
+          $('#property_current_value').prop('readonly', true).addClass('form-control-appended')
           $('.property-current-value-append').removeClass('d-none')
           $('#estimatePropertyBtn').prop('checked', true);
         } else {
-          $('#property_current_value').removeClass('form-control-appended')
+          $('#property_current_value').prop('readonly', false).removeClass('form-control-appended')
           $('.property-current-value-append').addClass('d-none')
           $('#estimatePropertyBtn').prop('checked', false);
         }
@@ -1452,11 +1453,15 @@ $(function() {
     $('#estimatePropertyBtn').change(function(e) {
       let estimate_cron_on = false;
       if ($(this).prop('checked')) {
-        estimate_cron_on = false;
-        $('#property_current_value').attr('placeholder', property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
-      } else {
         estimate_cron_on = true;
-        $('#property_current_value').val(property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+        $('.property-current-value-append').removeClass('d-none')
+        $('#property_current_value').addClass('form-control-appended')
+        $('#property_current_value').prop('readonly', true).val(property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+      } else {
+        estimate_cron_on = false;
+        $('.property-current-value-append').addClass('d-none')
+        $('#property_current_value').removeClass('form-control-appended')
+        $('#property_current_value').prop('readonly', false).val(property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
       }
 
       fetch('/property/updateData',  
