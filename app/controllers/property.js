@@ -1266,7 +1266,7 @@ exports.cashflow_date = async function(req, res) {
   })
 }
 
-
+// render the contacts page
 exports.contacts = async function(req, res) {
   const { user } = req.session;
 
