@@ -88,8 +88,8 @@ router.use('/property/tenancies/new', property.new_tenancy);
 router.use('/property/unit/delete', property.delete_unit);
 router.use('/property/unit/clear', property.clear_unit);
 
-router.use('/property/unit/tenant/new', property.new_tenant);
-router.use('/property/unit/tenant/delete', property.delete_tenant);
+router.use('/property/contact/new', property.new_contact);
+router.use('/property/contact/delete', property.delete_contact);
 
 // documents
 router.get('/property/documents', property.documents);
@@ -113,5 +113,8 @@ router.post('/transaction/mark/paid', transaction.mark);
 // services
 router.get('/services', service.all);
 router.get('/services/instantValuations', service.instant_valuations);
+
+// contacts
+router.get('/contacts', property.contacts);
 
 module.exports = router;

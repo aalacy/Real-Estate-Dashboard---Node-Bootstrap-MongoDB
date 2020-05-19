@@ -747,7 +747,7 @@ exports.upload_doc_to_property = async function(req, res) {
   const property_name = document.property_name;
   const unit_name = document.unit_name;
   let display_name = property_name;
-  if (unit_name != 'No unit selected' && unit_name) {
+  if (unit_name != 'No unit selected' && unit_name && unit_name != 'Single Unit Property') {
     display_name += ' - ' + unit_name
   }
   console.log(document)
@@ -848,15 +848,17 @@ exports.all_units = async function(req, res) {
   })
 }
 
-exports.new_tenant = async function(req, res) {
-  const { body: { property, unit, tenant } } = req;
+exports.new_contact = async function(req, res) {
+  const { body: { tenant } } = req;
+  const { user } = req.session;  
 
   let new_tenant = new Tenants(tenant);
   let new_values = {};
   let message = "Sucessfully added.";
   if (!tenant.id) {
     new_tenant.setDate();
-    new_tenant.setID();
+    new_tenant.user_id = user.id
+    new_tenant.setID(); 
     await new_tenant.save();
   } else {
     new_values = {
@@ -871,78 +873,47 @@ exports.new_tenant = async function(req, res) {
     message = "Successfully updated."
   }
 
-  const myproperty = await Properties.findOne({ id: property.id });
-  let tenancies = [];
-  tenants_cnt = 0;
-  let tenants = []
-  myproperty.tenancies.map(_unit => {
-    if (!_unit.tenants) {
-      _unit.tenants = [];
-    } 
-    if (_unit.id == unit.id) {
-      if (!tenant.id) {
-        _unit.tenants.push(new_tenant);
-      } else {
-        let _tenants = []
-        _unit.tenants.map(_tenant => {
-          if (_tenant.id == tenant.id) {
-            _tenants.push(tenant)
-          } else {
-            _tenants.push(_tenant)
-          }
-        })
-        _unit.tenants = _tenants;
-      }
-      tenants_cnt = _unit.tenants.length;
-      tenants = _unit.tenants
-    }
-    tenancies.push(_unit);
-  });
-
-  new_values = {
-    $set: { tenancies }
-  };
-  
-  return Properties.updateOne({ id: property.id }, new_values).then(() => {
-    res.json({
-      status: 200,
-      tenants,
-      message,
-      cnt: tenants_cnt
-    })
-  });
+  return res.json({
+    status: 200,
+    message,
+  })
 }
 
-exports.delete_tenant = async function(req, res) {
-  const { body: { property_id, unit_id, tenant_id } } = req;
+exports.delete_contact = async function(req, res) {
+  const { body: { id } } = req;
+  const { user } = req.session;  
 
-  const myproperty = await Properties.findOne({ id: property_id });
-  let tenancies = [];
-  let tenants = []
-  const myunit = myproperty.tenancies.map(_unit => {
-    if (_unit.id == unit_id) {
-      _unit.tenants = _unit.tenants.filter(_tenant => _tenant.id != tenant_id);
-      tenants = _unit.tenants;
-    }
-    tenancies.push(_unit);
-  });
+  try {
+    await Tenants.deleteOne({ id })
+    const properties = await Properties.find({ user_id: user.id });
+    properties.map(async (myproperty) => {
+      const tenancies = myproperty.tenancies.map(_unit => {
+        const tenants = _unit.tenants.map(tenant => {
+          if (tenant.id != id) {
+            return tenant.id
+          }
+        });
+        _unit.tenants = tenants
+        return _unit
+      });
 
-  new_values = {
-    $set: { tenancies }
-  };
-  
-  return Properties.updateOne({ id: property_id }, new_values).then(() => {
+      new_values = {
+        $set: { tenancies }
+      };
+
+      await Properties.updateOne({ id: myproperty.id }, new_values)
+    })
+    
     res.json({
       status: 200,
       message: 'Success',
-      cnt: tenants.length
     })
-  }).catch(e => {
-    res.json({
+  } catch (e) {
+    res.status(500).json({
       status: 500,
       message: 'Failure'
     })
-  });
+  }
 }
 
 const createNewUnit = async function(property, unit) {
@@ -953,7 +924,9 @@ const createNewUnit = async function(property, unit) {
   unit.rent_price = unit.rent_price.replace(/,/g, '') ? parseFloat(unit.rent_price.replace(/,/g, '')) : 0;
   try {
     unit.tenants = JSON.parse(unit.tenants);
-  } catch(e) {}
+  } catch(e) {
+    unit.tenants = []
+  }
   status = 'Occupied';
   let rental_income = myproperty.rental_income;
   let rental_yield = myproperty.rental_yield;
@@ -1290,4 +1263,18 @@ exports.cashflow_date = async function(req, res) {
     gross_yield,
     net_yield
   })
+}
+
+
+exports.contacts = async function(req, res) {
+  const { user } = req.session;
+
+  const contacts = await Tenants.find({ user_id: user.id }, {_id: 0})
+
+   res.render('property/contacts', {
+    title: 'Avenue - Contacts',
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
+    contacts
+  });
 }

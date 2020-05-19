@@ -37,8 +37,8 @@ const toNormalBtn = function(el) {
   $(el).find('span.loading').addClass('d-none');
 }
 
-const addTenant = function(tenant, unit) {
-  $('.tenant-list').append(`<div class="col-4 tenant-item"><div class="card my-2">
+const addContact = function(tenant, unit) {
+  $('.tenant-list').append(`<div class="col-12 col-md-6 col-xl-4 tenant-item"><div class="card my-2">
     <div class="card-body">
       <div class="row align-items-center">
       <div class="col-auto">
@@ -50,9 +50,12 @@ const addTenant = function(tenant, unit) {
         <h4 class="card-title mb-1 tenant-name">
           ${tenant.first_name} ${tenant.last_name}
         </h4>
-        <p class="card-text small text-muted">
-          <a href="#" class="edit-tenant" data-tenant='${JSON.stringify(tenant)}' data-id="${tenant.id}" data-unit="${unit.id}">View details</a>
+        <p class="small text-muted">
+          <a href="#" class="edit-contact" data-tenant='${JSON.stringify(tenant)}' data-id="${tenant.id}" data-unit="${unit.id}">View details</a>
         </p>
+        <span class="badge badge-soft-primary" data-toggle="tooltip" data-placement="bottom" title="${tenant.type}">
+         ${tenant.type}
+        </span>
       </div>
       <div class="col-auto">
         <div class="dropdown">
@@ -60,10 +63,10 @@ const addTenant = function(tenant, unit) {
             <i class="fe fe-more-vertical"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right">
-            <a href="#!" class="dropdown-item edit-tenant" data-tenant='${JSON.stringify(tenant)}' data-id="${tenant.id}" data-unit="${unit.id}">
+            <a href="#!" class="dropdown-item edit-contact" data-tenant='${JSON.stringify(tenant)}' data-id="${tenant.id}" data-unit="${unit.id}">
               Edit
             </a>
-            <a href="#!" class="dropdown-item delete-tenant" data-id="${tenant.id}">
+            <a href="#!" class="dropdown-item delete-contact" data-id="${tenant.id}">
               Delete
             </a>
           </div>
@@ -150,6 +153,17 @@ function doPopulate() {
                   </a>`
       }
 
+      let rating = '';
+      if ( doc.subcategory == 'EPC') {
+        if (['A', 'B', 'C'].includes(doc.rating)) {
+          rating = `<span class="badge badge-success">${doc.rating}</span>`
+        } else if (['D', 'E', 'F'].includes(doc.rating)) {
+          rating = `<span class="badge badge-warning">${doc.rating}</span>`
+        } else {
+          rating = `<span class="badge badge-danger">${doc.rating}</span>`
+        }
+      }
+
       $('.documentList').append(`<li class="list-group-item document-item px-0 page${page}">
           <div class="row align-items-center">
             <div class="col-auto">
@@ -161,7 +175,7 @@ function doPopulate() {
             </div>
             <div class="col ml-n2">
               <h4 class="card-title mb-1 name document-name document-lg-name">
-                ${fileName}
+                ${fileName} &nbsp; ${rating}
               </h4>
               <p class="card-text small text-muted mb-1">
                 ${doc.display_name}
@@ -2241,7 +2255,7 @@ $(function() {
     });
 
     // add new tenant
-    $('#add-tenant-form').submit(function(e){
+    $('#addContactBtn').click(function(e){
       e.preventDefault();
       const data = {
           property: {
@@ -2252,14 +2266,16 @@ $(function() {
           },
           tenant: {
             id: $('#tenant_id').val(),
+            type: $('#tenant_type').val(),
             first_name: $('#tenant_first_name').val(),
             last_name: $('#tenant_last_name').val(),
             email: $('#tenant_email').val(),
-            phone_number: $('#tenant_phone_number').val()
+            phone_number: $('#tenant_phone_number').val(),
+            notes: $('#tenant_notes').val()
           }
       };
       $('#modalAddNewTenant').modal('hide');
-      fetch('/property/unit/tenant/new/', {
+      fetch('/property/contact/new/', {
         credentials: 'same-origin', // <-- includes cookies in the request
         headers: {
             'CSRF-Token': $('meta[name="csrf"]').attr('content'), 
@@ -2275,11 +2291,10 @@ $(function() {
         } else if (res.status == 200) {
           $('.tenant-list').empty();
           res.tenants.map(tenant => {
-            addTenant(tenant, data.unit);
+            addContact(tenant, data.unit);
           });
           let tenants_cnt = res.cnt == 1 ?  res.cnt + ' Tenant' : res.cnt + ' Tenants';
           if (res.cnt) {
-            $('.no-tenants').remove();
             $('.unit-tenants').text(tenants_cnt);
           } else {
             $('.unit-tenants').text('No');
@@ -2290,6 +2305,33 @@ $(function() {
         console.log(error);
       });
     }) 
+
+    $('.delete-contact').click(function(e) {
+      e.preventDefault();
+      const data = {
+        id: $(this).data('id')
+      }
+      confirmDialog("Are you sure want to delete this contact?", (ans) => {
+          if (ans) {
+            fetch('/property/contact/delete', {
+              credentials: 'same-origin', // <-- includes cookies in the request
+              headers: {
+                  'CSRF-Token': $('meta[name="csrf"]').attr('content'), 
+                  'Content-Type': 'application/json'
+              },
+              method: 'POST',
+              body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(function(res) {
+              makeToast({message: res.message});
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      })
+    })
 
     // Dropzone
     if ($('.dropzone').length) {
