@@ -1813,39 +1813,7 @@
             });
           });
 
-          $('.add-tenant').click(function() {
-            $('#modalAddNewTenant').modal()
-              .on('shown.bs.modal', function () {
-                $('#tenant-modal-title').html('Add a New Tenant');
-                $('#addTenantBtn').html('Add');
-              });
-          })
-
-          $(document).on('click', '.edit-tenant', function() {
-            const tenant_id = $(this).data('id');
-            $('input[name="unit[id]"]').val($(this).data('unit'));
-            $('input[name="tenant[id]"]').val(tenant_id);
-            const tenant = $(this).data('tenant');
-            $('#tenant_first_name').val(tenant.first_name);
-            $('#tenant_last_name').val(tenant.last_name);
-            $('#tenant_email').val(tenant.email);
-            $('#tenant_phone_number').val(tenant.phone_number);
-            $('#modalAddNewTenant').modal()
-              .on('shown.bs.modal', function () {
-                $('#tenant-modal-title').html('Edit a Tenant');
-                $('#addTenantBtn').html('Update');
-                $('#tenant_id').val(tenant_id);
-              })
-              .on('hidden.bs.modal', function () {
-                $('#tenant-modal-title').html('Add a New Tenant');
-                $('#addTenantBtn').html('Add');
-                $('#tenant_first_name').val('');
-                $('#tenant_last_name').val('');
-                $('#tenant_email').val('');
-                $('#tenant_phone_number').val('');
-                $('#tenant_id').val();
-              });
-          });
+          
 
           // if (unit.tenants.length == 0) {
           //   $('.tenant-list').append(`<div class="col-auto no-tenants"><p>There is no tenants yet</p></div>`);

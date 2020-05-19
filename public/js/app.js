@@ -38,7 +38,7 @@ const toNormalBtn = function(el) {
 }
 
 const addContact = function(tenant, unit) {
-  $('.tenant-list').append(`<div class="col-12 col-md-6 col-xl-4 tenant-item"><div class="card my-2">
+  $('.contact-list').append(`<div class="col-12 col-md-6 col-xl-4 contact-item"><div class="card">
     <div class="card-body">
       <div class="row align-items-center">
       <div class="col-auto">
@@ -50,7 +50,7 @@ const addContact = function(tenant, unit) {
         <h4 class="card-title mb-1 tenant-name">
           ${tenant.first_name} ${tenant.last_name}
         </h4>
-        <p class="small text-muted">
+        <p class="small text-muted mb-1">
           <a href="#" class="edit-contact" data-tenant='${JSON.stringify(tenant)}' data-id="${tenant.id}" data-unit="${unit.id}">View details</a>
         </p>
         <span class="badge badge-soft-primary" data-toggle="tooltip" data-placement="bottom" title="${tenant.type}">
@@ -2289,16 +2289,13 @@ $(function() {
         makeToast({message: res.message});
         if (res.status == 422) {
         } else if (res.status == 200) {
-          $('.tenant-list').empty();
-          res.tenants.map(tenant => {
-            addContact(tenant, data.unit);
-          });
-          let tenants_cnt = res.cnt == 1 ?  res.cnt + ' Tenant' : res.cnt + ' Tenants';
-          if (res.cnt) {
-            $('.unit-tenants').text(tenants_cnt);
-          } else {
-            $('.unit-tenants').text('No');
-          }
+          addContact(res.tenant, data.unit);
+          // let tenants_cnt = res.cnt == 1 ?  res.cnt + ' Tenant' : res.cnt + ' Tenants';
+          // if (res.cnt) {
+          //   $('.unit-tenants').text(tenants_cnt);
+          // } else {
+          //   $('.unit-tenants').text('No');
+          // }
         }
       })
       .catch(error => {
@@ -2306,11 +2303,12 @@ $(function() {
       });
     }) 
 
-    $('.delete-contact').click(function(e) {
+    $(document).on('click', '.delete-contact', function(e) {
       e.preventDefault();
       const data = {
         id: $(this).data('id')
       }
+      var parent = $(this).parents('.contact-item');
       confirmDialog("Are you sure want to delete this contact?", (ans) => {
           if (ans) {
             fetch('/property/contact/delete', {
@@ -2325,6 +2323,9 @@ $(function() {
             .then(response => response.json())
             .then(function(res) {
               makeToast({message: res.message});
+              if (res.status == 200) {
+                parent.remove();
+              }
             })
             .catch(error => {
               console.log(error);
@@ -2332,6 +2333,40 @@ $(function() {
         }
       })
     })
+
+    $('.add-contact').click(function() {
+      $('#modalAddNewTenant').modal()
+        .on('shown.bs.modal', function () {
+          $('#tenant-modal-title').html('Add a New Tenant');
+          $('#addTenantBtn').html('Add');
+        });
+    })
+
+    $(document).on('click', '.edit-contact', function() {
+      const tenant_id = $(this).data('id');
+      $('input[name="unit[id]"]').val($(this).data('unit'));
+      $('input[name="tenant[id]"]').val(tenant_id);
+      const tenant = $(this).data('tenant');
+      $('#tenant_first_name').val(tenant.first_name);
+      $('#tenant_last_name').val(tenant.last_name);
+      $('#tenant_email').val(tenant.email);
+      $('#tenant_phone_number').val(tenant.phone_number);
+      $('#modalAddNewTenant').modal()
+        .on('shown.bs.modal', function () {
+          $('#tenant-modal-title').html('Edit a Tenant');
+          $('#addTenantBtn').html('Update');
+          $('#tenant_id').val(tenant_id);
+        })
+        .on('hidden.bs.modal', function () {
+          $('#tenant-modal-title').html('Add a New Tenant');
+          $('#addTenantBtn').html('Add');
+          $('#tenant_first_name').val('');
+          $('#tenant_last_name').val('');
+          $('#tenant_email').val('');
+          $('#tenant_phone_number').val('');
+          $('#tenant_id').val();
+        });
+    });
 
     // Dropzone
     if ($('.dropzone').length) {

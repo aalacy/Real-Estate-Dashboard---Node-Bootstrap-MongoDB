@@ -876,6 +876,7 @@ exports.new_contact = async function(req, res) {
   return res.json({
     status: 200,
     message,
+    tenant: new_tenant
   })
 }
 
