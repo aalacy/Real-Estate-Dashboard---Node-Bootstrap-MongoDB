@@ -14,7 +14,7 @@ const uuidv4 = require('uuid/v4');
  * User schema
  */
 
-const TenantsSchema = new Schema({
+const ContactsSchema = new Schema({
   id: { type: String, default: ''},
   user_id: { type: String, default: '' },
   type: { type: String, default: '' },
@@ -39,16 +39,16 @@ const TenantsSchema = new Schema({
  * Methods
  */
 
-TenantsSchema.methods.setDate = function() {
+ContactsSchema.methods.setDate = function() {
   this.created_at = this.updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
 };
 
-TenantsSchema.methods.updateDate = function() {
+ContactsSchema.methods.updateDate = function() {
   this.updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
 };
 
-TenantsSchema.methods.setID = function() {
+ContactsSchema.methods.setID = function() {
     this.id = uuidv4();
 }
 
-mongoose.model('Tenants', TenantsSchema);
+mongoose.model('Contacts', ContactsSchema);

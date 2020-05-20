@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const Properties = mongoose.model('Properties');
 const Documents = mongoose.model('Documents');
 const Transactions = mongoose.model('Transactions');
-const Tenants = mongoose.model('Tenants');
+const Contacts = mongoose.model('Contacts');
 const moment = require('moment');
 const uuidv4 = require('uuid/v4');
 const CronJobManager = require('cron-job-manager');
@@ -533,7 +533,7 @@ exports.search = async function(req, res) {
   const myproperties = await Properties.find( {user_id: user.id}, { _id: 0 });
   const _q = query.toLowerCase()
   units = [];
-  tenants = []
+  contacts = []
   properties = []
   myproperties.map(property => {
     if (property.address.toLowerCase().includes(_q) || property.city.toLowerCase().includes(_q)) {
@@ -554,7 +554,7 @@ exports.search = async function(req, res) {
       unit.tenants.map(tenant => {
         if ( tenant.first_name.toLowerCase().includes(_q) ||
         tenant.last_name.toLowerCase().includes(_q)) {
-          tenants.push({
+          contacts.push({
             unit_id: unit.id,
             property_id: property.id,
             property_name: `${property.address}, ${property.city}`,
@@ -570,7 +570,7 @@ exports.search = async function(req, res) {
   return res.json({
     status: 200,
     properties: properties.slice(0, 5),
-    tenants: tenants.slice(0, 5),
+    contacts: contacts.slice(0, 5),
     units: units.slice(0, 5)
   })
 };
@@ -849,34 +849,38 @@ exports.all_units = async function(req, res) {
 }
 
 exports.new_contact = async function(req, res) {
-  const { body: { tenant } } = req;
+  const { body: { contact } } = req;
   const { user } = req.session;  
 
-  let new_tenant = new Tenants(tenant);
+  let new_contact = new Contacts(contact);
   let new_values = {};
   let message = "Sucessfully added.";
-  if (!tenant.id) {
-    new_tenant.setDate();
-    new_tenant.user_id = user.id
-    new_tenant.setID(); 
-    await new_tenant.save();
+  if (!contact.id) {
+    new_contact.setDate();
+    new_contact.user_id = user.id
+    new_contact.setID(); 
+    await new_contact.save();
   } else {
     new_values = {
       $set: {  
-        first_name: tenant.first_name,
-        last_name: tenant.last_name,
-        email: tenant.email,
-        phone_number: tenant.phone_number
+        first_name: contact.first_name,
+        last_name: contact.last_name,
+        email: contact.email,
+        phone_number: contact.phone_number,
+        type: contact.type,
+        notes: contact.notes,
       }
     };
-    await Tenants.updateOne({ id: tenant.id }, new_values);
+    await Contacts.updateOne({ id: contact.id }, new_values);
     message = "Successfully updated."
   }
+
+  const contacts = await Contacts.find({ user_id: user.id }, { _id: 0})
 
   return res.json({
     status: 200,
     message,
-    tenant: new_tenant
+    contacts
   })
 }
 
@@ -885,7 +889,7 @@ exports.delete_contact = async function(req, res) {
   const { user } = req.session;  
 
   try {
-    await Tenants.deleteOne({ id })
+    await Contacts.deleteOne({ id })
     const properties = await Properties.find({ user_id: user.id });
     properties.map(async (myproperty) => {
       const tenancies = myproperty.tenancies.map(_unit => {
@@ -1270,7 +1274,7 @@ exports.cashflow_date = async function(req, res) {
 exports.contacts = async function(req, res) {
   const { user } = req.session;
 
-  const contacts = await Tenants.find({ user_id: user.id }, {_id: 0})
+  const contacts = await Contacts.find({ user_id: user.id }, {_id: 0})
 
    res.render('property/contacts', {
     title: 'Avenue - Contacts',

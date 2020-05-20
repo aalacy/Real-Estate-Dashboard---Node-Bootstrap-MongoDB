@@ -1612,6 +1612,16 @@
             parentDom = '.key2-docs-list';
           }
           let category = 'Key Documents - ' + doc.title
+          let rating = '';
+          if ( doc.subcategory == 'EPC') {
+            if (['A', 'B', 'C'].includes(doc.rating)) {
+              rating = `<span class="badge badge-success">${doc.rating}</span>`
+            } else if (['D', 'E', 'F'].includes(doc.rating)) {
+              rating = `<span class="badge badge-warning">${doc.rating}</span>`
+            } else {
+              rating = `<span class="badge badge-danger">${doc.rating}</span>`
+            }
+          }
           $(parentDom).append(`
             <div class="list-group-item">
               <div class="row align-items-center document-item">
@@ -1628,7 +1638,7 @@
                   <!-- Title -->
                   <h4 class="card-title mb-1 document-name">
                     <a href="/property/documents" target="_blank" data-property="${doc.property_id}" data-category="${category}">
-                      ${doc.title}
+                      ${doc.title} &nbsp; ${rating}
                     </a>
                   </h4>
 

@@ -37,7 +37,7 @@ const toNormalBtn = function(el) {
   $(el).find('span.loading').addClass('d-none');
 }
 
-const addContact = function(tenant, unit) {
+const addContact = function(contact, unit) {
   $('.contact-list').append(`<div class="col-12 col-md-6 col-xl-4 contact-item"><div class="card">
     <div class="card-body">
       <div class="row align-items-center">
@@ -47,14 +47,14 @@ const addContact = function(tenant, unit) {
         </a>
       </div>
       <div class="col ml-n2">
-        <h4 class="card-title mb-1 tenant-name">
-          ${tenant.first_name} ${tenant.last_name}
+        <h4 class="card-title mb-1 contact-name">
+          ${contact.first_name} ${contact.last_name}
         </h4>
         <p class="small text-muted mb-1">
-          <a href="#" class="edit-contact" data-tenant='${JSON.stringify(tenant)}' data-id="${tenant.id}" data-unit="${unit.id}">View details</a>
+          <a href="#" class="edit-contact" data-contact='${JSON.stringify(contact)}' data-id="${contact.id}" data-unit="${unit.id}">View details</a>
         </p>
-        <span class="badge badge-soft-primary" data-toggle="tooltip" data-placement="bottom" title="${tenant.type}">
-         ${tenant.type}
+        <span class="badge badge-soft-primary" data-toggle="tooltip" data-placement="bottom" title="${contact.type}">
+         ${contact.type}
         </span>
       </div>
       <div class="col-auto">
@@ -63,10 +63,10 @@ const addContact = function(tenant, unit) {
             <i class="fe fe-more-vertical"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right">
-            <a href="#!" class="dropdown-item edit-contact" data-tenant='${JSON.stringify(tenant)}' data-id="${tenant.id}" data-unit="${unit.id}">
+            <a href="#!" class="dropdown-item edit-contact" data-contact='${JSON.stringify(contact)}' data-id="${contact.id}" data-unit="${unit.id}">
               Edit
             </a>
-            <a href="#!" class="dropdown-item delete-contact" data-id="${tenant.id}">
+            <a href="#!" class="dropdown-item delete-contact" data-id="${contact.id}">
               Delete
             </a>
           </div>
@@ -1638,7 +1638,7 @@ $(function() {
       });
     });
 
-    // Search on navbar - property, unit, tenant
+    // Search on navbar - property, unit, contact
     $('body').click(function(e){
       $('#property-search-list').removeClass('show');
     })
@@ -1710,13 +1710,13 @@ $(function() {
               </a>`);
         })
 
-        // tenant list
-        if (res.tenants.length) {
+        // contact list
+        if (res.contacts.length) {
           $('#property-search-list .card-body .list-group').append(`<b class="mb-2">Tenants</b>`);
         }
-        res.tenants.map(tenant => {
-          let avatar = tenant.isMulti ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png';
-          const href = `/property/overview/${tenant.property_id}/units/${tenant.unit_id}`;
+        res.contacts.map(contact => {
+          let avatar = contact.isMulti ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png';
+          const href = `/property/overview/${contact.property_id}/units/${contact.unit_id}`;
           $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item border-0 px-0">
             <div class="row align-items-center">
               <div class="col-auto">
@@ -1725,11 +1725,11 @@ $(function() {
                 </div>
               </div>
               <div class="col ml-n2">
-                <h4 class="text-body mb-1 tenant-name">
-                  ${tenant.first_name} ${tenant.last_name}
+                <h4 class="text-body mb-1 contact-name">
+                  ${contact.first_name} ${contact.last_name}
                 </h4>
                 <p class="card-text small text-muted">
-                  ${tenant.unit_name}: ${tenant.property_name}
+                  ${contact.unit_name}: ${contact.property_name}
                 </p>
               </div>
             </div>
@@ -1737,7 +1737,7 @@ $(function() {
         });
 
         
-        if (!res.properties && !res.units && !res.tenants) {
+        if (!res.properties && !res.units && !res.contacts) {
           $('#property-search-list').removeClass('show');
         } else {
           $('#property-search-list').addClass('show');
@@ -2254,7 +2254,7 @@ $(function() {
       $('#modalAddNewLoan').modal();
     });
 
-    // add new tenant
+    // add new contact
     $('#addContactBtn').click(function(e){
       e.preventDefault();
       const data = {
@@ -2264,17 +2264,17 @@ $(function() {
           unit: {
             id:  $("input[name='unit[id]']").val()
           },
-          tenant: {
-            id: $('#tenant_id').val(),
-            type: $('#tenant_type').val(),
-            first_name: $('#tenant_first_name').val(),
-            last_name: $('#tenant_last_name').val(),
-            email: $('#tenant_email').val(),
-            phone_number: $('#tenant_phone_number').val(),
-            notes: $('#tenant_notes').val()
+          contact: {
+            id: $('#contact_id').val(),
+            type: $('#contact_type').val(),
+            first_name: $('#contact_first_name').val(),
+            last_name: $('#contact_last_name').val(),
+            email: $('#contact_email').val(),
+            phone_number: $('#contact_phone_number').val(),
+            notes: $('#contact_notes').val()
           }
       };
-      $('#modalAddNewTenant').modal('hide');
+      $('#modalAddNewContact').modal('hide');
       fetch('/property/contact/new/', {
         credentials: 'same-origin', // <-- includes cookies in the request
         headers: {
@@ -2289,7 +2289,10 @@ $(function() {
         makeToast({message: res.message});
         if (res.status == 422) {
         } else if (res.status == 200) {
-          addContact(res.tenant, data.unit);
+          $('.contact-list').empty()
+          res.contacts.map(contact => {
+            addContact(contact, data.unit);
+          })
           // let tenants_cnt = res.cnt == 1 ?  res.cnt + ' Tenant' : res.cnt + ' Tenants';
           // if (res.cnt) {
           //   $('.unit-tenants').text(tenants_cnt);
@@ -2335,37 +2338,25 @@ $(function() {
     })
 
     $('.add-contact').click(function() {
-      $('#modalAddNewTenant').modal()
-        .on('shown.bs.modal', function () {
-          $('#tenant-modal-title').html('Add a New Tenant');
-          $('#addTenantBtn').html('Add');
-        });
+      $('#contact-modal-title').html('Add a New Contact');
+      $('#addContactBtn').html('Add');
+      $('input').val('');
+      $('select').val(null).trigger('change');
+      $('#modalAddNewContact').modal();
     })
 
     $(document).on('click', '.edit-contact', function() {
-      const tenant_id = $(this).data('id');
-      $('input[name="unit[id]"]').val($(this).data('unit'));
-      $('input[name="tenant[id]"]').val(tenant_id);
-      const tenant = $(this).data('tenant');
-      $('#tenant_first_name').val(tenant.first_name);
-      $('#tenant_last_name').val(tenant.last_name);
-      $('#tenant_email').val(tenant.email);
-      $('#tenant_phone_number').val(tenant.phone_number);
-      $('#modalAddNewTenant').modal()
-        .on('shown.bs.modal', function () {
-          $('#tenant-modal-title').html('Edit a Tenant');
-          $('#addTenantBtn').html('Update');
-          $('#tenant_id').val(tenant_id);
-        })
-        .on('hidden.bs.modal', function () {
-          $('#tenant-modal-title').html('Add a New Tenant');
-          $('#addTenantBtn').html('Add');
-          $('#tenant_first_name').val('');
-          $('#tenant_last_name').val('');
-          $('#tenant_email').val('');
-          $('#tenant_phone_number').val('');
-          $('#tenant_id').val();
-        });
+      const contact = $(this).data('contact')
+      $('#contact_type').val(contact.type).trigger('change');
+      $('#contact_first_name').val(contact.first_name);
+      $('#contact_last_name').val(contact.last_name);
+      $('#contact_email').val(contact.email);
+      $('#contact_phone_number').val(contact.phone_number);
+      $('#contact_notes').val(contact.notes);
+      $('#contact-modal-title').html('Edit a Contact');
+      $('#addContactBtn').html('Update');
+      $('input[name="contact[id]"]').val(contact.id);
+      $('#modalAddNewContact').modal();
     });
 
     // Dropzone
