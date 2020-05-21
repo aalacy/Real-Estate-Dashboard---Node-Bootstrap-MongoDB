@@ -156,11 +156,11 @@ function doPopulate() {
       let rating = '';
       if ( doc.subcategory == 'EPC') {
         if (['A', 'B', 'C'].includes(doc.rating)) {
-          rating = `<span class="badge badge-success">${doc.rating}</span>`
+          rating = `<span class="badge badge-soft-success">${doc.rating}</span>`
         } else if (['D', 'E', 'F'].includes(doc.rating)) {
-          rating = `<span class="badge badge-warning">${doc.rating}</span>`
+          rating = `<span class="badge badge-soft-warning">${doc.rating}</span>`
         } else {
-          rating = `<span class="badge badge-danger">${doc.rating}</span>`
+          rating = `<span class="badge badge-soft-danger">${doc.rating}</span>`
         }
       }
 
@@ -329,6 +329,8 @@ function doPopulate() {
       $('#modalAddNewUnitWithProperty input').prop('disabled', true)
       $('#modalAddNewUnitWithProperty .unit-rent-requency').prop('disabled', true)
       $('#modalAddNewUnitWithProperty .property-filter').prop('disabled', false)
+
+      $('#tenancy_tenants').val(unit.tenants.join(',')).trigger('change')
     }
   }
 
@@ -370,6 +372,7 @@ function doPopulate() {
           $('.unit-filter').append(option);
           $('.unit-filter').val(unit.id).trigger('change');
           $('.unit-filter-hidden').val(unit.id);
+          $('.unit-description').val(unit.description);
           populateUnit(unit)
         } else {
           $('.unit-label').html('Units')
@@ -935,6 +938,25 @@ const fetchTransactions = (id=undefined, cnt=-1, paginated=true, unit_id=-1) => 
     .catch(err => {
         console.log(err);
     })
+}
+
+// fetch all tenants
+const fetchAllTenants = async (ids, handler) => {
+  const token = $('meta[name="csrf"]').attr('content');
+  let res = ''
+  try {
+    res = await fetch(`/property/tenant/all`, {
+      headers: {
+        'CSRF-Token': token, // <-- is the csrf token as a header
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({ ids })
+    }).then(res => res.json())
+  } catch (e) {}
+  if (res) {
+    handler(res.tenants)
+  }
 }
 
 // check the availability of update property value from api
@@ -1514,7 +1536,7 @@ $(function() {
         }
         let unit_id = $('input[name="unit[id]"]').val();
         if ($(this).data('unit')) {
-          unit_id = $(this).data('unit').id;
+          unit_id = $(this).data('unit');
         }
         if ($(this).hasClass('btn-unit-delete') || $(this).hasClass('delete-unit')) {
             const block_id = $(this).data('block');
@@ -2037,6 +2059,7 @@ $(function() {
     // update hidden tag for unit
     $('.unit-filter').on('select2:select', async function (e) {
       $('.unit-filter-hidden').val(e.params.data.id)
+      $('.unit-description').val(e.params.data.text)
     });
 
     // Clear unit selection on modal

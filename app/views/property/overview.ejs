@@ -1057,7 +1057,7 @@
                               <a href="#!" class="dropdown-item edit-unit" data-unit='<%=JSON.stringify(unit)%>'>
                                 Edit
                               </a>
-                              <a href="#!" class="dropdown-item action-unit" data-property="<%=property.id%>" data-unit='<%=JSON.stringify(unit)%>'>
+                              <a href="#!" class="dropdown-item action-unit" data-property="<%=property.id%>" data-unit='<%=unit.id %>'>
                                 Clear tenancy
                               </a>
                               <% if (property.tenancies.length > 1) { %>
@@ -1214,8 +1214,7 @@
                       </div>
                     </div> 
                   </div>
-                  <div class="tenant-list">
-                   
+                  <div class="contact-list row p-2">
                   </div> 
                 </div>
 
@@ -1597,10 +1596,10 @@
             subtitle = `<i class="fe fe-upload"></i>&nbsp;Upload`
           } else if (doc.expired || doc.expiringSoon){
             if (doc.expired) {
-              subtitle += `<span class="badge badge-danger px-2 py-1 mr-2">${doc.expired}&nbsp;expired</span>`
+              subtitle += `<span class="badge badge-soft-danger px-2 py-1 mr-2">${doc.expired}&nbsp;expired</span>`
             } 
             if (doc.expiringSoon) {
-              subtitle += `<span class="badge badge-warning px-2 py-1">${doc.expiringSoon}&nbsp;expiring Soon</span>`
+              subtitle += `<span class="badge badge-soft-warning px-2 py-1">${doc.expiringSoon}&nbsp;expiring Soon</span>`
             }
           } else {
             subtitle = `<i class="fe fe-check"></i>&nbsp;${doc.uploaded}&nbsp;Uploaded`
@@ -1615,11 +1614,11 @@
           let rating = '';
           if ( doc.subcategory == 'EPC') {
             if (['A', 'B', 'C'].includes(doc.rating)) {
-              rating = `<span class="badge badge-success">${doc.rating}</span>`
+              rating = `<span class="badge badge-soft-success">${doc.rating}</span>`
             } else if (['D', 'E', 'F'].includes(doc.rating)) {
-              rating = `<span class="badge badge-warning">${doc.rating}</span>`
+              rating = `<span class="badge badge-soft-warning">${doc.rating}</span>`
             } else {
-              rating = `<span class="badge badge-danger">${doc.rating}</span>`
+              rating = `<span class="badge badge-soft-danger">${doc.rating}</span>`
             }
           }
           $(parentDom).append(`
@@ -1790,9 +1789,11 @@
 
           // display tenants section
           $('.tenant-list').empty();
-          unit.tenants.map(tenant => {
-            addTenant(tenant, unit);
-          });
+          fetchAllTenants(unit.tenants, (tenants) => {
+            tenants.map(tenant => {
+              addContact(tenant, unit)
+            })
+          })
 
           $(document).on('click', '.delete-tenant', function() {
             confirmDialog("Are you sure?", (ans) => {

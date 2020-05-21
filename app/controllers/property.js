@@ -797,6 +797,7 @@ exports.upload_doc_to_property = async function(req, res) {
 exports.tenancies = async function(req, res) {
   const { user } = req.session;  
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
+  const contacts = await Contacts.find({ user_id: user.id, type: 'Tenant' }, {_id: 0})
   let occupied_properties = [];
   let vacant_properties = []
   let all_tenancies = 0;
@@ -831,7 +832,8 @@ exports.tenancies = async function(req, res) {
     vacant_properties,
     all_tenancies,
     occupied_tenancies,
-    vacant_tenancies
+    vacant_tenancies,
+    contacts
   });
 };
 
@@ -921,14 +923,14 @@ exports.delete_contact = async function(req, res) {
   }
 }
 
-const createNewUnit = async function(property, unit) {
+const createNewUnit = async function(property, unit, tenants=[]) {
   if (!unit.rent_price || unit.rent_price == 0) {
     unit.rent_frequency = 'Vacant';
   }
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
   unit.rent_price = unit.rent_price.replace(/,/g, '') ? parseFloat(unit.rent_price.replace(/,/g, '')) : 0;
   try {
-    unit.tenants = JSON.parse(unit.tenants);
+    unit.tenants = tenants;
   } catch(e) {
     unit.tenants = []
   }
@@ -971,14 +973,14 @@ const createNewUnit = async function(property, unit) {
 }
 
 exports.new_tenancy = async function(req, res) {
-  const { body: { property, unit } } = req;
+  const { body: { property, unit, tenants } } = req;
 
   const referer = urlLib.parse(req.headers.referer)
   if (!unit) {
     return res.redirect(referer.path);
   } 
 
-  const new_values = await createNewUnit(property, unit)
+  const new_values = await createNewUnit(property, unit, tenants)
   
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
     res.redirect('/property/tenancies');
@@ -1282,4 +1284,17 @@ exports.contacts = async function(req, res) {
     token: 'req.csrfToken()',
     contacts
   });
+}
+
+exports.all_tenants = async function(req, res) {
+  const { user } = req.session;
+
+  const { ids } = req.body;
+
+  const tenants = await Contacts.find({ user_id: user.id, id: { $in: ids } }, {_id: 0})
+
+  res.json({
+    status: 200,
+    tenants
+  })
 }
