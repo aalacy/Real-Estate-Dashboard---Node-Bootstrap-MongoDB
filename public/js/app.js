@@ -329,7 +329,6 @@ function doPopulate() {
       $('#modalAddNewUnitWithProperty input').prop('disabled', true)
       $('#modalAddNewUnitWithProperty .unit-rent-requency').prop('disabled', true)
       $('#modalAddNewUnitWithProperty .property-filter').prop('disabled', false)
-
       $('#tenancy_tenants').val(unit.tenants.join(',')).trigger('change')
     }
   }
