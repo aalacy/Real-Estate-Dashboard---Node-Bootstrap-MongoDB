@@ -2322,11 +2322,7 @@ $(function() {
         if (res.status == 422) {
         } else if (res.status == 200) {
           $('.contact-list').empty()
-          if (res.contacts.length) {
-            $('.contact-list').addClass('p-2')
-          } else {
-            $('.contact-list').removeClass('p-2')
-          }
+          
           res.contacts.map(contact => {
             addContact(contact, data.unit);
           })

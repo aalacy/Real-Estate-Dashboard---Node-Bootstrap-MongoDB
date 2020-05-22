@@ -1227,7 +1227,7 @@
                       </div>
                     </div> 
                   </div>
-                  <div class="contact-list row p-2">
+                  <div class="contact-list row">
                   </div> 
                 </div>
 
@@ -1802,6 +1802,11 @@
 
           // display tenants section
           $('.contact-list').empty();
+          if (unit.tenants.length) {
+            $('.contact-list').addClass('p-2')
+          } else {
+            $('.contact-list').removeClass('p-2')
+          }
           fetchAllTenants(unit.tenants, (tenants) => {
             tenants.map(tenant => {
               addContact(tenant, unit, false)
