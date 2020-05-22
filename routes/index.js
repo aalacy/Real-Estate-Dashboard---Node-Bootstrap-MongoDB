@@ -90,6 +90,7 @@ router.use('/property/unit/clear', property.clear_unit);
 
 router.use('/property/contact/new', property.new_contact);
 router.use('/property/contact/delete', property.delete_contact);
+router.use('/property/tenant/delete', property.delete_tenant);
 // router.get('/property/contact/all', property.all_contacts);
 router.post('/property/tenant/all', property.all_tenants);
 

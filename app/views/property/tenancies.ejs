@@ -12,7 +12,7 @@
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" id="property_id" name="property[id]" value="">
           <input type="hidden" name="unit[id]" value="">
-          <input type="hidden" name="unit[tenants]" id="unit_tenants" value="">
+          <input type="hidden" name="unit[description]" class="unit-description" value="">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
               <h3 class="modal-title" id="unit-modal-title">Add a Tenancy</h3>
@@ -21,23 +21,8 @@
               </button>
             </div>
             <div class="modal-body">
-
               <div class="row">
                 <div class="col-12 col-md-6">
-
-                  <!-- Start date -->
-                  <div class="form-group">
-                    <label>
-                      Units
-                    </label>
-                    <input type="text" id="unit_description" name="unit[description]" class="form-control unit-description" placeholder="Description" value="" required>  
-
-                  </div>
-
-                </div>
-                <div class="col-12 col-md-6">
-
-                  <!-- Start date -->
                   <div class="form-group">
                     <label>
                       Deposit
@@ -51,7 +36,21 @@
                       </div>
                     </div>
                   </div>
-
+                </div>
+                  
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>
+                      Tenant
+                    </label>
+                    <select class="form-control mb-3 tenancy_tenants" data-toggle="select" name="tenants[]" multiple="multiple" tabindex="-1" aria-hidden="true">
+                      <% contacts.forEach(contact => {%>
+                       <option data-avatar-src="/img/avatars/profiles/avatar-1.jpg" data-select2-id="<%=contact.id%>" value="<%=contact.id%>">
+                         <%=contact.first_name%> <%=contact.last_name%>
+                       </option>
+                      <% }) %>
+                   </select>
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -200,7 +199,7 @@
                     <label>
                       Tenant
                     </label>
-                    <select class="form-control mb-3" id="tenancy_tenants"  data-toggle="select" name="tenants[]" multiple="multiple" tabindex="-1" aria-hidden="true">
+                    <select class="form-control mb-3 tenancy_tenants" data-toggle="select" name="tenants[]" multiple="multiple" tabindex="-1" aria-hidden="true">
                       <% contacts.forEach(contact => {%>
                        <option data-avatar-src="/img/avatars/profiles/avatar-1.jpg" data-select2-id="<%=contact.id%>" value="<%=contact.id%>">
                          <%=contact.first_name%> <%=contact.last_name%>
@@ -445,7 +444,7 @@
              tenants = '●&nbsp;1 Tenant';
             } 
             if (unit.tenants.length > 1) { 
-              tenants = `●&nbsp;${unit.tenants}Tenants`
+              tenants = `●&nbsp;${unit.tenants.length} Tenants`
             }
             let name = `${property.address}, ${property.city}`;
             if (property.tenancies.length > 1) {
@@ -490,7 +489,7 @@
                           <i class="fe fe-more-vertical"></i>
                           </a>
                           <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#!" class="dropdown-item edit-unit" data-property="${property.id}" data-unit=${JSON.stringify(unit)}>
+                            <a href="#!" class="dropdown-item edit-unit" data-property="${property.id}" data-unit='${JSON.stringify(unit)}'>
                               Add a tenancy
                             </a>
                             ${deleteUnit}

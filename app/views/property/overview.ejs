@@ -190,7 +190,6 @@
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" name="property[id]" value="<%= property.id%>">
           <input type="hidden" name="unit[id]" value="">
-          <input type="hidden" name="unit[tenants]" id="unit_tenants" value="">
           <div class="modal-content bg-lighter">
             <div class="modal-header">
                 <!-- Header -->
@@ -230,6 +229,20 @@
                     </div>
                   </div>
     
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label>
+                      Tenant
+                    </label>
+                    <select class="form-control mb-3 tenancy_tenants" data-toggle="select" name="tenants[]" multiple="multiple" tabindex="-1" aria-hidden="true">
+                      <% contacts.forEach(contact => {%>
+                       <option data-avatar-src="/img/avatars/profiles/avatar-1.jpg" data-select2-id="<%=contact.id%>" value="<%=contact.id%>">
+                         <%=contact.first_name%> <%=contact.last_name%>
+                       </option>
+                      <% }) %>
+                   </select>
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -282,7 +295,7 @@
                     <label>
                       Rent Frequency
                     </label>
-                    <select class="form-control" id="unit_rent_frequency" name="unit[rent_frequency]" data-toggle="select" data-options='{"placeholder": "Select a frequency"}' required>
+                    <select class="form-control unit-rent-requency" name="unit[rent_frequency]" data-toggle="select" data-options='{"placeholder": "Select a frequency"}' required>
                       <option></option>
                       <option value="Daily">Daily</option>
                       <option value="Weekly">Weekly</option>
@@ -712,7 +725,7 @@
                         </h4>
                       </div>
                       <div class="col-auto">
-                        <button class="btn btn-sm btn-white" data-toggle="modal" data-target="#modalAddNewUnit">
+                        <button class="btn btn-sm btn-white add-new-unit">
                           Manage
                         </button>
                       </div>
@@ -929,7 +942,7 @@
 
           <div class="tab-pane fade" id="units" role="tabpanel">
             <div class="col-12">
-              <button class="btn btn-primary lift btn-add-unit" style="margin-bottom: 2rem;" data-toggle="modal" data-target="#modalAddNewUnit">
+              <button class="btn btn-primary lift btn-add-unit add-new-unit" style="margin-bottom: 2rem;">
                 Add a unit
               </button>
               <div class="units-list">
@@ -973,7 +986,7 @@
                               ●&nbsp;1 Tenant
                             <% } %>
                             <% if (unit.tenants.length > 1) { %> 
-                              ●&nbsp;<%=unit.tenants%> Tenants
+                              ●&nbsp;<%=unit.tenants.length%> Tenants
                             <% } %>
                           </div>
                           <div class="col-auto ml-auto">
@@ -1044,7 +1057,7 @@
                             ●&nbsp;1 Tenant
                           <% } %>
                           <% if (unit.tenants.length > 1) { %> 
-                            ●&nbsp;<%=unit.tenants%> Tenants
+                            ●&nbsp;<%=unit.tenants.length%> Tenants
                           <% } %>
 
                         </div>
@@ -1788,10 +1801,10 @@
           fetchTransactions(property.id, 3, false, unit.id);
 
           // display tenants section
-          $('.tenant-list').empty();
+          $('.contact-list').empty();
           fetchAllTenants(unit.tenants, (tenants) => {
             tenants.map(tenant => {
-              addContact(tenant, unit)
+              addContact(tenant, unit, false)
             })
           })
 

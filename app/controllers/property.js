@@ -345,6 +345,7 @@ exports.overview = async function(req, res) {
 
   const documents = await Documents.find({ user_id: user.id, property_id: id, status: 'alive' }, { _id: 0 });
   const transactions = await Transactions.find({ user_id: user.id, property_id: id }, { _id: 0 }).sort('-created_at');
+  const contacts = await Contacts.find({ user_id: user.id, type: 'Tenant' }, {_id: 0})
 
   let empty_cnt = 0;
   if (property.ownership == "") empty_cnt++;
@@ -482,7 +483,8 @@ exports.overview = async function(req, res) {
     gross_yield,
     net_yield,
     since_purchase,
-    loan_to_value
+    loan_to_value,
+    contacts
   });
 };
 
@@ -886,6 +888,10 @@ exports.new_contact = async function(req, res) {
   })
 }
 
+exports.delete_tenant = async function(req, res) {
+  
+}
+
 exports.delete_contact = async function(req, res) {
   const { body: { id } } = req;
   const { user } = req.session;  
@@ -988,14 +994,14 @@ exports.new_tenancy = async function(req, res) {
 };
 
 exports.new_unit = async function(req, res) {
-  const { body: { property, unit } } = req;
+  const { body: { property, unit, tenants } } = req;
 
   const referer = urlLib.parse(req.headers.referer)
   if (!unit) {
     return res.redirect(referer.path);
   } 
 
-  const new_values = await createNewUnit(property, unit)
+  const new_values = await createNewUnit(property, unit, tenants)
   
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
     return res.redirect(referer.path);
@@ -1026,9 +1032,9 @@ exports.rename_unit = async function(req, res) {
 }
 
 exports.update_unit = async function(req, res) {
-  const { body: { property, unit } } = req;
+  const { body: { property, unit, tenants } } = req;
 
-  const new_values = await createNewUnit(property, unit)
+  const new_values = await createNewUnit(property, unit, tenants)
   
   return Properties.updateOne({ id: property.id }, new_values).then(() => {
     res.redirect('/property/tenancies');

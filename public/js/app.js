@@ -37,7 +37,7 @@ const toNormalBtn = function(el) {
   $(el).find('span.loading').addClass('d-none');
 }
 
-const addContact = function(contact, unit) {
+const addContact = function(contact, unit, isContact=true) {
   $('.contact-list').append(`<div class="col-12 col-md-6 col-xl-4 contact-item"><div class="card">
     <div class="card-body">
       <div class="row align-items-center">
@@ -66,7 +66,7 @@ const addContact = function(contact, unit) {
             <a href="#!" class="dropdown-item edit-contact" data-contact='${JSON.stringify(contact)}' data-id="${contact.id}" data-unit="${unit.id}">
               Edit
             </a>
-            <a href="#!" class="dropdown-item delete-contact" data-id="${contact.id}">
+            <a href="#!" class="dropdown-item ${isContact ? 'delete-contact' : ''}" data-id="${contact.id}">
               Delete
             </a>
           </div>
@@ -329,7 +329,7 @@ function doPopulate() {
       $('#modalAddNewUnitWithProperty input').prop('disabled', true)
       $('#modalAddNewUnitWithProperty .unit-rent-requency').prop('disabled', true)
       $('#modalAddNewUnitWithProperty .property-filter').prop('disabled', false)
-      $('#tenancy_tenants').val(unit.tenants.join(',')).trigger('change')
+      $('.tenancy_tenants').val(unit.tenants.join(',')).trigger('change')
     }
   }
 
@@ -865,8 +865,11 @@ const clearTransactionModal = () => {
 
 const clearUnitModal = () => {
   $('.property-filter').val(null).trigger('change')
+  $('.tenancy_tenants').val(null).trigger('change')
+  $('.unit-rent-requency').val(null).trigger('change')
   $('.unit-filter').val(null).trigger('change').removeClass('is-invalid')
-  $('input').val('')
+  $('input[type="text"]').val('')
+  $('input[name="unit[id]"]').val('')
   $(".addUnitBtn").prop('disabled', false)
 }
 
@@ -1369,6 +1372,12 @@ $(function() {
       $('#modalAddNewUnitWithProperty').modal()
     })
 
+    // add a new unit modal in overview page
+    $(document).on('click', '.add-new-unit', function(e) {
+      clearUnitModal()
+      $('#modalAddNewUnit').modal()
+    })
+
     $(document).on('click', '.edit-unit', function(e){
         e.preventDefault();
         const property_id = $(this).data('property');
@@ -1387,6 +1396,7 @@ $(function() {
         $('input[name="unit[start_date]"]').val(unit.start_date);
         $('input[name="unit[end_date]"]').val(unit.end_date);
         $('.unit-rent-requency').val(unit.rent_frequency).trigger('change');
+        $('.tenancy_tenants').val(unit.tenants.join(',')).trigger('change');
         $('input[name="unit[rent_price]"]').val(unit.rent_price);
         $('input[name="unit[deposit]"]').val(unit.deposit);
         $('input[name="unit[tenants]"]').val(JSON.stringify(unit.tenants));
@@ -2312,6 +2322,11 @@ $(function() {
         if (res.status == 422) {
         } else if (res.status == 200) {
           $('.contact-list').empty()
+          if (res.contacts.length) {
+            $('.contact-list').addClass('p-2')
+          } else {
+            $('.contact-list').removeClass('p-2')
+          }
           res.contacts.map(contact => {
             addContact(contact, data.unit);
           })
@@ -2362,7 +2377,7 @@ $(function() {
     $('.add-contact').click(function() {
       $('#contact-modal-title').html('Add a New Contact');
       $('#addContactBtn').html('Add');
-      $('input').val('');
+      $('input[type="text"]').val('');
       $('select').val(null).trigger('change');
       $('#modalAddNewContact').modal();
     })

@@ -13,7 +13,7 @@ const uuidv4 = require('uuid/v4');
 
 exports.all = async function(req, res) {
   const { user } = req.session;
-  let cnt_enabled_properties = await Properties.find({user_id: user.id, estimate_cron_on: true }, { _id: 0 }).count();
+  let cnt_enabled_properties = await Properties.find({user_id: user.id }, { _id: 0 }).count();
 
   res.render('service/index', {
     title: 'Avenue - Services',
@@ -26,7 +26,7 @@ exports.all = async function(req, res) {
 exports.instant_valuations = async function(req, res) {
   const { user } = req.session;
   
-  let properties = await Properties.find({user_id: user.id, estimate_cron_on: true }, { _id: 0 });
+  let properties = await Properties.find({ user_id: user.id }, { _id: 0 });
   properties.map(property => {
     property.remaining_days = moment(property.estimate_cron_run_date).add(30, 'days').diff(moment(), 'days')
   })
