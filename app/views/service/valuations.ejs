@@ -23,7 +23,6 @@
                 
                 <!-- Pretitle -->
                 <p>
-				          
                   <a href="/services" class="btn btn-white btn-sm"><!-- <span class="fe fe-corner-up-left mr-2"></span> --> Back to services</a>
                 </p>
 
@@ -57,7 +56,7 @@
                     <div class="col-auto">
                       
                       <!-- Avatar -->
-                      <a href="#" class="avatar avatar-lg avatar-4by3">
+                      <a href="/property/overview/<%=property.id%>" class="avatar avatar-lg avatar-4by3">
                         <img src="<%=property.image ? '/' + property.image : (property.tenancies.length > 1 ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png')%>" alt="..." class="card-img-top thumb-image">
                       </a>
 
@@ -114,7 +113,7 @@
                     <div class="col-auto">
                       
                       <!-- Avatar -->
-                      <a href="#" class="avatar avatar-lg avatar-4by3">
+                      <a href="/property/overview/<%=property.id%>" class="avatar avatar-lg avatar-4by3">
                         <img src="<%=property.image ? '/' + property.image : (property.tenancies.length > 1 ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png')%>" alt="..." class="card-img-top thumb-image">
                       </a>
 
@@ -123,7 +122,7 @@
                       
                       <!-- Title -->
                       <h4 class="card-title mb-1">
-                        <a href="profile-posts.html"><%=property.address + ', ' + property.city%></a>
+                        <a href="/property/overview/<%=property.id%>"><%=property.address + ', ' + property.city%></a>
                       </h4>
 
                       <!-- Text -->

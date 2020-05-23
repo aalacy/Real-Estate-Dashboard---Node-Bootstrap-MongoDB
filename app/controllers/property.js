@@ -879,7 +879,10 @@ exports.new_contact = async function(req, res) {
     message = "Successfully updated."
   }
 
-  const contacts = await Contacts.find({ user_id: user.id }, { _id: 0})
+  let contacts = await Contacts.find({ user_id: user.id }, { _id: 0})
+  if (contact.filter == 'Select') {
+    contacts = contacts.filter(contact => contact.type == 'Tenant')
+  }
 
   return res.json({
     status: 200,
@@ -1303,4 +1306,18 @@ exports.all_tenants = async function(req, res) {
     status: 200,
     tenants
   })
+}
+
+// render tenant select page
+exports.select_tenant = async function(req, res) {
+  const { user } = req.session;
+
+  const contacts = await Contacts.find({ user_id: user.id, type: 'Tenant' }, {_id: 0})
+
+   res.render('property/selecttenant', {
+    title: 'Avenue - Contacts',
+    // token: req.csrfToken(),
+    token: 'req.csrfToken()',
+    contacts
+  });
 }

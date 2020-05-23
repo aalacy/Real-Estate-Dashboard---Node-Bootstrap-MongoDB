@@ -13,7 +13,7 @@ const uuidv4 = require('uuid/v4');
 
 exports.all = async function(req, res) {
   const { user } = req.session;
-  let cnt_enabled_properties = await Properties.find({user_id: user.id }, { _id: 0 }).count();
+  let cnt_enabled_properties = await Properties.find({user_id: user.id, estimate_cron_on: true }, { _id: 0 }).count();
 
   res.render('service/index', {
     title: 'Avenue - Services',

@@ -1221,7 +1221,7 @@
                         </h4>
                       </div>
                       <div class="col-auto">
-                        <a href="#!" class="btn btn-sm btn-white add-tenant">
+                        <a href="/contacts/select" class="btn btn-sm btn-white">
                           Add
                         </a>
                       </div>
@@ -1809,7 +1809,7 @@
           }
           fetchAllTenants(unit.tenants, (tenants) => {
             tenants.map(tenant => {
-              addContact(tenant, unit, false)
+              addContact(tenant, unit, 'Tenant')
             })
           })
 

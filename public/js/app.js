@@ -37,7 +37,28 @@ const toNormalBtn = function(el) {
   $(el).find('span.loading').addClass('d-none');
 }
 
-const addContact = function(contact, unit, isContact=true) {
+const addContact = function(contact, unit, filter='Contact') {
+  let bottomBox = ''
+  if (filter == 'Select') {
+    bottomBox = `<div class="card-footer">
+        <div class="row align-items-center">
+           <div class="col">
+             <!-- Input -->
+             
+           </div>
+           <div class="col-auto">
+             <!-- Button -->
+             <button class="btn btn-sm btn-primary">
+               Select
+             </button>
+           </div>
+        </div>
+     </div>`
+  }
+  let deleteClass = ''
+  if (filter != 'Tenant') {
+    deleteClass = 'delete-contact'
+  }
   $('.contact-list').append(`<div class="col-12 col-md-6 col-xl-4 contact-item"><div class="card">
     <div class="card-body">
       <div class="row align-items-center">
@@ -66,7 +87,7 @@ const addContact = function(contact, unit, isContact=true) {
             <a href="#!" class="dropdown-item edit-contact" data-contact='${JSON.stringify(contact)}' data-id="${contact.id}" data-unit="${unit.id}">
               Edit
             </a>
-            <a href="#!" class="dropdown-item ${isContact ? 'delete-contact' : ''}" data-id="${contact.id}">
+            <a href="#!" class="dropdown-item ${deleteClass}" data-id="${contact.id}">
               Delete
             </a>
           </div>
@@ -74,6 +95,7 @@ const addContact = function(contact, unit, isContact=true) {
       </div>
     </div>
   </div>
+  ${bottomBox}
 </div> 
 </div>`);
 }
@@ -2014,6 +2036,9 @@ $(function() {
     $('.document-categories a').click(function(e) {
       e.preventDefault()
       const cat = $(this).data('value')
+      if (!cat) {
+        return
+      }
       $('.documentCategoryBtn').text(cat)
       if (selected_doc_property_id == 'all') {
         if (cat == 'All Categories') {
@@ -2036,6 +2061,9 @@ $(function() {
     $('.doc-upload-categories a').click(function(e) {
       e.preventDefault()
       const cat = $(this).data('value')
+      if (!cat) {
+        return
+      }
       $('.docModalCategoryBtn').text(cat)
       let subcategory, category
       if (cat.split('-').length > 1) {
@@ -2289,6 +2317,7 @@ $(function() {
     // add new contact
     $('#addContactBtn').click(function(e){
       e.preventDefault();
+      const filter = $('#contact_filter').val();
       const data = {
           property: {
             id: $("input[name='property[id]']").val()
@@ -2303,7 +2332,8 @@ $(function() {
             last_name: $('#contact_last_name').val(),
             email: $('#contact_email').val(),
             phone_number: $('#contact_phone_number').val(),
-            notes: $('#contact_notes').val()
+            notes: $('#contact_notes').val(),
+            filter
           }
       };
       $('#modalAddNewContact').modal('hide');
@@ -2324,7 +2354,7 @@ $(function() {
           $('.contact-list').empty()
           
           res.contacts.map(contact => {
-            addContact(contact, data.unit);
+            addContact(contact, data.unit, filter);
           })
           // let tenants_cnt = res.cnt == 1 ?  res.cnt + ' Tenant' : res.cnt + ' Tenants';
           // if (res.cnt) {
@@ -2378,6 +2408,14 @@ $(function() {
       $('#modalAddNewContact').modal();
     })
 
+    $('.add-tenant').click(function() {
+      $('#contact-modal-title').html('Add a New Tenant');
+      $('#addContactBtn').html('Add');
+      $('input[type="text"]').val('');
+      $('select').val(null).trigger('change');
+      $('#modalAddNewContact').modal();
+    })
+
     $(document).on('click', '.edit-contact', function() {
       const contact = $(this).data('contact')
       $('#contact_type').val(contact.type).trigger('change');
@@ -2386,7 +2424,11 @@ $(function() {
       $('#contact_email').val(contact.email);
       $('#contact_phone_number').val(contact.phone_number);
       $('#contact_notes').val(contact.notes);
-      $('#contact-modal-title').html('Edit a Contact');
+      if ($(this).data('type') == 'Tenant') {
+        $('#contact-modal-title').html('Edit a Tenant');
+      } else {
+        $('#contact-modal-title').html('Edit a Contact');
+      }
       $('#addContactBtn').html('Update');
       $('input[name="contact[id]"]').val(contact.id);
       $('#modalAddNewContact').modal();

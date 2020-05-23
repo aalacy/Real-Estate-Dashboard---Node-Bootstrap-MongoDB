@@ -119,5 +119,6 @@ router.get('/services/instantValuations', service.instant_valuations);
 
 // contacts
 router.get('/contacts', property.contacts);
+router.get('/contacts/select', property.select_tenant);
 
 module.exports = router;

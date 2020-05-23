@@ -40,7 +40,7 @@ const PropertiesSchema = new Schema({
     square_feet: { type: Number, default: 0.0 },
     type: { type: String, default: '' }, // Detached House / Semi Detached House / Terraced House / Flat
     finish_quality: { type: String, default: '' }, // Very High / High / Average / Below Average / Unmordernised
-    outdoor_space: { type: String, default: 'none' }, // None / Balcony Terrace / Garden / Garden (Large)
+    outdoor_space: { type: String, default: '' }, // None / Balcony Terrace / Garden / Garden (Large)
     ownership: { type: String, default: '' }, // Freehold / Leasehold
     construction_date: { type: String, default: '' }, // 2019-01-02
     rental_yield: { type: Number, default: 0.0 }, // 3.8% - gross yeild
