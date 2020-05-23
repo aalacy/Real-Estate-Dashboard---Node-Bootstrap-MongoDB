@@ -1803,9 +1803,9 @@
           // display tenants section
           $('.contact-list').empty();
           if (unit.tenants.length) {
-            $('.contact-list').addClass('p-2')
+            $('.contact-list').addClass('p-tenant')
           } else {
-            $('.contact-list').removeClass('p-2')
+            $('.contact-list').removeClass('p-tenant')
           }
           fetchAllTenants(unit.tenants, (tenants) => {
             tenants.map(tenant => {

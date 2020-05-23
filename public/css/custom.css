@@ -430,3 +430,7 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 .keydoc-pagination a.active {
     color: #6c757d;
 }
+
+.p-tenant {
+    padding: 1.5rem 1rem 0 1rem;
+}
