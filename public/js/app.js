@@ -55,9 +55,11 @@ const addContact = function(contact, unit, filter='Contact') {
         </div>
      </div>`
   }
-  let deleteClass = ''
-  if (filter != 'Tenant') {
-    deleteClass = 'delete-contact'
+  let deleteClass = 'delete-contact'
+  let deleteLabel = 'Delete'
+  if (filter != 'Contact') {
+    deleteClass = 'remove-contact'
+    deleteLabel = 'Remove'
   }
   $('.contact-list').append(`<div class="col-12 col-md-6 col-xl-4 contact-item"><div class="card">
     <div class="card-body">
@@ -88,7 +90,7 @@ const addContact = function(contact, unit, filter='Contact') {
               Edit
             </a>
             <a href="#!" class="dropdown-item ${deleteClass}" data-id="${contact.id}">
-              Delete
+              ${deleteLabel}
             </a>
           </div>
         </div>
@@ -2352,6 +2354,12 @@ $(function() {
         if (res.status == 422) {
         } else if (res.status == 200) {
           $('.contact-list').empty()
+
+          if (res.contacts.length) {
+            $('.contact-list').addClass('p-tenant')
+          } else {
+            $('.contact-list').removeClass('p-tenant')
+          }
           
           res.contacts.map(contact => {
             addContact(contact, data.unit, filter);
@@ -2369,6 +2377,74 @@ $(function() {
       });
     }) 
 
+    // select tenant and go back to the overview/tenant
+    $('.select-tenant').click(function(e) {
+      e.preventDefault()
+
+      const property_id = $(this).data('property')
+      const unit_id = $(this).data('unit')
+      const tenant_id = $(this).data('tenant')
+
+      fetch('/property/tenant/select', {
+        credentials: 'same-origin', // <-- includes cookies in the request
+        headers: {
+            'CSRF-Token': $('meta[name="csrf"]').attr('content'), 
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({ property_id, unit_id, tenant_id })
+      })
+      .then(response => response.json())
+      .then(function(res) {
+        if (res.status == 200) {
+          location.href = `/property/overview/${property_id}/units/${unit_id}`
+        } else {
+          makeToast({ message: res.message });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    })
+
+    // remove tenant from overview page
+    $(document).on('click', '.remove-contact', function(e) {
+      e.preventDefault();
+      const data = {
+        id: $(this).data('id')
+      }
+      var parent = $(this).parents('.contact-item');
+      confirmDialog("Are you sure want to remove this tenant?", (ans) => {
+          if (ans) {
+            fetch('/property/tenant/remove', {
+              credentials: 'same-origin', // <-- includes cookies in the request
+              headers: {
+                  'CSRF-Token': $('meta[name="csrf"]').attr('content'), 
+                  'Content-Type': 'application/json'
+              },
+              method: 'POST',
+              body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(function(res) {
+              makeToast({message: res.message});
+              if (res.status == 200) {
+                parent.remove();
+                if ($('.contact-list .contact-item').length) {
+                  $('.contact-list').addClass('p-tenant')
+                } else {
+                  $('.contact-list').removeClass('p-tenant')
+                }
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      })
+    })
+
+    // delete contact from contact page
     $(document).on('click', '.delete-contact', function(e) {
       e.preventDefault();
       const data = {

@@ -90,9 +90,10 @@ router.use('/property/unit/clear', property.clear_unit);
 
 router.use('/property/contact/new', property.new_contact);
 router.use('/property/contact/delete', property.delete_contact);
-router.use('/property/tenant/delete', property.delete_tenant);
+router.use('/property/tenant/remove', property.remove_tenant);
 // router.get('/property/contact/all', property.all_contacts);
 router.post('/property/tenant/all', property.all_tenants);
+router.post('/property/tenant/select', property.add_tenant);
 
 // documents
 router.get('/property/documents', property.documents);
@@ -119,6 +120,6 @@ router.get('/services/instantValuations', service.instant_valuations);
 
 // contacts
 router.get('/contacts', property.contacts);
-router.get('/contacts/select', property.select_tenant);
+router.get('/contacts/select/:property_id/:unit_id', property.select_tenant);
 
 module.exports = router;

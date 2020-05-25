@@ -891,8 +891,36 @@ exports.new_contact = async function(req, res) {
   })
 }
 
-exports.delete_tenant = async function(req, res) {
-  
+exports.remove_tenant = async function(req, res) {
+  const { body: { id } } = req;
+  const { user } = req.session;  
+
+  let tenants_cnt = 0
+  try {
+    const properties = await Properties.find({ user_id: user.id });
+    properties.map(async (myproperty) => {
+      const tenancies = myproperty.tenancies.map(_unit => {
+        _unit.tenants = _unit.tenants.filter(tenant => tenant != id);
+        return _unit
+      });
+
+      new_values = {
+        $set: { tenancies }
+      };
+
+      await Properties.updateOne({ id: myproperty.id }, new_values)
+    })
+    
+    res.json({
+      status: 200,
+      message: 'Success',
+    })
+  } catch (e) {
+    res.status(500).json({
+      status: 500,
+      message: 'Failure'
+    })
+  }
 }
 
 exports.delete_contact = async function(req, res) {
@@ -904,12 +932,7 @@ exports.delete_contact = async function(req, res) {
     const properties = await Properties.find({ user_id: user.id });
     properties.map(async (myproperty) => {
       const tenancies = myproperty.tenancies.map(_unit => {
-        const tenants = _unit.tenants.map(tenant => {
-          if (tenant.id != id) {
-            return tenant.id
-          }
-        });
-        _unit.tenants = tenants
+        _unit.tenants = _unit.tenants.filter(tenant => tenant != id);
         return _unit
       });
 
@@ -1311,6 +1334,7 @@ exports.all_tenants = async function(req, res) {
 // render tenant select page
 exports.select_tenant = async function(req, res) {
   const { user } = req.session;
+  const { property_id, unit_id } = req.params;
 
   const contacts = await Contacts.find({ user_id: user.id, type: 'Tenant' }, {_id: 0})
 
@@ -1318,6 +1342,40 @@ exports.select_tenant = async function(req, res) {
     title: 'Avenue - Contacts',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
-    contacts
+    contacts,
+    property_id,
+    unit_id
   });
+}
+
+// add selected tenant to the property
+exports.add_tenant = async function(req, res) {
+  const { user } = req.session;
+  const { property_id, unit_id, tenant_id } = req.body
+
+  try {
+    const myproperty = await Properties.findOne({ user_id: user.id, id: property_id}, { _id: 0 })
+    const tenancies = myproperty.tenancies.map(_unit => {
+      if (_unit.id == unit_id) {
+        _unit.tenants.push(tenant_id)
+      }
+      return _unit
+    });
+
+    new_values = {
+      $set: { tenancies }
+    };
+
+    await Properties.updateOne({ id: property_id }, new_values)
+    
+    res.json({
+      status: 200,
+      message: 'Success',
+    })
+  } catch (e) {
+    res.status(500).json({
+      status: 500,
+      message: 'Failure'
+    })
+  }
 }
