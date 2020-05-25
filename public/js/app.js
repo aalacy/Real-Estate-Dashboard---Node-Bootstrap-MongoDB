@@ -16,6 +16,7 @@ let items = [];
 let transactions = [];
 let cur_transaction;
 let documents = [];
+let keyDocuments = [];
 let units = [];
 let selected_doc_property_id = 'all';
 
@@ -385,6 +386,7 @@ function doPopulate() {
         $('.addUnitBtn').prop('disabled', false)
         $('#modalAddNewUnitWithProperty input').val('')
         units = res.units
+        keyDocuments = res.keyDocuments
         
         if (res.units.length == 1) {
           $('.unit-label').html('Unit')
@@ -410,6 +412,14 @@ function doPopulate() {
           $('.unit-filter').prop('disabled', false);
           $('.unit-filter').val(null).trigger('change');
         }
+
+        /* in the document upload modal, check if any key document has been uploaded. 
+         if yes, disable the corresponding options for category */
+        clearDocumentModal(true)
+        keyDocuments.map(doc => {
+          const value = 'Key Documents - ' + doc.subcategory;
+          $(`a.dropdown-item[data-value="${value}"]`).attr('disabled', true).addClass('disabled')
+        })
       }
   }
 
@@ -895,6 +905,21 @@ const clearUnitModal = () => {
   $('input[type="text"]').val('')
   $('input[name="unit[id]"]').val('')
   $(".addUnitBtn").prop('disabled', false)
+}
+
+const clearDocumentModal = (exceptSelect=false) => {
+  $('div.keyDocuments a').attr('disabled', false).removeClass('disabled')
+  $('#modalUpload').find('input').empty();
+  if (!exceptSelect) {
+    $('#modalUpload').find('select').val('').trigger('change')
+  }
+  $('.document_unit').empty();
+  $('.docModalCategoryBtn').html('Select a Category')
+  $('.keydoc-subcategory-group').addClass('d-none')
+  $('.doc-expirydate-group').addClass('d-none')
+  $('.doc-rating-group').addClass('d-none')
+  $('.property-row').removeClass('d-none');
+  $('.unit-row').removeClass('d-none');
 }
 
 const setupPagination = () => {
@@ -2125,15 +2150,7 @@ $(function() {
 
     $(document).on('click', '.modal-upload', async function(e) {
       e.preventDefault()
-      $('#modalUpload').find('input').empty();
-      $('#modalUpload').find('select').val('').trigger('change')
-      $('.document_unit').empty();
-      $('.docModalCategoryBtn').html('Select a Category')
-      $('.keydoc-subcategory-group').addClass('d-none')
-      $('.doc-expirydate-group').addClass('d-none')
-      $('.doc-rating-group').addClass('d-none')
-      $('.property-row').removeClass('d-none');
-      $('.unit-row').removeClass('d-none');
+      clearDocumentModal()
       if ($(this).hasClass('modal-property') || $(this).hasClass('modal-unit')) {
         var property = $(this).data('property');
         var property_name = property.address + ', ' + property.city;

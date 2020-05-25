@@ -1334,13 +1334,13 @@
                         <%=gross_yield%> % 
                         </span>
                       </div>
-                      <div class="col-12 col-md-4 text-center">
+                      <div class="col-12 col-md-4 text-center border-right">
                         <h6 class="card-title text-muted text-uppercase mt-2">Net Yield</h6>
                         <span class="h1 first-net-yield">
                         <%=net_yield%> %  
                         </span>
                       </div>
-                      <div class="col-12 col-md-4 text-center border-right">
+                      <div class="col-12 col-md-4 text-center">
                         <h6 class="card-title text-muted text-uppercase mt-2">
                           Local Average
                         </h6>
@@ -1625,7 +1625,7 @@
           }
           let category = 'Key Documents - ' + doc.title
           let rating = '';
-          if ( doc.subcategory == 'EPC') {
+          if ( doc.rating ) {
             if (['A', 'B', 'C'].includes(doc.rating)) {
               rating = `<span class="badge badge-soft-success">${doc.rating}</span>`
             } else if (['D', 'E', 'F'].includes(doc.rating)) {

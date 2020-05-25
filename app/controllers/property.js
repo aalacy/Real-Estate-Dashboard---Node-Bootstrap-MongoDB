@@ -279,7 +279,8 @@ exports.keyDocs = async function(req, res) {
     'EPC': {
       title: 'EPC',
       property_id: id,
-      empty: true
+      empty: true,
+      rating: ''
     },
     'Gas Safety Record': {
       title: 'Gas Safety Record',
@@ -309,6 +310,7 @@ exports.keyDocs = async function(req, res) {
       keyDocs[doc.subcategory].empty = false
       if (keyDocs[doc.subcategory].uploaded == undefined) {
         keyDocs[doc.subcategory].uploaded = 1
+        keyDocs[doc.subcategory].rating = doc.rating
       } else {
         keyDocs[doc.subcategory].uploaded++;
       }
@@ -450,9 +452,6 @@ exports.overview = async function(req, res) {
 
   // recent 5 transactions
   // const recentTrans = transactions.slice(4)
-
-  // key documents
-  
 
   res.render('property/overview', {
     title: 'Avenue - Overview',
@@ -842,13 +841,15 @@ exports.tenancies = async function(req, res) {
 exports.all_units = async function(req, res) {
   const { body: { property } } = req;
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
+  const keyDocuments = await Documents.find({ property_id: property.id, category: 'Key Documents', subcategory: 'EPC' }, { _id:0 })
   let units = []
   if (myproperty) {
     units = myproperty.tenancies
   }
   return res.json({
     status: 200,
-    units
+    units,
+    keyDocuments
   })
 }
 
