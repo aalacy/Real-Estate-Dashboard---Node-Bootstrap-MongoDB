@@ -280,7 +280,7 @@ exports.keyDocs = async function(req, res) {
       title: 'EPC',
       property_id: id,
       empty: true,
-      rating: ''
+      rating: '',
     },
     'Gas Safety Record': {
       title: 'Gas Safety Record',
@@ -841,7 +841,7 @@ exports.tenancies = async function(req, res) {
 exports.all_units = async function(req, res) {
   const { body: { property } } = req;
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
-  const keyDocuments = await Documents.find({ property_id: property.id, category: 'Key Documents', subcategory: 'EPC' }, { _id:0 })
+  const keyDocuments = await Documents.find({ property_id: property.id, category: 'Key Documents' }, { _id:0 })
   let units = []
   if (myproperty) {
     units = myproperty.tenancies

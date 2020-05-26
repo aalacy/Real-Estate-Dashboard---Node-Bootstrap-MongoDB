@@ -42,8 +42,14 @@
                       To/From
                     </label>
                     <div class="col-lg-9 col-sm-12">
-                      <input type="text" id="transaction_user" name="transaction[user]" class="form-control w-100 ">
-                    </div>
+                      <select class="form-control mb-3" id="transaction_user" data-toggle="select" name="transaction[user]" tabindex="-1" aria-hidden="true">
+                        <% contacts.forEach(contact => {%>
+                         <option data-avatar-src="/img/avatars/profiles/avatar-1.jpg" data-select2-id="<%=contact.id%>" value="<%=contact.id%>">
+                           <%=contact.first_name%> <%=contact.last_name%>
+                         </option>
+                        <% }) %>
+                     </select>
+                   </div>
                   </div>
 
                   <div class="form-wrapper">
@@ -217,7 +223,7 @@
               </div>
               <div class="col-auto">
                 <!-- Button -->
-                <a href="#" class="btn btn-primary lift" data-toggle="modal" data-target="#modalAddNewTransaction">
+                <a href="#" class="btn btn-primary lift show-transaction-modal">
                   Add Transaction
                 </a>
 				

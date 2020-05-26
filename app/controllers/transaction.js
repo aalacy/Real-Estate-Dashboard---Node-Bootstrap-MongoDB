@@ -17,12 +17,14 @@ exports.all = async function(req, res) {
   const { user } = req.session;
 
   let properties  = await Properties.find({ user_id: user.id }, { _id: 0 });
+  let contacts  = await Contacts.find({ user_id: user.id }, { _id: 0 });
 
   res.render('transaction/index', {
     title: 'Avenue - Transactions',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
-    properties
+    properties,
+    contacts
   });
 }
 
@@ -36,6 +38,8 @@ exports.all_get = async function(req, res) {
   } else {
     transactions = await Transactions.find({ user_id: user.id }, { _id: 0 });
   }
+
+  let contacts  = await Contacts.find({ user_id: user.id }, { _id: 0 });
 
   const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
   const documents = await Documents.find({}, { _id: 0 });
@@ -53,6 +57,7 @@ exports.all_get = async function(req, res) {
       }
   	}
     const doc = documents.filter(document => document.id == transaction.document_id);
+    const user = contacts.filter(contact => contact.id == transaction.user)
   	return { 
   		id: transaction.id,
   		created_at: moment(transaction.created_at).format('YYYY-MM-DD'), 
@@ -60,7 +65,8 @@ exports.all_get = async function(req, res) {
       property_id: transaction.property_id,
       unit_id: transaction.unit_id,
       unit_name: unit.length > 0 ? unit[0].description : '',
-  		user: transaction.user,
+  		username: user.length > 0 ? user[0].first_name + ' ' + user[0].last_name : '',
+      user:transaction.user,
   		category: transaction.category,
   		account: transaction.account,
   		amount: transaction.amount,

@@ -105,6 +105,9 @@ const addContact = function(contact, unit, filter='Contact') {
 
 // documents
 const showDocSubcategories = (category, subcategory) => {
+  if (!category || !subcategory) {
+    return
+  }
   $('.filter-by-doc-subcategory').val(null).trigger('change')
 
   if (category == 'Key Documents') {
@@ -835,7 +838,7 @@ const displayTransactions = (paginated=true, unit_id=-1) => {
       avatar = `<img src="/${transaction.path}" alt="document image preview" class="avatar" style="height: auto;"/>`;
     }
     const val = JSON.stringify(transaction);
-    const contact = transaction.user ? transaction.user : 'No Contact';
+    const contact = transaction.username ? transaction.username : 'No Contact';
     let status_color = 'text-success';
     let status_text = 'Paid'
     if (transaction.status != 'Paid') {
@@ -889,6 +892,7 @@ const clearTransactionModal = () => {
   $('#modalAddNewTransaction input').val('');
   $('#transaction_account').val('Manual Transaction');
   $('#transaction_property').val(null).trigger('change')
+  $('#transaction_user').val(null).trigger('change')
   $('#transaction_unit').val(null).trigger('change')
   $('#transaction_category').val(null).trigger('change');
   $('#transaction_status').val(null).trigger('change');
@@ -2019,7 +2023,7 @@ $(function() {
       }
       $('#modalAddNewTransaction').find('form').attr('action', '/transaction/edit');
       $('#transaction_id').val(transaction.id);
-      $('#transaction_user').val(transaction.user);
+      $('#transaction_user').val(transaction.user).trigger('change');
       $('#transaction_created_at').val(transaction.created_at);
       $('#transaction_amount').val(amount.toString().replace('-','').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
       $('#transaction_property').val(transaction.property_id).trigger('change');
@@ -2039,14 +2043,14 @@ $(function() {
         });
     })
 
-    $('#modalAddNewTransaction').on('hidden.bs.modal', function (e) {
+    $('.show-transaction-modal').click(function (e) {
       clearTransactionModal();
+      $('#modalAddNewTransaction').modal()
     })
 
     /*
     *   Documents
     */
-
     $('#filterByProperty').on('select2:select', function (e) {
       if (e.params.data.id == 'all') {
         items = documents;
@@ -2196,10 +2200,12 @@ $(function() {
         $('.document_filename').val($(this).data('filename'));
         $('.document_note').val($(this).data('note') || '');
         $('.dz-message-placeholder').html('Replace a New File');
-        if (mimetype.includes('image')) {
-          $('.document-upload-image').removeClass('d-none').css('background-image', `url('/${image}')`);
-        } else {
-          $('.document-upload-image').removeClass('d-none').css('background-image', `url('/img/icons/file.svg')`);
+        if (mimetype) {
+          if (mimetype.includes('image')) {
+            $('.document-upload-image').removeClass('d-none').css('background-image', `url('/${image}')`);
+          } else {
+            $('.document-upload-image').removeClass('d-none').css('background-image', `url('/img/icons/file.svg')`);
+          }
         }
         $('#modalUpload .modal-title').text('Edit Document');
         $('#modalUpload .status').val('edit');
@@ -2214,6 +2220,13 @@ $(function() {
         $('.dz-message-placeholder').html('Choose a file or drag it here');
         $('#modalUpload .modal-title').text('Upload Document');
         $('#modalUpload .status').val('upload');
+
+        // upload modal from key documents in overview page
+        showDocSubcategories($(this).data('category'), $(this).data('subcategory'))
+        const property_id = $(this).data('property_id');
+        if (property_id) {
+          await selectPropertyFilter(property_id)
+        }
       }
 
       $('#modalUpload').modal();
