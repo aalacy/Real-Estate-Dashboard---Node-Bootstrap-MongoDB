@@ -90,15 +90,19 @@ exports.all_get = async function(req, res) {
 exports.create = async function(req, res) {
   const { body: { transaction, document } } = req;
 
+  console.log(transaction)
+
   const { user } = req.session;
 
-  console.log('===', transaction)
   const newTransaction  = new Transactions(transaction);
   newTransaction.id = uuidv4();
   newTransaction.user_id = user.id;
   newTransaction.document_id = document.id;
   if (newTransaction.category == '') {
     newTransaction.category = 'Uncategorised';
+  }
+  if (transaction.user == '-1') {
+    newTransaction.user = ''
   }
   newTransaction.amount = newTransaction.amount.replace(/,/g, '')
 

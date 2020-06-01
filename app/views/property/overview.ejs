@@ -220,7 +220,7 @@
                       Deposit
                     </label>
                     <div class="input-group input-group-merge mb-3">
-                      <input type="text" id="unit_deposit" onkeypress="return isNumberKey(event)"  name="unit[deposit]" class="form-control form-control-prepended number" required>
+                      <input type="text" id="unit_deposit" onkeypress="return isNumberKey(event)" name="unit[deposit]" class="form-control form-control-prepended number" required>
                       <div class="input-group-prepend">
                         <div class="input-group-text">
                           <span>£</span>
@@ -646,7 +646,13 @@
                                 <div class="w-2 h-2 bg-grey"></div>
                               </div>
                             </div>
-                            <span class="text-grey"> <b><% let activeTenancies = property.tenancies.filter(unit => unit.rent_frequency != 'Vacant')%><%=activeTenancies.length%></b>&nbsp;active tenancies </span>
+                            <span class="text-grey"> <% let activeTenancies = property.tenancies.filter(unit => unit.rent_frequency != 'Vacant')%>
+                              <% if (activeTenancies.length == 1) { %>
+                                <b>1</b>&nbsp;Active Tenancy
+                              <% } else {%>
+                                <b><%=activeTenancies.length%></b>&nbsp;Active Tenancies 
+                              <% }%>
+                            </span>
                           </div><!---->
                           <div class="pb-4 d-flex align-items-center">
                             <div class="pr-4">
@@ -1606,7 +1612,7 @@
           
           let subtitle = ''
           if (doc.empty) {
-            subtitle = `<a href="javascript::void(0)" class="modal-upload" data-property_id="${property.id}" data-category="Key Documents" data-subcategory="${doc.title}"><i class="fe fe-upload"></i>&nbsp;Upload</a>`
+            subtitle = `<a href="javascript::void(0)" class="modal-upload keydoc-overview" data-category="Key Documents" data-subcategory="${doc.title}"><i class="fe fe-upload"></i>&nbsp;Upload</a>`
           } else if (doc.expired || doc.expiringSoon){
             if (doc.expired) {
               subtitle += `<span class="badge badge-soft-danger px-2 py-1 mr-2">Expired</span>`
@@ -1663,7 +1669,7 @@
 
                 <div class="col-auto">
                   <div class="dropdown">
-                    <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a href="javascript::void(0)" class="dropdown-ellipses modal-upload" data-category="Key Documents" data-subcategory="${doc.title}">
                       <i class="fe fe-more-vertical"></i>
                     </a>
                   </div>
@@ -1768,12 +1774,12 @@
             $('.unit-name').text(unit.description + ' - Tenancy Details');
           }
           if (unit.deposit) {
-            $('.unit-deposit-section').html(`£<b class="unit-deposit">${toComma(unit.deposit)}</b>&nbsp;Deposit`);
+            $('.unit-deposit-section').html(`<b class="unit-deposit">£${toComma(unit.deposit)}</b>&nbsp;Deposit`);
           } else {
             $('.unit-deposit-section').text('No deposit')
           }
           if (unit.rent_price) {
-            $('.unit-rent-section').html(`£<b class="unit-rent">${toComma(unit.rent_price)}</b> <span class="unit-frequency">${unit.rent_frequency}</span> Rent`);
+            $('.unit-rent-section').html(`<b class="unit-rent">£${toComma(unit.rent_price)}</b> <span class="unit-frequency">${unit.rent_frequency}</span> Rent`);
             $('.unit-badge').html('<span class="badge badge-primary font-weight-bolder p-2 ml-2">Active</span>');
             $('.add-tenancy').addClass('d-none');
           } else {

@@ -43,6 +43,9 @@
                     </label>
                     <div class="col-lg-9 col-sm-12">
                       <select class="form-control mb-3" id="transaction_user" data-toggle="select" name="transaction[user]" tabindex="-1" aria-hidden="true">
+                        <option data-avatar-src="/img/avatars/profiles/no-avatar.png" data-select2-id="-1" value="-1">
+                          No Contact
+                         </option>
                         <% contacts.forEach(contact => {%>
                          <option data-avatar-src="/img/avatars/profiles/avatar-1.jpg" data-select2-id="<%=contact.id%>" value="<%=contact.id%>">
                            <%=contact.first_name%> <%=contact.last_name%>
@@ -80,7 +83,7 @@
                   <!-- Start date -->
                   <div class="form-wrapper">
                     <label class="form-label">
-                      Properties
+                      Property
                     </label>
                     <div class="col-lg-9 col-sm-12">
                       <select class="form-control property-filter" id="transaction_property" name="transaction[property_id]" data-toggle="select"  data-options='{"placeholder": "Select a Property"}' required>
@@ -95,7 +98,7 @@
                   <div class="form-wrapper">
                     <input type="hidden" class="unit-filter-hidden" name="transaction[unit_id]" value="">
                     <label class="form-label">
-                      Units 
+                      Unit
                     </label>
                     <div class="col-lg-9 col-sm-12 d-flex">
                       <select class="form-control unit-filter no-unit" id="transaction_unit" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>

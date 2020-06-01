@@ -24,7 +24,7 @@ const toComma = function(val) {
     if (val) {
       return val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     } else {
-      return "0";
+      return "";
     }
 };
 
@@ -137,7 +137,11 @@ const showDocExpiryAndRating = (subcategory) => {
 function doPopulate() {
     $('.documentList').empty();
     if (items && items.length) {
-      $('.document-header').html(`${items.length} Documents`)
+      if (items.length == 1) {
+        $('.document-header').html(`1 Document`)
+      } else {
+        $('.document-header').html(`${items.length} Documents`)
+      }
     } else {
       $('.document-header').html('No Document')
     }
@@ -161,9 +165,9 @@ function doPopulate() {
         uploaded_on = 'Last updated:' + uploaded_on
         if (['EPC', 'Gas Safety', 'Fire Safety'].includes(doc.subcategory)) {
           if (moment().isAfter(moment(doc.expiry_date))) {
-            uploaded_on = '<span class="text-danger">&bull; Expired</span>'
+            uploaded_on = '<span class="text-danger">&bull;</span>&nbsp;Expired'
           } else if (moment().add(90, 'days').isAfter(moment(doc.expiry_date))) {
-            uploaded_on = '<span class="text-warning">&bull; Expires Soon</span>'
+            uploaded_on = '<span class="text-warning">&bull;</span>&nbsp;Expires Soon'
           }
         }
       } else {
@@ -350,8 +354,8 @@ function doPopulate() {
       $('#modalAddNewUnitWithProperty input[name="unit[start_date]"]').val(unit.start_date);
       $('#modalAddNewUnitWithProperty input[name="unit[end_date]"]').val(unit.end_date);
       $('#modalAddNewUnitWithProperty .unit-rent-requency').val(unit.rent_frequency).trigger('change');
-      $('#modalAddNewUnitWithProperty input[name="unit[rent_price]"]').val(unit.rent_price);
-      $('#modalAddNewUnitWithProperty input[name="unit[deposit]"]').val(unit.deposit);
+      $('#modalAddNewUnitWithProperty input[name="unit[rent_price]"]').val(toComma(unit.rent_price));
+      $('#modalAddNewUnitWithProperty input[name="unit[deposit]"]').val(toComma(unit.deposit));
       $('#modalAddNewUnitWithProperty input[name="unit[tenants]"]').val(JSON.stringify(unit.tenants));
       $('.addUnitBtn').prop('disabled', true)
       $('#modalAddNewUnitWithProperty input').prop('disabled', true)
@@ -733,7 +737,7 @@ const highchartDoughnut = (id, data, showInLegend = false, showPound=true, drawC
             output1 = `<b style="fill:${this.point.color}">${this.point.name}</b><br />`
             let tooltip = `(${this.point.percentage.toFixed(1)} %)`
             if (showPound) {
-              tooltip = `£${this.point.y.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} ` + tooltip 
+              tooltip = `£${toComma(this.point.y)} ` + tooltip 
             }
             output1 += `<span>${tooltip}</span>`
             return output1
@@ -802,7 +806,7 @@ const highchartDoughnut = (id, data, showInLegend = false, showPound=true, drawC
   }
 
 const formatNumber = function(num) {
-    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return toComma(num)
 }
 
 // Display transactions
@@ -810,7 +814,11 @@ const displayTransactions = (paginated=true, unit_id=-1) => {
   $('.transaction-list').empty();
 
   if (items.length) {
-    $('.transaction-header').html(items.length + ' Transaction(s)')
+    if (items.length == 1) {
+      $('.transaction-header').html('1 Transaction')
+    } else {
+      $('.transaction-header').html(items.length + ' Transactions')
+    }
   } else {
     $('.transaction-header').html('No Transaction')
   }
@@ -828,7 +836,7 @@ const displayTransactions = (paginated=true, unit_id=-1) => {
       return
     }
     const sign = parseFloat(transaction.amount) < 0;
-    let amount = '£' + transaction.amount.replace('-', '').toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    let amount = '£' + toComma(transaction.amount.replace('-', ''));
    
     if (transaction.type == 'Out') {
       amount = '-' + amount;
@@ -1061,7 +1069,7 @@ const checkAvailabilityForPropertyValueUpdate = (property) => {
 $(function() {
     // set dateformat 
     $('input[data-toggle="flatpickr"]').flatpickr({
-      dateFormat: "d M y"
+      dateFormat: "d M Y"
     }) 
 
 
@@ -1450,8 +1458,8 @@ $(function() {
         $('input[name="unit[end_date]"]').val(unit.end_date);
         $('.unit-rent-requency').val(unit.rent_frequency).trigger('change');
         $('.tenancy_tenants').val(unit.tenants.join(',')).trigger('change');
-        $('input[name="unit[rent_price]"]').val(unit.rent_price);
-        $('input[name="unit[deposit]"]').val(unit.deposit);
+        $('input[name="unit[rent_price]"]').val(toComma(unit.rent_price));
+        $('input[name="unit[deposit]"]').val(toComma(unit.deposit));
         $('input[name="unit[tenants]"]').val(JSON.stringify(unit.tenants));
         $('input[name="unit[id]"]').val(unit.id);
         if ($('.unit-item').length > 1) {
@@ -1485,7 +1493,7 @@ $(function() {
         $('#estimatePropertyBtn').prop('checked', false);
       } else {
         $('.property-estimate-box-missing-value').addClass('d-none')
-        $('#property_current_value').val(property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+        $('#property_current_value').val(toComma(property.current_value.toString()))
         if (property.estimate_cron_on) {
           $('#property_current_value').prop('readonly', true).addClass('form-control-appended')
           $('.property-current-value-append').removeClass('d-none')
@@ -1502,8 +1510,8 @@ $(function() {
           $('#estimatePropertyBtn').prop('disabled', true);
           $('.property-estimate-box').addClass('d-none')
         }
-        $('.estimate_value').html(`${property.estimate_value ? property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}`)
-        $('.property_margin').html(`${property.margin ? property.margin.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : '0'}`)
+        $('.estimate_value').html(`${toComma(property.estimate_value)}`)
+        $('.property_margin').html(`${toComma(property.margin)}`)
         // enable auto estimate switch
         $('.get-property-est-btn').prop('disabled', false);
         const remaining_days = moment(property.estimate_cron_run_date).add(30, 'days').diff(moment(), 'days')
@@ -1561,12 +1569,12 @@ $(function() {
         estimate_cron_on = true;
         $('.property-current-value-append').removeClass('d-none')
         $('#property_current_value').addClass('form-control-appended')
-        $('#property_current_value').prop('readonly', true).val(property.estimate_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+        $('#property_current_value').prop('readonly', true).val(toComma(property.estimate_value))
       } else {
         estimate_cron_on = false;
         $('.property-current-value-append').addClass('d-none')
         $('#property_current_value').removeClass('form-control-appended')
-        $('#property_current_value').prop('readonly', false).val(property.current_value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+        $('#property_current_value').prop('readonly', false).val(toComma(property.current_value))
       }
 
       fetch('/property/updateData',  
@@ -2025,7 +2033,7 @@ $(function() {
       $('#transaction_id').val(transaction.id);
       $('#transaction_user').val(transaction.user).trigger('change');
       $('#transaction_created_at').val(transaction.created_at);
-      $('#transaction_amount').val(amount.toString().replace('-','').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+      $('#transaction_amount').val(toComma(amount.toString().replace('-','')));
       $('#transaction_property').val(transaction.property_id).trigger('change');
       await selectPropertyFilter(transaction.property_id)
       $('#transaction_unit').val(transaction.unit_id).trigger('change');
@@ -2221,15 +2229,28 @@ $(function() {
         $('#modalUpload .modal-title').text('Upload Document');
         $('#modalUpload .status').val('upload');
 
+        // If the modal upload from key document in overview
+        if ($(this).hasClass('keydoc-overview')) {
+          const doc_category = $(this).data('category')
+          const doc_subcategory =$(this).data('subcategory')
+          $('.document_category').val(doc_category)
+          showDocSubcategories(doc_category, doc_subcategory)
+          $('.doc_subcategory').val(doc_subcategory)
+          showDocExpiryAndRating(doc_subcategory)
+        }
+
         // upload modal from key documents in overview page
         showDocSubcategories($(this).data('category'), $(this).data('subcategory'))
         const property_id = $(this).data('property_id');
         if (property_id) {
           await selectPropertyFilter(property_id)
         }
+
       }
 
-      $('#modalUpload').modal();
+      $('#modalUpload').modal().on('hidden.bs.modal', function() { 
+        clearDocumentModal()
+      });
     });
 
     $('#cancelDocumentBtn').click(function(e){
@@ -2317,7 +2338,11 @@ $(function() {
               parent.remove();
               doPaginate()
               if (items && items.length > 1) {
-                $('.document-header').html(`${items.length-1} Documents`)
+                if (items.length == 2) {
+                  $('.document-header').html(`1 Document`)
+                } else {
+                  $('.document-header').html(`${items.length-1} Documents`)
+                }
               } else {
                 $('.document-header').html('No Document')
               }
