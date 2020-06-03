@@ -783,7 +783,7 @@
                         </h4>
                       </div>
                       <div class="col-auto">
-                        <select class="form-control text-right cashflowDateFilter"  data-toggle="select" data-options='{"placeholder": "Select a frequency", "minimumResultsForSearch": "Infinity" }' required style="max-width: 250px;">
+                        <select class="custom-select custom-select-sm form-control-flush select2-hidden-accessible cashflowDateFilter"  data-toggle="select" data-options='{"placeholder": "Select a frequency", "minimumResultsForSearch": -1 }' required style="max-width: 250px;" tabindex="-1" aria-hidden="true">
                           <option></option>
                           <option value="Current Month">Current Month</option>
                           <option value="Previous Month">Previous Month</option>
@@ -1037,7 +1037,7 @@
       
                           <!-- Time -->
                           <p class="card-text small text-muted">
-                            <span class="text-success mr-2">●</span><b><%=unit.start_date%></b>&nbsp;<i style="font-weight: regular;">–</i>&nbsp;<b><%=unit.end_date%></b>
+                            <span class="text-success mr-2">●</span><b><%=unit.start_date%></b>&nbsp;<i style="font-weight: regular;">–</i>&nbsp;<b><%=unit.end_date ? unit.end_date : 'Ongoing'%></b>
                           </p>
                         </div>
                         <div class="col-4 text-muted">
@@ -1645,7 +1645,7 @@
               <div class="row align-items-center document-item">
                 <div class="col-auto">
                   <a href="/property/documents" class="avatar" data-property="${doc.property_id}" data-category="${category}">
-                    <div class="avatar-title rounded text-secondary" style="background: #e8edf5">
+                    <div class="avatar-title rounded bg-light text-secondary">
                       <span class="fe fe-file"></span>
                     </div>
                   </a>
@@ -1794,7 +1794,7 @@
             $('.unit-tenants').html('No Tenant');
           }
           $('.unit-start_date').text(unit.start_date ? moment(unit.start_date).format('DD MMM YY') : '');
-          $('.unit-end_date').text(unit.end_date ? moment(unit.end_date).format('DD MMM YY') : '');
+          $('.unit-end_date').text(unit.end_date ? moment(unit.end_date).format('DD MMM YY') : 'Ongoing');
           $('input[name="unit[id]"]').val(unit.id);
 
           // show 3 most recent payment

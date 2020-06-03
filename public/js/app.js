@@ -143,7 +143,7 @@ function doPopulate() {
         $('.document-header').html(`${items.length} Documents`)
       }
     } else {
-      $('.document-header').html('No Document')
+      $('.document-header').html('No Documents')
     }
     
     let page = 0; 
@@ -820,7 +820,7 @@ const displayTransactions = (paginated=true, unit_id=-1) => {
       $('.transaction-header').html(items.length + ' Transactions')
     }
   } else {
-    $('.transaction-header').html('No Transaction')
+    $('.transaction-header').html('No Transactions')
   }
   
   items.map( (transaction, idx) => {
@@ -1804,15 +1804,15 @@ $(function() {
 
         // contact list
         if (res.contacts.length) {
-          $('#property-search-list .card-body .list-group').append(`<b class="mb-2">Tenants</b>`);
+          $('#property-search-list .card-body .list-group').append(`<b class="mb-2">Contacts</b>`);
         }
         res.contacts.map(contact => {
-          let avatar = contact.isMulti ? '/img/avatars/projects/multiple.png' : '/img/avatars/projects/single.png';
+          let avatar = '/img/avatars/profiles/avatar-1.jpg';
           const href = `/property/overview/${contact.property_id}/units/${contact.unit_id}`;
           $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item border-0 px-0">
             <div class="row align-items-center">
               <div class="col-auto">
-                <div class="avatar avatar-4by3">
+                <div class="avatar avatar-md avatar-4by3">
                   <img src="${avatar}" alt="avatar" class="avatar-img rounded">
                 </div>
               </div>
@@ -1821,7 +1821,7 @@ $(function() {
                   ${contact.first_name} ${contact.last_name}
                 </h4>
                 <p class="card-text small text-muted">
-                  ${contact.unit_name}: ${contact.property_name}
+                  ${contact.type}
                 </p>
               </div>
             </div>

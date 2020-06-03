@@ -434,3 +434,14 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 .p-tenant {
     padding: 1.5rem 1rem 0 1rem;
 }
+
+.select2-container:after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 5px solid #333;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+}

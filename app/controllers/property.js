@@ -536,13 +536,13 @@ exports.search = async function(req, res) {
   units = [];
   contacts = []
   properties = []
-  myproperties.map(property => {
+  myproperties.map( async (property) => {
     if (property.address.toLowerCase().includes(_q) || property.city.toLowerCase().includes(_q)) {
       properties.push(property);
     }
 
     property.tenancies.map(unit => {
-      if (unit.description.toLowerCase().includes(_q)) {
+      if (unit.description && unit.description.toLowerCase().includes(_q)) {
         units.push({
           id: unit.id,
           property_name: `${property.address}, ${property.city}`,
@@ -552,21 +552,14 @@ exports.search = async function(req, res) {
           isMulti: property.tenancies.length > 0
         })
       }
-      unit.tenants.map(tenant => {
-        if ( tenant.first_name.toLowerCase().includes(_q) ||
-        tenant.last_name.toLowerCase().includes(_q)) {
-          contacts.push({
-            unit_id: unit.id,
-            property_id: property.id,
-            property_name: `${property.address}, ${property.city}`,
-            unit_name: unit.description,
-            first_name: tenant.first_name,
-            last_name: tenant.last_name,
-            isMulti: property.tenancies.length > 0
-          })
-        }
-      })
     })
+  })
+  const allContacts = await Contacts.find({ user_id: user.id }, { _id: 0 })
+  allContacts.map(contact => {
+    if ( contact.first_name && contact.first_name.toLowerCase().includes(_q) ||
+      contact.last_name && contact.last_name.toLowerCase().includes(_q)) {
+        contacts.push(contact)
+      }
   })
   return res.json({
     status: 200,
