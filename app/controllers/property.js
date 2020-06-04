@@ -310,6 +310,7 @@ exports.keyDocs = async function(req, res) {
       keyDocs[doc.subcategory].empty = false
       if (keyDocs[doc.subcategory].uploaded == undefined) {
         keyDocs[doc.subcategory].uploaded = 1
+        keyDocs[doc.subcategory].doc = doc
         keyDocs[doc.subcategory].rating = doc.rating
       } else {
         keyDocs[doc.subcategory].uploaded++;
@@ -717,11 +718,15 @@ exports.documents_upload = async function(req, res) {
 exports.documents_delete = async function(req, res) {
   const { user } = req.session;
   const { body: { document } } = req;
-  new_values = {
-    $set: { status: 'deleted' }
-  };
+  // new_values = {
+  //   $set: { status: 'deleted' }
+  // };
 
-  return Documents.updateOne({ id: document.id }, new_values).then(async () => {
+  // delete the file from the path
+  console.log(__dirname + '/../../public/' + document.path)
+  fs.unlinkSync(__dirname + '/../../public/' + document.path)
+
+  return Documents.deleteOne({ id: document.id }).then(async () => {
     // const documents = await Documents.find({ proper: document.id, status: 'alive' }, { _id: 0 });
     res.json({
       status: 200,

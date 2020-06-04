@@ -516,7 +516,7 @@
                             <a href="/property/overview/${property.id}/units/${unit.id}" class="detail-unit">${name}</a>
                           </h4>
                           <p class="card-text small text-muted">
-                            <span class="text-success mr-2">●</span><b>${moment(unit.start_date).format('DD MMM YY')}</b>&nbsp;<i style="font-weight: regular;">–</i>&nbsp;<b>${unit.end_date ? moment(unit.end_date).format('DD MMM YY') : 'Ongoing'}</b>
+                            <span class="text-success mr-2">●</span><b>${moment(unit.start_date).format('DD MMM YYYY')}</b>&nbsp;<i style="font-weight: regular;">–</i>&nbsp;<b>${unit.end_date ? moment(unit.end_date).format('DD MMM YYYY') : 'Ongoing'}</b>
                           </p>
                         </div>
                         <div class="col-4">
@@ -587,8 +587,8 @@
             if (unit.id == e.params.data.id) {
               $('input[name="unit[description]"]').val(unit.description)
               $('input[name="unit[tenants]"]').val(JSON.stringify(unit.tenants))
-              $('input[name="unit[start_date]"]').val(moment(unit.start_date).format('DD MMM YY'));
-              $('input[name="unit[end_date]"]').val(moment(unit.end_date).format('DD MMM YY'));
+              $('input[name="unit[start_date]"]').val(moment(unit.start_date).format('DD MMM YYYY'));
+              $('input[name="unit[end_date]"]').val(moment(unit.end_date).format('DD MMM YYYY'));
               $('#unit_rent_frequency').val(unit.rent_frequency);
               $('#unit_rent_frequency').trigger('change');
               $('input[name="unit[rent_price]"]').val(unit.rent_price);

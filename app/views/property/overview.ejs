@@ -1640,13 +1640,20 @@
               rating = `<span class="badge badge-soft-danger">${doc.rating}</span>`
             }
           }
+
+          // If at least one document was uploaded, allow edit-doc
+          let editOptions = ''
+          if (doc.doc) {
+            const _doc = doc.doc;
+            editOptions = `data-property="<%=JSON.stringify(property)%>"  data-id="${_doc.id}" data-property_id="${_doc.property_id}" data-property_name="${_doc.property_name}" data-unit_id="${_doc.unit_id}" data-unit_name="${_doc.unit_name}" data-tag="${_doc.tag}" data-path="${_doc.path}" data-size="${_doc.size}" data-filename="${_doc.filename}" data-mimetype="${_doc.mimetype}" data-category="${_doc.category}" data-subcategory="${_doc.subcategory}" data-expirydate="${_doc.expiry_date}" data-rating="${_doc.rating}"`
+          }
           $(parentDom).append(`
             <div class="list-group-item">
               <div class="row align-items-center document-item">
                 <div class="col-auto">
                   <a href="/property/documents" class="avatar" data-property="${doc.property_id}" data-category="${category}">
-                    <div class="avatar-title rounded bg-light text-secondary">
-                      <span class="fe fe-file"></span>
+                    <div class="avatar-title rounded bg-white text-secondary">
+                      <span class="fe fe-file" style="font-size: 1.5rem;"></span>
                     </div>
                   </a>
 
@@ -1669,7 +1676,7 @@
 
                 <div class="col-auto">
                   <div class="dropdown">
-                    <a href="javascript::void(0)" class="dropdown-ellipses modal-upload" data-category="Key Documents" data-subcategory="${doc.title}">
+                    <a href="javascript::void(0)" class="dropdown-ellipses modal-upload ${editOptions ? 'edit-document' : ''}" data-category="Key Documents" data-subcategory="${doc.title}" ${editOptions}>
                       <i class="fe fe-more-vertical"></i>
                     </a>
                   </div>
@@ -1793,8 +1800,8 @@
           } else {
             $('.unit-tenants').html('No Tenant');
           }
-          $('.unit-start_date').text(unit.start_date ? moment(unit.start_date).format('DD MMM YY') : '');
-          $('.unit-end_date').text(unit.end_date ? moment(unit.end_date).format('DD MMM YY') : 'Ongoing');
+          $('.unit-start_date').text(unit.start_date ? moment(unit.start_date).format('DD MMM YYYY') : '');
+          $('.unit-end_date').text(unit.end_date ? moment(unit.end_date).format('DD MMM YYYY') : 'Ongoing');
           $('input[name="unit[id]"]').val(unit.id);
 
           // show 3 most recent payment
@@ -1896,10 +1903,10 @@
                       <i class="fe fe-more-vertical"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <button class="dropdown-item edit-document modal-upload modal-unit" data-property="" data-unit="" data-id="${doc.id}" data-property_id="${doc.property_id}" data-property_name="${doc.property_name}" data-unit_id="${doc.unit_id}" data-unit_name="${doc.unit_name}" data-tag="${doc.tag}" data-path="${doc.path}" data-size="${doc.size}" data-filename="${doc.filename}" data-mimetype="${doc.mimetype}">
+                      <button class="dropdown-item edit-document modal-upload modal-unit" data-property="" data-unit="" data-id="${doc.id}" data-property_id="${doc.property_id}" data-property_name="${doc.property_name}" data-unit_id="${doc.unit_id}" data-unit_name="${doc.unit_name}" data-tag="${doc.tag}" data-path="${doc.path}" data-size="${doc.size}" data-filename="${doc.filename}" data-mimetype="${doc.mimetype}" data-category="${doc.category}" data-subcategory="${doc.subcategory}" data-expirydate="${doc.expiry_date}" data-rating="${doc.rating}">
                         Edit
                       </button>
-                      <a class="dropdown-item delete-document" data-id="${doc.id}">
+                      <a class="dropdown-item delete-document" data-id="${doc.id}" data-path="${doc.path}">
                         Delete
                       </a>
                     </div>

@@ -435,7 +435,7 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     padding: 1.5rem 1rem 0 1rem;
 }
 
-.select2-container:after {
+.select2.select2-container:after {
     content: "";
     position: absolute;
     right: 10px;

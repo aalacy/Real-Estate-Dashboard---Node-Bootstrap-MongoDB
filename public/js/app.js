@@ -160,7 +160,7 @@ function doPopulate() {
       if (doc.mimetype.includes('image')) {
         avatar = `<img src="/${doc.path}" alt="document image preview" class="avatar rounded"/>`;
       }
-      let uploaded_on = `&nbsp;<time datetime="${doc.uploaded_at}">${moment(doc.uploaded_at).format('DD MMM YY')}</time>`
+      let uploaded_on = `&nbsp;<time datetime="${doc.uploaded_at}">${moment(doc.uploaded_at).format('DD MMM YYYY')}</time>`
       if (doc.category == 'Key Documents') {
         uploaded_on = 'Last updated:' + uploaded_on
         if (['EPC', 'Gas Safety', 'Fire Safety'].includes(doc.subcategory)) {
@@ -230,7 +230,7 @@ function doPopulate() {
                   <button class="dropdown-item edit-document modal-upload" data-id="${doc.id}" data-property_id="${doc.property_id}" data-property_name="${doc.property_name}" data-unit_id="${doc.unit_id}" data-unit_name="${doc.unit_name}" data-tag="${doc.tag}" data-path="${doc.path}" data-size="${doc.size}" data-note="${doc.note}" data-filename="${doc.filename}" data-mimetype="${doc.mimetype}" data-category="${doc.category}" data-subcategory="${doc.subcategory}" data-expirydate="${doc.expiry_date}" data-rating="${doc.rating}">
                     Edit
                   </button>
-                  <button class="dropdown-item delete-document" data-id="${doc.id}">
+                  <button class="dropdown-item delete-document" data-id="${doc.id}" data-path="${doc.path}">
                     Delete
                   </button>
                   <a class="dropdown-item download-document" href="/${doc.path}" download>
@@ -470,7 +470,7 @@ function confirmDialog(message, handler, title="Warning", hideDetail=false){
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary btn-no">Cancel</button>
-            <button type="button" class="btn btn-danger btn-yes delete-document">Ok</button>
+            <button type="button" class="btn btn-danger btn-yes">Ok</button>
           </div>
         </div>
       </div>
@@ -866,7 +866,7 @@ const displayTransactions = (paginated=true, unit_id=-1) => {
           </div>  
         </div>
         <div class="col-lg-2 col-md-3 col-sm-4">
-          <div class="mb-1">${moment(transaction.created_at).format('DD MMM YY')}</div>
+          <div class="mb-1">${moment(transaction.created_at).format('DD MMM YYYY')}</div>
           <div class="text-muted">Date</div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-4">
@@ -1812,7 +1812,7 @@ $(function() {
           $('#property-search-list .card-body .list-group').append(`<a href="${href}" class="list-group-item border-0 px-0">
             <div class="row align-items-center">
               <div class="col-auto">
-                <div class="avatar avatar-md avatar-4by3">
+                <div class="avatar" style="margin: 0 .5rem;">
                   <img src="${avatar}" alt="avatar" class="avatar-img rounded">
                 </div>
               </div>
@@ -2163,11 +2163,15 @@ $(function() {
     $(document).on('click', '.modal-upload', async function(e) {
       e.preventDefault()
       clearDocumentModal()
-      if ($(this).hasClass('modal-property') || $(this).hasClass('modal-unit')) {
-        var property = $(this).data('property');
+      
+      var property = $(this).data('property');
+      if (property) {
         var property_name = property.address + ', ' + property.city;
         var option = new Option(property_name, property.id, true, true);
         $('#document_property').append(option);
+      }
+
+      if ($(this).hasClass('modal-property') || $(this).hasClass('modal-unit')) {
         $('.property-row').addClass('d-none');
         if ($(this).hasClass('modal-property')) {
           units.map(unit => {
@@ -2314,11 +2318,13 @@ $(function() {
       confirmDialog("Are you sure?", (ans) => {
         if (ans) {
           const id = self.data('id');
+          const path = self.data('path');
           const parent = self.parents('.document-item');
           const token = $('meta[name="csrf"]').attr('content');
           const data = {
               document: {
-                id 
+                id,
+                path
               }
           };
           fetch('/property/documents/delete', {
