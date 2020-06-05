@@ -16,7 +16,7 @@
     ================================================== -->
     <div class="main-content">
 
-      <input type="hidden" id="hidden_properties" value="<%= JSON.stringify(properties) %>">
+      <!-- <input type="hidden" id="hidden_properties" value="<%= JSON.stringify(properties) %>"> -->
       <% include ../partials/modals %>
 
       <% include ./_document_header %>
@@ -28,17 +28,13 @@
 
     <script type="text/javascript">
       documents = $('#hidden_documents').val();
-      let properties = $('#hidden_properties').val();
-      try {
-        properties = JSON.parse(properties);
-      } catch(e) { properties = [];}
       items = []
       try {
         documents = JSON.parse(documents);
         items = documents;
       } catch(e) {}
 
-      $(function(){
+      $(async function(){
         doPopulate();
 
         doPaginate();
@@ -50,11 +46,7 @@
         $('.filter-by-property').removeClass('d-none');
         var option = new Option('All Properties', 'all', true, true);
         $('#filterByProperty').append(option);
-        properties.map(property => {
-          var property_name = property.address + ', ' + property.city;
-          var option = new Option(property_name, property.id, true, true);
-          $('.property-filter').append(option);
-        });
+        await populatePropertyDropdown ()
         if (doc_property && doc_category) {
           $('#filterByProperty').val(doc_property).trigger('change');
           $('.document-categories a').map( (x, el) => {

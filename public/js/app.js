@@ -16,6 +16,7 @@ let items = [];
 let transactions = [];
 let cur_transaction;
 let documents = [];
+let properties = [];
 let keyDocuments = [];
 let units = [];
 let selected_doc_property_id = 'all';
@@ -117,6 +118,7 @@ const showDocSubcategories = (category, subcategory) => {
   }
 }
 
+// show and hide expiry and rating in the document upload modal
 const showDocExpiryAndRating = (subcategory) => {
   $('.doc-expiry-date').val('')
   $('.doc-rating').val(null).trigger('change')
@@ -134,6 +136,7 @@ const showDocExpiryAndRating = (subcategory) => {
   }
 }
 
+// populate documents to the list
 function doPopulate() {
     $('.documentList').empty();
     if (items && items.length) {
@@ -156,7 +159,7 @@ function doPopulate() {
       // const date = new Date(doc.created_at);
       // const uploaded_at = date.getDate() + '/' +  date.getMonth()+1 + '/' + date.getFullYear();
       const uploaded_at = moment(doc.created_at).format('DD/MM/YYYY')
-      let avatar = '<span class="fe fe-file" style="font-size: 2rem;"></span>';
+      let avatar = '<span class="fe fe-file" style="font-size: 1.5rem;"></span>';
       if (doc.mimetype.includes('image')) {
         avatar = `<img src="/${doc.path}" alt="document image preview" class="avatar rounded"/>`;
       }
@@ -200,7 +203,7 @@ function doPopulate() {
           <div class="row align-items-center">
             <div class="col-auto">
               <a href="/${doc.path}" class="avatar" target="_blank">
-                <div class="avatar-title rounded bg-white text-secondary">
+                <div class="avatar-title rounded bg-light text-secondary">
                   ${avatar}
                 </div>
               </a>
@@ -244,8 +247,8 @@ function doPopulate() {
        })
   }
 
+// pagination in document list
   function doPaginate() {
-    // $('#documentPagination').empty();
     try {
       const pageCnt = Math.ceil(items.length / 3);
       var visiblePageCnt = Math.min(3, pageCnt);
@@ -362,6 +365,31 @@ function doPopulate() {
       $('#modalAddNewUnitWithProperty .unit-rent-requency').prop('disabled', true)
       $('#modalAddNewUnitWithProperty .property-filter').prop('disabled', false)
       $('.tenancy_tenants').val(unit.tenants.join(',')).trigger('change')
+    }
+  }
+
+  // const populate property list for select2 dropdown
+  const populatePropertyDropdown = async () => {
+    const token = $('meta[name="csrf"]').attr('content');
+    const res = await fetch('/property/all', {
+        credentials: 'same-origin', // <-- includes cookies in the request
+        headers: {
+            'CSRF-Token': token, 
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response => response.json())
+    .catch(error => {
+      console.log(error);
+    });
+
+    if (res.status == 'ok') {
+      properties = res.properties
+      properties.map(property => {
+        var property_name = property.address + ', ' + property.city;
+        var option = new Option(property_name, property.id, true, true);
+        $('.property-filter').append(option);
+      });
     }
   }
 
@@ -2164,14 +2192,14 @@ $(function() {
       e.preventDefault()
       clearDocumentModal()
       
-      var property = $(this).data('property');
-      if (property) {
-        var property_name = property.address + ', ' + property.city;
-        var option = new Option(property_name, property.id, true, true);
-        $('#document_property').append(option);
-      }
 
       if ($(this).hasClass('modal-property') || $(this).hasClass('modal-unit')) {
+        var property = $(this).data('property');
+        if (property) {
+          var property_name = property.address + ', ' + property.city;
+          var option = new Option(property_name, property.id, true, true);
+          $('#document_property').append(option);
+        }
         $('.property-row').addClass('d-none');
         if ($(this).hasClass('modal-property')) {
           units.map(unit => {
@@ -2233,23 +2261,24 @@ $(function() {
         $('#modalUpload .modal-title').text('Upload Document');
         $('#modalUpload .status').val('upload');
 
-        // If the modal upload from key document in overview
-        if ($(this).hasClass('keydoc-overview')) {
-          const doc_category = $(this).data('category')
-          const doc_subcategory =$(this).data('subcategory')
-          $('.document_category').val(doc_category)
-          showDocSubcategories(doc_category, doc_subcategory)
-          $('.doc_subcategory').val(doc_subcategory)
-          showDocExpiryAndRating(doc_subcategory)
-        }
-
         // upload modal from key documents in overview page
-        showDocSubcategories($(this).data('category'), $(this).data('subcategory'))
+        // showDocSubcategories($(this).data('category'), $(this).data('subcategory'))
         const property_id = $(this).data('property_id');
         if (property_id) {
           await selectPropertyFilter(property_id)
         }
 
+        // If the modal upload from key document in overview
+        if ($(this).hasClass('keydoc-overview')) {
+          const doc_category = $(this).data('category')
+          const doc_subcategory =$(this).data('subcategory')
+          const property_id = $(this).data('property_id')
+          $('#document_property').val(property_id).trigger('change');
+          $('.document_category').val(doc_category)
+          showDocSubcategories(doc_category, doc_subcategory)
+          $('.document_subcategory').val(doc_subcategory)
+          showDocExpiryAndRating(doc_subcategory)
+        }
       }
 
       $('#modalUpload').modal().on('hidden.bs.modal', function() { 

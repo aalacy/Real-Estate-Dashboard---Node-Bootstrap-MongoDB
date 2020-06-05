@@ -1645,15 +1645,15 @@
           let editOptions = ''
           if (doc.doc) {
             const _doc = doc.doc;
-            editOptions = `data-property="<%=JSON.stringify(property)%>"  data-id="${_doc.id}" data-property_id="${_doc.property_id}" data-property_name="${_doc.property_name}" data-unit_id="${_doc.unit_id}" data-unit_name="${_doc.unit_name}" data-tag="${_doc.tag}" data-path="${_doc.path}" data-size="${_doc.size}" data-filename="${_doc.filename}" data-mimetype="${_doc.mimetype}" data-category="${_doc.category}" data-subcategory="${_doc.subcategory}" data-expirydate="${_doc.expiry_date}" data-rating="${_doc.rating}"`
+            editOptions = `data-id="${_doc.id}" data-property_id="${_doc.property_id}" data-property_name="${_doc.property_name}" data-unit_id="${_doc.unit_id}" data-unit_name="${_doc.unit_name}" data-tag="${_doc.tag}" data-path="${_doc.path}" data-size="${_doc.size}" data-filename="${_doc.filename}" data-mimetype="${_doc.mimetype}" data-category="${_doc.category}" data-subcategory="${_doc.subcategory}" data-expirydate="${_doc.expiry_date}" data-rating="${_doc.rating}"`
           }
           $(parentDom).append(`
             <div class="list-group-item">
               <div class="row align-items-center document-item">
                 <div class="col-auto">
                   <a href="/property/documents" class="avatar" data-property="${doc.property_id}" data-category="${category}">
-                    <div class="avatar-title rounded bg-white text-secondary">
-                      <span class="fe fe-file" style="font-size: 1.5rem;"></span>
+                    <div class="avatar-title rounded bg-light text-secondary">
+                      <span class="fe fe-file"></span>
                     </div>
                   </a>
 
@@ -1676,7 +1676,7 @@
 
                 <div class="col-auto">
                   <div class="dropdown">
-                    <a href="javascript::void(0)" class="dropdown-ellipses modal-upload ${editOptions ? 'edit-document' : ''}" data-category="Key Documents" data-subcategory="${doc.title}" ${editOptions}>
+                    <a href="javascript::void(0)" class="dropdown-ellipses modal-upload keydoc-overview ${editOptions ? 'edit-document' : ''}" data-category="Key Documents" data-subcategory="${doc.title}" ${editOptions}  data-property_id="${doc.property_id}">
                       <i class="fe fe-more-vertical"></i>
                     </a>
                   </div>
@@ -1749,6 +1749,9 @@
             location.href = '/property/overview/' + _property_id  + '/' + new_tabs;
           }
         });
+
+        // populate properties for the dropdown in document modal
+        await populatePropertyDropdown ()
 
         $('.unit-tab').click(function(e){
           e.preventDefault();
@@ -1920,7 +1923,7 @@
           //   $('.unit-document-list').append(`<div class="col-auto no-documents"><p class="my-3">There is no documents yet</p></div>`)
           // }
 
-          $('.modal-upload').attr('data-property', $('#hidden_property').val());
+          // $('.modal-upload').attr('data-property', $('#hidden_property').val());
         });
 
         // if this page is called from tenancies, then go to unit detail
@@ -1955,7 +1958,7 @@
         $('.btn-primary.modal-upload').addClass('modal-property');
         doPopulate();
         doPaginate();
-        $('.modal-upload').attr('data-property', $('#hidden_property').val());
+        // $('.modal-upload').attr('data-property', $('#hidden_property').val());
         $('.edit-document').addClass('modal-property').attr('data-property', $('#hidden_property').val());
 
         // Update loan
