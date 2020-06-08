@@ -2194,12 +2194,13 @@ $(function() {
       
 
       if ($(this).hasClass('modal-property') || $(this).hasClass('modal-unit')) {
-        var property = $(this).data('property');
-        if (property) {
-          var property_name = property.address + ', ' + property.city;
-          var option = new Option(property_name, property.id, true, true);
-          $('#document_property').append(option);
-        }
+        // var property = $(this).data('property');
+        // if (property) {
+        //   var property_name = property.address + ', ' + property.city;
+        //   var option = new Option(property_name, property.id, true, true);
+        //   $('#document_property').append(option);
+        // }
+        $('#document_property').val(property.id).trigger('change');
         $('.property-row').addClass('d-none');
         if ($(this).hasClass('modal-property')) {
           units.map(unit => {
@@ -2278,6 +2279,8 @@ $(function() {
           showDocSubcategories(doc_category, doc_subcategory)
           $('.document_subcategory').val(doc_subcategory)
           showDocExpiryAndRating(doc_subcategory)
+          $('.unit-row').addClass('d-none');
+          $('.property-row').addClass('d-none');
         }
       }
 

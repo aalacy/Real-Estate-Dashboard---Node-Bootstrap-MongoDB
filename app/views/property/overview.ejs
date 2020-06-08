@@ -783,7 +783,7 @@
                         </h4>
                       </div>
                       <div class="col-auto">
-                        <select class="custom-select custom-select-sm form-control-flush select2-hidden-accessible cashflowDateFilter"  data-toggle="select" data-options='{"placeholder": "Select a frequency", "minimumResultsForSearch": -1 }' required style="max-width: 250px;" tabindex="-1" aria-hidden="true">
+                        <select class="yield-select custom-select custom-select-sm form-control-flush select2-hidden-accessible cashflowDateFilter"  data-toggle="select" data-options='{"placeholder": "Select a frequency", "minimumResultsForSearch": -1 }' required style="max-width: 250px;" tabindex="-1" aria-hidden="true">
                           <option></option>
                           <option value="Current Month">Current Month</option>
                           <option value="Previous Month">Previous Month</option>
@@ -1612,7 +1612,7 @@
           
           let subtitle = ''
           if (doc.empty) {
-            subtitle = `<a href="javascript::void(0)" class="modal-upload keydoc-overview" data-category="Key Documents" data-subcategory="${doc.title}"><i class="fe fe-upload"></i>&nbsp;Upload</a>`
+            subtitle = `<a href="javascript::void(0)" class="modal-upload keydoc-overview" data-property_id="${property.id}" data-category="Key Documents" data-subcategory="${doc.title}"><i class="fe fe-upload"></i>&nbsp;Upload</a>`
           } else if (doc.expired || doc.expiringSoon){
             if (doc.expired) {
               subtitle += `<span class="badge badge-soft-danger px-2 py-1 mr-2">Expired</span>`
@@ -1621,7 +1621,7 @@
               subtitle += `<span class="badge badge-soft-warning px-2 py-1">Expiring Soon</span>`
             }
           } else {
-            subtitle = `<i class="fe fe-check"></i>&nbsp;${doc.uploaded}&nbsp;Uploaded`
+            subtitle = `<i class="fe fe-check"></i>&nbsp;Uploaded`
           }
           let parentDom = 'key1-docs-list';
           if (['EPC', 'Gas Safety Record', 'Fire Safety Record'].includes(key)) {
@@ -1645,7 +1645,7 @@
           let editOptions = ''
           if (doc.doc) {
             const _doc = doc.doc;
-            editOptions = `data-id="${_doc.id}" data-property_id="${_doc.property_id}" data-property_name="${_doc.property_name}" data-unit_id="${_doc.unit_id}" data-unit_name="${_doc.unit_name}" data-tag="${_doc.tag}" data-path="${_doc.path}" data-size="${_doc.size}" data-filename="${_doc.filename}" data-mimetype="${_doc.mimetype}" data-category="${_doc.category}" data-subcategory="${_doc.subcategory}" data-expirydate="${_doc.expiry_date}" data-rating="${_doc.rating}"`
+            editOptions = `data-id="${_doc.id}" data-property_id="${_doc.property_id}" data-category="${_doc.category}" data-subcategory="${_doc.subcategory}" data-expirydate="${_doc.expiry_date}" data-rating="${_doc.rating}"`
           }
           $(parentDom).append(`
             <div class="list-group-item">
