@@ -311,7 +311,7 @@
     <% include ../partials/scripts %>
 
     <script type="text/javascript">
-      let properties = $('#hidden_properties').val();
+      properties = $('#hidden_properties').val();
       try {
         properties = JSON.parse(properties);
       } catch(e) { properties = [];}
