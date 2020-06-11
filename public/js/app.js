@@ -349,6 +349,7 @@ function doPopulate() {
 
   // populate the unit info from api
   const populateUnit = (unit) => {
+    $('.tenancy_tenants').val(null).trigger('change')
     if (unit.rent_frequency == 'Vacant') {
       $('#modalAddNewUnitWithProperty .unit-filter').removeClass('is-invalid')
 
@@ -415,6 +416,7 @@ function doPopulate() {
         console.log(error);
       });
       if (res.status == 200) {
+        $('.tenancy_tenants').val(null).trigger('change')
         $('.unit-filter').empty().removeClass('is-invalid');
         $('#modalAddNewUnitWithProperty input').prop('disabled', false)
         $('#modalAddNewUnitWithProperty .unit-rent-requency').prop('disabled', false)
@@ -1100,6 +1102,8 @@ $(function() {
       dateFormat: "d M Y"
     }) 
 
+    // disable autofill in login form
+    // $('#signin-form').disableAutoFill();
 
     /**
      * User Authentication
@@ -1548,7 +1552,7 @@ $(function() {
     }
 
     // show property value modal
-    $('.show-property-value').click(function() {
+    $('.show-property-value, .summary-edit-btn').click(function() {
       updateEstBox()
 
       if (property.current_value) {

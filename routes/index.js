@@ -30,7 +30,8 @@ router.get('/signup', home.signup);
 
 //POST login route (optional, everyone has access)
 router.post('/signin', auth.optional, home.signin_post);
-router.get('/signin', home.signin);
+router.get('/signin/', home.signin);
+router.get('/signin/:email', home.signin);
 
 router.post('/logout', home.logout);
 

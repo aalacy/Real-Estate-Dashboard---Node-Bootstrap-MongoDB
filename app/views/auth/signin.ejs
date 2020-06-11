@@ -40,16 +40,15 @@
           </div>
           
           <!-- Form -->
-          <form id="signin-form">
+          <form id="signin-form"  autocomplete="off">
 
             <!-- Email address -->
             <div class="form-group">
 
               <!-- Label -->
               <label>Email Address</label>
-
               <!-- Input -->
-              <input type="email" id="email" class="form-control" placeholder="name@address.com" required>
+              <input type="email" id="email" class="form-control" value="<%= email%>" placeholder="name@address.com" autocomplete="off" required>
 
             </div>
 

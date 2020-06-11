@@ -363,13 +363,13 @@
               </div>
 
               <div class="tab-pane fade" id="vacant" role="tabpanel">
-                  <div class="row my-3">
+                  <!-- <div class="row my-3">
                     <div class="col-12 col-md-4">
                       <select class="form-control my-3 property-filter" style="min-width: 250px;" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
                           <option></option>
                       </select>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="vacant-tenancies">
                   </div>
               </div>
@@ -391,7 +391,7 @@
     <% include ../partials/scripts %>
 
     <script type="text/javascript">
-      let properties = $('#hidden_properties').val();
+      properties = $('#hidden_properties').val();
       let occupiedProperties = $('#hidden_occupiedproperties').val();
       let vacantProperties = $('#hidden_vacantproperties').val();
       try {

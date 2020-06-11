@@ -11,10 +11,14 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 let nodemailer = require('nodemailer');
 
 exports.signin = function(req, res) {
+  const { email } = req.params
+
+  console.log('-====', email)
   res.render('auth/signin', {
     title: 'Avenue - Sign In',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
+    email
   });
 };
 

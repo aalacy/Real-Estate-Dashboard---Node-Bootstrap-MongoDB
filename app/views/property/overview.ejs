@@ -1186,7 +1186,7 @@
                             </div>
                             <div class="unit-tenants"></div>
                           </div>
-                           <div class="pb-4 d-flex align-items-center">
+                          <div class="pb-4 start-end-date-block">
                             <div class="pr-4">
                               <div class="d-flex align-items-center text-teal">
                                 <div class="w-2 h-2 bg-grey">
@@ -1803,8 +1803,13 @@
           } else {
             $('.unit-tenants').html('No Tenant');
           }
-          $('.unit-start_date').text(unit.start_date ? moment(unit.start_date).format('DD MMM YYYY') : '');
-          $('.unit-end_date').text(unit.end_date ? moment(unit.end_date).format('DD MMM YYYY') : 'Ongoing');
+          if (unit.start_date) {
+            $('.start-end-date-block').show()
+            $('.unit-start_date').text(moment(unit.start_date).format('DD MMM YYYY'));
+            $('.unit-end_date').text(unit.end_date ? moment(unit.end_date).format('DD MMM YYYY') : 'Ongoing');
+          } else {
+            $('.start-end-date-block').hide()
+          }
           $('input[name="unit[id]"]').val(unit.id);
 
           // show 3 most recent payment
@@ -2081,7 +2086,7 @@
         })
         .then(response => response.json())
         .then(function(res) {
-          if (res.status == 'ok' && res.data.equity != 0) {
+          if (res.status == 'ok' && res.data.equity != 0 && property.current_value) {
             debt = res.data.debt;
             equity = res.data.equity;
             $('.property_debt').val(res.data.debt.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
