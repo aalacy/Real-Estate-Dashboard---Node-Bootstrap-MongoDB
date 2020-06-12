@@ -2040,7 +2040,7 @@
           .then(response => response.json())
           .then(function(res) {
             $('#modalAddNewLoan').modal('hide');
-            if (res.status == 'ok') {
+            if (res.status == 'ok' && res.data.debt != -1) {
               equity = res.data.equity;
               debt = res.data.debt;
               drawLoanChart(res.data)
@@ -2086,7 +2086,7 @@
         })
         .then(response => response.json())
         .then(function(res) {
-          if (res.status == 'ok' && res.data.equity != 0 && property.current_value) {
+          if (res.status == 'ok' && res.data.debt != -1 && property.current_value) {
             debt = res.data.debt;
             equity = res.data.equity;
             $('.property_debt').val(res.data.debt.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));

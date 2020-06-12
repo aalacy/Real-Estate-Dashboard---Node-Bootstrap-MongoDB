@@ -49,7 +49,7 @@ const PropertiesSchema = new Schema({
     is_new: { type: Boolean, default: true }, // used to display alert on top of the overview page
     status: { type: String, default: 'Vacant' }, // Vacant or Occupied
     has_loan: { type: Boolean, default: false }, // used to display alert on top of the overview page
-    debt: { type: Number, default: 0.0 }, // Loan
+    debt: { type: Number, default: -1 }, // Loan
     equity: { type: Number, default: 0.0 }, // Equity
     lender: { type: String, default: '' }, // Lender
     amount_borrowed: { type: Number, default: 0.0 }, // Amount borrowed
