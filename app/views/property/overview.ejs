@@ -1970,8 +1970,7 @@
         $('input.property_debt').keyup(function(e){
           if ($(this).val()) {
             const loan = parseFloat($(this).val().replace(',', '') || 0);
-            const current_value = parseFloat($('#current_value').val());
-            $('.property_equity').val(current_value - loan);
+            $('.property_equity').val(property.current_value - loan);
           }
         });
 
@@ -2022,7 +2021,6 @@
             interest_rate: $('input[name="property[interest_rate]"]').val().replace(',', ''),
             start_date: $('input[name="property[start_date]"]').val(),
             maturity_date: $('input[name="property[maturity_date]"]').val(),
-            loan_updated_at: $('input[name="property[loan_updated_at]"]').val()
           };
 
           const token = $('meta[name="csrf"]').attr('content');
