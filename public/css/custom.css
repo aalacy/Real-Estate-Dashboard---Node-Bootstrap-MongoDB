@@ -326,6 +326,8 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     max-width: 180px; 
     overflow: hidden;
     text-overflow: ellipsis; 
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .document-lg-name {
@@ -392,6 +394,10 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 .avatar-md {
     height: 65px !important;
     width: 65px !important;
+}
+
+.avatar-xxl {
+    height: 6.125rem !important;
 }
 
 .marker {
