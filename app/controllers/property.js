@@ -79,7 +79,7 @@ const ESTIMATE_CRON_INTERVAL = '0 0 0 */30 * *'
 const estimateValueCron = async (property_id) => {
   const property = await Properties.findOne({id: property_id}, {_id: 0})
   if (property.estimate_cron_run_date == moment().format('YYYY-MM-DD')) {
-   const estimate_url = `https://api.propertydata.co.uk/valuation-sale?key=${process.env.PROPERTYDATA_API_KEY}&postcode=${property.zip.replace(' ','')}&internal_area=${property.square_feet}&property_type=${property.type}&construction_date=${property.construction_date}&bedrooms=${property.bedrooms}&bathrooms=${property.bathrooms}&finish_quality=${property.finish_quality}&outdoor_space=${property.outdoor_space}&off_street_parking=${property.off_street_parking}`;
+    const estimate_url = `https://api.propertydata.co.uk/valuation-sale?key=${process.env.PROPERTYDATA_API_KEY}&postcode=${property.zip.replace(' ','')}&internal_area=${property.square_feet}&property_type=${property.type}&construction_date=${property.construction_date}&bedrooms=${property.bedrooms}&bathrooms=${property.bathrooms}&finish_quality=${property.finish_quality}&outdoor_space=${property.outdoor_space}&off_street_parking=${property.off_street_parking}`;
     const est_res = await request({ uri: estimate_url, json: true }).catch(e => {
       console.log(e)
     });

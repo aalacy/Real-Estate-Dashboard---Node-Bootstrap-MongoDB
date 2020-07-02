@@ -126,5 +126,8 @@ router.get('/contacts/select/:property_id/:unit_id', property.select_tenant);
 
 // invest
 router.get('/invest', invest.index)
+router.get('/invest/all', invest.all)
+router.post('/invest/manage-short-list', invest.manageShortList)
+router.get('/invest/propertyListCron', invest.propertyListCron)
 
 module.exports = router;

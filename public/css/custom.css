@@ -462,3 +462,18 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     display: flex;
     align-items: center;
 }
+
+/* Invest */
+
+.like-icon {
+    opacity: 0;
+    transition: all .5s ease; 
+}
+
+.invest-item:hover .like-icon {
+    opacity: 1;
+}
+
+.red {
+    color: red;
+}

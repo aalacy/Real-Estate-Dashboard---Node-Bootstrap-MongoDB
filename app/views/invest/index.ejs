@@ -39,14 +39,14 @@
 		                <!-- Nav -->
 		                <ul class="nav nav-tabs nav-overflow header-tabs">
 		                  <li class="nav-item">
-		                    <a href="team-overview.html" class="nav-link active">
+		                    <a href="#browse" data-toggle="tab" role="tab" aria-controls="browse" aria-selected="true"  class="nav-link active">
 		                      Browse
 		                    </a>
 		                  </li>
 		                  <li class="nav-item">
-		                    <a href="team-projects.html" class="nav-link">
+		                    <a href="#shortlist" data-toggle="tab" role="tab" aria-controls="shortlist" aria-selected="true"  class="nav-link">
 		                      Your Shortlist
-							             <span class="badge badge-pill badge-soft-secondary">3</span>
+							             <span class="badge badge-pill badge-soft-secondary invest-short-cnt"></span>
 		                    </a>
 		                  </li>
 		                </ul>
@@ -55,39 +55,35 @@
               </div>
             </div>
 		    </div>
-        <div class="row mt-4 mt-md-5">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-body">
-                <ul class="list-group list-group-lg list-group-flush list my-n4 invest-list">
-                  <li class="list-group-item invest-item px-0 page1">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <a href="/uploads/file-1591342555538.csv" class="avatar avatar-xxl avatar-4by3" target="_blank">
-                          <img class="avatar-title rounded" src="https://photos.zillowstatic.com/p_e/IS3jroc0l02doy0000000000.jpg" alt="10019 S Hoover St APT 4, Los Angeles, CA 90044" aria-hidden="false">
-                        </a>
-                      </div>
-                      <div class="col ml-n2">
-                        <h4 class="card-title mb-2 name document-name document-lg-name">
-                          <a href="#">
-                            Address
-                          </a>
-                        </h4>
-                        <p class="card-text small mb-3">
-                          <b>£2,500</b><span class="text-muted mx-3">●</span><b>3 bed Terraced House</b>
-                        </p>
-                        <p class="card-text">
-                          <span class="badge badge-soft-dark px-2">Auctioned</span>
-                        </p>
-                      </div>
-                      <div class="col-auto">
-                        <button class="btn btn-text"><i class="fe fe-heart"></i></button>
-                      </div>
-                    </div> 
-                  </li>
-                </ul>
+        <div class="container mb-4">
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade active show" id="browse" role="tabpanel" aria-labelledby="browse-tab">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <ul class="list-group list-group-lg list-group-flush list my-n4 invest-list">
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
+              <ul id="investPagination" class="pagination-md mt-5 justify-content-end"></ul>
             </div>
+            <div class="tab-pane fade" id="shortlist" role="tabpanel" aria-labelledby="shortlist-tab">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <ul class="list-group list-group-lg list-group-flush list my-n4 invest-short-list">
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <ul id="investShortlistPagination" class="pagination-md mt-5 justify-content-end"></ul>
+            </div>
+          </div>
         </div>
       </div>
     </div> 
@@ -95,6 +91,7 @@
     <!-- JAVASCRIPT
     ================================================== -->
     <% include ../partials/scripts %>
+    <script src="/js/invest.js"></script>
 
   </body>
 </html>
