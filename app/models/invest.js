@@ -16,6 +16,7 @@ const uuidv4 = require('uuid/v4');
 
 const InvestsSchema = new Schema({
   id: { type: String, default: ''},
+  listname: { type: String, default: ''},
   address: { type: String, default: '' },
   postcode: { type: String, default: '' },
   type: { type: String, default: '' },

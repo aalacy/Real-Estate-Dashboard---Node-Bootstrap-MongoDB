@@ -60,9 +60,12 @@ exports.propertyListCron = async (req, res) => {
     console.log(e)
   });
   if (list_res.status == 'success') {
-  	console.log(list_res.result_count)
+  	const properties = list_res.properties.map(property => {
+  		property.listname = _propertyList
+  		return property
+  	})
 
-  	await Invests.insertMany(list_res.properties).catch(e => {
+  	await Invests.insertMany(properties).catch(e => {
   		console.log(e)
   	})
   }

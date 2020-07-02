@@ -323,7 +323,7 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 
 .document-name {
     white-space: nowrap; 
-    max-width: 180px; 
+    /*max-width: 180px; */
     overflow: hidden;
     text-overflow: ellipsis; 
     font-size: 16px;

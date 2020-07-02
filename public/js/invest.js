@@ -82,7 +82,7 @@ const displayInvestData = ({ data, listClass, type }) => {
                   </div>
                   <div class="col ml-n2">
                     <h4 class="card-title mb-2 name document-name">
-                      <a href="#">
+                      <a href="${invest.url}" target="_blank">
                         ${invest.address}
                       </a>
                     </h4>
@@ -90,7 +90,7 @@ const displayInvestData = ({ data, listClass, type }) => {
                       <b>£${toComma(invest.price)}</b><span class="text-muted mx-3">●</span><b>${invest.bedrooms} bed ${invest.type}</b>
                     </p>
                     <p class="card-text">
-                      <span class="badge badge-soft-dark px-2">Auctioned</span>
+                      <span class="badge badge-soft-dark px-2">${invest.listname}</span>
                     </p>
                   </div>
                   <div class="col-auto like-icon">
