@@ -7,6 +7,7 @@
 let invests = []
 let myShortLists = []
 let myShortListIds = []
+const PAGE = 25
 
 const updateShortList = ({ id, type, shortLists, shortListIds}) => {
 	myShortListIds = shortListIds
@@ -15,8 +16,8 @@ const updateShortList = ({ id, type, shortLists, shortListIds}) => {
 
 const _doPaginate = ({ items, paginationId, itemClass}) => {
     try {
-      const pageCnt = Math.ceil(items.length / 3);
-      var visiblePageCnt = Math.min(3, pageCnt);
+      const pageCnt = Math.ceil(items.length / PAGE);
+      var visiblePageCnt = Math.min(PAGE, pageCnt);
       $(paginationId).twbsPagination('destroy');
       $(paginationId).twbsPagination({
           totalPages: pageCnt,
@@ -59,25 +60,27 @@ const displayInvestData = ({ data, listClass, type }) => {
 	$(listClass).empty()
 	data.map((invest, idx) => {
 		let page = 0; 
-		if (idx % 3 == 0) { 
-	        page = (parseInt(idx/3) + 1)
-      	} else {
-	        page = (parseInt(idx/3) + 1) + ' d-none'
-      	}
-      	let feIcon = `<i class="fe fe-trash"></i>`
-      	if (type == 'browse') {
-      		if (myShortListIds.includes(invest.id)) {
-	      		feIcon = `<i class="fe fe-heart red"></i>`
-      		} else {
-	      		feIcon = `<i class="fe fe-heart"></i>`
-      		}
-      	} 
+		if (idx % PAGE == 0) { 
+      page = (parseInt(idx/PAGE) + 1)
+  	} else {
+      page = (parseInt(idx/PAGE) + 1) + ' d-none'
+  	}
+  	let feIcon = `<i class="fe fe-trash"></i>`
+  	if (type == 'browse') {
+  		if (myShortListIds.includes(invest.id)) {
+    		feIcon = `<i class="fe fe-heart red"></i>`
+  		} else {
+    		feIcon = `<i class="fe fe-heart"></i>`
+  		}
+  	} 
+    let category = invest.category.replace('-', ' ').replace('properties', '').trim()
+    category = category[0].toUpperCase() + category.substr(1)
 		$(listClass).append(`
 			<li class="list-group-item invest-item px-0 page${page}">
                 <div class="row align-items-center">
                   <div class="col-auto">
                     <a href="/uploads/file-1591342555538.csv" class="avatar avatar-xxl avatar-4by3" target="_blank">
-                      <img class="avatar-title rounded" src="https://photos.zillowstatic.com/p_e/IS3jroc0l02doy0000000000.jpg" alt="10019 S Hoover St APT 4, Los Angeles, CA 90044" aria-hidden="false">
+                      <img class="avatar-title rounded" src="/img/avatars/projects/single.png" alt="10019 S Hoover St APT 4, Los Angeles, CA 90044" aria-hidden="false">
                     </a>
                   </div>
                   <div class="col ml-n2">
@@ -90,7 +93,7 @@ const displayInvestData = ({ data, listClass, type }) => {
                       <b>£${toComma(invest.price)}</b><span class="text-muted mx-3">●</span><b>${invest.bedrooms} bed ${invest.type}</b>
                     </p>
                     <p class="card-text">
-                      <span class="badge badge-soft-dark px-2">${invest.listname}</span>
+                      <span class="badge badge-soft-dark px-2">${category}</span>
                     </p>
                   </div>
                   <div class="col-auto like-icon">

@@ -27,9 +27,89 @@
   	              <div class="col-auto">
                   
   	                <!-- Button -->
-  	                <a href="#" class="btn btn-primary lift">
+  	                <!-- <a href="#" class="btn btn-primary lift">
   	                  Preferences
-  	                </a>
+  	                </a> -->
+                    <button class="btn btn-primary" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      Preferences
+                    </button>
+                    <form class="dropdown-menu dropdown-menu-right dropdown-menu-card" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-283px, 29px, 0px);" data-select2-id="25">
+                            <div class="card-header">
+
+                              <!-- Title -->
+                              <h4 class="card-header-title">
+                                Filters
+                              </h4>
+
+                              <!-- Link -->
+                              <button class="btn btn-sm btn-link text-reset d-none" type="reset">
+                                <small>Clear filters</small>
+                              </button>
+
+                            </div>
+                            <div class="card-body" data-select2-id="24">
+
+                              <!-- List group -->
+                              <div class="list-group list-group-flush mt-n4 mb-4" data-select2-id="23">
+                                <div class="list-group-item" data-select2-id="22">
+                                  <div class="row" data-select2-id="21">
+                                    <div class="col">
+
+                                      <!-- Text -->
+                                      <small>Title</small>
+
+                                    </div>
+                                    <div class="col-auto" data-select2-id="20">
+
+                                      <!-- Select -->
+                                      <select class="custom-select custom-select-sm select2-hidden-accessible" name="item-title" data-toggle="select" data-options="{&quot;minimumResultsForSearch&quot;: -1}" data-select2-id="4" tabindex="-1" aria-hidden="true">
+                                        <option value="*" selected="" data-select2-id="6">Any</option>
+                                        <option value="Designer" data-select2-id="32">Designer</option>
+                                        <option value="Developer" data-select2-id="33">Developer</option>
+                                        <option value="Owner" data-select2-id="34">Owner</option>
+                                        <option value="Founder" data-select2-id="35">Founder</option>
+                                      </select><span class="select2 select2-container select2-container--default select2-container--below" dir="ltr" data-select2-id="5" style="width: auto;"><span class="selection"><span class="select2-selection select2-selection--single custom-select custom-select-sm" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-item-title-yq-container"><span class="select2-selection__rendered" id="select2-item-title-yq-container" role="textbox" aria-readonly="true" title="Any">Any</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+
+                                    </div>
+                                  </div> <!-- / .row -->
+                                </div>
+                                <div class="list-group-item">
+                                  <div class="row">
+                                    <div class="col">
+
+                                      <!-- Text -->
+                                      <small>Lead scrore</small>
+
+                                    </div>
+                                    <div class="col-auto">
+
+                                      <!-- Select -->
+                                      <select class="custom-select custom-select-sm select2-hidden-accessible" name="item-score" data-toggle="select" data-options="{&quot;minimumResultsForSearch&quot;: -1}" data-select2-id="7" tabindex="-1" aria-hidden="true">
+                                        <option value="*" selected="" data-select2-id="9">Any</option>
+                                        <option value="1/10">1+</option>
+                                        <option value="2/10">2+</option>
+                                        <option value="3/10">3+</option>
+                                        <option value="4/10">4+</option>
+                                        <option value="5/10">5+</option>
+                                        <option value="6/10">6+</option>
+                                        <option value="7/10">7+</option>
+                                        <option value="8/10">8+</option>
+                                        <option value="9/10">9+</option>
+                                        <option value="10/10">10</option>
+                                      </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="8" style="width: auto;"><span class="selection"><span class="select2-selection select2-selection--single custom-select custom-select-sm" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-item-score-zr-container"><span class="select2-selection__rendered" id="select2-item-score-zr-container" role="textbox" aria-readonly="true" title="Any">Any</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+
+                                    </div>
+                                  </div> <!-- / .row -->
+                                </div>
+                              </div>
+
+                              <!-- Button -->
+                              <button class="btn btn-block btn-primary" type="submit">
+                                Apply filter
+                              </button>
+
+                            </div>
+                          </form>
 
   	              </div>
                 </div> <!-- / .row -->

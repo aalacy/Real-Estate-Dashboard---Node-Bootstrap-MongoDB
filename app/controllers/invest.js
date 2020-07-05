@@ -61,10 +61,11 @@ exports.propertyListCron = async (req, res) => {
   });
   if (list_res.status == 'success') {
   	const properties = list_res.properties.map(property => {
-  		property.listname = _propertyList
+  		property.category = _propertyList
+  		property.type = _propertyRegion
   		return property
   	})
-
+  	
   	await Invests.insertMany(properties).catch(e => {
   		console.log(e)
   	})
