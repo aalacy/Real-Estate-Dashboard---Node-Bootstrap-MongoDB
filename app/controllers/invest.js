@@ -79,10 +79,23 @@ exports.propertyListCron = async (req, res) => {
 exports.index = async function(req, res) {
   const { user } = req.session;
 
+
+  const _propertyList = propertyList.map(list => {
+	  let category = list.replace(/-/g, ' ').replace('properties', '').trim()
+	    category = category[0].toUpperCase() + category.substr(1)
+
+	  return {
+	  	text: category,
+	  	value: list
+	  }
+  })
+
   res.render('invest/index', {
     title: 'Avenue - Invest',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
+    _propertyList,
+    propertyRegions
   });
 }
 

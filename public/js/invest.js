@@ -8,6 +8,11 @@ let invests = []
 let myShortLists = []
 let myShortListIds = []
 const PAGE = 25
+let investFilter = {
+  category: '*',
+  type: '*',
+  price: '*'
+} 
 
 const updateShortList = ({ id, type, shortLists, shortListIds}) => {
 	myShortListIds = shortListIds
@@ -58,7 +63,8 @@ const doShortlistPaginate = () => {
 
 const displayInvestData = ({ data, listClass, type }) => {
 	$(listClass).empty()
-	data.map((invest, idx) => {
+  const filteredData = applyInvestFilter(data) 
+	filteredData.map((invest, idx) => {
 		let page = 0; 
 		if (idx % PAGE == 0) { 
       page = (parseInt(idx/PAGE) + 1)
@@ -73,7 +79,7 @@ const displayInvestData = ({ data, listClass, type }) => {
     		feIcon = `<i class="fe fe-heart"></i>`
   		}
   	} 
-    let category = invest.category.replace('-', ' ').replace('properties', '').trim()
+    let category = invest.category.replace(/-/g, ' ').replace('properties', '').trim()
     category = category[0].toUpperCase() + category.substr(1)
 		$(listClass).append(`
 			<li class="list-group-item invest-item px-0 page${page}">
@@ -138,11 +144,11 @@ const getInvestData = (id) => {
 // manage Invest data
 const manageInvestData = () => {
 	displayInvestData({ data: invests, listClass: '.invest-list', type: 'browse'})
-  	doInvestPaginate()
+	doInvestPaginate()
 
-  	displayInvestData({ data: myShortLists, listClass: '.invest-short-list', type: 'shortlist'})
-  	doShortlistPaginate()
-  	$('.invest-short-cnt').html(myShortLists.length)
+	displayInvestData({ data: myShortLists, listClass: '.invest-short-list', type: 'shortlist'})
+	doShortlistPaginate()
+	$('.invest-short-cnt').html(myShortLists.length)
 }
 
 // manage short list
@@ -174,6 +180,47 @@ const manageShortList = (id) => {
     });
 }
 
+// Apply Invest Preference Filter
+const applyInvestFilter = (data) => {
+  return data.filter(item => {
+    let _category = investFilter.category == '*' ? true : investFilter.category != '*' && investFilter.category == item.category
+    let _type = false
+    if (investFilter.price == '*') {
+      _type = true
+    }
+    if (investFilter.price == 'Under £50,000' && item.price < 50000) {
+      _type = true
+    }
+    if (investFilter.price == '£50,000 - £100,000' && item.price >= 50000 && item.price < 100000) {
+      _type = true
+    } 
+    if (investFilter.price == '£100,000 - £200,000' && item.price >= 100000 && item.price < 200000) {
+      _type = true
+    } 
+    if (investFilter.price == 'Over £200,000' && item.price >= 200000) {
+      _type = true
+    } 
+    return _category && _type
+  })
+}
+
 $(function() {
 	getInvestData()
+
+  // To avoid closing a dropdown
+  $(".select2-selection").on("click", function(){
+      return false; // prevent propagation
+  });
+
+  // preferences
+  $('#invest-filter').submit(e => {
+    e.preventDefault()
+    investFilter = {
+      category: $('#investCategory').val(),
+      type: $('#investType').val(),
+      price: $('#investPrice').val()
+    }
+    console.log(investFilter)
+    manageInvestData()
+  })
 })
