@@ -184,23 +184,22 @@ const manageShortList = (id) => {
 const applyInvestFilter = (data) => {
   return data.filter(item => {
     let _category = investFilter.category == '*' ? true : investFilter.category != '*' && investFilter.category == item.category
-    let _type = false
-    if (investFilter.price == '*') {
-      _type = true
-    }
+    let _price = investFilter.price == '*'
     if (investFilter.price == 'Under £50,000' && item.price < 50000) {
-      _type = true
+      _price = true
     }
     if (investFilter.price == '£50,000 - £100,000' && item.price >= 50000 && item.price < 100000) {
-      _type = true
+      _price = true
     } 
     if (investFilter.price == '£100,000 - £200,000' && item.price >= 100000 && item.price < 200000) {
-      _type = true
+      _price = true
     } 
     if (investFilter.price == 'Over £200,000' && item.price >= 200000) {
-      _type = true
+      _price = true
     } 
-    return _category && _type
+    let _type = investFilter.type == '*' || investFilter.type == item.type
+
+    return _category && _price && _type
   })
 }
 

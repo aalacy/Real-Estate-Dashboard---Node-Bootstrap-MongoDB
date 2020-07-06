@@ -62,7 +62,7 @@ exports.propertyListCron = async (req, res) => {
   if (list_res.status == 'success') {
   	const properties = list_res.properties.map(property => {
   		property.category = _propertyList
-  		property.type = _propertyRegion
+  		property.region = _propertyRegion
   		return property
   	})
   	
