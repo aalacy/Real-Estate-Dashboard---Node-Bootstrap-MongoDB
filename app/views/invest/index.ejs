@@ -10,173 +10,278 @@
     <!-- MAIN CONTENT
     ================================================== -->
     <div class="main-content">
+      <div class="header ">
+        <div class="container">
+          <div class="header-body">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Title -->
+                <h1 class="header-title">
+                  Invest
+                </h1>
 
-      <div class="container">
-          <div class="col-12">
-            <!-- Header -->
-            <div class="header mt-md-5">
-              <div class="header-body">
-                <div class="row align-items-center">
-                  <div class="col">
+              </div>
+              <div class="col-auto">
+              
+                <!-- Button -->
+                <!-- <a href="#" class="btn btn-primary lift">
+                  Preferences
+                </a> -->
+                <button class="btn btn-primary" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  Preferences
+                </button>
+                <form id="invest-filter" class="dropdown-menu dropdown-menu-right dropdown-menu-card" x-placement="bottom-end" >
+                  <div class="card-header">
+
                     <!-- Title -->
-                    <h1 class="header-title">
-                      Invest
-                    </h1>
+                    <h4 class="card-header-title">
+                      Filters
+                    </h4>
 
-                  </div>
-  	              <div class="col-auto">
-                  
-  	                <!-- Button -->
-  	                <!-- <a href="#" class="btn btn-primary lift">
-  	                  Preferences
-  	                </a> -->
-                    <button class="btn btn-primary" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                      Preferences
+                    <!-- Link -->
+                    <button class="btn btn-sm btn-link text-reset d-none" type="reset">
+                      <small>Clear filters</small>
                     </button>
-                    <form id="invest-filter" class="dropdown-menu dropdown-menu-right dropdown-menu-card" x-placement="bottom-end" >
-                      <div class="card-header">
 
-                        <!-- Title -->
-                        <h4 class="card-header-title">
-                          Filters
-                        </h4>
-
-                        <!-- Link -->
-                        <button class="btn btn-sm btn-link text-reset d-none" type="reset">
-                          <small>Clear filters</small>
-                        </button>
-
-                      </div>
-                      <div class="card-body">
-
-                        <!-- List group -->
-                        <div class="list-group list-group-flush mt-n4 mb-4" data-select2-id="23">
-                          <div class="list-group-item">
-                            <div class="row">
-                              <div class="col">
-
-                                <!-- Text -->
-                                <small>Category</small>
-
-                              </div>
-                              <div class="col-auto">
-
-                                <!-- Select -->
-                                <select id="investCategory" class="custom-select custom-select-sm select2-selection" name="invest[category]" data-toggle="select" data-options="{&quot;minimumResultsForSearch&quot;: -1}"  tabindex="-1" aria-hidden="true">
-                                  <option value="*">Any</option>
-                                  <% _propertyList.forEach(list => {%>
-                                    <option value="<%=list.value%>"><%=list.text%></option>
-                                  <% }) %>
-                                </select>
-                              </div>
-                            </div> <!-- / .row -->
-                          </div>
-                          <div class="list-group-item">
-                            <div class="row">
-                              <div class="col">
-
-                                <!-- Text -->
-                                <small>Type</small>
-
-                              </div>
-                              <div class="col-auto" data-select2-id="20">
-
-                                <!-- Select -->
-                                <select class="custom-select custom-select-sm select2-selection" id="investType" name="invest[type]" data-toggle="select" data-options='{&quot;minimumResultsForSearch&quot;: -1}' tabindex="-1" aria-hidden="true">
-                                  <option value="*">Any</option>
-                                  <option value="Detached house">Detached House</option>
-                                  <option value="Semi-detached house">Semi Detached House</option>
-                                  <option value="Terraced house">Terraced House</option>
-                                  <option value="Flat">Flat</option>
-                                </select>
-                              </div>
-                            </div> <!-- / .row -->
-                          </div>
-                          <div class="list-group-item">
-                            <div class="row">
-                              <div class="col">
-                                <small>Price range</small>
-
-                              </div>
-                              <div class="col-auto">
-
-                                <!-- Select -->
-                                <select id="investPrice" class="custom-select custom-select-sm select2-selection" name="invest[price]" data-toggle="select" data-options="{&quot;minimumResultsForSearch&quot;: -1}"  tabindex="-1" aria-hidden="true">
-                                  <option value="*">Any</option>
-                                  <option value="Under £50,000">Under £50,000</option>
-                                  <option value="£50,000 - £100,000">£50,000 - £100,000</option>
-                                  <option value="£100,000 - £200,000">£100,000 - £200,000</option>
-                                  <option value="Over £200,000">Over £200,000</option>
-                                </select>
-                              </div>
-                            </div> <!-- / .row -->
-                          </div>
-                        </div>
-
-                        <!-- Button -->
-                        <button class="btn btn-block btn-primary" type="submit">
-                          Apply filter
-                        </button>
-
-                      </div>
-                    </form>
-  	              </div>
-                </div> <!-- / .row -->
-				        <div class="row align-items-center">
-		              <div class="col">
-
-		                <!-- Nav -->
-		                <ul class="nav nav-tabs nav-overflow header-tabs">
-		                  <li class="nav-item">
-		                    <a href="#browse" data-toggle="tab" role="tab" aria-controls="browse" aria-selected="true"  class="nav-link active">
-		                      Browse
-		                    </a>
-		                  </li>
-		                  <li class="nav-item">
-		                    <a href="#shortlist" data-toggle="tab" role="tab" aria-controls="shortlist" aria-selected="true"  class="nav-link">
-		                      Your Shortlist
-							             <span class="badge badge-pill badge-soft-secondary invest-short-cnt"></span>
-		                    </a>
-		                  </li>
-		                </ul>
-		              </div>
-		            </div>
-              </div>
-            </div>
-		    </div>
-        <div class="container mb-4">
-          <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade active show" id="browse" role="tabpanel" aria-labelledby="browse-tab">
-              <div class="row">
-                <div class="col-12">
-                  <div class="card">
-                    <div class="card-body">
-                      <ul class="list-group list-group-lg list-group-flush list my-n4 invest-list">
-                      </ul>
-                    </div>
                   </div>
-                </div>
-              </div>
-              <ul id="investPagination" class="pagination-md mt-5 justify-content-end"></ul>
-            </div>
-            <div class="tab-pane fade" id="shortlist" role="tabpanel" aria-labelledby="shortlist-tab">
-              <div class="row">
-                <div class="col-12">
-                  <div class="card">
-                    <div class="card-body">
-                      <ul class="list-group list-group-lg list-group-flush list my-n4 invest-short-list">
-                      </ul>
+                  <div class="card-body">
+
+                    <!-- List group -->
+                    <div class="list-group list-group-flush mt-n4 mb-4" data-select2-id="23">
+                      <div class="list-group-item">
+                        <div class="row">
+                          <div class="col">
+
+                            <!-- Text -->
+                            <small>Category</small>
+
+                          </div>
+                          <div class="col-auto">
+
+                            <!-- Select -->
+                            <select id="investCategory" class="custom-select custom-select-sm select2-selection" name="invest[category]" data-toggle="select" data-options="{&quot;minimumResultsForSearch&quot;: -1}"  tabindex="-1" aria-hidden="true">
+                              <option value="*">Any</option>
+                              <% _propertyList.forEach(list => {%>
+                                <option value="<%=list.value%>"><%=list.text%></option>
+                              <% }) %>
+                            </select>
+                          </div>
+                        </div> <!-- / .row -->
+                      </div>
+                      <div class="list-group-item">
+                        <div class="row">
+                          <div class="col">
+
+                            <!-- Text -->
+                            <small>Type</small>
+
+                          </div>
+                          <div class="col-auto" data-select2-id="20">
+
+                            <!-- Select -->
+                            <select class="custom-select custom-select-sm select2-selection" id="investType" name="invest[type]" data-toggle="select" data-options='{&quot;minimumResultsForSearch&quot;: -1}' tabindex="-1" aria-hidden="true">
+                              <option value="*">Any</option>
+                              <option value="Detached house">Detached House</option>
+                              <option value="Semi-detached house">Semi Detached House</option>
+                              <option value="Terraced house">Terraced House</option>
+                              <option value="Flat">Flat</option>
+                            </select>
+                          </div>
+                        </div> <!-- / .row -->
+                      </div>
+                      <div class="list-group-item">
+                        <div class="row">
+                          <div class="col">
+                            <small>Price range</small>
+
+                          </div>
+                          <div class="col-auto">
+
+                            <!-- Select -->
+                            <select id="investPrice" class="custom-select custom-select-sm select2-selection" name="invest[price]" data-toggle="select" data-options="{&quot;minimumResultsForSearch&quot;: -1}"  tabindex="-1" aria-hidden="true">
+                              <option value="*">Any</option>
+                              <option value="Under £50,000">Under £50,000</option>
+                              <option value="£50,000 - £100,000">£50,000 - £100,000</option>
+                              <option value="£100,000 - £200,000">£100,000 - £200,000</option>
+                              <option value="Over £200,000">Over £200,000</option>
+                            </select>
+                          </div>
+                        </div> <!-- / .row -->
+                      </div>
                     </div>
+
+                    <!-- Button -->
+                    <button class="btn btn-block btn-primary" type="submit">
+                      Apply filter
+                    </button>
+
                   </div>
-                </div>
+                </form>
               </div>
-              <ul id="investShortlistPagination" class="pagination-md mt-5 justify-content-end"></ul>
+            </div> <!-- / .row -->
+		        <div class="row align-items-center">
+              <div class="col">
+
+                <!-- Nav -->
+                <ul class="nav nav-tabs nav-overflow header-tabs">
+                  <li class="nav-item">
+                    <a href="#browse" data-toggle="tab" role="tab" aria-controls="browse" aria-selected="true"  class="nav-link active">
+                      Browse
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#shortlist" data-toggle="tab" role="tab" aria-controls="shortlist" aria-selected="true"  class="nav-link">
+                      Your Shortlist
+					             <span class="badge badge-pill badge-soft-secondary invest-short-cnt"></span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div> 
+	    </div>
+      <div class="container mb-4">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade active show" id="browse" role="tabpanel" aria-labelledby="browse-tab">
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="row align-items-center">
+                      <div class="col">
+                        <h4 class="card-header-title mb-2 invest-header">
+                          Properties
+                        </h4>
+                      </div>
+                      <div class="col-auto mr-3">
+                        <select class="custom-select custom-select-sm form-control-flush select2-hidden-accessible" id="sortInvest" data-toggle="select" data-options='{&quot;minimumResultsForSearch&quot;: -1}' tabindex="-1" aria-hidden="true">
+                          <option value="Sort: Highest Price" selected>Sort: Highest Price</option>
+                          <option value="Sort: Highest Price">Sort: Lowest Price</option>
+                        </select>
+                      </div>
+                      <div class="col-auto">
+                        <div class="dropdown">
+                          <button class="btn btn-text btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <i class="fe fe-sliders mr-1"></i> Filter
+                          </button>
+                          <form id="invest-filter" class="dropdown-menu dropdown-menu-right dropdown-menu-card" x-placement="bottom-end" >
+                            <div class="card-header">
 
+                              <!-- Title -->
+                              <h4 class="card-header-title">
+                                Filters
+                              </h4>
+
+                              <!-- Link -->
+                              <button class="btn btn-sm btn-link text-reset d-none" type="reset">
+                                <small>Clear filters</small>
+                              </button>
+
+                            </div>
+                            <div class="card-body">
+
+                              <!-- List group -->
+                              <div class="list-group list-group-flush mt-n4 mb-4" data-select2-id="23">
+                                <div class="list-group-item">
+                                  <div class="row">
+                                    <div class="col">
+
+                                      <!-- Text -->
+                                      <small>Category</small>
+
+                                    </div>
+                                    <div class="col-auto">
+
+                                      <!-- Select -->
+                                      <select id="investCategory" class="custom-select custom-select-sm select2-selection" name="invest[category]" data-toggle="select" data-options="{&quot;minimumResultsForSearch&quot;: -1}"  tabindex="-1" aria-hidden="true">
+                                        <option value="*">Any</option>
+                                        <% _propertyList.forEach(list => {%>
+                                          <option value="<%=list.value%>"><%=list.text%></option>
+                                        <% }) %>
+                                      </select>
+                                    </div>
+                                  </div> <!-- / .row -->
+                                </div>
+                                <div class="list-group-item">
+                                  <div class="row">
+                                    <div class="col">
+
+                                      <!-- Text -->
+                                      <small>Type</small>
+
+                                    </div>
+                                    <div class="col-auto" data-select2-id="20">
+
+                                      <!-- Select -->
+                                      <select class="custom-select custom-select-sm select2-selection" id="investType" name="invest[type]" data-toggle="select" data-options='{&quot;minimumResultsForSearch&quot;: -1}' tabindex="-1" aria-hidden="true">
+                                        <option value="*">Any</option>
+                                        <option value="Detached house">Detached House</option>
+                                        <option value="Semi-detached house">Semi Detached House</option>
+                                        <option value="Terraced house">Terraced House</option>
+                                        <option value="Flat">Flat</option>
+                                      </select>
+                                    </div>
+                                  </div> <!-- / .row -->
+                                </div>
+                                <div class="list-group-item">
+                                  <div class="row">
+                                    <div class="col">
+                                      <small>Price range</small>
+
+                                    </div>
+                                    <div class="col-auto">
+
+                                      <!-- Select -->
+                                      <select id="investPrice" class="custom-select custom-select-sm select2-selection" name="invest[price]" data-toggle="select" data-options="{&quot;minimumResultsForSearch&quot;: -1}"  tabindex="-1" aria-hidden="true">
+                                        <option value="*">Any</option>
+                                        <option value="Under £50,000">Under £50,000</option>
+                                        <option value="£50,000 - £100,000">£50,000 - £100,000</option>
+                                        <option value="£100,000 - £200,000">£100,000 - £200,000</option>
+                                        <option value="Over £200,000">Over £200,000</option>
+                                      </select>
+                                    </div>
+                                  </div> <!-- / .row -->
+                                </div>
+                              </div>
+
+                              <!-- Button -->
+                              <button class="btn btn-block btn-primary" type="submit">
+                                Apply filter
+                              </button>
+
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-group list-group-lg list-group-flush list my-n4 invest-list">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul id="investPagination" class="pagination-md mt-5 justify-content-end"></ul>
+          </div>
+          <div class="tab-pane fade" id="shortlist" role="tabpanel" aria-labelledby="shortlist-tab">
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <ul class="list-group list-group-lg list-group-flush list my-n4 invest-short-list">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul id="investShortlistPagination" class="pagination-md mt-5 justify-content-end"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <!-- JAVASCRIPT
     ================================================== -->
     <% include ../partials/scripts %>
