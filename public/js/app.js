@@ -370,9 +370,9 @@ function doPopulate() {
   }
 
   // const populate property list for select2 dropdown
-  const populatePropertyDropdown = async () => {
+  const populatePropertyDropdown = async (callback) => {
     const token = $('meta[name="csrf"]').attr('content');
-    const res = await fetch('/property/all', {
+    fetch('/property/all', {
         credentials: 'same-origin', // <-- includes cookies in the request
         headers: {
             'CSRF-Token': token, 
@@ -380,18 +380,24 @@ function doPopulate() {
         },
     })
     .then(response => response.json())
+    .then(res => {
+      if (res.status == 'ok') {
+        properties = res.properties
+        properties.map(property => {
+          var property_name = property.address + ', ' + property.city;
+          var option = new Option(property_name, property.id, true, true);
+          $('.property-filter').append(option);
+        });
+
+        if (callback) {
+          callback()
+        }
+      }
+    })
     .catch(error => {
       console.log(error);
     });
 
-    if (res.status == 'ok') {
-      properties = res.properties
-      properties.map(property => {
-        var property_name = property.address + ', ' + property.city;
-        var option = new Option(property_name, property.id, true, true);
-        $('.property-filter').append(option);
-      });
-    }
   }
 
   // property filter in transaction
@@ -2173,23 +2179,6 @@ $(function() {
     // Clear unit selection on modal
     $('.clear-unit-selection').click(function(e) {
       $('.unit-filter').val(null).trigger('change')
-    });
-
-    $('.document_tag').select2({
-      tags: true,
-      createTag: function (params) {
-        var term = $.trim(params.term);
-
-        if (term === '') {
-          return null;
-        }
-
-        return {
-          id: term,
-          text: term,
-          newTag: true // add additional parameters
-        }
-      }
     });
 
     $(document).on('click', '.modal-upload', async function(e) {

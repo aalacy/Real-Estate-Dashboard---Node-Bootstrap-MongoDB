@@ -155,10 +155,12 @@
                         </h4>
                       </div>
                       <div class="col-auto mr-3">
-                        <select class="custom-select custom-select-sm form-control-flush select2-hidden-accessible" id="sortInvest" data-toggle="select" data-options='{&quot;minimumResultsForSearch&quot;: -1}' tabindex="-1" aria-hidden="true">
-                          <option value="Sort: Highest Price" selected>Sort: Highest Price</option>
-                          <option value="Sort: Highest Price">Sort: Lowest Price</option>
-                        </select>
+                        <form>
+                        <select id="investSort" class="custom-select custom-select-sm form-control-flush" data-toggle="select" data-options='{"minimumResultsForSearch": -1}'>
+                            <option value="highestSort" selected>Sort: Highest Price</option>
+                            <option value="lowestSort">Sort: Lowest Price</option>
+                          </select>
+                        </form>
                       </div>
                       <div class="col-auto">
                         <div class="dropdown">

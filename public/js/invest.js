@@ -58,7 +58,7 @@ const doInvestPaginate = () => {
 }
 
 const doShortlistPaginate = () => {
-	_doPaginate({ items: shortLists, paginationId: '#investShortlistPagination', itemClass: '.invest-short-list .list-group-item'})
+	_doPaginate({ items: myShortLists, paginationId: '#investShortlistPagination', itemClass: '.invest-short-list .list-group-item'})
 }
 
 const displayInvestData = ({ data, listClass, type }) => {
@@ -85,7 +85,7 @@ const displayInvestData = ({ data, listClass, type }) => {
 			<li class="list-group-item invest-item px-0 page${page}">
                 <div class="row align-items-center">
                   <div class="col-auto">
-                    <a href="/uploads/file-1591342555538.csv" class="avatar avatar-xl avatar-4by3" target="_blank">
+                    <a href="/uploads/file-1591342555538.csv" class="avatar avatar-xxl avatar-4by3" target="_blank">
                       <img class="avatar-title rounded" src="/img/avatars/projects/single.png" alt="10019 S Hoover St APT 4, Los Angeles, CA 90044" aria-hidden="false">
                     </a>
                   </div>
@@ -95,7 +95,7 @@ const displayInvestData = ({ data, listClass, type }) => {
                         ${invest.address}
                       </a>
                     </h4>
-                    <p class="card-text small mb-2">
+                    <p class="card-text small mb-3">
                       <b>£${toComma(invest.price)}</b><span class="text-muted mx-3">●</span><b>${invest.bedrooms} bed ${invest.type}</b>
                     </p>
                     <p class="card-text">
@@ -222,7 +222,17 @@ $(function() {
       type: $('#investType').val(),
       price: $('#investPrice').val()
     }
-    console.log(investFilter)
+    manageInvestData()
+  })
+
+  // sort filter
+  $('#investSort').on('select2:select', function (e) {
+    if (e.params.data.id == 'highestSort') {
+      invests.sort((a, b) => b.price - a.price)
+    } else if (e.params.data.id == 'lowestSort') {
+      invests.sort((a, b) => a.price - b.price)
+    }
+
     manageInvestData()
   })
 })

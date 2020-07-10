@@ -101,7 +101,7 @@ exports.index = async function(req, res) {
 
 // get the all the invests and shortlist data
 exports.all = async (req, res) => {
-	const invests = await Invests.find({}, {_id: 0})
+	const invests = await Invests.find({}, {_id: 0}).sort({ price: -1 })
 	let shortListIds = await Investshorts.find({}, {_id: 0})
 	shortListIds = shortListIds.map(ids => ids.invest_id)
 	const shortLists = await Invests.find({ id: {$in: shortListIds} }, {_id: 0})
