@@ -1343,7 +1343,7 @@
                       <div class="col-12 col-md-4 text-center border-right">
                         <h6 class="card-title text-muted text-uppercase mt-2">Net Yield</h6>
                         <span class="h1 first-net-yield">
-                        <%=net_yield%> %  
+                        <%=net_yield%>%  
                         </span>
                       </div>
                       <div class="col-12 col-md-4 text-center">
@@ -1351,7 +1351,7 @@
                           Local Average
                         </h6>
                         <span class="h1">
-                         N/A
+                         <%=property.average_yield ? property.average_yield + '%' : 'N/A'%>
                         </span>
                       </div>
                     </div>

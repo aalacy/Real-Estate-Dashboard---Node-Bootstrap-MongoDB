@@ -76,6 +76,25 @@ const calcRentalYield = function(purchase_price, rental_income) {
 }
 
 const ESTIMATE_CRON_INTERVAL = '0 0 0 */30 * *'
+// Cron function to get the average gross yield for the property
+const yieldCron = async (property_id) => {
+  const property = await Properties.findOne({id: property_id}, {_id: 0})
+  if (property.yield_cron_run_date == moment().format('YYYY-MM-DD') && property.bedrooms > 0) {
+    const yieldUrl = `https://api.propertydata.co.uk/yields?key=${process.env.PROPERTYDATA_API_KEY}&postcode=${property.zip.replace(' ', '')}&bedrooms=${property.bedrooms}`
+    const est_res = await request({ uri: yieldUrl, json: true }).catch(e => {
+      console.log('yieldUrl', e)
+    });
+
+    if (est_res.status == 'success') {
+      estimate_cron_run_date = moment().add(30, 'days').format('YYYY-MM-DD')
+      average_yield = est_res.data.long_let.gross_yield.replace('%', '')
+      const res = await Properties.updateOne({ id: property.id }, {$set: { average_yield, estimate_cron_run_date}})
+        .catch(err => console.log('yieldUrl', err));
+    }
+  }
+}
+
+// Cron function to get the estimate value for the property
 const estimateValueCron = async (property_id) => {
   const property = await Properties.findOne({id: property_id}, {_id: 0})
   if (property.estimate_cron_run_date == moment().format('YYYY-MM-DD')) {
@@ -118,21 +137,24 @@ const estimatePropertyValue = async (property_id) => {
 exports._managePropertyEstimateCron = async () => {
   const properties = await Properties.find({})
   properties.map(property => {
-    if (property.estimate_cron_on) {
-      if (!cronManager.exists(property.id)) {
+    if (!cronManager.exists(property.id)) {
+      if (property.estimate_cron_on) {
         cronManager.add(property.id, ESTIMATE_CRON_INTERVAL, async () => { 
           await estimateValueCron(property.id)
         })
       }
-      cronManager.start(property.id);
+      if (property.yield_cron_on) {
+        cronManager.add(property.id, ESTIMATE_CRON_INTERVAL, async () => { 
+          await yieldCron(property.id)
+        })
+      }
     }
+    cronManager.start(property.id);
   })
-  console.log('_managePropertyEstimateCron', cronManager)
 }
 
 // create a cronjob to get the property estimate from api
 const managePropertyEstimateCron = async (property, estimate_cron_on=true) => {
-  console.log('managePropertyEstimateCron', cronManager)
   if (!estimate_cron_on) {
     if (cronManager.exists(property.id)) {
       cronManager.stop(property.id);
@@ -627,6 +649,7 @@ exports.updateData = async function(req, res) {
   Object.keys(property).map(key => {
     new_values['$set'][key] = property[key]
   })
+
   return Properties.updateOne({ id: property.id }, new_values).then( () => {
       res.json({
         status: 'Ok',
@@ -647,7 +670,7 @@ exports.update = async function(req, res) {
   
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
 
-  request({uri: address, json: true}).then( geo_data => {
+  request({uri: address, json: true}).then( async (geo_data) => {
     property.lat = geo_data.results[0].geometry.location.lat;
     property.lng = geo_data.results[0].geometry.location.lng;
     property.purchase_price = property.purchase_price.replace(/,/g, '') ? parseFloat(property.purchase_price.replace(/,/g, '')) : 0;
@@ -663,9 +686,14 @@ exports.update = async function(req, res) {
     console.log('missing_value', missing_value)
     if (!missing_value) {
       property.estimate_cron_run_date = moment().format('YYYY-MM-DD')
-      managePropertyEstimateCron(property)
+      await managePropertyEstimateCron(property)
     } else {
       property.estimate_cron_run_date = ''
+    }
+
+    if (property.bedrooms > 0) {
+      property.yield_cron_run_date = moment().format('YYYY-MM-DD')
+      await yieldCron(property.id)
     }
 
     const new_values = { $set: property };
