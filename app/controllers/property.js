@@ -233,7 +233,7 @@ exports.all = async function(req, res, next) {
         total_expenses += (amount)
       }
     })
-    property.type = PROPERTY_TYPE[property.type];
+    // property.type = PROPERTY_TYPE[property.type];
     let net_profit = total_income - Math.abs(total_expenses);
     const total_cost = total_income + Math.abs(total_expenses);
     const income_percent = (total_income/total_cost*100).toFixed(2);
@@ -385,7 +385,7 @@ exports.overview = async function(req, res) {
   empty_cnt = (11 - empty_cnt) / 11 * 100;
   empty_cnt = empty_cnt.toFixed(0);
 
-  property.type = PROPERTY_TYPE[property.type];
+  // property.type = PROPERTY_TYPE[property.type];
   property.construction_date = CONSTRUCTION_DATE[property.construction_date];
   property.outdoor_space = OUTDOOR_SPACE[property.outdoor_space];
   property.finish_quality = FINISH_QUALITY[property.finish_quality];
@@ -686,19 +686,23 @@ exports.update = async function(req, res) {
     console.log('missing_value', missing_value)
     if (!missing_value) {
       property.estimate_cron_run_date = moment().format('YYYY-MM-DD')
-      await managePropertyEstimateCron(property)
     } else {
       property.estimate_cron_run_date = ''
     }
 
     if (property.bedrooms > 0) {
       property.yield_cron_run_date = moment().format('YYYY-MM-DD')
-      await yieldCron(property.id)
     }
 
     const new_values = { $set: property };
 
-    return Properties.updateOne({ id: property.id }, new_values).then( () => {
+    return Properties.updateOne({ id: property.id }, new_values).then( async () => {
+      if (!missing_value) {
+        await estimateValueCron(property.id)(property)
+      }
+      if (property.bedrooms > 0) {
+        await yieldCron(property.id)
+      }
       res.redirect('/property/overview/' + property.id);
     }).catch(err => console.log(err));
 
@@ -1184,15 +1188,17 @@ exports.cron_estimate = async function(req, res) {
   let estimate_cron_run_date = ''
   console.log('cron', estimate_cron_on)
   let property = await Properties.findOne({ id: property_id})
+  property.estimate_cron_on = estimate_cron_on
   if (estimate_cron_on) {
-    await managePropertyEstimateCron(property, estimate_cron_on)
-    property = await estimatePropertyValue(property_id)
     property.estimate_cron_run_date = moment().format('YYYY-MM-DD')
   } else {
     property.estimate_cron_run_date = ''
   }
   const new_values = { $set: { estimate_cron_on, estimate_cron_run_date:property.estimate_cron_run_date } };
-  return Properties.updateOne({ id: property_id }, new_values).then((_property) => {
+  return Properties.updateOne({ id: property_id }, new_values).then(async (_property) => {
+    if (estimate_cron_on) {
+      await estimatePropertyValue(property_id)
+    }
     res.json({
       status: 200,
       message: 'Successfully done',

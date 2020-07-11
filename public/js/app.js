@@ -1522,6 +1522,7 @@ $(function() {
       $('.property-estimate-box').removeClass('d-none')
       $('.property-estimate-box-empty').removeClass('d-none')
       $('.property-estimate-box-missing-value').removeClass('d-none')
+      $('#property_current_value').val(toComma(property.current_value.toString()))
       if (is_missing) {
         $('.property-estimate-box').addClass('d-none')
         $('.property-estimate-box-empty').addClass('d-none')
@@ -1531,7 +1532,6 @@ $(function() {
         $('#estimatePropertyBtn').prop('checked', false);
       } else {
         $('.property-estimate-box-missing-value').addClass('d-none')
-        $('#property_current_value').val(toComma(property.current_value.toString()))
         if (property.estimate_cron_on) {
           $('#property_current_value').prop('readonly', true).addClass('form-control-appended')
           $('.property-current-value-append').removeClass('d-none')
@@ -1807,7 +1807,7 @@ $(function() {
                       ${property.address}, ${property.city}
                     </h4>
                     <p class="small text-muted mb-0">
-                      <time>${PROPERTY_TYPE[property.type]}</time>
+                      <time>${property.type}</time>
                     </p>
                   </div>
                 </div>
