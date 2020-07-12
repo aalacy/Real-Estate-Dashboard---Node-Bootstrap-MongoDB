@@ -153,7 +153,6 @@
                         </label>
                         <input type="text" id="property_zip" name="property[zip]" class="form-control" value="<%= property.zip%>">
                       </div>
-
                     </div>
                   </div> <!-- / .row -->
                 </div>
@@ -180,10 +179,10 @@
                         </label>
                         <select class="form-control" id="property_type" name="property[type]" data-toggle="select" data-options='{"placeholder": "Select a property type"}'>
                           <option></option>
-                          <option value="detached_house" <% if (property.type == 'detached_house'){ %><%='selected'%><%}%>>Detached House</option>
-                          <option value="semi-detached_house" <% if (property.type == 'semi-detached_house'){ %><%='selected'%><%}%>>Semi Detached House</option>
-                          <option value="terraced_house" <% if (property.type == 'terraced_house'){ %><%='selected'%><%}%>>Terraced House</option>
-                          <option value="flat" <% if (property.type == 'flat'){ %><%='selected'%><%}%>>Flat</option>
+                          <option value="Detached house" <% if (property.type == 'Detached house'){ %><%='selected'%><%}%>>Detached House</option>
+                          <option value="Semi-detached house" <% if (property.type == 'Semi-detached house'){ %><%='selected'%><%}%>>Semi Detached House</option>
+                          <option value="Terraced house" <% if (property.type == 'Terraced house'){ %><%='selected'%><%}%>>Terraced House</option>
+                          <option value="Flat" <% if (property.type == 'flat'){ %><%='selected'%><%}%>>Flat</option>
                         </select>
                         <div class="invalid-feedback">
                           Please select a type

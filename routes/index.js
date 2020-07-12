@@ -23,6 +23,7 @@ const home = require('../app/controllers/home');
 const property = require('../app/controllers/property');
 const transaction = require('../app/controllers/transaction');
 const service = require('../app/controllers/service');
+const invest = require('../app/controllers/invest');
 
 //POST new user route (optional, everyone has access)
 router.post('/signup', auth.optional, home.signup_post);
@@ -122,5 +123,11 @@ router.get('/services/instantValuations', service.instant_valuations);
 // contacts
 router.get('/contacts', property.contacts);
 router.get('/contacts/select/:property_id/:unit_id', property.select_tenant);
+
+// invest
+router.get('/invest', invest.index)
+router.get('/invest/all', invest.all)
+router.post('/invest/manage-short-list', invest.manageShortList)
+router.get('/invest/propertyListCron', invest.propertyListCron)
 
 module.exports = router;

@@ -46,10 +46,10 @@
     border-color: #007bff;
 }
 
-.select2.select2-container {
+/*.select2.select2-container {
     min-width: 144px;
 }
-
+*/
 .document-upload-image {
     height: 150px;
     background-size: contain;
@@ -323,9 +323,11 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
 
 .document-name {
     white-space: nowrap; 
-    max-width: 180px; 
+    /*max-width: 180px; */
     overflow: hidden;
     text-overflow: ellipsis; 
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .document-lg-name {
@@ -394,6 +396,10 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     width: 65px !important;
 }
 
+.avatar-xxl {
+    height: 6.125rem !important;
+}
+
 .marker {
     background-size: cover;
     width: 40px;
@@ -435,7 +441,7 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     padding: 1.5rem 1rem 0 1rem;
 }
 
-.yield-select + .select2.select2-container .select2-selection {
+/*.yield-select + .select2.select2-container .select2-selection {
     text-align: right;
     padding-right: 28px;
     border: none;
@@ -451,8 +457,28 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
 }
-
+*/
 .start-end-date-block {
     display: flex;
     align-items: center;
+}
+
+/* Invest */
+
+/*.like-icon {
+    opacity: 0;
+    transition: all .5s ease; 
+}
+
+.invest-item:hover .like-icon {
+    opacity: 1;
+}*/
+
+.invest-item:hover {
+    opacity: 0.95;
+}
+
+.red {
+    color: red;
+    -webkit-text-stroke: thick;
 }

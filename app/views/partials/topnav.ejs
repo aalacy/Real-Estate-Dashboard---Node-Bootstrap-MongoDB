@@ -97,7 +97,6 @@
 
         <!-- Menu -->
         <div class="dropdown-menu dropdown-menu-right">
-          <a href="/contacts" class="dropdown-item">My Contacts</a>
           <a href="/settings" class="dropdown-item">Settings</a>
 		      <a href="#" class="dropdown-item">Help</a>
           <hr class="dropdown-divider">
@@ -120,34 +119,44 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <a class="nav-link" href="/" id="topnavDashboards" role="button" aria-haspopup="true" aria-expanded="false">
-            Dashboard
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/property/my">
+            My Portfolio
           </a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle " href="#" id="topnavDocumentation" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            My Portfolio
+          <a class="nav-link dropdown-toggle " href="#" id="organize" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Organise
           </a>
-          <ul class="dropdown-menu" aria-labelledby="topnavDocumentation">
+          <ul class="dropdown-menu" aria-labelledby="organize">
             <li>
-              <a class="dropdown-item " href="/property/my">
-                Properties
+              <a class="dropdown-item" href="/property/tenancies">
+                Tenancies
               </a>
             </li>
             <li>
-              <a class="dropdown-item " href="/property/tenancies">
-                Tenancies
+              <a class="dropdown-item" href="/property/documents">
+                Documents
+              </a>
+            </li>
+            <li>
+              <a href="/contacts" class="dropdown-item">
+                Contacts
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/transaction/all">
+                Transactions
               </a>
             </li>
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/transaction/all"  role="button" aria-haspopup="true" aria-expanded="false">
-            Transactions
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/property/documents"  role="button" aria-haspopup="true" aria-expanded="false">
-            Documents
+          <a class="nav-link" href="/invest"  role="button" aria-haspopup="true" aria-expanded="false">
+            Invest
           </a>
         </li>
         <li class="nav-item">
@@ -155,12 +164,10 @@
             Services
           </a>
         </li>
-        
       </ul>
-
     </div>
 
-  </div> <!-- / .container -->
+  </div>
   </nav>
 
   <div class="toast d-none" role="alert" aria-live="assertive" aria-atomic="true">

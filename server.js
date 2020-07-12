@@ -44,6 +44,7 @@ require('./config/passport')(passport);
 require('./config/express')(app, passport);
 app.use(require('./routes'));
 const propertyController = require('./app/controllers/property');
+const investController = require('./app/controllers/invest');
 
 app.use(function(err, req, res, next) {
   console.log('server', err);
@@ -82,6 +83,9 @@ function listen() {
 
   // manage cron job for estimate value
   propertyController._managePropertyEstimateCron()
+
+  // get the property lists
+  // investController.propertyListCron()
 }
 
 function connect() {

@@ -16,11 +16,11 @@
     ================================================== -->
     <div class="main-content">
 
-      <!-- <input type="hidden" id="hidden_properties" value="<%= JSON.stringify(properties) %>"> -->
       <% include ../partials/modals %>
 
       <% include ./_document_header %>
       <% include ./_documents %>
+      <input type="hidden" id="hidden_properties" value="<%= JSON.stringify(properties) %>">
     </div>
     <!-- JAVASCRIPT
     ================================================== -->
@@ -28,9 +28,11 @@
 
     <script type="text/javascript">
       documents = $('#hidden_documents').val();
+      properties = $('#hidden_properties').val();
       items = []
       try {
         documents = JSON.parse(documents);
+        properties = JSON.parse(properties);
         items = documents;
       } catch(e) {}
 
@@ -46,7 +48,11 @@
         $('.filter-by-property').removeClass('d-none');
         var option = new Option('All Properties', 'all', true, true);
         $('#filterByProperty').append(option);
-        await populatePropertyDropdown ()
+        properties.map(property => {
+          var property_name = property.address + ', ' + property.city;
+          option = new Option(property_name, property.id, true, true);
+          $('#filterByProperty').append(option);
+        });
         if (doc_property && doc_category) {
           $('#filterByProperty').val(doc_property).trigger('change');
           $('.document-categories a').map( (x, el) => {
@@ -59,6 +65,7 @@
         } else {
           $('#filterByProperty').val('all').trigger('change');
         }
+        
       });
     </script>
 

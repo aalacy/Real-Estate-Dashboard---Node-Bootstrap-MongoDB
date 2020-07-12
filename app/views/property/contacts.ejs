@@ -139,22 +139,22 @@
 	             	<div class="card-body">
 		               	<div class="row align-items-center">
 			                 <div class="col-auto">
-			                   <a href="#" class="avatar">
+			                   <a href="#!" class="avatar edit-contact" data-contact="<%= JSON.stringify(contact)%>">
 			                     <img src="/img/avatars/profiles/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
 			                   </a>
 
 			                 </div>
 			                 <div class="col ml-n2">
 			                   <h4 class="mb-1">
-			                     <a href="#"><%= contact.first_name + ' ' + contact.last_name%></a>
+			                     <a href="#" class="edit-contact" data-contact="<%= JSON.stringify(contact)%>"><%= contact.first_name + ' ' + contact.last_name%></a>
 			                   </h4>
 			                   <p class="small text-muted mb-1">
 			                     <%= contact.email %>
 			                   </p>
 							   
-							   <span class="badge badge-soft-primary" data-toggle="tooltip" data-placement="bottom" title="<%= contact.type %>">
-								 <%= contact.type %>
-							   </span>
+        							   <span class="badge badge-soft-primary">
+        								 <%= contact.type %>
+        							   </span>
 			                 </div>
 		                 	<div class="col-auto">
 			                   	<div class="dropdown">
