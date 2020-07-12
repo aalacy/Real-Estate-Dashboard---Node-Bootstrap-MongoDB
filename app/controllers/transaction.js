@@ -20,7 +20,7 @@ exports.all = async function(req, res) {
   let contacts  = await Contacts.find({ user_id: user.id }, { _id: 0 });
 
   res.render('transaction/index', {
-    title: 'Avenue - Transactions',
+    title: 'Transactions | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
     properties,

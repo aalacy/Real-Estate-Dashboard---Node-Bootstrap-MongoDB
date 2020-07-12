@@ -285,7 +285,7 @@ exports.my = async function(req, res, next) {
   const { user } = req.session;
  
   res.render('property/myproperties', {
-    title: 'Avenue - MyProperties',
+    title: 'My Portfolio | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
   });
@@ -477,7 +477,7 @@ exports.overview = async function(req, res) {
   // const recentTrans = transactions.slice(4)
 
   res.render('property/overview', {
-    title: 'Avenue - Overview',
+    title: 'Property | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
     property,
@@ -519,7 +519,7 @@ exports.detail = async function(req, res) {
   const property = await Properties.findOne({ id: id }, { _id: 0 });
 
   res.render('property/detail', {
-    title: 'Avenue - Detail',
+    title: 'Edit Property | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
     property
@@ -528,7 +528,7 @@ exports.detail = async function(req, res) {
 
 exports.new = function(req, res) {
   res.render('property/new', {
-    title: 'Avenue - Add Property',
+    title: 'Add Property | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
   });
@@ -543,7 +543,7 @@ exports.review = async function(req, res) {
     property.lng = geo_data.results[0].geometry.location.lng;
   
     res.render('property/review', {
-      title: 'Avenue - Add Property',
+      title: 'Add Property | Avenue',
       // token: req.csrfToken(),
     token: 'req.csrfToken()',
       property: property
@@ -728,7 +728,7 @@ exports.documents = async function(req, res) {
   res.render('property/documents', {
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
-    title: 'Avenue - Documents',
+    title: 'Documents | Avenue',
     properties,
     documents
   });
@@ -857,7 +857,7 @@ exports.tenancies = async function(req, res) {
   res.render('property/tenancies', {
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
-    title: 'Avenue - Tenancies',
+    title: 'Tenancies | Avenue',
     properties,
     occupied_properties,
     vacant_properties,
@@ -1344,7 +1344,7 @@ exports.contacts = async function(req, res) {
   const contacts = await Contacts.find({ user_id: user.id }, {_id: 0})
 
    res.render('property/contacts', {
-    title: 'Avenue - Contacts',
+    title: 'Contacts | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
     contacts
@@ -1372,7 +1372,7 @@ exports.select_tenant = async function(req, res) {
   const contacts = await Contacts.find({ user_id: user.id, type: 'Tenant' }, {_id: 0})
 
    res.render('property/selecttenant', {
-    title: 'Avenue - Contacts',
+    title: 'Select Tenant | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
     contacts,

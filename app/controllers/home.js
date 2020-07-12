@@ -15,7 +15,7 @@ exports.signin = function(req, res) {
 
   console.log('-====', email)
   res.render('auth/signin', {
-    title: 'Avenue - Sign In',
+    title: 'Sign In | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
     email
@@ -97,7 +97,7 @@ exports.signin_post = async function(req, res, next) {
 
 exports.signup = function(req, res) {
   res.render('auth/signup', {
-    title: 'Avenue - Sign Up',
+    title: 'Sign Up | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
   });
@@ -175,7 +175,7 @@ exports.password_reset = function(req, res) {
   res.render('auth/password_reset', {
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
-    title: 'Avenue - Reset Password'
+    title: 'Reset Password - Avenue'
   });
 };
 
@@ -183,7 +183,7 @@ exports.password_recovery = function(req, res) {
   res.render('auth/password_recovery', {
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
-    title: 'Avenue - Recover Password'
+    title: 'Recover Password | Avenue'
   });
 };
 
@@ -273,7 +273,7 @@ exports.settings = async function(req, res) {
   res.render('auth/settings', {
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
-    title: 'Avenue - Settings',
+    title: 'Settings | Avenue',
     user: myuser
   });
 };
