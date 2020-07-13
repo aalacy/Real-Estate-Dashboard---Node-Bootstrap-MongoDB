@@ -91,7 +91,7 @@ exports.index = async function(req, res) {
   })
 
   res.render('invest/index', {
-    title: 'Avenue - Invest',
+    title: 'Invest | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
     _propertyList,

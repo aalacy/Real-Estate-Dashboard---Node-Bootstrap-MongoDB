@@ -139,7 +139,7 @@ exports.index = async function(req, res, next) {
   res.render('dashboard/index', {
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
-    title: 'Avenue - Dashboard',
+    title: 'Home | Avenue',
     username: current_user.first_name,
     properties: properties,
     portfolio_value,

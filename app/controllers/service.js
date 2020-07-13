@@ -16,7 +16,7 @@ exports.all = async function(req, res) {
   let cnt_enabled_properties = await Properties.find({user_id: user.id, estimate_cron_on: true }, { _id: 0 }).count();
 
   res.render('service/index', {
-    title: 'Avenue - Services',
+    title: 'Services | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
     cnt_enabled_properties
@@ -32,7 +32,7 @@ exports.instant_valuations = async function(req, res) {
   })
 
   res.render('service/valuations', {
-    title: 'Avenue - Services',
+    title: 'Property Analytics | Avenue',
     properties,
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
