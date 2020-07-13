@@ -63,7 +63,13 @@ const doShortlistPaginate = () => {
 
 const displayInvestData = ({ data, listClass, type }) => {
 	$(listClass).empty()
+
+  // get the filtered data
   const filteredData = applyInvestFilter(data) 
+
+  // update badge for filter button
+  updateFilterBadge()
+
 	filteredData.map((invest, idx) => {
 		let page = 0; 
 		if (idx % PAGE == 0) { 
@@ -206,6 +212,31 @@ const applyInvestFilter = (data) => {
   })
 }
 
+const updateFilterBadge = () => {
+  let filterCnt = 0
+  for (let filter in investFilter) {
+    if (investFilter[filter] != '*') {
+      filterCnt++
+    }
+  }
+  if (filterCnt) {
+    $('.invest-filter-cnt').removeClass('d-none').html(filterCnt)
+    $('.invest-clear-filter').removeClass('d-none')
+  } else {
+    $('.invest-clear-filter').addClass('d-none')
+    $('.invest-filter-cnt').addClass('d-none')
+  }
+}
+
+// Clear the filter
+const clearFilter = () => {
+  for (let filter in investFilter) {
+    investFilter[filter] = '*'
+  }
+
+  updateFilterBadge()
+}
+
 $(function() {
 	getInvestData()
 
@@ -234,5 +265,10 @@ $(function() {
     }
 
     manageInvestData()
+  })
+
+  // clear filter
+  $('.invest-clear-filter').click(() => {
+    clearFilter()
   })
 })
