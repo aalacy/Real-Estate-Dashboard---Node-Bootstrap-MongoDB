@@ -400,6 +400,12 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     height: 6.125rem !important;
 }
 
+.avatar-xxs {
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: .34167rem;
+}
+
 .marker {
     background-size: cover;
     width: 40px;
@@ -441,26 +447,21 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     padding: 1.5rem 1rem 0 1rem;
 }
 
-/*.yield-select + .select2.select2-container .select2-selection {
-    text-align: right;
-    padding-right: 28px;
-    border: none;
-}
-
-.select2.select2-container:after {
-    content: "";
-    position: absolute;
-    right: 10px;
-    top: 47%;
-    transform: translateY(-50%);
-    border-top: 5px solid #333;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-}
-*/
 .start-end-date-block {
     display: flex;
     align-items: center;
+}
+
+/* dropdown menu on hover */
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+  display: none;
+}
+
+.subhover:hover ~ .dropdown-menu, .dropdown-menu:hover {
+  display: block;
 }
 
 /* Invest */

@@ -80,9 +80,9 @@ const displayInvestData = ({ data, listClass, type }) => {
   	let feIcon = `<i class="fe fe-trash"></i>`
   	if (type == 'browse') {
   		if (myShortListIds.includes(invest.id)) {
-    		feIcon = `<i class="fe fe-heart red"></i>`
+    		feIcon = `<img src="/img/icons/active.svg" class="avatar avatar-xxs" alt="active"></img>`
   		} else {
-    		feIcon = `<i class="fe fe-heart"></i>`
+    		feIcon = `<img src="/img/icons/inactive.svg" class="avatar avatar-xxs" alt="inactive"></img>`
   		}
   	} 
     let category = invest.category.replace(/-/g, ' ').replace('properties', '').trim()
@@ -136,9 +136,8 @@ const getInvestData = (id) => {
     .then(function(res) {
       if (res.status == 200) {
       	invests = res.invests
-      	shortLists = res.shortLists
-      	myShortListIds = res.shortListIds
 
+        updateShortList(res)
       	manageInvestData()
       } 
     })
@@ -235,6 +234,11 @@ const clearFilter = () => {
   }
 
   updateFilterBadge()
+
+  // clear filter select
+  $('#investCategory').val('*').trigger('change')
+  $('#investType').val('*').trigger('change')
+  $('#investPrice').val('*').trigger('change')
 }
 
 $(function() {
