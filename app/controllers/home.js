@@ -110,7 +110,7 @@ exports.signup_post = async function(req, res) {
   console.log(req.body);
 
   if (!user.email) {
-    return res.status(200).json({
+    return res.status(422).json({
       errors: {
         status: 422,
         email: 'Email is required'
@@ -118,8 +118,8 @@ exports.signup_post = async function(req, res) {
     });
   }
 
-  if (!user.first_name || !user.last_name) {
-    return res.status(200).json({
+  if (!user.first_name) {
+    return res.status(422).json({
       errors: {
         status: 422,
         email: 'Username is required'
@@ -128,9 +128,8 @@ exports.signup_post = async function(req, res) {
   }
 
   const find_user = await Users.findOne({ email: user.email });
-  console.log(find_user);
   if (find_user) {
-    return res.status(200).json({
+    return res.status(422).json({
       status: 422,
       errors: {
         email: 'Email is already registered'
@@ -139,7 +138,7 @@ exports.signup_post = async function(req, res) {
   }
 
   if (!user.password) {
-    return res.status(200).json({
+    return res.status(422).json({
       status: 422,
       errors: {
         password: 'Password is required'
