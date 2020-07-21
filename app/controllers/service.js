@@ -19,7 +19,8 @@ exports.all = async function(req, res) {
     title: 'Services | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
-    cnt_enabled_properties
+    cnt_enabled_properties,
+    path: '/services'
   });
 }
 
@@ -36,5 +37,6 @@ exports.instant_valuations = async function(req, res) {
     properties,
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
+    path: '/services/instantValuations'
   });
 }

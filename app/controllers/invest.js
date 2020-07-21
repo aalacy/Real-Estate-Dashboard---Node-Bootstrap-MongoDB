@@ -95,7 +95,8 @@ exports.index = async function(req, res) {
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
     _propertyList,
-    propertyRegions
+    propertyRegions,
+    path: '/invest'
   });
 }
 

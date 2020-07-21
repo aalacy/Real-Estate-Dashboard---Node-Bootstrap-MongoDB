@@ -288,6 +288,7 @@ exports.my = async function(req, res, next) {
     title: 'My Portfolio | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
+    path: '/property/my'
   });
 };
 
@@ -506,7 +507,8 @@ exports.overview = async function(req, res) {
     net_yield,
     since_purchase,
     loan_to_value,
-    contacts
+    contacts,
+    path: '/property/overview'
   });
 };
 
@@ -522,7 +524,8 @@ exports.detail = async function(req, res) {
     title: 'Edit Property | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
-    property
+    property,
+    path: '/property/detail'
   });
 };
 
@@ -730,7 +733,8 @@ exports.documents = async function(req, res) {
     token: 'req.csrfToken()',
     title: 'Documents | Avenue',
     properties,
-    documents
+    documents,
+    path: '/property/documents'
   });
 };
 
@@ -864,7 +868,8 @@ exports.tenancies = async function(req, res) {
     all_tenancies,
     occupied_tenancies,
     vacant_tenancies,
-    contacts
+    contacts,
+    path: '/property/tenancies'
   });
 };
 
@@ -1347,7 +1352,8 @@ exports.contacts = async function(req, res) {
     title: 'Contacts | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
-    contacts
+    contacts,
+    path: '/contacts'
   });
 }
 

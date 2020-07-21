@@ -24,7 +24,8 @@ exports.all = async function(req, res) {
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
     properties,
-    contacts
+    contacts,
+    path: '/transaction/all'
   });
 }
 

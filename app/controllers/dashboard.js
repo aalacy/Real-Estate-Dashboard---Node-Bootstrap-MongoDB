@@ -154,6 +154,7 @@ exports.index = async function(req, res, next) {
     labels,
     badge_value,
     vacant_cnt,
+    path: '/'
   });
 };
 
