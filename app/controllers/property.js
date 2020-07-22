@@ -534,6 +534,7 @@ exports.new = function(req, res) {
     title: 'Add Property | Avenue',
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
+    path: '/property/new'
   });
 };
 

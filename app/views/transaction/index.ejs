@@ -5,7 +5,6 @@
 
   </head>
   <body>
-  <%- include('../partials/sidebar', {path}) %>
 
     <div class="modal  fade" id="modalAddNewTransaction" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="transaction">
@@ -42,7 +41,7 @@
                       To/From
                     </label>
                     <div class="col-lg-9 col-sm-12">
-                      <select class="form-control mb-3" id="transaction_user" data-toggle="select" name="transaction[user]" tabindex="-1" aria-hidden="true">
+                      <select class="custom-select mb-3" id="transaction_user" data-toggle="select" name="transaction[user]">
                         <option data-avatar-src="/img/avatars/profiles/no-avatar.png" data-select2-id="-1" value="-1">
                           No Contact
                          </option>
@@ -86,7 +85,7 @@
                       Property
                     </label>
                     <div class="col-lg-9 col-sm-12">
-                      <select class="form-control property-filter" id="transaction_property" name="transaction[property_id]" data-toggle="select"  data-options='{"placeholder": "Select a Property"}' required>
+                      <select class="custom-select property-filter" id="transaction_property" name="transaction[property_id]" data-toggle="select"  data-options='{"placeholder": "Select a Property"}' required>
                         <option></option>
                         <% properties.forEach(property => {%>
                         	<option value="<%= property.id%>"><%= property.address%>, <%= property.city%></option>
@@ -101,7 +100,7 @@
                       Unit
                     </label>
                     <div class="col-lg-9 col-sm-12 d-flex">
-                      <select class="form-control unit-filter no-unit" id="transaction_unit" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
+                      <select class="custom-select unit-filter no-unit" id="transaction_unit" data-toggle="select" data-options='{"placeholder": "Select a Unit"}'>
                         <option></option>
                       </select>  
                     </div>
@@ -112,7 +111,7 @@
                       Category
                     </label>
                     <div class="col-lg-9 col-sm-12">
-                      <select class="form-control" style="min-width: 250px;" name="transaction[category]" id="transaction_category" data-toggle="select" data-options='{"placeholder": "Select a Category", "width": "element"}'>
+                      <select class="custom-select" style="min-width: 250px;" name="transaction[category]" id="transaction_category" data-toggle="select" data-options='{"placeholder": "Select a Category", "width": "element"}'>
                         <option></option>
                       </select>  
                     </div>
@@ -132,7 +131,7 @@
                       Status
                     </label>
                     <div class="col-lg-9 col-sm-12">
-                      <select class="form-control" style="min-width: 250px;" name="transaction[status]" id="transaction_status" data-toggle="select" data-options='{"placeholder": "Has this transaction been paid?", "width": "element", "minimumResultsForSearch": "-1"}' required>
+                      <select class="custom-select" style="min-width: 250px;" name="transaction[status]" id="transaction_status" data-toggle="select" data-options='{"placeholder": "Has this transaction been paid?", "width": "element", "minimumResultsForSearch": "-1"}' required>
                         <option></option>
                         <option class="text-success" value="Paid">Paid</option>
                         <option class="text-danger" value="Due">Due</option>
@@ -206,6 +205,9 @@
       </div>
     </div>
 
+    <%- include('../partials/sidebar', {path}) %>
+
+
     <!-- MAIN CONTENT
     ================================================== -->
     <div class="main-content">
@@ -256,7 +258,7 @@
                   </div>
                   
                   <div class="col-12 col-md-3">
-                    <select class="form-control" style="min-width: 350px;" id="categoryFilter" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
+                    <select class="custom-select" style="min-width: 350px;" id="categoryFilter" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
                         <option></option>
                         <option value="All">All Categories</option>
                         <optgroup label="Income">
