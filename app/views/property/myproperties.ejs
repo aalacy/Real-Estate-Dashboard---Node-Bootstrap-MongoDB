@@ -7,9 +7,11 @@
     <body>
     <%- include('../partials/sidebar', {path}) %>
 
+
       <!-- MAIN CONTENT
     ================================================== -->
     <div class="main-content">
+      <%- include('../partials/topbar') %>
     
         <!-- HEADER -->
         <div class="header">
@@ -223,7 +225,7 @@
               right_value = property.operating_expense_ratio + '%';
           }
 
-          $('.property-list').append(`<div class="col-12 col-md-6 col-xl-4 property-block">
+          $('.property-list').append(`<div class="col-12 col-md-12 col-lg-6 col-xl-4 property-block">
               <div class="card p-relative">
                 <div class="row align-items-center badge-group">
                   <div class="col">

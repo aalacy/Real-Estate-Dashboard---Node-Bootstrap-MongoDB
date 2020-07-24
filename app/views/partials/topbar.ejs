@@ -1,0 +1,89 @@
+<nav class="navbar navbar-expand-md navbar-light d-none d-md-flex" id="topbar">
+  <div class="container-fluid">
+
+    <!-- Form -->
+    <form class="form-inline mr-4 d-none d-md-flex">
+      <div class="input-group input-group-flush input-group-merge" data-list='{"valueNames": ["name"]}'>
+
+        <!-- Input -->
+        <input type="search" class="form-control form-control-prepended  dropdown-toggle" id="property-search" placeholder="Search" aria-label="Search">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <i class="fe fe-search"></i>
+          </div>
+        </div>
+
+        <!-- Menu -->
+        <div class="dropdown-menu dropdown-menu-card"  id="property-search-list">
+          <div class="card-body">
+
+            <!-- List group -->
+            <div class="list-group list-group-flush list my-n3">
+              
+            </div>
+          
+          </div>
+        </div> <!-- / .dropdown-menu -->
+        
+      </div>
+    </form>
+
+    <!-- User -->
+    <div class="navbar-user">
+
+      <!-- Dropdown -->
+      <div class="dropdown mr-4 d-none d-md-flex">
+
+        <!-- Toggle -->
+        <a href="#" class="navbar-user-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="icon active">
+            <i class="fe fe-bell"></i>
+          </span>
+        </a>
+
+        <!-- Menu -->
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-card">
+          <div class="card-header">
+
+            <!-- Title -->
+            <h5 class="card-header-title">
+              Notifications
+            </h5>
+
+            <!-- Link -->
+            <a href="#!" class="small">
+              View all
+            </a>
+
+          </div> <!-- / .card-header -->
+          <div class="card-body">
+
+            <!-- List group -->
+            <div class="list-group list-group-flush list-group-activity my-n3">
+            </div>
+          </div>
+        </div> <!-- / .dropdown-menu -->
+      </div>
+
+      <!-- Dropdown -->
+      <div class="dropdown">
+
+        <!-- Toggle -->
+        <a href="#" class="avatar avatar-sm avatar-online dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img src="/img/avatars/profiles/avatar-1.jpg" alt="..." class="avatar-img rounded-circle" />
+        </a>
+
+        <!-- Menu -->
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sidebarIcon">
+          <a href="#" class="dropdown-item">Profile</a>
+          <a href="/settings" class="dropdown-item">Settings</a>
+          <hr class="dropdown-divider">
+          <a href="javascript:logout()" class="dropdown-item">Logout</a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</nav>

@@ -254,15 +254,6 @@ exports.password_reset_generate = async function(req, res) {
     } catch (err) {
       console.log('err', err);
     }
-    // sgMail.send(msg).then(res1 => {
-    //   console.log(res1);
-    //   res.json({
-    //     status: 200,
-    //     message: 'Successfully Generated'
-    //   });
-    // }).catch(err => {
-    //     console.log('------------ password_generate link error ------------', err);
-    // });
   }
 };
 
@@ -273,7 +264,8 @@ exports.settings = async function(req, res) {
     // token: req.csrfToken(),
     token: 'req.csrfToken()',
     title: 'Settings | Avenue',
-    user: myuser
+    user: myuser,
+    path: '/settings'
   });
 };
 
