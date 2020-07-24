@@ -18,7 +18,7 @@
     <% include ../partials/loan_modal %>
     <% include ../partials/modals %>
 
-     <div class="modal  fade" id="modalAddNewTransaction" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal  fade" id="modalAddNewTransaction" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="transaction">
         <form id="add-transaction-form" class="form-inline" method="post" action="/transaction/create">
           <input type="hidden" name="_csrf" value="<%= token %>">
@@ -321,7 +321,7 @@
       </div>
     </div>
 
-     <div class="modal  fade" id="modalEditUnitName" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal  fade" id="modalEditUnitName" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form method="post" action="/property/unit/edit/name">
           <input type="hidden" name="_csrf" value="<%= token %>">
@@ -537,7 +537,8 @@
   
     <!-- MAIN CONTENT  -->
     <div class="main-content">
-
+      <%- include('../partials/topbar') %>
+      
       <!-- HEADER -->
       <div class="header">
         <div class="container">

@@ -6,7 +6,7 @@
   <body>
     <%- include('../partials/sidebar', {path}) %>
 
-     <div class="modal fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="modalAddNewUnit" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <form id="add-unit-form" method="post" action="/property/unit/update">
           <input type="hidden" name="_csrf" value="<%= token %>">
@@ -286,7 +286,8 @@
     </div>
 
     <div class="main-content">
-
+      <%- include('../partials/topbar') %>
+      
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-12">

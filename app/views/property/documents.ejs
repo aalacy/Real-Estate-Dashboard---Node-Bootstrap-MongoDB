@@ -12,11 +12,12 @@
 
     <%- include('../partials/sidebar', {path}) %>
     
+    <% include ../partials/modals %>
+    
     <!-- MAIN CONTENT
     ================================================== -->
     <div class="main-content">
-
-      <% include ../partials/modals %>
+      <%- include('../partials/topbar') %>
 
       <% include ./_document_header %>
       <% include ./_documents %>

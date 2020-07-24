@@ -9,12 +9,12 @@
     ================================================== -->
     <% include ../partials/modals %>
 
-    <% include ../partials/topnav %>
+    <%- include('../partials/sidebar', {path}) %>
 
     <!-- MAIN CONTENT
     ================================================== -->
     <div class="main-content">
-
+      <%- include('../partials/topbar') %>
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-12 col-lg-10 col-xl-8">
