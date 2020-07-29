@@ -42,9 +42,10 @@
 
         doPaginate();
 
+        populatePropertyDropdown()
+
         const doc_property = localStorage.getItem('doc_property');
         const doc_category = localStorage.getItem('doc_category');
-
 
         $('.filter-by-property').removeClass('d-none');
         var option = new Option('All Properties', 'all', true, true);

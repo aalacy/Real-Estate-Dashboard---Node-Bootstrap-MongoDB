@@ -389,6 +389,8 @@ function doPopulate() {
           $('.property-filter').append(option);
         });
 
+        $('#filterByProperty').val(null).trigger('change');
+
         if (callback) {
           callback()
         }

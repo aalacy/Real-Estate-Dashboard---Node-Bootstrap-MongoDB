@@ -199,7 +199,7 @@
                     <label>
                       Tenant
                     </label>
-                    <select class="form-control mb-3 tenancy_tenants" data-toggle="select" name="tenants[]" multiple="multiple" tabindex="-1" aria-hidden="true">
+                    <select class="custom-select mb-3 tenancy_tenants" data-toggle="select" name="tenants[]" multiple="multiple" tabindex="-1" aria-hidden="true">
                       <% contacts.forEach(contact => {%>
                        <option data-avatar-src="/img/avatars/profiles/avatar-1.jpg" data-select2-id="<%=contact.id%>" value="<%=contact.id%>">
                          <%=contact.first_name%> <%=contact.last_name%>
