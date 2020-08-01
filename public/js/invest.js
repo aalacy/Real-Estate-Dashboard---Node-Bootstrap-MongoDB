@@ -7,7 +7,7 @@
 let invests = []
 let myShortLists = []
 let myShortListIds = []
-const PAGE = 25
+page_cnt = 25
 let investFilter = {
   category: '*',
   type: '*',
@@ -17,40 +17,6 @@ let investFilter = {
 const updateShortList = ({ id, type, shortLists, shortListIds}) => {
 	myShortListIds = shortListIds
 	myShortLists = shortLists
-}
-
-const _doPaginate = ({ items, paginationId, itemClass}) => {
-    try {
-      const pageCnt = Math.ceil(items.length / PAGE);
-      var visiblePageCnt = Math.min(PAGE, pageCnt);
-      $(paginationId).twbsPagination('destroy');
-      $(paginationId).twbsPagination({
-          totalPages: pageCnt,
-          // the current page that show on start
-          startPage: 1,
-          // maximum visible pages
-          visiblePages: 0,
-          initiateStartPageClick: true,
-          // template for pagination links
-          href: false,
-          // variable name in href template for page number
-          hrefVariable: '',
-          // Text labels
-          first: '',
-          prev: 'Prev',
-          next: 'Next',
-          last: '',
-          // carousel-style pagination
-          loop: false,
-          // callback function
-          onPageClick: function (event, page) {
-            $(itemClass).addClass('d-none');
-            $('.page'+page).removeClass('d-none');
-          },
-          // pagination Classes
-          paginationClass: 'pagination',
-      });
-    } catch(e) {}
 }
 
 const doInvestPaginate = () => {
@@ -72,10 +38,10 @@ const displayInvestData = ({ data, listClass, type }) => {
 
 	filteredData.map((invest, idx) => {
 		let page = 0; 
-		if (idx % PAGE == 0) { 
-      page = (parseInt(idx/PAGE) + 1)
+		if (idx % page_cnt == 0) { 
+      page = (parseInt(idx/page_cnt) + 1)
   	} else {
-      page = (parseInt(idx/PAGE) + 1) + ' d-none'
+      page = (parseInt(idx/page_cnt) + 1) + ' d-none'
   	}
   	let feIcon = `<i class="fe fe-trash"></i>`
   	if (type == 'browse') {

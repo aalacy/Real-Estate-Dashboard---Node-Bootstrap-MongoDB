@@ -5,7 +5,6 @@
 
   </head>
   <body>
-
     <div class="modal  fade" id="modalAddNewTransaction" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="transaction">
         <form id="add-transaction-form" class="form-inline" method="post" action="/transaction/create">
@@ -207,7 +206,6 @@
 
     <%- include('../partials/sidebar', {path}) %>
 
-
     <!-- MAIN CONTENT
     ================================================== -->
     <div class="main-content">
@@ -235,6 +233,28 @@
 				
               </div>
             </div> <!-- / .row -->
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Nav -->
+                <ul class="nav nav-tabs nav-overflow header-tabs"  role="tablist">
+                  <li class="nav-item">
+                    <a href="#all" data-toggle="tab" role="tab" aria-controls="all" aria-selected="true"  class="nav-link active">
+                      All transactions
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#paid" data-toggle="tab" role="tab" aria-controls="paid" aria-selected="true" class="nav-link">
+                      Paid
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#due" data-toggle="tab" role="tab" aria-controls="due" aria-selected="true" class="nav-link">
+                      Due
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div> 
         </div>
       </div> <!-- / .header -->
@@ -290,8 +310,8 @@
                   </div>
                   <button class="btn btn-outline-secondary transaction-multiple-btn mr-3">Select Multiple</button>
                   <button class="btn btn-outline-secondary transaction-multiple-finish-btn mr-sm-3  d-none">Finish</button>
-                  <button class="btn btn-white transaction-multiple-del-btn mr-sm-3"><i class="fe fe-trash"></i></button>
-                  <button class="btn btn-white" id="manageTransactions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-horizontal"></i></span>
+                  <button class="btn btn-white transaction-multiple-del-btn mr-sm-3 d-none"><i class="fe fe-trash"></i></button>
+                  <button class="btn btn-white d-none" id="manageTransactions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-horizontal"></i></span>
                   </button>
                   <div class="dropdown-menu transaction-dropdown" aria-labelledby="dropdownMenuButton">
                     <button class="dropdown-item transaction-multiple-paid-btn" data-status='Paid'>Mark as Paid</button>
@@ -303,90 +323,29 @@
               <div class="transaction-list">
               </div>
             </div>
-            <ul class="transactionPagination pagination-md mt-5 justify-content-end"></ul>
+            <ul id="allTransPagination" class="pagination-md mt-5 justify-content-end"></ul>
+          </div>
+          <div class="tab-pane fade" id="paid" role="tabpanel">
+            <div class="card" >
+              <div class="paid-transaction-list">
+              </div>
+            </div>
+            <ul id="paidTransPagination" class="pagination-md mt-5 justify-content-end"></ul>
+          </div>
+          <div class="tab-pane fade" id="due" role="tabpanel">
+            <div class="card" >
+              <div class="due-transaction-list">
+              </div>
+            </div>
+            <ul id="dueTransPagination" class="pagination-md mt-5 justify-content-end"></ul>
           </div>
         </div>
       </div>
     </div> <!-- / .row -->
-    <!-- JAVASCRIPT
-    ================================================== -->
+
+    <!-- JAVASCRIPT -->
     <input type="hidden" id="hidden_properties" value="<%= JSON.stringify(properties) %>">
     <% include ../partials/scripts %>
-
-    <script type="text/javascript">
-      properties = $('#hidden_properties').val();
-      try {
-        properties = JSON.parse(properties);
-      } catch(e) { properties = [];}
-
-      let query = ''
-
-
-    	$(function() {
-    		fetchTransactions(undefined, -1);
-
-        // setup properties filter
-        var option = new Option('All Properties', 'All', true, true);
-        $('#propertyFilter').append(option);
-        properties.map(property => {
-          var property_name = property.address + ', ' + property.city;
-          option = new Option(property_name, property.id, true, true);
-          $('#propertyFilter').append(option);
-        });
-        $('#propertyFilter').val('All').trigger('change');
-
-        $('#propertyFilter').on('select2:select', function (e) {
-          if (e.params.data.id == 'All') {
-            items = transactions;
-          } else {
-            items = transactions.filter(item => item.property_id == e.params.data.id);
-          }
-          displayTransactions();
-          setupPagination();
-        });
-
-        // multiple selection
-        $('.transaction-multiple-btn').click(function() {
-          $('.custom-checkbox').removeClass('d-none');
-          $('.transaction-multiple-finish-btn').removeClass('d-none');
-          
-          $('.transaction-multiple-del-btn').removeClass('d-none');
-          $(this).addClass('d-none');
-          $('.transaction-item .avatar-title').addClass('d-none');
-        })
-
-        $('.transaction-multiple-finish-btn').click(function(){
-          $('.transaction-multiple-btn').removeClass('d-none');
-          $('.transaction-item .avatar-title').removeClass('d-none');
-          $('.custom-checkbox').addClass('d-none');
-          $('.transaction-multiple-finish-btn').addClass('d-none');
-          $('.custom-control-input').prop('checked', false);
-        })
-
-        $('.tranaction-checkbox-all').click(function(e){
-          if ($('.tranaction-checkbox-all:checked').length) {
-            $('.tranaction-checkbox').prop('checked', true);
-            $('.transaction-multiple-del-btn').addClass('btn-danger').removeClass('btn-white');
-            $('#manageTransactions').addClass('btn-secondary').removeClass('btn-white');
-          } else {
-            $('.tranaction-checkbox').prop('checked', false);
-            $('.transaction-multiple-del-btn').removeClass('btn-danger').addClass('btn-white');
-            $('#manageTransactions').removeClass('btn-secondary').addClass('btn-white');
-          }
-          $(".selectedItems").html($('.tranaction-checkbox:checked').length);
-        });
-
-        $(document).on('click', '.tranaction-checkbox', function() {
-          $(".selectedItems").html($('.tranaction-checkbox:checked').length);
-          if ($('.tranaction-checkbox:checked').length) {
-            $('.transaction-multiple-del-btn').addClass('btn-danger').removeClass('btn-white');
-            $('#manageTransactions').addClass('btn-secondary').removeClass('btn-white');
-          } else {
-            $('.transaction-multiple-del-btn').removeClass('btn-danger').addClass('btn-white');
-            $('#manageTransactions').removeClass('btn-secondary').addClass('btn-white');
-          }
-        })
-      });
-    </script>
+    <script src="/js/transaction.js"></script>
   </body>
 </html>

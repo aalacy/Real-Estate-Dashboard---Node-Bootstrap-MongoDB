@@ -11,15 +11,47 @@ const PROPERTY_TYPE = {
     flat: 'Flat'
 };
 
-const page_cnt = 5;
+let page_cnt = 3;
 let items = [];
-let transactions = [];
-let cur_transaction;
 let documents = [];
 let properties = [];
 let keyDocuments = [];
 let units = [];
 let selected_doc_property_id = 'all';
+
+const _doPaginate = ({ items, paginationId, itemClass}) => {
+  try {
+    const pageCnt = Math.ceil(items.length / page_cnt);
+    var visiblePageCnt = Math.min(page_cnt, pageCnt);
+    $(paginationId).twbsPagination('destroy');
+    $(paginationId).twbsPagination({
+        totalPages: pageCnt,
+        // the current page that show on start
+        startPage: 1,
+        // maximum visible pages
+        visiblePages: 0,
+        initiateStartPageClick: true,
+        // template for pagination links
+        href: false,
+        // variable name in href template for page number
+        hrefVariable: '',
+        // Text labels
+        first: '',
+        prev: 'Prev',
+        next: 'Next',
+        last: '',
+        // carousel-style pagination
+        loop: false,
+        // callback function
+        onPageClick: function (event, page) {
+          $(itemClass).addClass('d-none');
+          $('.page'+page).removeClass('d-none');
+        },
+        // pagination Classes
+        paginationClass: 'pagination',
+    });
+  } catch(e) {}
+}
 
 const toComma = function(val) {
     if (val) {
@@ -103,6 +135,20 @@ const addContact = function(contact, unit, filter='Contact') {
 </div> 
 </div>`);
 }
+
+// transaction categories
+const income_categories = ['Rental Income', 'Deposit', 'Uncategorised'];
+const expenses_categories = ['Insurance', 'Repairs & Maintenance', 'Management Fees', 'Utilities', 'Tax', 'Legal', 'Mortgage or Loans', 'Deposit', 'Uncategorised'];
+const changeCategorySelection = (list) => {
+  $('#transaction_category').empty();
+  list.forEach(item => {
+      option = new Option(item, item, true, true);
+      $('#transaction_category').append(option);
+  })
+
+  $('#transaction_category').val(null);
+  $('#transaction_category').trigger('change');
+};
 
 // documents
 const showDocSubcategories = (category, subcategory) => {
@@ -399,7 +445,6 @@ function doPopulate() {
     .catch(error => {
       console.log(error);
     });
-
   }
 
   // property filter in transaction
@@ -847,105 +892,7 @@ const formatNumber = function(num) {
     return toComma(num)
 }
 
-// Display transactions
-const displayTransactions = (paginated=true, unit_id=-1) => {
-  $('.transaction-list').empty();
 
-  if (items.length) {
-    if (items.length == 1) {
-      $('.transaction-header').html('1 Transaction')
-    } else {
-      $('.transaction-header').html(items.length + ' Transactions')
-    }
-  } else {
-    $('.transaction-header').html('No Transactions')
-  }
-  
-  items.map( (transaction, idx) => {
-    if (idx % page_cnt == 0) { 
-      page = (parseInt(idx/page_cnt) + 1)
-    } else {
-      page = (parseInt(idx/page_cnt) + 1) + ' d-none'
-    }
-    if (!paginated) {
-      page = page.toString().replace(' d-none', '')
-    }
-    if (unit_id != -1 && unit_id != transaction.unit_id) {
-      return
-    }
-    const sign = parseFloat(transaction.amount) < 0;
-    let amount = '£' + toComma(transaction.amount.replace('-', ''));
-   
-    if (transaction.type == 'Out') {
-      amount = '-' + amount;
-    }
-    let avatar = '<svg style="opacity: 0.7;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><g class="nc-icon-wrapper"><path d="M21,0H3C2.4,0,2,0.4,2,1v22c0,0.6,0.4,1,1,1h18c0.6,0,1-0.4,1-1V1C22,0.4,21.6,0,21,0z M11,9h5v2h-5V9z M9,19H6v-2h3V19z M9,15H6v-2h3V15z M9,11H6V9h3V11z M9,7H6V5h3V7z M15,19h-4v-2h4V19z M18,15h-7v-2h7V15z M18,7h-7V5h7V7z"></path></g></svg>';
-    if (transaction.mimetype && transaction.mimetype.includes('image')) {
-      avatar = `<img src="/${transaction.path}" alt="document image preview" class="avatar" style="height: auto;"/>`;
-    }
-    const val = JSON.stringify(transaction);
-    const contact = transaction.username ? transaction.username : 'No Contact';
-    let status_color = 'text-success';
-    let status_text = 'Paid'
-    if (transaction.status != 'Paid') {
-      status_color = 'text-danger';
-      status_text = 'Due'
-    }
-    const status = `<span class="${status_color} font-weight-bold">${status_text}</span>`
-    $('.transaction-list').append(`
-      <div id="tranaction_${idx}" class="transaction-item list-group-item cursor-hand px-4 page${page}" data-val='${val}'>
-        <div class="col-auto avatar d-flex align-items-center">
-          <div class="custom-control custom-checkbox my-1 mr-sm-2 d-none">
-            <input type="checkbox" name="tranaction[id]" class="custom-control-input tranaction-checkbox" id="customCheck${idx}" value="${transaction.id}">
-            <label class="custom-control-label" for="customCheck${idx}"></label>
-          </div>
-          <div class="avatar-title rounded bg-white text-secondary">
-            ${avatar}
-          </div>  
-        </div>
-        <div class="col-lg-2 col-md-3 col-sm-4">
-          <div class="mb-1">${moment(transaction.created_at).format('DD MMM YYYY')}</div>
-          <div class="text-muted">Date</div>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-4">
-          <div class="mb-1">${contact}</div>
-          <div class="text-muted">${transaction.category}</div>
-        </div>
-        <div class="col-lg-4 col-md-5 col-sm-6">
-          <div class="mb-1">${transaction.propertyName}</div>
-          <div class="text-muted">Property</div>
-        </div>
-        <div class="col-lg-1 col-md-3 col-sm-6">
-          <div class="mb-1 font-weight-bold">${amount}</div>
-          <div class="text-muted">Amount</div>
-        </div>
-        <div class="ml-auto col-auto">
-          <div class="mb-1">${status}</div>
-          <div class="text-muted text-right">Status</div>
-        </div>
-        <div class="ml-auto col-auto d-flex align-items-center">
-          <span class="fe fe-chevron-right"></span>
-        </div>
-      </div>
-    `);
-  });
-}
-
-const clearTransactionModal = () => {
-  $('#addTransactionBtn').text('Add');
-  $('#transaction-modal-title').text('Add a New Transaction');
-  $('#modalAddNewTransaction').find('form').attr('action', '/transaction/create');
-  $('#modalAddNewTransaction input').val('');
-  $('#transaction_account').val('Manual Transaction');
-  $('#transaction_property').val(null).trigger('change')
-  $('#transaction_user').val(null).trigger('change')
-  $('#transaction_unit').val(null).trigger('change')
-  $('#transaction_category').val(null).trigger('change');
-  $('#transaction_status').val(null).trigger('change');
-  $('button.delete-transaction').addClass('d-none');
-  $('#modalAddNewTransaction .modal-footer').removeClass('justify-content-between');
-  $('#income_option').val('In').trigger('click');
-}
 
 const clearUnitModal = () => {
   $('.property-filter').val(null).trigger('change')
@@ -972,74 +919,6 @@ const clearDocumentModal = (exceptSelect=false) => {
   $('.unit-row').removeClass('d-none');
 }
 
-const setupPagination = () => {
-  try {
-    const pageCnt = Math.ceil(items.length / page_cnt);
-    var visiblePageCnt = Math.min(page_cnt, pageCnt);
-    $('.transactionPagination').twbsPagination('destroy');
-    $('.transactionPagination').twbsPagination({
-        totalPages: pageCnt,
-        // the current page that show on start
-        startPage: 1,
-        // maximum visible pages
-        visiblePages: 0,
-        initiateStartPageClick: true,
-        // template for pagination links
-        href: false,
-        // variable name in href template for page number
-        hrefVariable: '{{number}}',
-        // Text labels
-        first: '',
-        prev: 'Prev',
-        next: 'Next',
-        last: '',
-        // carousel-style pagination
-        loop: false,
-        // callback function
-        onPageClick: function (event, page) {
-          $('.transaction-list .list-group-item').addClass('d-none');
-          $('.page'+page).removeClass('d-none');
-        },
-        // pagination Classes
-        paginationClass: 'pagination',
-    });
-  } catch(e) {}
-}
-
-/*
-* Transactions
-*/
-
-// transaction categories
-const income_categories = ['Rental Income', 'Deposit', 'Uncategorised'];
-const expenses_categories = ['Insurance', 'Repairs & Maintenance', 'Management Fees', 'Utilities', 'Tax', 'Legal', 'Mortgage or Loans', 'Deposit', 'Uncategorised'];
-const changeCategorySelection = (list) => {
-  $('#transaction_category').empty();
-  list.forEach(item => {
-      option = new Option(item, item, true, true);
-      $('#transaction_category').append(option);
-  })
-
-  $('#transaction_category').val(null);
-  $('#transaction_category').trigger('change');
-};
-
-// fetch transaction data from server
-const fetchTransactions = (id=undefined, cnt=-1, paginated=true, unit_id=-1) => {
-  fetch(`/transaction/all/get/${id}/${cnt}`, {method: 'GET'})
-    .then(res => res.json())
-    .then(res => {
-      transactions = res.transactions;
-      items = transactions;
-      displayTransactions(paginated, unit_id)
-      if (paginated) {
-        setupPagination();
-      }
-    })
-    .catch(err => {
-        console.log(err);
-    })
-}
 
 // fetch all tenants
 const fetchAllTenants = async (ids, handler) => {
@@ -1879,222 +1758,6 @@ $(function() {
           console.log(err);
       })
     });
-
-    
-    // initialize the category with income
-    changeCategorySelection(income_categories);
-    
-    
-
-    $('input[name="transaction[type]"]').change(function(){
-      if ($(this)[0].id == "income_option") {
-        changeCategorySelection(income_categories);
-
-        // remove - sign from pound
-        $('.pound-sign').html('£');
-      } else {
-        changeCategorySelection(expenses_categories);
-
-        // add - sign to pound
-        $('.pound-sign').html('-£');
-      }
-
-      if (cur_transaction) {
-        $('#transaction_category').val(cur_transaction.category);
-        $('#transaction_category').trigger('change');
-      }
-    });
-
-    // filter by category in transactions
-    $('#categoryFilter').val('All').trigger('change');
-        $('#categoryFilter').on('select2:select', function (e) {
-          if (e.params.data.id == 'All') {
-            items = transactions;
-          } else {
-            items = transactions.filter(item => item.category == e.params.data.id);
-          }
-          displayTransactions();
-          setupPagination();
-        });
-
-    // Mark the seleted transactions into paid
-    $(document).on('click', '.transaction-multiple-paid-btn', function(e) {
-      e.preventDefault();
-      let ids = []
-      $.find('.tranaction-checkbox:checked').map((e) =>{
-        ids.push($(e).val())
-      })
-      if (ids < 1) {
-        $('.transaction-dropdown').toggleClass('show')
-        return;
-      }
-      var data = {
-        transaction: {
-          ids
-        },
-        status: $(this).data('status')
-      };
-      confirmDialog("Are you sure?", (ans) => {
-        if (ans) {
-          const token = $('input[name="_csrf"]').val();
-          fetch('/transaction/mark/paid', {
-              credentials: 'same-origin', // <-- includes cookies in the request
-              headers: {
-                  'CSRF-Token': token, 
-                  'Content-Type': 'application/json'
-              },
-              method: 'POST',
-              body: JSON.stringify(data)
-          })
-          .then(response => response.json())
-          .then(function(res) {
-            makeToast({message: res.message});
-
-            if (res.status == 200) {
-              location.href = '/transaction/all';
-            }
-          })
-          .catch(error => {
-              console.log(error);
-          }).
-          finally(() =>{
-            $('.transaction-dropdown').toggleClass('show')
-          });
-        }
-      });
-    });
-
-    // Delete selected transactions
-    $(document).on('click', '.transaction-multiple-del-btn', function(e) {
-      e.preventDefault();
-      let ids = []
-      $.find('.tranaction-checkbox:checked').map((e) =>{
-        ids.push($(e).val())
-      })
-      if (ids < 1) {
-        return;
-      }
-      var data = {
-        transaction: {
-          ids
-        }
-      };
-      confirmDialog("Are you sure?", (ans) => {
-        if (ans) {
-          const token = $('input[name="_csrf"]').val();
-          fetch('/transaction/delete', {
-              credentials: 'same-origin', // <-- includes cookies in the request
-              headers: {
-                  'CSRF-Token': token, 
-                  'Content-Type': 'application/json'
-              },
-              method: 'POST',
-              body: JSON.stringify(data)
-          })
-          .then(response => response.json())
-          .then(function(res) {
-            makeToast({message: res.message});
-
-            if (res.status == 200) {
-              location.href = '/transaction/all';
-            }
-          })
-          .catch(error => {
-              console.log(error);
-          });
-        }
-      });
-    });
-
-    $(document).on('click', '.delete-transaction', function(e) {
-      e.preventDefault();
-      const parent = $($('#current_transaction_item').val());
-      const ids= [$('#transaction_id').val()];
-      if (ids.length < 1) {
-        return;
-      }
-      var data = {
-        transaction: {
-          ids
-        }
-      };
-      var self = $(this);
-      confirmDialog("Are you sure?", (ans) => {
-        if (ans) {
-          const token = $('input[name="_csrf"]').val();
-          fetch('/transaction/delete', {
-              credentials: 'same-origin', // <-- includes cookies in the request
-              headers: {
-                  'CSRF-Token': token, 
-                  'Content-Type': 'application/json'
-              },
-              method: 'POST',
-              body: JSON.stringify(data)
-          })
-          .then(response => response.json())
-          .then(function(res) {
-            makeToast({message: res.message});
-
-            if (res.status == 200) {
-              parent.fadeOut( 1000, function() {
-                parent.remove();
-              });
-            }
-          })
-          .catch(error => {
-              console.log(error);
-          });
-        }
-      });
-    });
-
-    // action to select transaction item in transactions page
-    $(document).on('click', '.transaction-item', async function(e) {
-      if ($(e.target).hasClass('tranaction-checkbox') || $(e.target).hasClass('custom-control-label')) {
-        return;
-      }
-
-      $('#addTransactionBtn').text('Update');
-      $('#transaction-modal-title').text('Update Transaction');
-      const transaction = $(this).data('val');
-      cur_transaction = transaction;
-      const amount = Number(transaction.amount.replace(',', ''));
-      if (amount > 0) {
-        $('#modalAddNewTransaction #income_option').click();
-      } else {
-        $('#modalAddNewTransaction #expenses_option').click();
-      }
-      if (transaction.type == 'In') {
-        $('#income_option').click()
-      } else {
-        $('#expenses_option').click()
-      }
-      $('#modalAddNewTransaction').find('form').attr('action', '/transaction/edit');
-      $('#transaction_id').val(transaction.id);
-      $('#transaction_user').val(transaction.user).trigger('change');
-      $('#transaction_created_at').val(transaction.created_at);
-      $('#transaction_amount').val(toComma(amount.toString().replace('-','')));
-      $('#transaction_property').val(transaction.property_id).trigger('change');
-      await selectPropertyFilter(transaction.property_id)
-      $('#transaction_unit').val(transaction.unit_id).trigger('change');
-      $('.unit-filter').val(transaction.unit_id)
-      $('#transaction_category').val(transaction.category).trigger('change');
-      $('#transaction_status').val(transaction.status).trigger('change');
-      $('#transaction_account').val(transaction.account);
-      $('#transaction_note').val(transaction.note);
-      $('button.delete-transaction').removeClass('d-none');
-      $('#current_transaction_item').val('#'+$(this)[0].id)
-      $('#modalAddNewTransaction .modal-footer').addClass('justify-content-between');
-      $('#modalAddNewTransaction').modal()
-        .on('hidden.bs.modal', function() {
-          clearTransactionModal();
-        });
-    })
-
-    $('.show-transaction-modal').click(function (e) {
-      clearTransactionModal();
-      $('#modalAddNewTransaction').modal()
-    })
 
     /*
     *   Documents
