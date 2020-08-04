@@ -431,11 +431,12 @@ function doPopulate() {
         properties = res.properties
         properties.map(property => {
           var property_name = property.address + ', ' + property.city;
-          var option = new Option(property_name, property.id, true, true);
-          $('.property-filter').append(option);
+          option = new Option(property_name, property.id, true, true);
+          $('#document_property').append(option);
         });
 
         $('#filterByProperty').val(null).trigger('change');
+        $('#document_property').val(null).trigger('change');
 
         if (callback) {
           callback()

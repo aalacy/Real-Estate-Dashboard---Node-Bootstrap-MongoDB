@@ -149,7 +149,7 @@
                     <label>
                       Property
                     </label>
-                    <select class="form-control property-filter" name="property[id]" data-toggle="select" data-options='{"placeholder": "Select a property"}' required>
+                    <select class="custom-select property-filter" id="document_property" name="property[id]" data-toggle="select" data-options='{"placeholder": "Select a property"}' required>
                       <option></option>
                       
                     </select>
@@ -558,30 +558,31 @@
         
       }
       $(function(){
+        populatePropertyDropdown()
 
         // display property filter
-        var option = new Option('All Properties', 'all', true, true);
-        $('.tenancy-property-filter').append(option);
-        allProperties.map(property => {
-          var property_name = property.address + ', ' + property.city;
-          option = new Option(property_name, property.id, true, true);
-          $('.property-filter').append(option);
-          $('.tenancy-property-filter').append(option);
-        });
-        $('.tenancy-property-filter').val('all').trigger('change');
-        $('.property-filter').val('all').trigger('change');
+        // var option = new Option('All Properties', 'all', true, true);
+        // $('.tenancy-property-filter').append(option);
+        // allProperties.map(property => {
+        //   var property_name = property.address + ', ' + property.city;
+        //   option = new Option(property_name, property.id, true, true);
+        //   $('#docu').append(option);
+        //   // $('.tenancy-property-filter').append(option);
+        // });
+        // // $('.tenancy-property-filter').val('all').trigger('change');
+        // $('.property-filter').val('all').trigger('change');
 
         // Initialize
         displayAllTenancies();
 
-        $('.tenancy-property-filter').on('select2:select', function (e) {
-          if (e.params.data.id == 'all') {
-            items = properties;
-          } else {
-            items = properties.filter(item => item.id == e.params.data.id);
-          }
-          displayAllTenancies();
-        });
+        // $('.tenancy-property-filter').on('select2:select', function (e) {
+        //   if (e.params.data.id == 'all') {
+        //     items = properties;
+        //   } else {
+        //     items = properties.filter(item => item.id == e.params.data.id);
+        //   }
+        //   displayAllTenancies();
+        // });
 
         $('.unit-filter').on('select2:select', async function (e) {
           units.map(unit => {

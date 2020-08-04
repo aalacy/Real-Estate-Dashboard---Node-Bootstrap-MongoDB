@@ -27,11 +27,9 @@
                     <label>
                       Property
                     </label>
-                    <select class="custom-select" style="min-width: 350px;" id="document_property" data-toggle="select"  data-options='{"placeholder": "Select a Property", "width": "element"}' required>
+                    <select class="custom-select property-filter" style="min-width: 350px;" id="document_property" data-toggle="select"  data-options='{"placeholder": "Select a Property", "width": "element"}' required>
                       <option></option>
-                      <% properties.forEach(property => {%>
-                          <option value="<%= property.id%>"><%= property.address%>, <%= property.city%></option>
-                        <% }) %>
+                     
                     </select>  
                   </div>
                 </div>
