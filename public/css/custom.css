@@ -483,3 +483,8 @@ table.dataTable.table-sm th:last-child:before, table.dataTable.table-sm th:last-
     color: red;
     -webkit-text-stroke: thick;
 }
+
+.modal-header .close {
+    padding: 1rem 1.5rem;
+    margin: -1rem -1rem -1rem auto !important;
+}
