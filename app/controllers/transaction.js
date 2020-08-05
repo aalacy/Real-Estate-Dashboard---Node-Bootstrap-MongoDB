@@ -31,14 +31,16 @@ exports.all = async function(req, res) {
 
 exports.all_get = async function(req, res) {
   const { user } = req.session;
-  const { params: { id, cnt } } = req;
+  const { body: { property_id, unit_id, cnt }} = req;
 
   let transactions = []
-  if (id != undefined && cnt != -1) {
-    transactions = await Transactions.find({ user_id: user.id, property_id: id, type: 'In' }, { _id: 0 }).limit(Number(cnt));
+  if (property_id != undefined && cnt != -1 && unit_id != undefined) {
+    transactions = await Transactions.find({ user_id: user.id, property_id, unit_id, type: 'In' }, { _id: 0 }).limit(Number(cnt));
   } else {
     transactions = await Transactions.find({ user_id: user.id }, { _id: 0 });
   }
+
+  console.log(req.body)
 
   let contacts  = await Contacts.find({ user_id: user.id }, { _id: 0 });
 
@@ -90,8 +92,6 @@ exports.all_get = async function(req, res) {
 
 exports.create = async function(req, res) {
   const { body: { transaction, document } } = req;
-
-  console.log(transaction)
 
   const { user } = req.session;
 

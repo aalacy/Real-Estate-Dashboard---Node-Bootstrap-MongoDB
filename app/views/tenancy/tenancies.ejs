@@ -131,7 +131,7 @@
 
     <div class="modal  fade" id="modalAddNewUnitWithProperty" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
-        <form id="add-unit-with-property-form" method="post" action="/property/tenancies/new/">
+        <form id="add-unit-with-property-form" method="post" action="/tenancy/tenancies/new/">
           <input type="hidden" name="_csrf" value="<%= token %>">
           <input type="hidden" name="unit[description]" class="unit-description" value="">
           <div class="modal-content bg-lighter">
@@ -469,7 +469,7 @@
                       </div>
                       <div class="col-4">
                         <h4 class="card-title mb-1">
-                          <a href="/property/overview/${property.id}/units/${unit.id}" class="detail-unit">${name}</a>
+                          <a href="/tenancy/detail/${property.id}/${unit.id}" class="detail-unit">${name}</a>
                         </h4>
                         <p class="card-text small text-muted">
                           Vacant &nbsp;●&nbsp; <a href="#" class="edit-unit update-detail" data-property="${property.id}" data-unit='${JSON.stringify(unit)}'>Add a tenancy</a>

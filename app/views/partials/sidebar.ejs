@@ -78,7 +78,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link <%= path == '/property/tenancies' ? 'active' : '' %>" href="/property/tenancies">
+          <a class="nav-link <%= path.startsWith('/tenancy/') ? 'active' : '' %>" href="/tenancy/tenancies">
             <i class="fe fe-calendar"></i> Tenancies
           </a>
         </li>

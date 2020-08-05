@@ -21,6 +21,7 @@ const auth = require('./auth');
 const dashboard = require('../app/controllers/dashboard');
 const home = require('../app/controllers/home');
 const property = require('../app/controllers/property');
+const tenancy = require('../app/controllers/tenancy');
 const transaction = require('../app/controllers/transaction');
 const service = require('../app/controllers/service');
 const invest = require('../app/controllers/invest');
@@ -81,12 +82,14 @@ router.use('/property/estimated_sale', property.estimated_sale);
 router.post('/property/cron/estimate', property.cron_estimate);
 
 // Add Tenancy
-router.get('/property/tenancies', property.tenancies);
+router.get('/tenancy/tenancies', tenancy.tenancies);
+router.use('/tenancy/tenancies/new', tenancy.new_tenancy);
+router.get('/tenancy/detail/:property_id/:id', tenancy.detail);
+
 router.use('/property/unit/all', property.all_units);
 router.use('/property/unit/new', property.new_unit);
 router.use('/property/unit/edit/name', property.rename_unit);
 router.use('/property/unit/update', property.update_unit);
-router.use('/property/tenancies/new', property.new_tenancy);
 router.use('/property/unit/delete', property.delete_unit);
 router.use('/property/unit/clear', property.clear_unit);
 
@@ -110,7 +113,7 @@ router.post('/property/loan/new', property.new_loan);
 
 // transactions
 router.get('/transaction/all', transaction.all);
-router.get('/transaction/all/get/:id/:cnt', transaction.all_get);
+router.post('/transaction/all/get', transaction.all_get);
 router.post('/transaction/create', transaction.create);
 router.post('/transaction/edit', transaction.edit);
 router.post('/transaction/delete', transaction.delete);

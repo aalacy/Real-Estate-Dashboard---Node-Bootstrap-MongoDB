@@ -347,5 +347,10 @@
     <input type="hidden" id="hidden_properties" value="<%= JSON.stringify(properties) %>">
     <% include ../partials/scripts %>
     <script src="/js/transaction.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        fetchTransactions(undefined, -1);
+      })
+    </script>
   </body>
 </html>

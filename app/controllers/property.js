@@ -830,50 +830,6 @@ exports.upload_doc_to_property = async function(req, res) {
   });
 }
 
-exports.tenancies = async function(req, res) {
-  const { user } = req.session;  
-  const properties = await Properties.find({ user_id: user.id }, { _id: 0 });
-  const contacts = await Contacts.find({ user_id: user.id, type: 'Tenant' }, {_id: 0})
-  let occupied_properties = [];
-  let vacant_properties = []
-  let all_tenancies = 0;
-  let occupied_tenancies = 0;
-  let vacant_tenancies = 0;
-  properties.map(property => {
-    all_tenancies += property.tenancies.length;
-    var occupied_property = Object.assign({}, JSON.parse(JSON.stringify(property)));
-    occupied_property.tenancies = [];
-    var vacant_property = Object.assign({}, JSON.parse(JSON.stringify(property)));
-    vacant_property.tenancies = [];
-    property.tenancies.map(unit => {
-      if (unit.rent_frequency == 'Vacant') {
-        vacant_tenancies++;
-        vacant_property.tenancies.push(unit);
-      } else {
-        occupied_tenancies++;
-        occupied_property.tenancies.push(unit);
-      }
-    });
-    property.tenancies.sort((a, b) => { return moment(a.end_date).isBefore(moment(b.end_date))})
-    occupied_properties.push(occupied_property);
-    vacant_properties.push(vacant_property);
-  });
-
-  res.render('property/tenancies', {
-    // token: req.csrfToken(),
-    token: 'req.csrfToken()',
-    title: 'Tenancies | Avenue',
-    properties,
-    occupied_properties,
-    vacant_properties,
-    all_tenancies,
-    occupied_tenancies,
-    vacant_tenancies,
-    contacts,
-    path: '/property/tenancies'
-  });
-};
-
 exports.all_units = async function(req, res) {
   const { body: { property } } = req;
   const myproperty = await Properties.findOne({ id: property.id }, { _id: 0 });
@@ -1040,21 +996,6 @@ const createNewUnit = async function(property, unit, tenants=[]) {
 
   return new_values;
 }
-
-exports.new_tenancy = async function(req, res) {
-  const { body: { property, unit, tenants } } = req;
-
-  const referer = urlLib.parse(req.headers.referer)
-  if (!unit) {
-    return res.redirect(referer.path);
-  } 
-
-  const new_values = await createNewUnit(property, unit, tenants)
-  
-  return Properties.updateOne({ id: property.id }, new_values).then(() => {
-    res.redirect('/property/tenancies');
-  });
-};
 
 exports.new_unit = async function(req, res) {
   const { body: { property, unit, tenants } } = req;

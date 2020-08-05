@@ -98,9 +98,9 @@ const displayTransactions = (paginated=true, unit_id=-1) => {
     $('.transaction-header').html('No Transactions')
   }
   
-  _displayTransactions({ trans:items, listClass: '.transaction-list' })
-  _displayTransactions({ trans:paidTransactions, listClass: '.paid-transaction-list' })
-  _displayTransactions({ trans:dueTransactions, listClass: '.due-transaction-list' })
+  _displayTransactions({ paginated, trans:items, listClass: '.transaction-list', unit_id })
+  _displayTransactions({ paginated, trans:paidTransactions, listClass: '.paid-transaction-list' })
+  _displayTransactions({ paginated, trans:dueTransactions, listClass: '.due-transaction-list' })
 }
 
 const clearTransactionModal = () => {
@@ -130,9 +130,21 @@ const setupPagination = () => {
 */
 
 // fetch transaction data from server
-const fetchTransactions = (id=undefined, cnt=-1, paginated=true, unit_id=-1) => {
-  fetch(`/transaction/all/get/${id}/${cnt}`, {method: 'GET'})
-    .then(res => res.json())
+const fetchTransactions = (id=undefined, cnt=-1, paginated=true, unit_id=undefined) => {
+  const token = $('input[name="_csrf"]').val();
+  fetch(`/transaction/all/get`, {
+    credentials: 'same-origin', // <-- includes cookies in the request
+    headers: {
+        'CSRF-Token': token, 
+        'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      property_id: id,
+      cnt,
+      unit_id
+    })
+  }).then(res => res.json())
     .then(res => {
       transactions = res.transactions;
       paidTransactions = transactions.filter(transaction => transaction.status == 'Paid')
@@ -361,8 +373,6 @@ $(function(){
     clearTransactionModal();
     $('#modalAddNewTransaction').modal()
   })
-
-  fetchTransactions(undefined, -1);
 
   // setup properties filter
   var option = new Option('All Properties', 'All', true, true);
