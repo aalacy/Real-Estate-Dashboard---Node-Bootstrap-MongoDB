@@ -3,6 +3,11 @@ let paidTransactions = [];
 let dueTransactions = [];
 let cur_transaction;
 page_cnt = 10
+let transactionFilter = {
+  property: 'All',
+  category: 'All',
+  dateRange: '*'
+}
 
 properties = $('#hidden_properties').val();
 try {
@@ -11,8 +16,19 @@ try {
 
 let query = ''
 
-const _displayTransactions = ({paginated=true, unit_id=-1, trans, listClass}) => {
-  trans.map( (transaction, idx) => {
+const _displayTransactions = ({paginated=true, unit_id=-1, trans, listClass, id}) => {
+  const filteredData = applyTransactionFilter(trans)
+
+  if (filteredData.length) {
+    if (filteredData.length == 1) {
+      $(`.transaction-header-${id}`).html('1 Transaction')
+    } else {
+      $(`.transaction-header-${id}`).html(filteredData.length + ' Transactions')
+    }
+  } else {
+    $(`.transaction-header-${id}`).html('No Transactions')
+  }
+  filteredData.map( (transaction, idx) => {
     if (idx % page_cnt == 0) { 
       page = (parseInt(idx/page_cnt) + 1)
     } else {
@@ -44,11 +60,11 @@ const _displayTransactions = ({paginated=true, unit_id=-1, trans, listClass}) =>
     }
     const status = `<span class="${status_color} font-weight-bold">${status_text}</span>`
     $(listClass).append(`
-      <div id="tranaction_${idx}" class="transaction-item list-group-item cursor-hand px-4 page${page}" data-val='${val}'>
+      <div id="tranaction_${id+'_'+idx}" class="transaction-item list-group-item cursor-hand px-4 page${page}" data-val='${val}'>
         <div class="col-auto avatar d-flex align-items-center">
-          <div class="custom-control custom-checkbox my-1 mr-sm-2 d-none">
-            <input type="checkbox" name="tranaction[id]" class="custom-control-input tranaction-checkbox" id="customCheck${idx}" value="${transaction.id}">
-            <label class="custom-control-label" for="customCheck${idx}"></label>
+          <div class="custom-control custom-checkbox custom-checkbox-${id} my-1 mr-sm-2 d-none">
+            <input type="checkbox" name="tranaction[id]" class="custom-control-input tranaction-checkbox tranaction-checkbox-${id}" id="customCheck${id+'_'+idx}" value="${transaction.id}" data-id="${id}">
+            <label class="custom-control-label" for="customCheck${id+'_'+idx}" ></label>
           </div>
           <div class="avatar-title rounded bg-white text-secondary">
             ${avatar}
@@ -82,25 +98,28 @@ const _displayTransactions = ({paginated=true, unit_id=-1, trans, listClass}) =>
   });
 }
 
+const manageTransactions = () => {
+  displayTransactions()
+  setupPagination()
+}
+
 // Display transactions
 const displayTransactions = (paginated=true, unit_id=-1) => {
+  paidTransactions = transactions.filter(transaction => transaction.status == 'Paid')
+  dueTransactions = transactions.filter(transaction => transaction.status == 'Due')
+  items = transactions;
+
   $('.transaction-list').empty();
   $('.paid-transaction-list').empty();
   $('.due-transaction-list').empty();
 
-  if (items.length) {
-    if (items.length == 1) {
-      $('.transaction-header').html('1 Transaction')
-    } else {
-      $('.transaction-header').html(items.length + ' Transactions')
-    }
-  } else {
-    $('.transaction-header').html('No Transactions')
+  if (dueTransactions.length) {
+    $('.due-cnt').text(dueTransactions.length)
   }
-  
-  _displayTransactions({ paginated, trans:items, listClass: '.transaction-list', unit_id })
-  _displayTransactions({ paginated, trans:paidTransactions, listClass: '.paid-transaction-list' })
-  _displayTransactions({ paginated, trans:dueTransactions, listClass: '.due-transaction-list' })
+
+  _displayTransactions({ paginated, trans:items, listClass: '.transaction-list', unit_id, id:'all' })
+  _displayTransactions({ paginated, trans:paidTransactions, listClass: '.paid-transaction-list', unit_id, id:'paid' })
+  _displayTransactions({ paginated, trans:dueTransactions, listClass: '.due-transaction-list', unit_id, id:'due' })
 }
 
 const clearTransactionModal = () => {
@@ -125,6 +144,15 @@ const setupPagination = () => {
   _doPaginate({ items:dueTransactions, paginationId: '#dueTransPagination', itemClass:'.due-transaction-list .list-group-item'})
 }
 
+
+const applyTransactionFilter = (data) => {
+  return data.filter(item => {
+    let _property = transactionFilter.property == 'All' ? true : item.property_id == transactionFilter.property
+    let _category = transactionFilter.category == 'All' ? true : item.category == transactionFilter.category
+    return _property && _category
+  })
+}
+
 /*
 * Transactions
 */
@@ -147,9 +175,6 @@ const fetchTransactions = (id=undefined, cnt=-1, paginated=true, unit_id=undefin
   }).then(res => res.json())
     .then(res => {
       transactions = res.transactions;
-      paidTransactions = transactions.filter(transaction => transaction.status == 'Paid')
-      dueTransactions = transactions.filter(transaction => transaction.status == 'Due')
-      items = transactions;
       displayTransactions(paginated, unit_id)
       if (paginated) {
         setupPagination();
@@ -184,26 +209,27 @@ $(function(){
   });
 
   // filter by category in transactions
-  $('#categoryFilter').val('All').trigger('change');
-      $('#categoryFilter').on('select2:select', function (e) {
-        if (e.params.data.id == 'All') {
-          items = transactions;
-        } else {
-          items = transactions.filter(item => item.category == e.params.data.id);
-        }
-        displayTransactions();
-        setupPagination();
-      });
+  $('.categoryFilter').val('All').trigger('change');
+  // $('.categoryFilter').on('select2:select', function (e) {
+  //   if (e.params.data.id == 'All') {
+  //     items = transactions;
+  //   } else {
+  //     items = transactions.filter(item => item.category == e.params.data.id);
+  //   }
+  //   displayTransactions();
+  //   setupPagination();
+  // });
 
   // Mark the seleted transactions into paid
-  $(document).on('click', '.transaction-multiple-paid-btn', function(e) {
+  $(document).on('click', '.transaction-multiple-paid-btn-all, .transaction-multiple-paid-btn-paid, .transaction-multiple-paid-btn-due', function(e) {
+    const id = $(this).data('id')
     e.preventDefault();
     let ids = []
-    $.find('.tranaction-checkbox:checked').map((e) =>{
+    $.find(`.tranaction-checkbox-${id}:checked`).map((e) =>{
       ids.push($(e).val())
     })
     if (ids < 1) {
-      $('.transaction-dropdown').toggleClass('show')
+      $(this).parents('.transaction-dropdown').toggleClass('show')
       return;
     }
     var data = {
@@ -236,17 +262,17 @@ $(function(){
             console.log(error);
         }).
         finally(() =>{
-          $('.transaction-dropdown').toggleClass('show')
+          $(this).parents('.transaction-dropdown').toggleClass('show')
         });
       }
     });
   });
 
   // Delete selected transactions
-  $(document).on('click', '.transaction-multiple-del-btn', function(e) {
+  $(document).on('click', '.transaction-multiple-del-btn-all, .transaction-multiple-del-btn-paid, .transaction-multiple-del-btn-due', function(e) {
     e.preventDefault();
     let ids = []
-    $.find('.tranaction-checkbox:checked').map((e) =>{
+    $.find(`.tranaction-checkbox-${id}:checked`).map((e) =>{
       ids.push($(e).val())
     })
     if (ids < 1) {
@@ -375,68 +401,95 @@ $(function(){
   })
 
   // setup properties filter
-  var option = new Option('All Properties', 'All', true, true);
-  $('#propertyFilter').append(option);
+  var option = new Option('All', 'All', true, true);
+  $('#propertyFilter-all, #propertyFilter-paid, #propertyFilter-due').append(option);
   properties.map(property => {
     var property_name = property.address + ', ' + property.city;
     option = new Option(property_name, property.id, true, true);
-    $('#propertyFilter').append(option);
+    $('#propertyFilter-all, #propertyFilter-paid, #propertyFilter-due').append(option);
   });
-  $('#propertyFilter').val('All').trigger('change');
+  $('#propertyFilter-all, #propertyFilter-paid, #propertyFilter-due').val('All').trigger('change');
 
-  $('#propertyFilter').on('select2:select', function (e) {
-    if (e.params.data.id == 'All') {
-      items = transactions;
-    } else {
-      items = transactions.filter(item => item.property_id == e.params.data.id);
-    }
-    displayTransactions();
-    setupPagination();
-  });
+  // $('#propertyFilterall, #propertyFilterpaid, #propertyFilterdue').on('select2:select', function (e) {
+  //   if (e.params.data.id == 'All') {
+  //     items = transactions;
+  //   } else {
+  //     items = transactions.filter(item => item.property_id == e.params.data.id);
+  //   }
+  //   displayTransactions();
+  //   setupPagination();
+  // });
 
   // multiple selection
-  $('.transaction-multiple-btn').click(function() {
-    $('.custom-checkbox').removeClass('d-none');
-    $('.transaction-multiple-finish-btn').removeClass('d-none');
-    $('.transaction-multiple-del-btn').removeClass('d-none');
-    $('#manageTransactions').removeClass('d-none');
+  $('.transaction-multiple-btn-all, .transaction-multiple-btn-paid, .transaction-multiple-btn-due').click(function() {
+    const id = $(this).data('id')
+    $(`.custom-checkbox-${id}`).removeClass('d-none');
+    $(`.transaction-multiple-finish-btn-${id}`).removeClass('d-none');
+    $(`.transaction-multiple-del-btn-${id}`).removeClass('d-none');
+    $(`.manageTransactions-${id}`).removeClass('d-none');
     
-    $('.transaction-multiple-del-btn').removeClass('d-none');
+    $(`.transaction-multiple-del-btn-${id}`).removeClass('d-none');
     $(this).addClass('d-none');
-    $('.transaction-item .avatar-title').addClass('d-none');
+    $(`.transaction-item .avatar-title`).addClass('d-none');
   })
 
-  $('.transaction-multiple-finish-btn').click(function(){
-    $('.transaction-multiple-btn').removeClass('d-none');
-    $('.transaction-item .avatar-title').removeClass('d-none');
-    $('.custom-checkbox').addClass('d-none');
-    $('.transaction-multiple-finish-btn').addClass('d-none');
-    $('.transaction-multiple-del-btn').addClass('d-none');
-    $('#manageTransactions').addClass('d-none');
-    $('.custom-control-input').prop('checked', false);
+  $('.transaction-multiple-finish-btn-all, .transaction-multiple-finish-btn-paid, .transaction-multiple-finish-btn-due').click(function(){
+    const id = $(this).data('id')
+    $(`.transaction-multiple-btn-${id}`).removeClass('d-none');
+    $(`.transaction-item .avatar-title`).removeClass('d-none');
+    $(`.custom-checkbox-${id}`).addClass('d-none');
+    $(`.transaction-multiple-finish-btn-${id}`).addClass('d-none');
+    $(`.transaction-multiple-del-btn-${id}`).addClass('d-none');
+    $(`.manageTransactions-${id}`).addClass('d-none');
+    $(`.tranaction-checkbox-${id}`).prop('checked', false);
   })
 
-  $('.tranaction-checkbox-all').click(function(e){
-    if ($('.tranaction-checkbox-all:checked').length) {
-      $('.tranaction-checkbox').prop('checked', true);
-      $('.transaction-multiple-del-btn').addClass('btn-danger').removeClass('btn-white');
-      $('#manageTransactions').addClass('btn-secondary').removeClass('btn-white');
+  $('.tranaction-checkbox-all-all, .tranaction-checkbox-all-paid, .tranaction-checkbox-all-due').click(function(e){
+    const id = $(this).data('id')
+    if ($(`.tranaction-checkbox-all-${id}:checked`).length) {
+      $(`.tranaction-checkbox-${id}`).prop('checked', true);
+      $(`.transaction-multiple-del-btn-${id}`).addClass('btn-danger').removeClass('btn-white');
+      $(`.manageTransactions-${id}`).addClass('btn-secondary').removeClass('btn-white');
     } else {
-      $('.tranaction-checkbox').prop('checked', false);
-      $('.transaction-multiple-del-btn').removeClass('btn-danger').addClass('btn-white');
-      $('#manageTransactions').removeClass('btn-secondary').addClass('btn-white');
+      $(`.tranaction-checkbox-${id}`).prop('checked', false);
+      $(`.transaction-multiple-del-btn-${id}`).removeClass('btn-danger').addClass('btn-white');
+      $(`.manageTransactions-${id}`).removeClass('btn-secondary').addClass('btn-white');
     }
-    $(".selectedItems").html($('.tranaction-checkbox:checked').length);
+    // $(".selectedItems").html($('.tranaction-checkbox:checked').length);
   });
 
-  $(document).on('click', '.tranaction-checkbox', function() {
-    $(".selectedItems").html($('.tranaction-checkbox:checked').length);
-    if ($('.tranaction-checkbox:checked').length) {
-      $('.transaction-multiple-del-btn').addClass('btn-danger').removeClass('btn-white');
-      $('#manageTransactions').addClass('btn-secondary').removeClass('btn-white');
+  $(document).on('click', '.tranaction-checkbox-all, .tranaction-checkbox-paid, .tranaction-checkbox-due', function() {
+    const id = $(this).data('id')
+    // $(".selectedItems").html($('.tranaction-checkbox:checked').length);
+    if ($(`.tranaction-checkbox-${id}:checked`).length) {
+      $(`.transaction-multiple-del-btn-${id}`).addClass('btn-danger').removeClass('btn-white');
+      $(`.manageTransactions-${id}`).addClass('btn-secondary').removeClass('btn-white');
     } else {
-      $('.transaction-multiple-del-btn').removeClass('btn-danger').addClass('btn-white');
-      $('#manageTransactions').removeClass('btn-secondary').addClass('btn-white');
+      $(`.transaction-multiple-del-btn-${id}`).removeClass('btn-danger').addClass('btn-white');
+      $(`.manageTransactions-${id}`).removeClass('btn-secondary').addClass('btn-white');
     }
+  })
+
+  // sort filter newest - oldest
+  $('.transactionSort').on('select2:select', function (e) {
+    if (e.params.data.id == 'newest') {
+      transactions = transactions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    } else if (e.params.data.id == 'oldest') {
+      transactions = transactions.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+    }
+
+    manageTransactions()
+  })
+
+  // filter group
+  $('#tran-filter-all, #tran-filter-paid, #tran-filter-due').submit(function(e) {
+    const id = $(this).data('id')
+    e.preventDefault()
+    transactionFilter = {
+      property: $(`#propertyFilter-${id}`).val(),
+      category: $(`#categoryFilter-${id}`).val(),
+      dateRange: $(`#dateRangeFilter-${id}`).val()
+    }
+    manageTransactions()
   })
 })

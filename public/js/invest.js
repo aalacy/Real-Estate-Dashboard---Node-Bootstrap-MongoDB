@@ -91,25 +91,25 @@ const getInvestData = (id) => {
 		}
 	}
 	fetch('/invest/all', {
-        credentials: 'same-origin', // <-- includes cookies in the request
-        headers: {
-          'CSRF-Token': token, // <-- is the csrf token as a header
-          'Content-Type': 'application/json'
-        },
-        method: 'GET',
-    })
-    .then(response => response.json())
-    .then(function(res) {
-      if (res.status == 200) {
-      	invests = res.invests
+    credentials: 'same-origin', // <-- includes cookies in the request
+    headers: {
+      'CSRF-Token': token, // <-- is the csrf token as a header
+      'Content-Type': 'application/json'
+    },
+    method: 'GET',
+  })
+  .then(response => response.json())
+  .then(function(res) {
+    if (res.status == 200) {
+    	invests = res.invests
 
-        updateShortList(res)
-      	manageInvestData()
-      } 
-    })
-    .catch(error => {
-        console.log(error);
-    });
+      updateShortList(res)
+    	manageInvestData()
+    } 
+  })
+  .catch(error => {
+      console.log(error);
+  });
 }
 
 // manage Invest data
@@ -229,9 +229,9 @@ $(function() {
   // sort filter
   $('#investSort').on('select2:select', function (e) {
     if (e.params.data.id == 'highestSort') {
-      invests.sort((a, b) => b.price - a.price)
+      invests = invests.sort((a, b) => b.price - a.price)
     } else if (e.params.data.id == 'lowestSort') {
-      invests.sort((a, b) => a.price - b.price)
+      invests = invests.sort((a, b) => a.price - b.price)
     }
 
     manageInvestData()

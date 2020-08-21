@@ -1,0 +1,139 @@
+  
+  <div class="card-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h4 class="card-header-title mb-2 transaction-header-<%=id%>">
+          Files
+        </h4>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-wrap py-4 px-4 border-bottom">
+    <div class="col-auto d-flex align-items-center">
+      <div class="custom-control custom-checkbox custom-checkbox-<%=id%> my-1 mr-sm-2 d-none">
+        <input name="tranaction[id]" class="custom-control-input custom-control-input-<%=id%> tranaction-checkbox-all-<%=id%>" id="customCheck<%=id%>" type="checkbox" data-id="<%=id%>"/>
+        <label class="custom-control-label" for="customCheck<%=id%>"></label>
+      </div>
+      <button class="btn btn-outline-secondary transaction-multiple-btn-<%=id%> mr-3" data-id="<%=id%>">Select Multiple</button>
+      <button class="btn btn-outline-secondary transaction-multiple-finish-btn-<%=id%> mr-sm-3  d-none" data-id="<%=id%>">Finish</button>
+      <button class="btn btn-white transaction-multiple-del-btn-<%=id%> mr-sm-3 d-none"><i class="fe fe-trash"></i></button>
+      <button class="btn btn-white d-none manageTransactions-<%=id%>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-horizontal"></i></span>
+      </button>
+      <div class="dropdown-menu transaction-dropdown" aria-labelledby="dropdownMenuButton">
+        <button class="dropdown-item transaction-multiple-paid-btn-<%=id%>" data-id="<%=id%>" data-status='Paid'>Mark as Paid</button>
+        <button class="dropdown-item transaction-multiple-paid-btn-<%=id%>" data-id="<%=id%>" data-status='Due'>Mark as Due</button>
+      </div>
+    </div>
+    <div class="col-auto">
+      <div class="dropdown">
+        <button class="btn btn-white" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <i class="fe fe-sliders mr-1"></i> Filter <span class="badge badge-primary ml-1 transaction-filter-cnt d-none">1</span>
+        </button>
+        <form id="tran-filter-<%=id%>" class="dropdown-menu dropdown-menu-bottom dropdown-menu-card"  data-id="<%=id%>">
+          <div class="card-header">
+
+            <!-- Title -->
+            <h4 class="card-header-title">
+              Filters
+            </h4>
+
+            <!-- Link -->
+            <button class="btn btn-sm btn-link text-reset transaction-clear-filter d-none" type="reset">
+              <small>Clear filters</small>
+            </button>
+
+          </div>
+          <div class="card-body">
+
+            <!-- List group -->
+            <div class="list-group list-group-flush mt-n4 mb-4">
+              <div class="list-group-item">
+                <div class="row">
+                  <div class="col">
+
+                    <!-- Text -->
+                    <small>Property</small>
+
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Select -->
+                    <select class="custom-select custom-select-sm select2-selection" style="min-width: 350px;" id="propertyFilter-<%=id%>" data-toggle="select"  data-options='{"placeholder": "All", &quot;minimumResultsForSearch&quot;: -1}' required>
+                      <option></option>
+                    </select> 
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+              <div class="list-group-item">
+                <div class="row">
+                  <div class="col">
+
+                    <!-- Text -->
+                    <small>Category</small>
+
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Select -->
+                    <select class="custom-select custom-select-sm select2-selection categoryFilter" id="categoryFilter-<%=id%>" data-toggle="select"  data-options='{"placeholder": "All", &quot;minimumResultsForSearch&quot;: -1}' required>
+                      <option></option>
+                      <option value="All">All</option>
+                      <optgroup label="Income">
+                        <option value="Rental Income">Rental Income</option>
+                        <option value="Deposit">Deposit</option>
+                        <option value="Uncategorised">Uncategorised</option>
+                      </optgroup>
+                      <optgroup label="Expenses">
+                        <option value="Insurance">Insurance</option>
+                        <option value="Repairs & Maintenance">Repairs & Maintenance</option>
+                        <option value="Management Fees">Management Fees</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Tax">Tax</option>
+                        <option value="Legal">Legal</option>
+                        <option value="Mortgage or Loans">Mortgage or Loans</option>
+                        <option value="Deposit">Deposit</option>
+                        <option value="Uncategorised">Uncategorised</option>
+                      </optgroup>
+                  </select> 
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+              <div class="list-group-item">
+                <div class="row">
+                  <div class="col">
+                    <small>Date</small>
+
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Select -->
+                    <select id="transactionDateRange-<%=id%>" class="custom-select custom-select-sm select2-selection" name="invest[price]" data-toggle="select" data-options="{&quot;minimumResultsForSearch&quot;: -1}"  tabindex="-1" aria-hidden="true">
+                      <option value="*">Any</option>
+                      <option value="Under £50,000">Under £50,000</option>
+                      <option value="£50,000 - £100,000">£50,000 - £100,000</option>
+                      <option value="£100,000 - £200,000">£100,000 - £200,000</option>
+                      <option value="Over £200,000">Over £200,000</option>
+                    </select>
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
+            <!-- Button -->
+            <button class="btn btn-block btn-primary" type="submit" data-id="<%=id%>">
+              Apply filter
+            </button>
+
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-auto ml-auto">
+      <form>
+        <select class="custom-select custom-select-sm form-control-flush transactionSort" data-toggle="select" data-options='{"minimumResultsForSearch": -1}' data-id="<%=id%>">
+          <option value="newest" selected>Newest</option>
+          <option value="oldest">Oldest</option>
+        </select>
+      </form>
+    </div>
+  </div>

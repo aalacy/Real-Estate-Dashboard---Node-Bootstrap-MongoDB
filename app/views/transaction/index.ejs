@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
       <% include ../partials/head %>
-
   </head>
   <body>
     <div class="modal  fade" id="modalAddNewTransaction" tabindex="-1" role="dialog" aria-hidden="true">
@@ -249,7 +248,7 @@
                   </li>
                   <li class="nav-item">
                     <a href="#due" data-toggle="tab" role="tab" aria-controls="due" aria-selected="true" class="nav-link">
-                      Due
+                      Due <span class="badge badge-soft-danger due-cnt"></span>
                     </a>
                   </li>
                 </ul>
@@ -264,62 +263,7 @@
         <div class="tab-content">
           <div class="tab-pane fade active show" id="all" role="tabpanel">
             <div class="card" >
-              <div class="card-header">
-                <div class="row align-items-center">
-                  <div class="col">
-                    <h4 class="card-header-title mb-2 transaction-header">
-                      Files
-                    </h4>
-                  </div>
-
-                  <div class="col-12 col-md-3">
-                    <select class="custom-select" style="min-width: 350px;" id="propertyFilter" data-toggle="select"  data-options='{"placeholder": "All Properties", "width": "element"}' required>
-                        <option></option>
-                    </select>  
-                  </div>
-                  
-                  <div class="col-12 col-md-3">
-                    <select class="custom-select" style="min-width: 350px;" id="categoryFilter" data-toggle="select"  data-options='{"placeholder": "All Categories", "width": "element"}' required>
-                        <option></option>
-                        <option value="All">All Categories</option>
-                        <optgroup label="Income">
-                          <option value="Rental Income">Rental Income</option>
-                          <option value="Deposit">Deposit</option>
-                          <option value="Uncategorised">Uncategorised</option>
-                        </optgroup>
-                        <optgroup label="Expenses">
-                          <option value="Insurance">Insurance</option>
-                          <option value="Repairs & Maintenance">Repairs & Maintenance</option>
-                          <option value="Management Fees">Management Fees</option>
-                          <option value="Utilities">Utilities</option>
-                          <option value="Tax">Tax</option>
-                          <option value="Legal">Legal</option>
-                          <option value="Mortgage or Loans">Mortgage or Loans</option>
-                          <option value="Deposit">Deposit</option>
-                          <option value="Uncategorised">Uncategorised</option>
-                        </optgroup>
-                    </select> 
-                  </div>
-                </div>
-              </div>
-              <div class="d-flex flex-wrap py-4 px-4 border-bottom">
-                <div class="col-auto d-flex align-items-center">
-                  <div class="custom-control custom-checkbox my-1 mr-sm-2 d-none">
-                    <input type="checkbox" name="tranaction[id]" class="custom-control-input tranaction-checkbox-all" id="customCheck${idx}" >
-                    <label class="custom-control-label" for="customCheck${idx}"></label>
-                  </div>
-                  <button class="btn btn-outline-secondary transaction-multiple-btn mr-3">Select Multiple</button>
-                  <button class="btn btn-outline-secondary transaction-multiple-finish-btn mr-sm-3  d-none">Finish</button>
-                  <button class="btn btn-white transaction-multiple-del-btn mr-sm-3 d-none"><i class="fe fe-trash"></i></button>
-                  <button class="btn btn-white d-none" id="manageTransactions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-horizontal"></i></span>
-                  </button>
-                  <div class="dropdown-menu transaction-dropdown" aria-labelledby="dropdownMenuButton">
-                    <button class="dropdown-item transaction-multiple-paid-btn" data-status='Paid'>Mark as Paid</button>
-                    <button class="dropdown-item transaction-multiple-paid-btn" data-status='Due'>Mark as Due</button>
-                  </div>
-                </div>
-                
-              </div>
+              <%- include('./transaction_header', {id:'all'}) %>
               <div class="transaction-list">
               </div>
             </div>
@@ -327,6 +271,7 @@
           </div>
           <div class="tab-pane fade" id="paid" role="tabpanel">
             <div class="card" >
+              <%- include('./transaction_header', {id:'paid'}) %>
               <div class="paid-transaction-list">
               </div>
             </div>
@@ -334,6 +279,7 @@
           </div>
           <div class="tab-pane fade" id="due" role="tabpanel">
             <div class="card" >
+              <%- include('./transaction_header', {id:'due'}) %>
               <div class="due-transaction-list">
               </div>
             </div>
